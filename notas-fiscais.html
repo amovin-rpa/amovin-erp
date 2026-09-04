@@ -122,8 +122,8 @@
                 <span style="font-weight:700;font-size:16px;color:var(--grafite);">Status da IA</span>
             </div>
             <div>
-                <span class="status-ia" id="statusIA">⏳ Verificando...</span>
-                <span style="font-size:12px;color:var(--cinza);margin-left:12px;" id="modeloIA">Gemini 2.5 Flash</span>
+                <span class="status-ia" id="statusIA"> Verificando...</span>
+                <span style="font-size:12px;color:var(--cinza);margin-left:12px;" id="modeloIA">Gemini 2.5 Flash (Gratuito)</span>
             </div>
         </div>
         <div style="font-size:12px;color:var(--cinza);margin-top:4px;">
@@ -135,7 +135,7 @@
 
     <!-- PASSO 1: UPLOAD -->
     <div class="card" id="passoUpload">
-        <h3>📤 Envie a Nota Fiscal <span class="badge badge-ia">🤖 IA</span></h3>
+        <h3>📤 Envie a Nota Fiscal <span class="badge badge-ia"> IA</span></h3>
         <div class="dropzone" id="dropzone" onclick="document.getElementById('fileInput').click()">
             <span class="icone">📄</span>
             <p><strong>Arraste o arquivo aqui</strong> ou clique para selecionar</p>
@@ -183,14 +183,14 @@
         <div style="margin:16px 0;">
             <label style="font-size:11px;font-weight:600;color:var(--cinza);text-transform:uppercase;display:block;margin-bottom:8px;">🏷️ Destino dos Produtos</label>
             <div class="destinos-grid">
-                <div class="destino-card" data-destino="estoque" onclick="selecionarDestino(this)"><span class="icone">📦</span><span class="nome">Estoque</span><span class="desc">Consumíveis</span></div>
+                <div class="destino-card" data-destino="estoque" onclick="selecionarDestino(this)"><span class="icone"></span><span class="nome">Estoque</span><span class="desc">Consumíveis</span></div>
                 <div class="destino-card selecionado" data-destino="patrimonio" onclick="selecionarDestino(this)"><span class="icone">🏢</span><span class="nome">Patrimônio</span><span class="desc">Bens duráveis</span></div>
                 <div class="destino-card" data-destino="servico" onclick="selecionarDestino(this)"><span class="icone">🛠️</span><span class="nome">Serviço</span><span class="desc">Contratação</span></div>
             </div>
         </div>
 
         <div style="margin:16px 0;">
-            <label style="font-size:11px;font-weight:600;color:var(--cinza);text-transform:uppercase;display:block;margin-bottom:8px;">📤 Módulos para encaminhar</label>
+            <label style="font-size:11px;font-weight:600;color:var(--cinza);text-transform:uppercase;display:block;margin-bottom:8px;"> Módulos para encaminhar</label>
             <div class="modulos-grid">
                 <div class="modulo-card selecionado" data-modulo="financeiro" onclick="toggleModulo(this)"><span class="icone">💰</span><span class="nome">Financeiro</span></div>
                 <div class="modulo-card selecionado" data-modulo="prestacao" onclick="toggleModulo(this)"><span class="icone">📋</span><span class="nome">Prest. Contas</span></div>
@@ -238,7 +238,7 @@
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:13px;">
                 <div><strong>📋 Projeto:</strong> <span id="confProjeto">---</span></div>
                 <div><strong>📂 Categoria:</strong> <span id="confCategoria">---</span></div>
-                <div><strong>🏷️ Destino:</strong> <span id="confDestino">---</span></div>
+                <div><strong>️ Destino:</strong> <span id="confDestino">---</span></div>
                 <div><strong>💰 Valor:</strong> <span id="confValor" style="color:var(--roxo);font-weight:700;">R$ 0,00</span></div>
             </div>
         </div>
@@ -260,7 +260,7 @@
             <div class="form-group"><label>🏢 Emitente (Razão Social) *</label><input type="text" id="manualEmitente" placeholder="Ex: EBAZAR.COM.BR LTDA"></div>
             <div class="form-row">
                 <div class="form-group"><label>📄 CNPJ *</label><input type="text" id="manualCnpj" placeholder="Ex: 03.007.331/0122-39"></div>
-                <div class="form-group"><label>📞 Telefone</label><input type="text" id="manualTelefone" placeholder="Ex: (11) 99999-9999"></div>
+                <div class="form-group"><label> Telefone</label><input type="text" id="manualTelefone" placeholder="Ex: (11) 99999-9999"></div>
             </div>
             <div class="form-group"><label>💰 Valor Total *</label><input type="number" id="manualValor" step="0.01" placeholder="0,00"></div>
             <div class="form-group">
@@ -373,11 +373,11 @@ function verificarChave() {
 }
 
 function configurarChave() {
-    var key = prompt('🔑 Digite sua chave do OpenRouter (sk-or-v1-...):\n\nObtenha em: https://openrouter.ai/keys');
+    var key = prompt('🔑 Digite sua chave do Gemini (AIza...):\n\nObtenha grátis em: https://aistudio.google.com/app/apikey');
     if (key && key.length > 10) {
         setGeminiKey(key);
         verificarChave();
-        mostrarToast('✅ Chave OpenRouter configurada!', 'success');
+        mostrarToast('✅ Chave Gemini configurada!', 'success');
     }
 }
 
@@ -385,13 +385,13 @@ async function testarConexao() {
     var key = getGeminiKey();
     if (!key || key.length < 10 || key === 'undefined') { mostrarToast('⚠️ Configure a chave primeiro!', 'warning'); return; }
     try {
-        var response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+        var response = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=' + key, {
             method: 'POST',
-            headers: { 'Authorization': 'Bearer ' + key, 'Content-Type': 'application/json', 'HTTP-Referer': window.location.origin, 'X-Title': 'AMOVIN ERP' },
-            body: JSON.stringify({ model: 'google/gemini-2.5-flash', max_tokens: 200, messages: [{ role: 'user', content: 'Diga "olá"' }] })
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ contents: [{ parts: [{ text: 'Diga "olá" em uma palavra' }] }] })
         });
         var data = await response.json();
-        if (data.choices && data.choices[0]) { mostrarToast('✅ Conexão OK!', 'success'); } 
+        if (data.candidates && data.candidates[0]) { mostrarToast('✅ Conexão OK! Gemini funcionando.', 'success'); } 
         else { mostrarToast('❌ Erro: ' + (data.error?.message || 'desconhecido'), 'error'); }
     } catch (e) { mostrarToast('❌ Erro: ' + e.message, 'error'); }
 }
@@ -407,7 +407,7 @@ async function processarNota(event) {
     var info = document.getElementById('infoArquivo');
 
     info.innerHTML = '⏳ Processando: ' + file.name + '...';
-    preview.innerHTML = '<div style="text-align:center;padding:20px;"><span style="font-size:32px;">⏳</span><p style="margin-top:8px;color:var(--cinza);">Extraindo texto...</p></div>';
+    preview.innerHTML = '<div style="text-align:center;padding:20px;"><span style="font-size:32px;"></span><p style="margin-top:8px;color:var(--cinza);">Extraindo texto...</p></div>';
     preview.classList.add('visivel');
     document.getElementById('passoPreview').style.display = 'block';
     document.getElementById('statusExtraido').textContent = '📄 Extraindo texto...';
@@ -439,13 +439,13 @@ async function processarNota(event) {
 }
 
 // ============================================================
-// EXTRAIR DADOS COM IA (BLINDADO CONTRA ERRO 401)
+// EXTRAIR DADOS COM IA (GEMINI DIRETO - GRATUITO)
 // ============================================================
 async function extrairDadosComIA(texto) {
     var preview = document.getElementById('previewIA');
     var key = getGeminiKey();
 
-    // 🔒 BLINDAGEM: Verifica a chave ANTES de tentar enviar
+    //  BLINDAGEM: Verifica a chave ANTES de tentar enviar
     if (!key || key.trim() === '' || key === 'undefined' || key.length < 10) {
         document.getElementById('statusExtraido').textContent = '⚠️ Sem chave';
         document.getElementById('statusExtraido').className = 'badge badge-ia status-ia aviso';
@@ -468,29 +468,24 @@ Texto da nota: ${texto.substring(0, 6000)}
 IMPORTANTE: Se algum campo não for encontrado, use null. Retorne APENAS o JSON, sem texto adicional.`;
 
     try {
-        var response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+        var response = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=' + key, {
             method: 'POST',
-            headers: { 
-                'Authorization': 'Bearer ' + key, 
-                'Content-Type': 'application/json', 
-                'HTTP-Referer': window.location.origin, 
-                'X-Title': 'AMOVIN ERP' 
-            },
-            body: JSON.stringify({ model: 'google/gemini-2.5-flash', max_tokens: 4000, messages: [{ role: 'user', content: prompt }] })
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
         });
 
-        // 🔒 BLINDAGEM: Trata erro 401 e outros erros HTTP explicitamente
+        // 🔒 BLINDAGEM: Trata erros HTTP explicitamente
         if (!response.ok) {
-            if (response.status === 401) throw new Error('Erro de autenticação (401). Sua chave é inválida ou expirou.');
-            if (response.status === 429) throw new Error('Limite de requisições atingido (429). Tente novamente em instantes.');
+            if (response.status === 400) throw new Error('Chave inválida ou expirada (400). Configure uma nova chave.');
+            if (response.status === 429) throw new Error('Limite de requisições atingido (429). Aguarde um minuto.');
             throw new Error('Erro na API: ' + response.status);
         }
 
         var data = await response.json();
         if (data.error) throw new Error(data.error.message || 'Erro na API');
-        if (!data.choices || !data.choices[0] || !data.choices[0].message) throw new Error('Resposta inválida da IA');
+        if (!data.candidates || !data.candidates[0] || !data.candidates[0].content) throw new Error('Resposta inválida da IA');
 
-        var resposta = data.choices[0].message.content;
+        var resposta = data.candidates[0].content.parts[0].text;
         var match = resposta.match(/\{[\s\S]*\}/);
         if (!match) throw new Error('JSON não encontrado na resposta da IA');
 
@@ -548,12 +543,12 @@ function mostrarPreview(dados) {
             <div class="preview-item"><span class="label">🏢 Emitente</span><span class="valor">${dados.emitente || '—'}</span></div>
             <div class="preview-item"><span class="label">📄 CNPJ</span><span class="valor">${dados.cnpj || '—'}</span></div>
             <div class="preview-item"><span class="label">📞 Telefone</span><span class="valor">${dados.telefone || '—'}</span></div>
-            <div class="preview-item"><span class="label">📅 Data Emissão</span><span class="valor">${dados.dataEmissao || '—'}</span></div>
+            <div class="preview-item"><span class="label"> Data Emissão</span><span class="valor">${dados.dataEmissao || '—'}</span></div>
             <div class="preview-item"><span class="label">💰 Valor Total</span><span class="valor destaque">${fm(dados.valorTotal)}</span></div>
         </div>
         ${itensHtml}
         <div style="margin-top:12px;font-size:11px;color:var(--cinza);padding:8px;background:white;border-radius:8px;border:1px solid #E5E0D8;">
-            🤖 Processado com Gemini 2.5 Flash via OpenRouter
+            🤖 Processado com Gemini 2.5 Flash (Gratuito)
         </div>`;
     document.getElementById('resumoNumero').textContent = dados.numero || '---';
     document.getElementById('resumoEmitente').textContent = dados.emitente || '---';
@@ -687,7 +682,7 @@ function confirmarVinculo() {
     var dataEntrega = document.getElementById('dataEntrega').value;
     var obs = document.getElementById('obsVinculo').value.trim();
 
-    if (!projetoId || !categoria || !dataEntrega) { mostrarToast('⚠️ Preencha Projeto, Categoria e Data!', 'warning'); return; }
+    if (!projetoId || !categoria || !dataEntrega) { mostrarToast('️ Preencha Projeto, Categoria e Data!', 'warning'); return; }
 
     var valorNota = dadosNota ? dadosNota.valorTotal || 0 : 0;
     var numeroInterno = 'AMOVIN-' + new Date().getFullYear() + '-' + String(notas.length + 1).padStart(4, '0');
@@ -762,7 +757,7 @@ function limparDados() {
     document.getElementById('previewIA').innerHTML = ''; document.getElementById('previewIA').classList.remove('visivel');
     document.getElementById('passoPreview').style.display = 'none'; document.getElementById('passoVinculo').style.display = 'none';
     document.getElementById('passoConfirmacao').style.display = 'none';
-    document.getElementById('infoArquivo').innerHTML = '📎 Nenhum arquivo selecionado';
+    document.getElementById('infoArquivo').innerHTML = ' Nenhum arquivo selecionado';
     document.getElementById('btnAvancar').disabled = true; document.getElementById('fileInput').value = '';
     document.getElementById('passoUpload').style.display = 'block';
 }
@@ -797,7 +792,7 @@ if (!sessionStorage.getItem('amovin_logado')) { window.location.href = 'index.ht
 document.addEventListener('DOMContentLoaded', function() {
     verificarChave();
     console.log('📄 Notas Fiscais - AMOVIN ERP');
-    console.log('🔑 Chave:', getGeminiKey() ? 'Configurada ✅' : 'Não configurada ❌');
+    console.log(' Chave:', getGeminiKey() ? 'Configurada ✅' : 'Não configurada ❌');
 });
 </script>
 </body>
