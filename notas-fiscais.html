@@ -122,7 +122,7 @@
             </div>
             <div>
                 <span class="status-ia" id="statusIA">⏳ Verificando...</span>
-                <span style="font-size:12px;color:var(--cinza);margin-left:12px;" id="modeloIA">Gemini 1.5 Flash (Free Tier)</span>
+                <span style="font-size:12px;color:var(--cinza);margin-left:12px;" id="modeloIA">Gemini Flash (Gratuito)</span>
             </div>
         </div>
         <div style="font-size:12px;color:var(--cinza);margin-top:4px;">
@@ -299,21 +299,6 @@ function salvarNotas() { localStorage.setItem('amovin_notas_fiscais', JSON.strin
 function salvarProdutosEspera() { localStorage.setItem('amovin_produtos_espera', JSON.stringify(produtosEspera)); }
 function salvarContatos() { localStorage.setItem('amovin_contatos', JSON.stringify(contatos)); }
 
-function getGeminiKey() {
-    if (typeof AMOVIN_CONFIG !== 'undefined' && AMOVIN_CONFIG) {
-        return AMOVIN_CONFIG.getGeminiKey();
-    }
-    return localStorage.getItem('amovin_gemini_key');
-}
-
-function setGeminiKey(key) {
-    if (typeof AMOVIN_CONFIG !== 'undefined' && AMOVIN_CONFIG) {
-        AMOVIN_CONFIG.setGeminiKey(key);
-    } else {
-        localStorage.setItem('amovin_gemini_key', key);
-    }
-}
-
 async function extrairTextoDoArquivo(file) {
     if (file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf')) {
         try {
@@ -343,13 +328,16 @@ async function extrairTextoDoArquivo(file) {
 }
 
 function verificarChave() {
-    var key = getGeminiKey();
+    var key = AMOVIN_CONFIG.getGeminiKey();
     var statusEl = document.getElementById('statusIA');
     var chaveEl = document.getElementById('statusChave');
+    var modeloEl = document.getElementById('modeloIA');
+    
     if (key && key.length > 20 && key !== 'undefined') {
         statusEl.textContent = '✅ Conectado';
         statusEl.className = 'status-ia sucesso';
         chaveEl.textContent = 'Configurada ✅';
+        modeloEl.textContent = AMOVIN_CONFIG.MODELO_IA.replace('models/', '');
     } else {
         statusEl.textContent = '⚠️ Sem chave';
         statusEl.className = 'status-ia erro';
@@ -360,26 +348,46 @@ function verificarChave() {
 function configurarChave() {
     var key = prompt('🔑 Digite sua chave do Gemini:\n\nObtenha grátis em: https://aistudio.google.com/app/apikey');
     if (key && key.length > 20) {
-        setGeminiKey(key.trim());
+        AMOVIN_CONFIG.setGeminiKey(key.trim());
         verificarChave();
-        mostrarToast('✅ Chave Gemini configurada!', 'success');
+        AMOVIN_CONFIG.mostrarToast('✅ Chave Gemini configurada!', 'success');
     }
 }
 
 async function testarConexao() {
-    var key = getGeminiKey();
-    if (!key || key.length < 20 || key === 'undefined') { mostrarToast('⚠️ Configure a chave primeiro!', 'warning'); return; }
+    var key = AMOVIN_CONFIG.getGeminiKey();
+    if (!key || key.length < 20 || key === 'undefined') { 
+        AMOVIN_CONFIG.mostrarToast('⚠️ Configure a chave primeiro!', 'warning'); 
+        return; 
+    }
+    
+    var btn = document.querySelector('button[onclick="testarConexao()"]');
+    var statusEl = document.getElementById('statusIA');
+    btn.disabled = true;
+    btn.textContent = '⏳ Testando...';
+    statusEl.textContent = '⏳ Verificando...';
+    statusEl.className = 'status-ia aviso';
+
     try {
-        // ✅ MODELO ESTÁVEL: gemini-1.5-flash (Padrão oficial Free Tier)
-        var response = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=' + key, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ contents: [{ parts: [{ text: 'Diga "ok" em uma palavra' }] }] })
-        });
-        var data = await response.json();
-        if (data.candidates && data.candidates[0]) { mostrarToast('✅ Conexão OK! Gemini 1.5 Flash funcionando.', 'success'); } 
-        else { mostrarToast('❌ Erro: ' + (data.error?.message || 'desconhecido'), 'error'); }
-    } catch (e) { mostrarToast('❌ Erro: ' + e.message, 'error'); }
+        // ✅ CHAMADA CENTRALIZADA PELO CONFIG.JS (Usa o modelo seguro definido lá)
+        var resposta = await AMOVIN_CONFIG.callGeminiAPI('Responda apenas com a palavra: OK', { json: false });
+        
+        if (resposta && resposta.includes('OK')) { 
+            statusEl.textContent = '✅ Conexão OK!';
+            statusEl.className = 'status-ia sucesso';
+            document.getElementById('modeloIA').textContent = AMOVIN_CONFIG.MODELO_IA.replace('models/', '');
+            AMOVIN_CONFIG.mostrarToast('✅ Conexão OK! ' + AMOVIN_CONFIG.MODELO_IA.replace('models/', '') + ' funcionando.', 'success'); 
+        } else { 
+            throw new Error('Resposta inesperada da IA');
+        }
+    } catch (e) { 
+        statusEl.textContent = '❌ Falha na conexão';
+        statusEl.className = 'status-ia erro';
+        AMOVIN_CONFIG.mostrarToast('❌ Erro: ' + e.message, 'error'); 
+    } finally {
+        btn.disabled = false;
+        btn.textContent = '🧪 Testar';
+    }
 }
 
 async function processarNota(event) {
@@ -423,7 +431,7 @@ async function processarNota(event) {
 
 async function extrairDadosComIA(texto) {
     var preview = document.getElementById('previewIA');
-    var key = getGeminiKey();
+    var key = AMOVIN_CONFIG.getGeminiKey();
 
     if (!key || key.trim() === '' || key === 'undefined' || key.length < 20) {
         document.getElementById('statusExtraido').textContent = '⚠️ Sem chave';
@@ -455,31 +463,8 @@ Texto da nota:
 ${texto.substring(0, 8000)}`;
 
     try {
-        // ✅ MODELO ESTÁVEL: gemini-1.5-flash + JSON Nativo
-        var response = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=' + key, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ 
-                contents: [{ parts: [{ text: prompt }] }],
-                generationConfig: {
-                    response_mime_type: "application/json",
-                    temperature: 0.1
-                }
-            })
-        });
-
-        if (!response.ok) {
-            if (response.status === 400) throw new Error('Chave inválida ou expirada (400).');
-            if (response.status === 429) throw new Error('Limite de requisições atingido (429). Aguarde.');
-            if (response.status === 503) throw new Error('Serviço temporariamente indisponível (503). Tente o modo manual.');
-            throw new Error('Erro na API: ' + response.status);
-        }
-
-        var data = await response.json();
-        if (data.error) throw new Error(data.error.message || 'Erro na API');
-        if (!data.candidates || !data.candidates[0] || !data.candidates[0].content) throw new Error('Resposta inválida da IA');
-
-        var dados = JSON.parse(data.candidates[0].content.parts[0].text);
+        // ✅ CHAMADA CENTRALIZADA PELO CONFIG.JS (Garante uso do modelo correto e JSON nativo)
+        var dados = await AMOVIN_CONFIG.callGeminiAPI(prompt, { json: true, temperature: 0.1 });
         
         if (!dados.numero && !dados.emitente) throw new Error('Dados insuficientes extraídos.');
 
@@ -492,7 +477,7 @@ ${texto.substring(0, 8000)}`;
         document.getElementById('statusExtraido').className = 'badge badge-ia status-ia sucesso';
         document.getElementById('btnAvancar').disabled = false;
         mostrarPreview(dados);
-        mostrarToast('✅ Dados extraídos com sucesso!', 'success');
+        AMOVIN_CONFIG.mostrarToast('✅ Dados extraídos com sucesso!', 'success');
 
     } catch (e) {
         console.error('❌ Erro na extração:', e);
@@ -536,7 +521,7 @@ function mostrarPreview(dados) {
         </div>
         ${itensHtml}
         <div style="margin-top:12px;font-size:11px;color:var(--cinza);padding:8px;background:white;border-radius:8px;border:1px solid #E5E0D8;">
-            🤖 Processado com Gemini 1.5 Flash (JSON Nativo)
+            🤖 Processado com ${AMOVIN_CONFIG.MODELO_IA.replace('models/', '')} (JSON Nativo)
         </div>`;
     document.getElementById('resumoNumero').textContent = dados.numero || '---';
     document.getElementById('resumoEmitente').textContent = dados.emitente || '---';
@@ -566,7 +551,7 @@ function salvarManual() {
     var valor = parseFloat(document.getElementById('manualValor').value) || 0;
     var itensText = document.getElementById('manualItens').value.trim();
 
-    if (!numero || !emitente || !data) { mostrarToast('⚠️ Preencha Número, Emitente e Data!', 'warning'); return; }
+    if (!numero || !emitente || !data) { AMOVIN_CONFIG.mostrarToast('⚠️ Preencha Número, Emitente e Data!', 'warning'); return; }
 
     var itens = [];
     if (itensText) {
@@ -590,11 +575,11 @@ function salvarManual() {
     document.getElementById('statusExtraido').className = 'badge badge-ia status-ia sucesso';
     document.getElementById('btnAvancar').disabled = false;
     mostrarPreview(dadosNota);
-    mostrarToast('✅ Dados inseridos manualmente com sucesso!', 'success');
+    AMOVIN_CONFIG.mostrarToast('✅ Dados inseridos manualmente com sucesso!', 'success');
 }
 
 function avancarParaVinculo() {
-    if (!dadosNota) { mostrarToast('⚠️ Nenhuma nota processada.', 'warning'); return; }
+    if (!dadosNota) { AMOVIN_CONFIG.mostrarToast('⚠️ Nenhuma nota processada.', 'warning'); return; }
     document.getElementById('passoPreview').style.display = 'none';
     document.getElementById('passoVinculo').style.display = 'block';
     preencherProjetos();
@@ -641,7 +626,7 @@ function atualizarSaldo() {
     document.getElementById('saldoRealizado').textContent = fm(realizado);
     document.getElementById('saldoDisponivel').textContent = fm(previsto - realizado);
     if ((previsto - realizado) < (dadosNota ? dadosNota.valorTotal || 0 : 0)) {
-        mostrarToast('⚠️ Atenção: Saldo insuficiente para esta nota!', 'warning');
+        AMOVIN_CONFIG.mostrarToast('⚠️ Atenção: Saldo insuficiente para esta nota!', 'warning');
     }
 }
 
@@ -664,7 +649,7 @@ function confirmarVinculo() {
     var dataEntrega = document.getElementById('dataEntrega').value;
     var obs = document.getElementById('obsVinculo').value.trim();
 
-    if (!projetoId || !categoria || !dataEntrega) { mostrarToast('⚠️ Preencha Projeto, Categoria e Data!', 'warning'); return; }
+    if (!projetoId || !categoria || !dataEntrega) { AMOVIN_CONFIG.mostrarToast('⚠️ Preencha Projeto, Categoria e Data!', 'warning'); return; }
 
     var valorNota = dadosNota ? dadosNota.valorTotal || 0 : 0;
     var numeroInterno = 'AMOVIN-' + new Date().getFullYear() + '-' + String(notas.length + 1).padStart(4, '0');
@@ -697,7 +682,7 @@ function confirmarVinculo() {
     document.getElementById('confValor').textContent = fm(valorNota);
 
     dadosNota = null;
-    mostrarToast('✅ Nota vinculada com sucesso! Nº: ' + numeroInterno, 'success');
+    AMOVIN_CONFIG.mostrarToast('✅ Nota vinculada com sucesso! Nº: ' + numeroInterno, 'success');
 }
 
 function direcionarParaModulos(nota) {
@@ -710,7 +695,7 @@ function direcionarParaModulos(nota) {
                 obs: 'Cadastrado via NF ' + nota.numero + ' - ' + nota.numeroInterno
             });
             salvarContatos();
-            mostrarToast('✅ Fornecedor enviado para o CRM!', 'success');
+            AMOVIN_CONFIG.mostrarToast('✅ Fornecedor enviado para o CRM!', 'success');
         }
     }
 
@@ -725,7 +710,7 @@ function direcionarParaModulos(nota) {
             });
         });
         salvarProdutosEspera();
-        mostrarToast('📦 ' + nota.itens.length + ' produto(s) enviado(s) para Sala de Espera!', 'success');
+        AMOVIN_CONFIG.mostrarToast('📦 ' + nota.itens.length + ' produto(s) enviado(s) para Sala de Espera!', 'success');
     }
 }
 
@@ -740,19 +725,7 @@ function limparDados() {
 }
 
 function novaNota() { document.getElementById('passoConfirmacao').style.display = 'none'; limparDados(); }
-function verNotaVinculada() { mostrarToast('📋 Nota salva com sucesso no histórico!', 'info'); }
-
-function mostrarToast(mensagem, tipo) {
-    var toast = document.createElement('div');
-    var classes = { 'success': 'toast-success', 'error': 'toast-error', 'info': 'toast-info', 'warning': 'toast-warning' };
-    toast.className = 'toast ' + (classes[tipo] || 'toast-info');
-    toast.textContent = mensagem;
-    document.body.appendChild(toast);
-    setTimeout(function() {
-        toast.style.opacity = '0'; toast.style.transform = 'translateX(100%)'; toast.style.transition = 'all 0.4s ease';
-        setTimeout(function() { toast.remove(); }, 400);
-    }, 4000);
-}
+function verNotaVinculada() { AMOVIN_CONFIG.mostrarToast('📋 Nota salva com sucesso no histórico!', 'info'); }
 
 var dz = document.getElementById('dropzone');
 dz.addEventListener('dragover', function(e) { e.preventDefault(); this.classList.add('dragover'); });
@@ -767,7 +740,7 @@ if (!sessionStorage.getItem('amovin_logado')) { window.location.href = 'index.ht
 document.addEventListener('DOMContentLoaded', function() {
     verificarChave();
     console.log('📄 Notas Fiscais - AMOVIN ERP');
-    console.log('🔑 Chave:', getGeminiKey() ? 'Configurada ✅' : 'Não configurada ❌');
+    console.log('🔑 Chave:', AMOVIN_CONFIG.getGeminiKey() ? 'Configurada ✅' : 'Não configurada ❌');
 });
 </script>
 </body>
