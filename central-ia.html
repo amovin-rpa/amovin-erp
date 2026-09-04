@@ -38,6 +38,8 @@
         .btn-success:hover { background: #388E3C; }
         .btn-outline { background: transparent; color: var(--cinza); border: 1px solid #E5E0D8; }
         .btn-outline:hover { background: #F8F4ED; }
+        .btn-warning { background: var(--dourado); color: white; }
+        .btn-warning:hover { background: #B45309; }
         .dropzone { border: 3px dashed #E5E0D8; border-radius: 14px; padding: 40px 20px; text-align: center; transition: all 0.3s; cursor: pointer; background: #FAFAFA; }
         .dropzone:hover, .dropzone.dragover { border-color: var(--roxo); background: #F5F0FF; }
         .dropzone .icone { font-size: 48px; display: block; margin-bottom: 12px; }
@@ -54,6 +56,7 @@
         .status-ia { display: inline-block; padding: 4px 14px; border-radius: 20px; font-size: 11px; font-weight: 600; }
         .status-ia.sucesso { background: #D1FAE5; color: #065F46; }
         .status-ia.erro { background: #FEE2E2; color: #991B1B; }
+        .status-ia.aviso { background: #FEF3C7; color: #92400E; }
         .rodape { background: #FFFFFF; border-radius: 14px; padding: 12px 18px; border: 1px solid #F0E9DF; margin-top: 20px; }
         .rodape-grid { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
         .rodape-logo { flex-shrink: 0; }
@@ -92,7 +95,7 @@
             </div>
             <div>
                 <span class="status-ia" id="statusIA">⏳ Verificando...</span>
-                <span style="font-size:12px;color:var(--cinza);margin-left:12px;" id="modeloIA">Gemini 2.5 Flash</span>
+                <span style="font-size:12px;color:var(--cinza);margin-left:12px;" id="modeloIA">Gemini 1.5 Flash (Free Tier)</span>
             </div>
         </div>
         <div style="font-size:12px;color:var(--cinza);margin-top:4px;">
@@ -103,7 +106,7 @@
     </div>
 
     <div class="card">
-        <h3>📄 Leitura Inteligente de Notas Fiscais <span class="badge badge-ia">IA</span></h3>
+        <h3>📄 Leitura Inteligente de Notas Fiscais <span class="badge badge-ia">🤖 IA</span></h3>
 
         <div class="dropzone" id="dropzoneNota" onclick="document.getElementById('fileInputNota').click()">
             <span class="icone">📄</span>
@@ -173,7 +176,6 @@ function setGeminiKey(key) {
 // EXTRAIR TEXTO DO ARQUIVO
 // ============================================================
 async function extrairTextoDoArquivo(file) {
-    // 1. PDF - Usar PDF.js
     if (file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf')) {
         console.log('📄 Detectado PDF, extraindo texto...');
         const arrayBuffer = await file.arrayBuffer();
@@ -191,7 +193,6 @@ async function extrairTextoDoArquivo(file) {
         return textoCompleto;
     }
     
-    // 2. Imagens (JPG, PNG) - Usar Tesseract.js para OCR
     if (file.type.startsWith('image/')) {
         console.log('🖼️ Detectada imagem, aplicando OCR...');
         const resultado = await Tesseract.recognize(file, 'por+eng', {
@@ -206,7 +207,6 @@ async function extrairTextoDoArquivo(file) {
         return resultado.data.text;
     }
     
-    // 3. Texto, XML, DOC - FileReader simples
     console.log('📝 Detectado texto, lendo diretamente...');
     return new Promise((resolve, reject) => {
         const reader = new FileReader();
@@ -217,14 +217,14 @@ async function extrairTextoDoArquivo(file) {
 }
 
 // ============================================================
-// VERIFICAR CHAVE
+// VERIFICAR CHAVE (ACEITA FORMATOS AQ E AIza)
 // ============================================================
 function verificarChave() {
     var key = getGeminiKey();
     var statusEl = document.getElementById('statusIA');
     var chaveEl = document.getElementById('statusChave');
 
-    if (key && key.length > 10) {
+    if (key && key.length > 20 && key !== 'undefined') {
         statusEl.textContent = '✅ Conectado';
         statusEl.className = 'status-ia sucesso';
         chaveEl.textContent = 'Configurada ✅';
@@ -238,47 +238,44 @@ function verificarChave() {
 }
 
 function configurarChave() {
-    var key = prompt('🔑 Digite sua chave do OpenRouter (sk-or-v1-...):\n\nObtenha gratuitamente em: https://openrouter.ai/keys');
-    if (key && key.length > 10) {
-        setGeminiKey(key);
+    var key = prompt('🔑 Digite sua chave do Gemini (Google AI Studio):\n\nObtenha grátis em: https://aistudio.google.com/app/apikey\n\n(Nova chave começa com AQ ou AIza)');
+    if (key && key.length > 20) {
+        setGeminiKey(key.trim());
         verificarChave();
-        mostrarToast('✅ Chave OpenRouter configurada com sucesso!', 'success');
+        mostrarToast('✅ Chave Gemini configurada com sucesso!', 'success');
     } else if (key !== null) {
-        mostrarToast('⚠️ Chave inválida. Deve ter mais de 10 caracteres.', 'warning');
+        mostrarToast('⚠️ Chave inválida. Deve ter mais de 20 caracteres.', 'warning');
     }
 }
 
 async function testarConexao() {
     var key = getGeminiKey();
-    if (!key || key.length < 10) {
+    if (!key || key.length < 20 || key === 'undefined') {
         mostrarToast('⚠️ Configure a chave primeiro!', 'warning');
         return;
     }
 
-    mostrarToast('🧪 Testando conexão...', 'info');
+    mostrarToast('🧪 Testando conexão com Gemini 1.5 Flash...', 'info');
 
     try {
-        var response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+        // ✅ API OFICIAL GRATUITA DO GOOGLE (GEMINI 1.5 FLASH)
+        var response = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=' + key, {
             method: 'POST',
-            headers: {
-                'Authorization': 'Bearer ' + key,
-                'Content-Type': 'application/json',
-                'HTTP-Referer': window.location.origin,
-                'X-Title': 'AMOVIN ERP'
-            },
-            body: JSON.stringify({
-                model: 'google/gemini-2.5-flash',
-                max_tokens: 4000,
-                messages: [{ role: 'user', content: 'Diga "olá" em português' }]
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+                contents: [{ parts: [{ text: 'Diga "ok" em uma palavra' }] }]
             })
         });
+
         var data = await response.json();
 
-        if (data.choices && data.choices[0] && data.choices[0].message) {
-            mostrarToast('✅ Conexão OK! Resposta: ' + data.choices[0].message.content, 'success');
+        if (data.candidates && data.candidates[0]) {
+            mostrarToast('✅ Conexão OK! Gemini 1.5 Flash funcionando.', 'success');
             verificarChave();
         } else if (data.error) {
-            mostrarToast('❌ Erro: ' + data.error.message, 'error');
+            mostrarToast('❌ Erro: ' + (data.error.message || 'desconhecido'), 'error');
+        } else {
+            mostrarToast('❌ Resposta inválida da API', 'error');
         }
     } catch (e) {
         mostrarToast('❌ Erro de conexão: ' + e.message, 'error');
@@ -330,84 +327,72 @@ async function processarNotaIA() {
     }
 
     var key = getGeminiKey();
-    if (!key || key.length < 10) {
-        mostrarToast('⚠️ Chave OpenRouter não configurada.', 'warning');
+    if (!key || key.length < 20 || key === 'undefined') {
+        mostrarToast('⚠️ Chave Gemini não configurada.', 'warning');
         return;
     }
 
-    preview.innerHTML = '<div style="text-align:center;padding:20px;"><span style="font-size:32px;">⏳</span><p style="margin-top:8px;color:var(--cinza);">Processando com IA...</p></div>';
+    preview.innerHTML = '<div style="text-align:center;padding:20px;"><span style="font-size:32px;">🤖</span><p style="margin-top:8px;color:var(--cinza);">Processando com Gemini 1.5 Flash...</p></div>';
     preview.classList.add('visivel');
 
-    var prompt = `Extraia os campos da nota fiscal abaixo e retorne APENAS UM JSON VÁLIDO.
+    var prompt = `Analise a nota fiscal abaixo e extraia os seguintes dados estritamente em formato JSON:
+- numero (string)
+- emitente (string, razão social)
+- cnpj (string, apenas números)
+- telefone (string, se disponível)
+- dataEmissao (string, formato YYYY-MM-DD)
+- valorTotal (número)
+- itens (array de objetos com: descricao, quantidade, valor_unitario, valor_total)
+IMPORTANTE: Se algum campo não for encontrado, use null. Retorne APENAS o JSON válido, sem markdown ou texto adicional.
 
-Campos:
-- numero: Número da Nota
-- emitente: Nome do Emitente
-- cnpj: CNPJ do Emitente
-- dataEmissao: Data de Emissão (YYYY-MM-DD)
-- valorTotal: Valor Total (apenas número)
-- itens: Lista com descricao, quantidade, valor_unitario, valor_total
-
-Texto:
-${textoExtraido.substring(0, 4000)}
-
-Retorne APENAS o JSON, sem texto adicional.`;
+Texto da nota:
+${textoExtraido.substring(0, 8000)}`;
 
     try {
-        var response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+        // ✅ API OFICIAL GRATUITA DO GOOGLE + JSON NATIVO
+        var response = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=' + key, {
             method: 'POST',
-            headers: {
-                'Authorization': 'Bearer ' + key,
-                'Content-Type': 'application/json',
-                'HTTP-Referer': window.location.origin,
-                'X-Title': 'AMOVIN ERP'
-            },
-            body: JSON.stringify({
-                model: 'google/gemini-2.5-flash',
-                max_tokens: 4000,
-                messages: [{ role: 'user', content: prompt }]
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+                contents: [{ parts: [{ text: prompt }] }],
+                generationConfig: {
+                    response_mime_type: "application/json",
+                    temperature: 0.1
+                }
             })
         });
+
+        // Tratamento de erros HTTP
+        if (!response.ok) {
+            if (response.status === 400) throw new Error('Chave inválida ou expirada (400).');
+            if (response.status === 429) throw new Error('Limite de requisições atingido (429). Aguarde um minuto.');
+            if (response.status === 503) throw new Error('Serviço temporariamente indisponível (503). Tente novamente em instantes.');
+            throw new Error('Erro na API: ' + response.status);
+        }
 
         var data = await response.json();
 
         if (data.error) {
-            preview.innerHTML = `
-                <div style="text-align:center;padding:20px;">
-                    <span style="font-size:32px;">❌</span>
-                    <p style="color:var(--vermelho);font-weight:600;">Erro na API</p>
-                    <p style="font-size:12px;color:var(--cinza);">${data.error.message || 'Erro desconhecido'}</p>
-                    <button class="btn btn-primary" onclick="processarNotaIA()" style="margin-top:12px;padding:8px 20px;">🔄 Tentar Novamente</button>
-                </div>
-            `;
-            return;
+            throw new Error(data.error.message || 'Erro desconhecido na API');
         }
 
-        if (!data.choices || !data.choices[0] || !data.choices[0].message) {
-            preview.innerHTML = `
-                <div style="text-align:center;padding:20px;">
-                    <span style="font-size:32px;">❌</span>
-                    <p style="color:var(--vermelho);">Resposta inválida da IA</p>
-                    <button class="btn btn-primary" onclick="processarNotaIA()" style="margin-top:12px;padding:8px 20px;">🔄 Tentar Novamente</button>
-                </div>
-            `;
-            return;
+        if (!data.candidates || !data.candidates[0] || !data.candidates[0].content) {
+            throw new Error('Resposta inválida da IA');
         }
 
-        var resposta = data.choices[0].message.content;
-        var match = resposta.match(/\{[\s\S]*\}/);
-        if (!match) {
-            preview.innerHTML = `
-                <div style="text-align:center;padding:20px;">
-                    <span style="font-size:32px;">⚠️</span>
-                    <p style="color:var(--dourado);">Não foi possível extrair JSON da resposta</p>
-                    <button class="btn btn-primary" onclick="processarNotaIA()" style="margin-top:12px;padding:8px 20px;">🔄 Tentar Novamente</button>
-                </div>
-            `;
-            return;
+        // Com response_mime_type: "application/json", o retorno é JSON puro
+        var resposta = data.candidates[0].content.parts[0].text;
+        var dados;
+        
+        try {
+            dados = JSON.parse(resposta);
+        } catch (parseErr) {
+            // Fallback: tentar extrair JSON com regex
+            var match = resposta.match(/\{[\s\S]*\}/);
+            if (!match) throw new Error('Não foi possível extrair JSON da resposta');
+            dados = JSON.parse(match[0]);
         }
 
-        var dados = JSON.parse(match[0]);
         if (!dados || typeof dados !== 'object') throw new Error('Dados inválidos');
 
         dadosExtraidos = dados;
@@ -419,7 +404,7 @@ Retorne APENAS o JSON, sem texto adicional.`;
         preview.innerHTML = `
             <div style="text-align:center;padding:20px;">
                 <span style="font-size:32px;">❌</span>
-                <p style="color:var(--vermelho);">Erro: ${e.message}</p>
+                <p style="color:var(--vermelho);font-weight:600;">Erro: ${e.message}</p>
                 <button class="btn btn-primary" onclick="processarNotaIA()" style="margin-top:12px;padding:8px 20px;">🔄 Tentar Novamente</button>
             </div>
         `;
@@ -453,10 +438,14 @@ function mostrarResultado(dados) {
             <div class="ia-item"><span class="label">📋 Número</span><span class="valor destaque">${dados.numero || '—'}</span></div>
             <div class="ia-item"><span class="label">🏢 Emitente</span><span class="valor">${dados.emitente || '—'}</span></div>
             <div class="ia-item"><span class="label">📄 CNPJ</span><span class="valor">${dados.cnpj || '—'}</span></div>
+            <div class="ia-item"><span class="label">📞 Telefone</span><span class="valor">${dados.telefone || '—'}</span></div>
             <div class="ia-item"><span class="label">📅 Data Emissão</span><span class="valor">${dados.dataEmissao || '—'}</span></div>
             <div class="ia-item"><span class="label">💰 Valor Total</span><span class="valor destaque">${fm(dados.valorTotal)}</span></div>
         </div>
         ${itensHtml}
+        <div style="margin-top:12px;font-size:11px;color:var(--cinza);padding:8px;background:white;border-radius:8px;border:1px solid #E5D9F5;">
+            🤖 Processado com Gemini 1.5 Flash (JSON Nativo)
+        </div>
     `;
 }
 
@@ -511,6 +500,8 @@ if (!sessionStorage.getItem('amovin_logado')) { window.location.href = 'index.ht
 // ============================================================
 document.addEventListener('DOMContentLoaded', function() {
     verificarChave();
+    console.log('🧠 Central de IA - AMOVIN ERP');
+    console.log('🔑 Chave:', getGeminiKey() ? 'Configurada ✅' : 'Não configurada ❌');
 });
 </script>
 </body>
