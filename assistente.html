@@ -6,27 +6,14 @@
 <title>Amovin ERP Social • Assistente IA</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
 <style>
-:root {
-  --laranja: #C65A11;
-  --amarelo: #F5C518;
-  --verde: #57C220;
-  --azul: #1E88E5;
-  --grafite: #1A1A1A;
-  --cinza: #6B7280;
-  --cinza-claro: #F8F4ED;
-  --branco: #FFFFFF;
-  --vermelho: #E53935;
-  --roxo: #7C3AED;
-}
+:root { --laranja: #C65A11; --amarelo: #F5C518; --verde: #57C220; --azul: #1E88E5; --grafite: #1A1A1A; --cinza: #6B7280; --cinza-claro: #F8F4ED; --branco: #FFFFFF; --vermelho: #E53935; --roxo: #7C3AED; }
 * { margin:0; padding:0; box-sizing:border-box; }
 body { font-family: 'Inter', system-ui, sans-serif; background: #F8F4ED; display: flex; min-height: 100vh; }
-
 .main-content { flex: 1; margin-left: 270px; padding: 24px 30px; }
 .topo-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 10px; }
 .topo-bar h1 { font-size: 24px; font-weight: 700; color: var(--grafite); }
 .topo-bar h1 span { color: var(--roxo); }
 .btn-sair-topo { background: #F8F4ED; color: #1A1A1A; border: 1px solid #F0E9DF; padding: 8px 16px; border-radius: 10px; font-size: 12px; font-weight: 600; cursor: pointer; }
-
 .grid-ia { display: grid; grid-template-columns: 260px 1fr; gap: 20px; min-height: 500px; }
 .card { background: #FFFFFF; padding: 22px; border-radius: 14px; border: 1px solid #F0E9DF; }
 .card h3 { font-size: 16px; font-weight: 700; color: var(--grafite); margin-bottom: 15px; padding-bottom: 12px; border-bottom: 1px solid #F0E9DF; }
@@ -35,7 +22,7 @@ body { font-family: 'Inter', system-ui, sans-serif; background: #F8F4ED; display
 .chat-mensagens { height: 350px; overflow-y: auto; background: #F8F4ED; padding: 15px; border-radius: 10px; margin-bottom: 15px; }
 .msg { margin-bottom: 12px; display: flex; gap: 8px; }
 .msg.usuario { justify-content: flex-end; }
-.bolha { max-width: 80%; padding: 10px 14px; border-radius: 14px; font-size: 13px; line-height: 1.5; }
+.bolha { max-width: 80%; padding: 10px 14px; border-radius: 14px; font-size: 13px; line-height: 1.5; white-space: pre-wrap; }
 .msg.ia .bolha { background: #FFF3E0; color: var(--grafite); }
 .msg.usuario .bolha { background: var(--laranja); color: white; }
 .chat-input { display: flex; gap: 10px; }
@@ -43,16 +30,15 @@ body { font-family: 'Inter', system-ui, sans-serif; background: #F8F4ED; display
 .chat-input input:focus { border-color: var(--laranja); }
 .chat-input button { padding: 12px 22px; background: var(--laranja); color: white; border: none; border-radius: 25px; cursor: pointer; font-weight: 700; transition: background 0.2s; }
 .chat-input button:hover { background: #A04A0E; }
+.chat-input button:disabled { background: #ccc; cursor: not-allowed; }
 .ia-status { font-size: 11px; color: var(--cinza); margin-top: 8px; text-align: center; }
 .ia-status .modelo { font-weight: 600; color: var(--roxo); }
-
 .rodape { background: #FFFFFF; border-radius: 14px; padding: 12px 18px; border: 1px solid #F0E9DF; margin-top: 20px; }
 .rodape-grid { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
 .rodape-logo { flex-shrink: 0; } .rodape-logo .logo-vigorre { width: 50px; }
 .rodape-info { flex: 1; } .rodape-info .copyright { font-size: 8px; color: #8A8F98; } .rodape-info .tm { font-size: 6px; vertical-align: super; }
 .rodape-info .contato { font-size: 9px; color: #8A8F98; } .rodape-info a { color: #C65A11; text-decoration: none; } .rodape-info .email { font-size: 8px; color: #aaa; }
 .logo-vigorre-fallback { font-size: 12px; font-weight: 700; display: none; }
-
 @media (max-width: 768px) { .main-content { margin-left: 0; } .grid-ia { grid-template-columns: 1fr; } }
 </style>
 </head>
@@ -66,20 +52,19 @@ body { font-family: 'Inter', system-ui, sans-serif; background: #F8F4ED; display
     <button class="btn-sair-topo" onclick="window.location.href='dashboard.html'">🏠 Dashboard</button>
   </div>
 
-  <div style="font-size:12px;color:var(--cinza);margin-bottom:16px;display:flex;gap:12px;flex-wrap:wrap;">
-    <span>🔑 Chave: <span id="statusChave">Não configurada</span></span>
-    <span>📌 Modelo: <span id="statusModelo">Gemini 2.5 Flash</span></span>
-    <button class="btn btn-outline" onclick="configurarChave()" style="padding:2px 12px;font-size:11px;border:1px solid #E5E0D8;border-radius:6px;cursor:pointer;background:transparent;">🔑 Configurar</button>
+  <div style="font-size:12px;color:var(--cinza);margin-bottom:16px;display:flex;gap:12px;flex-wrap:wrap;align-items:center;">
+    <span>🔑 Chave: <span id="statusChave" style="font-weight:600;">Não configurada</span></span>
+    <button class="btn-sair-topo" onclick="configurarChave()" style="padding:4px 12px;font-size:11px;">🔑 Configurar</button>
   </div>
 
   <div class="grid-ia">
     <div class="card">
       <h3>📋 Comandos Rápidos</h3>
-      <button class="comando" onclick="perguntar('Criar um ofício para a Prefeitura solicitando apoio para projeto social')">📄 Criar Ofício</button>
-      <button class="comando" onclick="perguntar('Gerar um projeto social para jovens em situação de vulnerabilidade')">📋 Criar Projeto</button>
+      <button class="comando" onclick="perguntar('Crie um ofício para a Prefeitura solicitando apoio para projeto social')">📄 Criar Ofício</button>
+      <button class="comando" onclick="perguntar('Gere um projeto social para jovens em situação de vulnerabilidade')">📋 Criar Projeto</button>
       <button class="comando" onclick="perguntar('Sugerir estratégias de captação de recursos para ONG')">💰 Captação</button>
       <button class="comando" onclick="perguntar('Modelo de termo de parceria para profissionais voluntários')">📝 Termo de Parceria</button>
-      <button class="comando" onclick="perguntar('Como fazer prestação de contas para editais')">📊 Prestação de Contas</button>
+      <button class="comando" onclick="perguntar('Como fazer prestação de contas para editais?')">📊 Prestação de Contas</button>
       <button class="comando" onclick="perguntar('Sugerir indicadores de impacto social para projeto esportivo')">🎯 Indicadores</button>
       <button class="comando" onclick="perguntar('O que é LGPD e como aplicar na AMOVIN?')">🔒 LGPD</button>
     </div>
@@ -90,10 +75,10 @@ body { font-family: 'Inter', system-ui, sans-serif; background: #F8F4ED; display
       </div>
       <div class="chat-input">
         <input type="text" id="inputMsg" placeholder="Digite sua pergunta..." onkeypress="if(event.key==='Enter')enviarMensagem()">
-        <button onclick="enviarMensagem()">Enviar</button>
+        <button onclick="enviarMensagem()" id="btnEnviar">Enviar</button>
       </div>
       <div class="ia-status" id="iaStatus">
-        ⚡ <span class="modelo">Gemini 2.5 Flash</span> - Pronto para usar
+        ⚡ <span class="modelo">Gemini 1.5 Flash</span> - Pronto para usar
       </div>
     </div>
   </div>
@@ -116,27 +101,6 @@ body { font-family: 'Inter', system-ui, sans-serif; background: #F8F4ED; display
 <script src="config.js"></script>
 <script src="menu.js?v=20260904"></script>
 <script>
-// ============================================================
-// USAR CONFIG.JS OU LOCALSTORAGE (FALLBACK)
-// ============================================================
-function getGeminiKey() {
-    if (typeof AMOVIN_CONFIG !== 'undefined' && AMOVIN_CONFIG) {
-        return AMOVIN_CONFIG.getGeminiKey();
-    }
-    return localStorage.getItem('amovin_gemini_key');
-}
-
-function setGeminiKey(key) {
-    if (typeof AMOVIN_CONFIG !== 'undefined' && AMOVIN_CONFIG) {
-        AMOVIN_CONFIG.setGeminiKey(key);
-    } else {
-        localStorage.setItem('amovin_gemini_key', key);
-    }
-}
-
-// ============================================================
-// FUNÇÕES DO CHAT
-// ============================================================
 function adicionarMensagem(t, tipo) {
     var container = document.getElementById('chatMensagens');
     var d = document.createElement('div');
@@ -152,125 +116,69 @@ window.perguntar = function(t) {
 };
 
 function configurarChave() {
-    var key = prompt('🔑 Digite sua chave do OpenRouter (sk-or-v1-...):\n\nObtenha gratuitamente em: https://openrouter.ai/keys');
-    if (key && key.length > 10) {
-        setGeminiKey(key);
+    var key = prompt('🔑 Digite sua chave do Gemini (Google AI Studio):\n\nObtenha grátis em: https://aistudio.google.com/app/apikey');
+    if (key && key.trim().length > 20) {
+        AMOVIN_CONFIG.setGeminiKey(key);
         atualizarStatus();
-        mostrarToast('✅ Chave OpenRouter configurada com sucesso!', 'success');
+        AMOVIN_CONFIG.mostrarToast('✅ Chave configurada com sucesso!', 'success');
     } else if (key !== null) {
-        mostrarToast('⚠️ Chave inválida. Deve ter mais de 10 caracteres.', 'warning');
+        AMOVIN_CONFIG.mostrarToast('⚠️ Chave inválida.', 'warning');
     }
 }
 
 function atualizarStatus() {
-    var key = getGeminiKey();
     var chaveEl = document.getElementById('statusChave');
-    var modeloEl = document.getElementById('statusModelo');
-    var statusIa = document.getElementById('iaStatus');
-
-    if (key && key.length > 10) {
+    if (AMOVIN_CONFIG.isKeyConfigured()) {
         chaveEl.textContent = 'Configurada ✅';
         chaveEl.style.color = '#2E7D32';
-        modeloEl.textContent = 'Gemini 2.5 Flash';
-        statusIa.innerHTML = '⚡ <span class="modelo">Gemini 2.5 Flash</span> - Pronto para usar';
     } else {
         chaveEl.textContent = 'Não configurada';
         chaveEl.style.color = '#C62828';
-        statusIa.innerHTML = '⚠️ <span class="modelo">Sem chave</span> - Configure a chave primeiro';
     }
 }
 
-function mostrarToast(mensagem, tipo) {
-    var toast = document.createElement('div');
-    toast.textContent = mensagem;
-    toast.style.cssText = 'position:fixed;top:20px;right:20px;padding:16px 24px;border-radius:12px;color:white;font-weight:600;font-size:14px;z-index:10000;box-shadow:0 8px 32px rgba(0,0,0,0.15);animation:slideInRight 0.4s ease;max-width:400px;';
-    if (tipo === 'success') toast.style.background = '#57C220';
-    else if (tipo === 'error') toast.style.background = '#E53935';
-    else if (tipo === 'warning') toast.style.background = '#D97706';
-    else toast.style.background = '#1E88E5';
-    document.body.appendChild(toast);
-    setTimeout(function() {
-        toast.style.opacity = '0';
-        toast.style.transform = 'translateX(100%)';
-        toast.style.transition = 'all 0.4s ease';
-        setTimeout(function() { toast.remove(); }, 400);
-    }, 4000);
-}
-
-window.enviarMensagem = function() {
-    var t = document.getElementById('inputMsg').value.trim();
+window.enviarMensagem = async function() {
+    var input = document.getElementById('inputMsg');
+    var t = input.value.trim();
     if (!t) return;
-    adicionarMensagem(t, 'usuario');
-    document.getElementById('inputMsg').value = '';
-
-    var key = getGeminiKey();
-    if (!key) {
-        adicionarMensagem('⚠️ Chave OpenRouter não configurada. Clique em "Configurar" acima.', 'ia');
+    
+    if (!AMOVIN_CONFIG.isKeyConfigured()) {
+        adicionarMensagem('⚠️ Chave da IA não configurada. Clique em "🔑 Configurar" acima.', 'ia');
         return;
     }
 
-    document.getElementById('iaStatus').innerHTML = '⏳ Processando... <span class="modelo">Gemini 2.5 Flash</span>';
-    document.getElementById('iaStatus').style.color = '#E65100';
+    adicionarMensagem(t, 'usuario');
+    input.value = '';
+    
+    var btn = document.getElementById('btnEnviar');
+    var status = document.getElementById('iaStatus');
+    btn.disabled = true;
+    status.innerHTML = '⏳ Processando... <span class="modelo">Gemini 1.5 Flash</span>';
+    status.style.color = '#E65100';
 
-    var prompt = `Você é o assistente virtual da AMOVIN (Associação e Movimento pela Inclusão). 
-Responda de forma profissional, educada e prática. 
-Se for um pedido de criação de documento, forneça um modelo completo e bem estruturado.
+    var prompt = `Você é o assistente virtual da AMOVIN (Associação e Movimento pela Inclusão). Responda de forma profissional, educada e prática. Se for um pedido de criação de documento, forneça um modelo completo e bem estruturado.\n\nPergunta: ${t}`;
 
-Pergunta: ` + t;
-
-    fetch('https://openrouter.ai/api/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-            'Authorization': 'Bearer ' + key,
-            'Content-Type': 'application/json',
-            'HTTP-Referer': window.location.origin,
-            'X-Title': 'AMOVIN ERP'
-        },
-        body: JSON.stringify({
-            model: 'google/gemini-2.5-flash',
-            max_tokens: 4000,
-            messages: [{ role: 'user', content: prompt }]
-        })
-    })
-    .then(function(r) { return r.json(); })
-    .then(function(d) {
-        document.getElementById('iaStatus').innerHTML = '✅ Resposta recebida <span class="modelo">Gemini 2.5 Flash</span>';
-        document.getElementById('iaStatus').style.color = '#2E7D32';
-        
-        if (d.choices && d.choices[0] && d.choices[0].message) {
-            adicionarMensagem(d.choices[0].message.content, 'ia');
-        } else if (d.error) {
-            console.log('❌ Erro da API:', d.error);
-            adicionarMensagem('❌ Erro: ' + (d.error.message || 'Erro desconhecido'), 'ia');
-        } else {
-            adicionarMensagem('Desculpe, não consegui processar sua pergunta.', 'ia');
-        }
-    })
-    .catch(function(err) {
-        console.log('❌ Erro de conexão:', err);
-        document.getElementById('iaStatus').innerHTML = '❌ Erro ao conectar';
-        document.getElementById('iaStatus').style.color = '#C62828';
-        adicionarMensagem('❌ Erro ao processar. Verifique sua conexão.', 'ia');
-    });
+    try {
+        var data = await AMOVIN_CONFIG.callGeminiAPI(prompt, { temperature: 0.7, maxTokens: 2000, mimeType: 'text/plain' });
+        var resposta = data.candidates[0].content.parts[0].text;
+        adicionarMensagem(resposta, 'ia');
+        status.innerHTML = '✅ <span class="modelo">Gemini 1.5 Flash</span> - Pronto para usar';
+        status.style.color = '#2E7D32';
+    } catch (erro) {
+        console.error('Erro:', erro);
+        adicionarMensagem('❌ Erro ao processar: ' + erro.message, 'ia');
+        status.innerHTML = '❌ Erro na conexão';
+        status.style.color = '#C62828';
+    } finally {
+        btn.disabled = false;
+    }
 };
 
-// ============================================================
-// VERIFICAÇÃO DE SESSÃO
-// ============================================================
 if (!sessionStorage.getItem('amovin_logado')) { window.location.href = 'index.html'; }
 
-// ============================================================
-// INICIALIZAÇÃO
-// ============================================================
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('🤖 Assistente IA - AMOVIN ERP (OpenRouter)');
     atualizarStatus();
-    console.log('🔑 Chave:', getGeminiKey() ? 'Configurada ✅' : 'Não configurada ❌');
 });
-
-var styleToast = document.createElement('style');
-styleToast.textContent = `@keyframes slideInRight { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }`;
-document.head.appendChild(styleToast);
 </script>
 </body>
 </html>
