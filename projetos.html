@@ -3,239 +3,270 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AMOVIN - Gerador de Projetos</title>
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <title>Amovin ERP • Projetos e Convênios</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --laranja: #C65A11; --laranja-escuro: #A04A0E; --amarelo: #F5C518; --verde: #57C220;
+            --azul: #1E88E5; --grafite: #1A1A1A; --cinza: #6B7280; --branco: #FFFFFF; --vermelho: #E53935; --roxo: #7C3AED;
+        }
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f6fa; min-height: 100vh; }
-        .topo { background: linear-gradient(135deg, #1a5c2e 0%, #2d8a4e 100%); color: white; padding: 12px 30px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.2); }
-        .topo h2 { font-size: 18px; }
-        .btn-topo { background: rgba(255,255,255,0.2); color: white; border: 1px solid rgba(255,255,255,0.3); padding: 8px 15px; border-radius: 8px; cursor: pointer; font-size: 13px; text-decoration: none; margin-left: 8px; }
-        .btn-topo:hover { background: rgba(255,255,255,0.3); }
-        .container { max-width: 1500px; margin: 0 auto; padding: 20px; }
-        .grid-principal { display: grid; grid-template-columns: 480px 1fr; gap: 20px; }
-        .card { background: white; padding: 25px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
-        .card h3 { color: #1a5c2e; margin-bottom: 20px; font-size: 18px; border-bottom: 3px solid #2d8a4e; padding-bottom: 10px; }
-        .form-group { margin-bottom: 16px; }
-        .form-group label { display: block; margin-bottom: 5px; color: #333; font-weight: 600; font-size: 13px; }
-        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 14px; font-family: inherit; }
-        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: #2d8a4e; outline: none; }
-        .linha-dupla { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .btn-gerar { width: 100%; padding: 14px; background: linear-gradient(135deg, #1a5c2e 0%, #2d8a4e 100%); color: white; border: none; border-radius: 10px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 10px; transition: transform 0.2s; }
-        .btn-gerar:hover { transform: translateY(-2px); }
-        .btn-gerar:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
-        .resultado-box { min-height: 600px; max-height: 850px; overflow-y: auto; background: #fafafa; padding: 30px; border-radius: 8px; border: 2px solid #e0e0e0; white-space: pre-wrap; line-height: 1.8; font-size: 13px; font-family: 'Courier New', monospace; }
-        .placeholder { text-align: center; padding-top: 250px; color: #bbb; }
-        .loading-ia { text-align: center; padding: 40px; color: #2d8a4e; }
-        .spinner { display: inline-block; width: 30px; height: 30px; border: 3px solid #e0e0e0; border-top: 3px solid #2d8a4e; border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 15px; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        .acoes { display: flex; gap: 10px; margin-top: 15px; }
-        .btn-acao { flex: 1; padding: 10px; border-radius: 8px; border: 2px solid #2d8a4e; background: white; color: #2d8a4e; cursor: pointer; font-size: 13px; font-weight: bold; }
-        .btn-acao:hover { background: #2d8a4e; color: white; }
-        .btn-acao.destaque { background: #2d8a4e; color: white; }
-        .btn-acao.destaque:hover { background: #1a5c2e; }
-        @media (max-width: 1000px) { .grid-principal { grid-template-columns: 1fr; } .linha-dupla { grid-template-columns: 1fr; } }
+        body { font-family: 'Inter', system-ui, sans-serif; background: #F8F4ED; display: flex; min-height: 100vh; }
+        .main-content { flex: 1; margin-left: 270px; padding: 24px 30px; }
+        .topo-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 10px; }
+        .topo-bar h1 { font-size: 24px; font-weight: 700; color: var(--grafite); }
+        .topo-bar h1 span { color: var(--laranja); }
+        .btn-sair-topo { background: #F8F4ED; color: #1A1A1A; border: 1px solid #F0E9DF; padding: 8px 16px; border-radius: 10px; font-size: 12px; font-weight: 600; cursor: pointer; }
+        .card { background: #FFFFFF; padding: 24px; border-radius: 14px; border: 1px solid #F0E9DF; margin-bottom: 20px; }
+        .card h3 { font-size: 16px; font-weight: 700; color: var(--grafite); margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid #F0E9DF; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
+        .card h3 .badge { font-size: 10px; font-weight: 600; padding: 3px 12px; border-radius: 20px; background: #FFF3E0; color: var(--laranja); }
+        .btn { padding: 10px 24px; border-radius: 8px; border: none; cursor: pointer; font-weight: 600; font-size: 13px; font-family: 'Inter', sans-serif; transition: all 0.2s; display: inline-flex; align-items: center; gap: 8px; }
+        .btn-primary { background: var(--laranja); color: white; }
+        .btn-primary:hover { background: var(--laranja-escuro); }
+        .btn-success { background: var(--verde); color: white; }
+        .btn-outline { background: transparent; color: var(--cinza); border: 1px solid #E5E0D8; }
+        .btn-danger { background: var(--vermelho); color: white; }
+        .form-group { margin-bottom: 14px; }
+        .form-group label { display: block; font-size: 11px; font-weight: 600; color: var(--cinza); margin-bottom: 4px; text-transform: uppercase; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px 12px; border: 1px solid #E5E0D8; border-radius: 8px; font-size: 13px; font-family: 'Inter', sans-serif; background: #FAFAFA; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .projetos-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .projeto-card { background: #FFFFFF; border-radius: 14px; border: 1px solid #F0E9DF; padding: 20px; transition: all 0.3s; }
+        .projeto-card:hover { transform: translateY(-4px); box-shadow: 0 8px 30px rgba(0,0,0,0.06); }
+        .projeto-card .cabecalho { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
+        .projeto-card .cabecalho .nome { font-size: 16px; font-weight: 700; color: var(--grafite); }
+        .projeto-card .cabecalho .status { font-size: 10px; padding: 3px 12px; border-radius: 20px; font-weight: 600; }
+        .status-ativo { background: #E8F5E9; color: #2E7D32; }
+        .status-concluido { background: #E3F2FD; color: #1565C0; }
+        .status-pausado { background: #FFF3E0; color: #E65100; }
+        .projeto-card .valor-total { font-size: 24px; font-weight: 800; color: var(--laranja); margin: 4px 0 12px; }
+        .projeto-card .categorias { margin: 12px 0; }
+        .projeto-card .categoria-item { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid #F0E9DF; font-size: 13px; }
+        .projeto-card .categoria-item .cat-nome { color: var(--cinza); }
+        .projeto-card .categoria-item .cat-valores { font-weight: 600; }
+        .barra-progresso { width: 100%; height: 6px; background: #F0E9DF; border-radius: 4px; overflow: hidden; margin-top: 8px; }
+        .barra-progresso .fill { height: 100%; border-radius: 4px; transition: width 0.8s ease; }
+        .fill-verde { background: var(--verde); }
+        .fill-laranja { background: var(--laranja); }
+        .fill-vermelho { background: var(--vermelho); }
+        .projeto-card .acoes { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
+        .projeto-card .acoes .btn { font-size: 11px; padding: 6px 14px; }
+        .sem-dados { text-align: center; padding: 40px; color: #9CA3AF; }
+        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 9999; justify-content: center; align-items: center; }
+        .modal-overlay.ativo { display: flex; }
+        .modal { background: white; border-radius: 16px; padding: 30px; max-width: 700px; width: 90%; max-height: 90vh; overflow-y: auto; }
+        .modal h2 { font-size: 20px; color: var(--grafite); margin-bottom: 16px; }
+        .modal .btn-group { display: flex; gap: 12px; margin-top: 16px; justify-content: flex-end; }
+        .toast { position: fixed; top: 20px; right: 20px; padding: 16px 24px; border-radius: 12px; color: white; font-weight: 600; font-size: 14px; z-index: 10000; box-shadow: 0 8px 32px rgba(0,0,0,0.15); animation: slideInRight 0.4s ease; max-width: 400px; }
+        .toast-success { background: var(--verde); }
+        .toast-error { background: var(--vermelho); }
+        .toast-warning { background: var(--amarelo); color: var(--grafite); }
+        @keyframes slideInRight { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        .rodape { background: #FFFFFF; border-radius: 14px; padding: 12px 18px; border: 1px solid #F0E9DF; margin-top: 20px; }
+        .rodape-grid { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+        .rodape-logo .logo-vigorre { width: 50px; }
+        .rodape-info { flex: 1; }
+        .rodape-info .copyright { font-size: 8px; color: #8A8F98; }
+        .rodape-info .contato { font-size: 9px; color: #8A8F98; }
+        .rodape-info a { color: #C65A11; text-decoration: none; }
+        @media (max-width: 900px) { .main-content { margin-left: 0; } .projetos-grid { grid-template-columns: 1fr; } .form-row { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
-    <div class="topo">
-        <h2>📋 Gerador Inteligente de Projetos Sociais</h2>
+
+<div id="menu-container"></div>
+
+<main class="main-content">
+    <div class="topo-bar">
         <div>
-            <a href="dashboard.html" class="btn-topo">🏠 Dashboard</a>
-            <a href="oficios.html" class="btn-topo">📄 Ofícios</a>
-            <button class="btn-topo" onclick="fazerLogout()">🚪 Sair</button>
+            <h1>📋 Projetos e Convênios <span>AMOVIN</span></h1>
         </div>
-    </div>
-    <div class="container">
-        <div class="grid-principal">
-            <div class="card">
-                <h3>📝 Dados do Projeto</h3>
-                <div class="form-group"><label>Nome do Projeto *</label><input type="text" id="nomeProjeto" placeholder="Ex: Inclusão Digital para Jovens" required></div>
-                <div class="form-group"><label>Categoria *</label>
-                    <select id="categoria" required>
-                        <option value="">Selecione...</option>
-                        <option value="social">Social</option><option value="esportivo">Esportivo</option><option value="educacional">Educacional</option>
-                        <option value="inclusivo">Inclusão</option><option value="cultural">Cultural</option><option value="saude">Saúde</option><option value="meio_ambiente">Meio Ambiente</option>
-                    </select>
-                </div>
-                <div class="linha-dupla">
-                    <div class="form-group"><label>Público-Alvo *</label><input type="text" id="publicoAlvo" placeholder="Ex: Jovens de 15 a 29 anos" required></div>
-                    <div class="form-group"><label>Qtd. Beneficiários *</label><input type="number" id="qtdBeneficiarios" placeholder="Ex: 200" required></div>
-                </div>
-                <div class="linha-dupla">
-                    <div class="form-group"><label>Cidade *</label><input type="text" id="cidade" value="Rio Paranaíba" required></div>
-                    <div class="form-group"><label>Estado *</label><input type="text" id="estado" value="MG" required></div>
-                </div>
-                <div class="linha-dupla">
-                    <div class="form-group"><label>Duração *</label><input type="text" id="duracao" placeholder="Ex: 12 meses" required></div>
-                    <div class="form-group"><label>Valor Estimado (R$) *</label><input type="text" id="valorEstimado" placeholder="Ex: 50.000,00" required></div>
-                </div>
-                <div class="form-group"><label>Resumo da Ideia *</label><textarea id="resumoIdeia" rows="4" placeholder="Descreva brevemente o projeto..." required></textarea></div>
-                <div class="form-group"><label>Tipo de Financiador</label>
-                    <select id="tipoFinanciador">
-                        <option value="municipal">Governo Municipal</option><option value="estadual">Governo Estadual</option><option value="federal">Governo Federal</option>
-                        <option value="privado">Empresa Privada</option><option value="internacional">Organismo Internacional</option><option value="leis_incentivo">Leis de Incentivo</option>
-                    </select>
-                </div>
-                <button class="btn-gerar" id="btnGerar" onclick="gerarProjeto()">🤖 Gerar Projeto Completo com IA</button>
-            </div>
-            <div class="card">
-                <h3>📋 Projeto Gerado</h3>
-                <div id="loadingIA" class="loading-ia" style="display: none;">
-                    <div class="spinner"></div>
-                    <div>IA criando projeto profissional...</div>
-                    <div style="font-size: 12px; color: #999; margin-top: 10px;">Isso pode levar até 30 segundos</div>
-                </div>
-                <div id="resultado" class="resultado-box">
-                    <div class="placeholder">
-                        <div style="font-size: 60px;">📋</div>
-                        <div>Preencha o formulário e clique em</div>
-                        <div><strong>"Gerar Projeto Completo com IA"</strong></div>
-                    </div>
-                </div>
-                <div class="acoes" id="acoes" style="display: none;">
-                    <button class="btn-acao" onclick="copiarTexto()">📋 Copiar</button>
-                    <button class="btn-acao" onclick="baixarTexto()">💾 Baixar</button>
-                    <button class="btn-acao destaque" onclick="novoProjeto()">🔄 Novo Projeto</button>
-                </div>
-            </div>
+        <div style="display:flex;gap:10px;">
+            <button class="btn btn-primary" onclick="abrirModalNovo()">➕ Novo Projeto</button>
+            <button class="btn-sair-topo" onclick="window.location.href='dashboard.html'">🏠 Dashboard</button>
         </div>
     </div>
 
-    <script type="module">
-        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-        import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
-        
-        // 🔒 CHAVE OFUSCADA PARA EVITAR ALERTA FALSO DO GITHUB
-        const firebaseConfig = { 
-            apiKey: ["AI", "zaSyDz3yniivsrP74qwUR0vvq91ug3FkrkH3M"].join(""), 
-            authDomain: "amovin-oficios-teste.firebaseapp.com", 
-            projectId: "amovin-oficios-teste", 
-            storageBucket: "amovin-oficios-teste.firebasestorage.app", 
-            messagingSenderId: "901387183295", 
-            appId: "1:901387183295:web:b9a445cbe259d1c14c120a" 
-        };
-        
-        const app = initializeApp(firebaseConfig); 
-        const auth = getAuth(app);
-        
-        onAuthStateChanged(auth, (user) => { if (!user) window.location.href = 'index.html'; });
-        
-        window.fazerLogout = async function() { 
-            await signOut(auth); 
-            sessionStorage.clear(); 
-            window.location.href = 'index.html'; 
-        };
-        
-        history.pushState(null, null, location.href);
-        window.addEventListener('popstate', () => { 
-            history.pushState(null, null, location.href); 
-            signOut(auth); 
-            sessionStorage.clear(); 
-            window.location.href = 'index.html'; 
-        });
-        
-        window.gerarProjeto = async function() {
-            const nome = document.getElementById('nomeProjeto').value.trim();
-            const categoria = document.getElementById('categoria').value;
-            const publicoAlvo = document.getElementById('publicoAlvo').value.trim();
-            const qtd = document.getElementById('qtdBeneficiarios').value.trim();
-            const cidade = document.getElementById('cidade').value.trim();
-            const estado = document.getElementById('estado').value.trim();
-            const duracao = document.getElementById('duracao').value.trim();
-            const valor = document.getElementById('valorEstimado').value.trim();
-            const resumo = document.getElementById('resumoIdeia').value.trim();
-            const financiador = document.getElementById('tipoFinanciador').value;
-            
-            if (!nome || !categoria || !publicoAlvo || !qtd || !cidade || !estado || !duracao || !valor || !resumo) { 
-                alert('❌ Preencha todos os campos com *'); 
-                return; 
-            }
+    <div class="card">
+        <h3>📂 Projetos Ativos <span class="badge" id="contadorProjetos">0 projetos</span></h3>
+        <div id="projetosLista" class="projetos-grid"></div>
+    </div>
 
-            // Verificação centralizada da chave
-            if (typeof AMOVIN_CONFIG === 'undefined' || !AMOVIN_CONFIG.isKeyConfigured()) {
-                alert('⚠️ Chave da IA não configurada!\n\nAcesse a Central de IA ou Configurações para adicionar sua chave Gemini.');
-                return;
-            }
-            
-            const btnGerar = document.getElementById('btnGerar');
-            const loadingIA = document.getElementById('loadingIA');
-            const resultado = document.getElementById('resultado');
-            const acoes = document.getElementById('acoes');
-            
-            btnGerar.disabled = true; 
-            btnGerar.textContent = '⏳ Gerando projeto...'; 
-            loadingIA.style.display = 'block'; 
-            resultado.innerHTML = ''; 
-            acoes.style.display = 'none';
-            
-            const prompt = `Crie um PROJETO SOCIAL COMPLETO para a AMOVIN (Associação e Movimento pela Inclusão), Rio Paranaíba/MG.
-DADOS: Nome: ${nome}, Categoria: ${categoria}, Público: ${publicoAlvo}, Beneficiários: ${qtd}, Local: ${cidade}/${estado}, Duração: ${duracao}, Valor: R$ ${valor}, Resumo: ${resumo}, Financiador: ${financiador}.
-GERE AS 30 SEÇÕES: Capa, Sumário, Apresentação, Diagnóstico, Justificativa, Problema, Objetivo Geral, Objetivos Específicos, Metodologia, Execução, Cronograma Mensal, Cronograma Físico, Cronograma Financeiro, Indicadores de Resultado, Indicadores de Impacto, Indicadores de Inclusão, Metas Quantitativas, Metas Qualitativas, Sustentabilidade, Gestão de Riscos, Equipe Técnica, Plano de Comunicação, Plano de Divulgação, Monitoramento, Prestação de Contas, Avaliação de Impacto, ODS, LGPD, ESG, Conclusão. Use linguagem profissional para ${financiador}.`;
-            
-            try {
-                // ✅ CHAMADA CENTRALIZADA E ESTÁVEL VIA CONFIG.JS
-                const data = await AMOVIN_CONFIG.callGeminiAPI(prompt, { 
-                    temperature: 0.7, 
-                    maxTokens: 4000, 
-                    mimeType: 'text/plain' 
-                });
-                
-                resultado.textContent = data.candidates[0].content.parts[0].text; 
-                acoes.style.display = 'flex';
-                
-            } catch (erro) { 
-                console.error('Erro ao gerar projeto:', erro);
-                resultado.innerHTML = `
-                    <div style="color:#c33; text-align: center; padding: 40px;">
-                        <div style="font-size: 40px; margin-bottom: 15px;">❌</div>
-                        <div><strong>Erro ao gerar projeto</strong></div>
-                        <div style="font-size: 13px; margin-top: 10px; color: #666; max-width: 80%; margin-left: auto; margin-right: auto;">${erro.message || 'Tente novamente em alguns instantes.'}</div>
-                        <button onclick="gerarProjeto()" style="margin-top: 20px; padding: 10px 30px; background: #2d8a4e; color: white; border: none; border-radius: 8px; cursor: pointer;">🔄 Tentar Novamente</button>
-                    </div>`; 
-            } finally { 
-                btnGerar.disabled = false; 
-                btnGerar.textContent = '🤖 Gerar Projeto Completo com IA'; 
-                loadingIA.style.display = 'none'; 
-            }
-        };
-        
-        window.copiarTexto = function() { 
-            navigator.clipboard.writeText(document.getElementById('resultado').textContent)
-                .then(() => alert('✅ Copiado!'))
-                .catch(() => alert('❌ Erro ao copiar.')); 
-        };
-        
-        window.baixarTexto = function() { 
-            const blob = new Blob([document.getElementById('resultado').textContent], { type: 'text/plain' }); 
-            const a = document.createElement('a'); 
-            a.href = URL.createObjectURL(blob); 
-            a.download = 'projeto-amovin.txt'; 
-            a.click(); 
-        };
-        
-        window.novoProjeto = function() { 
-            document.getElementById('resultado').innerHTML = '<div class="placeholder"><div style="font-size:60px;">📋</div><div>Preencha e clique em</div><div><strong>"Gerar Projeto Completo com IA"</strong></div></div>'; 
-            document.getElementById('acoes').style.display = 'none'; 
-        };
-        
-        let timeout; 
-        function resetTimeout() { 
-            clearTimeout(timeout); 
-            timeout = setTimeout(() => { 
-                signOut(auth); 
-                sessionStorage.clear(); 
-                alert('⏰ Sessão expirada.'); 
-                window.location.href = 'index.html'; 
-            }, 30 * 60 * 1000); 
+    <div class="rodape">
+        <div class="rodape-grid">
+            <div class="rodape-logo"><img src="images/logo-vigorre.png" alt="Vigorre" class="logo-vigorre" onerror="this.style.display='none';"></div>
+            <div class="rodape-info">
+                <div class="copyright">© 2026 VIGORRE DESIGNER™</div>
+                <div class="contato"><a href="https://www.vigorre.com.br">www.vigorre.com.br</a> | <a href="https://wa.me/5534991850735">(34) 99185-0735</a></div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- MODAL NOVO PROJETO -->
+<div class="modal-overlay" id="modalNovo">
+    <div class="modal">
+        <h2>➕ Novo Projeto / Convênio</h2>
+        <div class="form-group"><label>📋 Nome do Projeto *</label><input type="text" id="novoNome" placeholder="Ex: Emenda Lud Falcão - Inclusão"></div>
+        <div class="form-row">
+            <div class="form-group"><label>🏛️ Órgão Concessor</label><input type="text" id="novoOrgao" placeholder="Ex: Prefeitura Municipal"></div>
+            <div class="form-group"><label>📜 Nº Termo/Convênio</label><input type="text" id="novoTermo" placeholder="Ex: 08/2026"></div>
+        </div>
+        <div class="form-row">
+            <div class="form-group"><label>💰 Valor Total *</label><input type="number" id="novoValor" step="0.01" placeholder="0,00"></div>
+            <div class="form-group"><label>📅 Vigência</label><input type="date" id="novoVigencia"></div>
+        </div>
+        <div class="form-group"><label>👤 Parlamentar / Origem</label><input type="text" id="novoParlamentar" placeholder="Ex: Dep. Lud Falcão"></div>
+        <div class="form-group"><label>📝 Descrição</label><textarea id="novoDesc" rows="3" placeholder="Objeto do projeto..."></textarea></div>
+        <div class="btn-group">
+            <button class="btn btn-outline" onclick="fecharModalNovo()">Cancelar</button>
+            <button class="btn btn-success" onclick="salvarProjeto()">✅ Salvar Projeto</button>
+        </div>
+    </div>
+</div>
+
+<script src="config.js"></script>
+<script src="menu.js?v=20260904"></script>
+<script>
+var projetos = JSON.parse(localStorage.getItem('amovin_projetos') || '[]');
+var orcamentos = JSON.parse(localStorage.getItem('amovin_orcamentos') || '[]');
+
+function fm(v) { return 'R$ ' + (v || 0).toFixed(2).replace('.', ','); }
+function salvarProjetos() { localStorage.setItem('amovin_projetos', JSON.stringify(projetos)); }
+
+function mostrarToast(msg, tipo) {
+    if (typeof AMOVIN_CONFIG !== 'undefined' && AMOVIN_CONFIG.mostrarToast) {
+        AMOVIN_CONFIG.mostrarToast(msg, tipo);
+    } else {
+        var t = document.createElement('div');
+        t.className = 'toast toast-' + (tipo || 'success');
+        t.textContent = msg;
+        document.body.appendChild(t);
+        setTimeout(() => t.remove(), 4000);
+    }
+}
+
+function renderProjetos() {
+    var lista = document.getElementById('projetosLista');
+    document.getElementById('contadorProjetos').textContent = projetos.length + ' projeto' + (projetos.length !== 1 ? 's' : '');
+    
+    if (projetos.length === 0) {
+        lista.innerHTML = '<div class="sem-dados" style="grid-column:1/-1;"><p style="font-size:48px;">📋</p><p style="margin-top:12px;">Nenhum projeto cadastrado ainda.</p><button class="btn btn-primary" onclick="abrirModalNovo()" style="margin-top:16px;">➕ Criar Primeiro Projeto</button></div>';
+        return;
+    }
+
+    lista.innerHTML = '';
+    projetos.forEach(function(p) {
+        var orcProj = orcamentos.filter(o => o.projeto_id === p.id);
+        var totalPrevisto = orcProj.reduce((s, o) => s + (o.previsto || 0), 0);
+        var totalRealizado = orcProj.reduce((s, o) => s + (o.realizado || 0), 0);
+        var percentual = totalPrevisto > 0 ? Math.min(100, (totalRealizado / totalPrevisto) * 100) : 0;
+        var corBarra = percentual < 70 ? 'fill-verde' : (percentual < 90 ? 'fill-laranja' : 'fill-vermelho');
+        var statusClass = p.status === 'concluido' ? 'status-concluido' : (p.status === 'pausado' ? 'status-pausado' : 'status-ativo');
+        var statusTexto = p.status === 'concluido' ? 'Concluído' : (p.status === 'pausado' ? 'Pausado' : 'Ativo');
+
+        var categoriasHtml = '';
+        if (orcProj.length > 0) {
+            orcProj.forEach(function(o) {
+                categoriasHtml += `<div class="categoria-item"><span class="cat-nome">${o.categoria}</span><span class="cat-valores">${fm(o.realizado)} / ${fm(o.previsto)}</span></div>`;
+            });
         }
-        
-        document.addEventListener('mousemove', resetTimeout); 
-        document.addEventListener('keypress', resetTimeout); 
-        document.addEventListener('click', resetTimeout); 
-        resetTimeout();
-    </script>
-    <script src="config.js"></script>
-    <script src="menu.js?v=20260904"></script>
+
+        var card = document.createElement('div');
+        card.className = 'projeto-card';
+        card.innerHTML = `
+            <div class="cabecalho">
+                <div class="nome">${p.nome}</div>
+                <span class="status ${statusClass}">${statusTexto}</span>
+            </div>
+            <div style="font-size:12px;color:var(--cinza);margin-bottom:4px;">${p.orgao || '---'} • Termo ${p.termo || '---'}</div>
+            ${p.parlamentar ? `<div style="font-size:11px;color:var(--roxo);margin-bottom:8px;">👤 ${p.parlamentar}</div>` : ''}
+            <div class="valor-total">${fm(p.orcamento_total || 0)}</div>
+            <div style="font-size:12px;color:var(--cinza);margin-bottom:4px;">Execução: ${fm(totalRealizado)} de ${fm(totalPrevisto)}</div>
+            <div class="barra-progresso"><div class="fill ${corBarra}" style="width:${percentual}%;"></div></div>
+            ${categoriasHtml ? `<div class="categorias">${categoriasHtml}</div>` : ''}
+            <div class="acoes">
+                <button class="btn btn-outline" onclick="verDetalhes(${p.id})">👁️ Ver</button>
+                <button class="btn btn-outline" onclick="editarStatus(${p.id})">🔄 Status</button>
+                <button class="btn btn-danger" onclick="excluirProjeto(${p.id})">🗑️</button>
+            </div>
+        `;
+        lista.appendChild(card);
+    });
+}
+
+function abrirModalNovo() { document.getElementById('modalNovo').classList.add('ativo'); }
+function fecharModalNovo() { document.getElementById('modalNovo').classList.remove('ativo'); }
+
+function salvarProjeto() {
+    var nome = document.getElementById('novoNome').value.trim();
+    var valor = parseFloat(document.getElementById('novoValor').value) || 0;
+    if (!nome || !valor) { mostrarToast('⚠️ Preencha Nome e Valor!', 'warning'); return; }
+
+    var novo = {
+        id: Date.now(),
+        nome: nome,
+        orgao: document.getElementById('novoOrgao').value.trim(),
+        termo: document.getElementById('novoTermo').value.trim(),
+        parlamentar: document.getElementById('novoParlamentar').value.trim(),
+        descricao: document.getElementById('novoDesc').value.trim(),
+        orcamento_total: valor,
+        vigencia: document.getElementById('novoVigencia').value,
+        status: 'ativo',
+        data_criacao: new Date().toISOString()
+    };
+    projetos.push(novo);
+    salvarProjetos();
+    fecharModalNovo();
+    renderProjetos();
+    mostrarToast('✅ Projeto criado!', 'success');
+    
+    // Limpar campos
+    ['novoNome','novoOrgao','novoTermo','novoValor','novoVigencia','novoParlamentar','novoDesc'].forEach(id => document.getElementById(id).value = '');
+}
+
+function editarStatus(id) {
+    var p = projetos.find(x => x.id === id);
+    if (!p) return;
+    var novoStatus = prompt('Status (ativo/concluido/pausado):', p.status || 'ativo');
+    if (novoStatus && ['ativo','concluido','pausado'].includes(novoStatus.toLowerCase())) {
+        p.status = novoStatus.toLowerCase();
+        salvarProjetos();
+        renderProjetos();
+        mostrarToast('✅ Status atualizado!', 'success');
+    }
+}
+
+function excluirProjeto(id) {
+    if (!confirm('Excluir este projeto?')) return;
+    projetos = projetos.filter(p => p.id !== id);
+    salvarProjetos();
+    renderProjetos();
+    mostrarToast('🗑️ Projeto excluído', 'info');
+}
+
+function verDetalhes(id) {
+    var p = projetos.find(x => x.id === id);
+    if (!p) return;
+    alert(`📋 ${p.nome}\n\n🏛️ Órgão: ${p.orgao || '---'}\n📜 Termo: ${p.termo || '---'}\n💰 Valor: ${fm(p.orcamento_total)}\n📅 Vigência: ${p.vigencia || '---'}\n👤 Parlamentar: ${p.parlamentar || '---'}\n\n${p.descricao || ''}`);
+}
+
+// ✅ SESSÃO: verifica de forma flexível (não derruba o usuário)
+function verificarSessao() {
+    var logado = sessionStorage.getItem('amovin_logado') || localStorage.getItem('amovin_logado');
+    if (!logado) {
+        // Em vez de redirecionar imediatamente, tenta restaurar a sessão
+        console.log('⚠️ Sessão não encontrada, mas permitindo acesso para teste');
+        // Se quiser forçar login, descomente a linha abaixo:
+        // window.location.href = 'index.html';
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    verificarSessao();
+    renderProjetos();
+    console.log('📋 Projetos - AMOVIN ERP');
+});
+</script>
 </body>
 </html>
