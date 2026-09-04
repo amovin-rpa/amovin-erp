@@ -10,7 +10,7 @@
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f6fa; min-height: 100vh; }
         .topo { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 12px 30px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.2); }
         .topo h2 { font-size: 18px; }
-        .btn-topo { background: rgba(255,255,255,0.2); color: white; border: 1px solid rgba(255,255,255,0.3); padding: 8px 15px; border-radius: 8px; cursor: pointer; font-size: 13px; text-decoration: none; }
+        .btn-topo { background: rgba(255,255,255,0.2); color: white; border: 1px solid rgba(255,255,255,0.3); padding: 8px 15px; border-radius: 8px; cursor: pointer; font-size: 13px; text-decoration: none; margin-left: 10px; }
         .btn-topo:hover { background: rgba(255,255,255,0.3); }
         .container { max-width: 1400px; margin: 0 auto; padding: 20px; }
         .grid-principal { display: grid; grid-template-columns: 450px 1fr; gap: 20px; }
@@ -63,20 +63,47 @@
                 <h3>📋 Ofício Gerado</h3>
                 <div id="loadingIA" class="loading-ia" style="display: none;"><div class="spinner"></div><div>IA criando ofício profissional...</div><div style="font-size: 12px; color: #999; margin-top: 10px;">Isso pode levar até 15 segundos</div></div>
                 <div id="resultado" class="resultado-box"><div class="resultado-placeholder"><div style="font-size: 60px; margin-bottom: 20px;">📄</div><div>Preencha o formulário e clique em</div><div><strong>"Gerar Ofício com IA"</strong></div></div></div>
-                <div class="acoes" id="acoes" style="display: none;"><button class="btn-acao" onclick="copiarTexto()">📋 Copiar</button><button class="btn-acao" onclick="baixarTexto()">💾 Baixar TXT</button><button class="btn-acao destaque" onclick="novoOfício()">🔄 Novo Ofício</button></div>
+                <div class="acoes" id="acoes" style="display: none;"><button class="btn-acao" onclick="copiarTexto()">📋 Copiar</button><button class="btn-acao" onclick="baixarTexto()">💾 Baixar TXT</button><button class="btn-acao destaque" onclick="novoOficio()">🔄 Novo Ofício</button></div>
             </div>
         </div>
     </div>
+
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
         import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
-        const firebaseConfig = { apiKey: "AIzaSyDu5663V7pAamG2lzjD1i2CNTKh6uPZO3U", authDomain: "amovin-oficios-teste.firebaseapp.com", projectId: "amovin-oficios-teste", storageBucket: "amovin-oficios-teste.firebasestorage.app", messagingSenderId: "901387183295", appId: "1:901387183295:web:b9a445cbe259d1c14c120a" };
-        const app = initializeApp(firebaseConfig); const auth = getAuth(app);
+        
+        const firebaseConfig = { 
+            apiKey: "AIzaSyDu5663V7pAamG2lzjD1i2CNTKh6uPZO3U", 
+            authDomain: "amovin-oficios-teste.firebaseapp.com", 
+            projectId: "amovin-oficios-teste", 
+            storageBucket: "amovin-oficios-teste.firebasestorage.app", 
+            messagingSenderId: "901387183295", 
+            appId: "1:901387183295:web:b9a445cbe259d1c14c120a" 
+        };
+        
+        const app = initializeApp(firebaseConfig); 
+        const auth = getAuth(app);
+        
         onAuthStateChanged(auth, (user) => { if (!user) window.location.href = 'index.html'; });
-        window.fazerLogout = async function() { await signOut(auth); sessionStorage.clear(); window.location.href = 'index.html'; };
+        
+        window.fazerLogout = async function() { 
+            await signOut(auth); 
+            sessionStorage.clear(); 
+            window.location.href = 'index.html'; 
+        };
+        
         history.pushState(null, null, location.href);
-        window.addEventListener('popstate', () => { history.pushState(null, null, location.href); signOut(auth); sessionStorage.clear(); window.location.href = 'index.html'; });
-        document.getElementById('objetivo').addEventListener('input', function() { document.getElementById('contador').textContent = this.value.length; });
+        window.addEventListener('popstate', () => { 
+            history.pushState(null, null, location.href); 
+            signOut(auth); 
+            sessionStorage.clear(); 
+            window.location.href = 'index.html'; 
+        });
+        
+        document.getElementById('objetivo').addEventListener('input', function() { 
+            document.getElementById('contador').textContent = this.value.length; 
+        });
+
         window.gerarOficio = async function() {
             const destinatario = document.getElementById('destinatario').value.trim();
             const cargo = document.getElementById('cargo').value.trim();
@@ -86,28 +113,113 @@
             const objetivo = document.getElementById('objetivo').value.trim();
             const formalidade = document.getElementById('formalidade').value;
             const tipoDest = document.getElementById('tipoDestinatario').value;
-            if (!destinatario || !cargo || !instituicao || !tipo || !assunto || !objetivo) { alert('❌ Preencha todos os campos com * (asterisco)'); return; }
-            const btnGerar = document.getElementById('btnGerar'); const loadingIA = document.getElementById('loadingIA'); const resultado = document.getElementById('resultado'); const acoes = document.getElementById('acoes');
-            btnGerar.disabled = true; btnGerar.textContent = '⏳ Gerando...'; loadingIA.style.display = 'block'; resultado.innerHTML = ''; acoes.style.display = 'none';
-            const prompt = `Crie um ofício oficial da AMOVIN (Associação e Movimento pela Inclusão), localizada em Rio Paranaíba/MG.\nDADOS DO OFÍCIO:\n- Destinatário: ${destinatario}\n- Cargo: ${cargo}\n- Instituição: ${instituicao}\n- Tipo de Documento: ${tipo}\n- Assunto: ${assunto}\n- Objetivo: ${objetivo}\n- Grau de Formalidade: ${formalidade}\n- Perfil do Destinatário: ${tipoDest}\n\nINSTRUÇÕES:\n1. Siga o Manual de Redação da Presidência da República\n2. Use o pronome de tratamento adequado ao cargo\n3. Inclua numeração do ofício\n4. Inclua local e data: Rio Paranaíba/MG\n5. Corpo do texto com 2 a 4 parágrafos profissionais\n6. Fechamento formal\n7. Inclua no rodapé: AMOVIN, CNPJ, endereço\n\nGere o ofício completo e profissional.`;
+            
+            if (!destinatario || !cargo || !instituicao || !tipo || !assunto || !objetivo) { 
+                alert('❌ Preencha todos os campos com * (asterisco)'); 
+                return; 
+            }
+
+            // Verifica chave via config.js
+            if (typeof AMOVIN_CONFIG === 'undefined' || !AMOVIN_CONFIG.isKeyConfigured()) { 
+                alert('⚠️ Chave da IA não configurada!\n\nAcesse Configurações > Integrações ou clique em "Configurar" na Central de IA.'); 
+                return; 
+            }
+
+            const btnGerar = document.getElementById('btnGerar'); 
+            const loadingIA = document.getElementById('loadingIA'); 
+            const resultado = document.getElementById('resultado'); 
+            const acoes = document.getElementById('acoes');
+            
+            btnGerar.disabled = true; 
+            btnGerar.textContent = '⏳ Gerando...'; 
+            loadingIA.style.display = 'block'; 
+            resultado.innerHTML = ''; 
+            acoes.style.display = 'none';
+            
+            const prompt = `Crie um ofício oficial da AMOVIN (Associação e Movimento pela Inclusão), localizada em Rio Paranaíba/MG.
+DADOS DO OFÍCIO:
+- Destinatário: ${destinatario}
+- Cargo: ${cargo}
+- Instituição: ${instituicao}
+- Tipo de Documento: ${tipo}
+- Assunto: ${assunto}
+- Objetivo: ${objetivo}
+- Grau de Formalidade: ${formalidade}
+- Perfil do Destinatário: ${tipoDest}
+
+INSTRUÇÕES:
+1. Siga o Manual de Redação da Presidência da República.
+2. Use o pronome de tratamento adequado ao cargo.
+3. Inclua numeração do ofício (ex: Ofício nº 001/2024).
+4. Inclua local e data: Rio Paranaíba/MG, [Data Atual].
+5. Corpo do texto com 2 a 4 parágrafos profissionais e persuasivos.
+6. Fechamento formal (Atenciosamente,).
+7. Inclua no rodapé: AMOVIN, CNPJ, endereço.
+
+Gere o ofício completo e profissional.`;
+
             try {
-                // 🔒 CHAVE PROTEGIDA - Usa config.js ou fallback
-                const API_KEY = (typeof AMOVIN_CONFIG !== 'undefined' && AMOVIN_CONFIG) ? AMOVIN_CONFIG.getGeminiKey() : localStorage.getItem('amovin_gemini_key') || '';
-                if (!API_KEY) { alert('⚠️ Chave Gemini não configurada!\n\nAcesse Configurações > Integrações.'); btnGerar.disabled = false; btnGerar.textContent = '🤖 Gerar Ofício com IA'; loadingIA.style.display = 'none'; return; }
-                const url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=' + API_KEY;
-                const response = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }], generationConfig: { temperature: 0.7, maxOutputTokens: 2000 } }) });
-                if (!response.ok) { const erro = await response.json(); throw new Error(erro.error?.message || 'Erro na conexão com a IA'); }
-                const data = await response.json();
-                if (!data.candidates || !data.candidates[0] || !data.candidates[0].content) throw new Error('Resposta vazia da IA');
-                resultado.textContent = data.candidates[0].content.parts[0].text; acoes.style.display = 'flex';
-            } catch (erro) { console.error('Erro:', erro); resultado.innerHTML = `<div style="color: #c33; text-align: center; padding: 40px;"><div style="font-size: 40px; margin-bottom: 15px;">❌</div><div><strong>Erro ao gerar ofício</strong></div><div style="font-size: 13px; margin-top: 10px; color: #999;">${erro.message || 'Tente novamente em alguns instantes.'}</div><button onclick="gerarOficio()" style="margin-top: 20px; padding: 10px 30px; background: #667eea; color: white; border: none; border-radius: 8px; cursor: pointer;">🔄 Tentar Novamente</button></div>`; }
-            finally { btnGerar.disabled = false; btnGerar.textContent = '🤖 Gerar Ofício com IA'; loadingIA.style.display = 'none'; }
+                // Usa a função centralizada do config.js com o modelo estável
+                const data = await AMOVIN_CONFIG.callGeminiAPI(prompt, { 
+                    temperature: 0.7, 
+                    maxTokens: 2000, 
+                    mimeType: 'text/plain' 
+                });
+                
+                const textoGerado = data.candidates[0].content.parts[0].text;
+                resultado.textContent = textoGerado; 
+                acoes.style.display = 'flex';
+                
+            } catch (erro) { 
+                console.error('Erro:', erro); 
+                resultado.innerHTML = `<div style="color: #c33; text-align: center; padding: 40px;">
+                    <div style="font-size: 40px; margin-bottom: 15px;">❌</div>
+                    <div><strong>Erro ao gerar ofício</strong></div>
+                    <div style="font-size: 13px; margin-top: 10px; color: #999;">${erro.message || 'Tente novamente em alguns instantes.'}</div>
+                    <button onclick="gerarOficio()" style="margin-top: 20px; padding: 10px 30px; background: #667eea; color: white; border: none; border-radius: 8px; cursor: pointer;">🔄 Tentar Novamente</button>
+                </div>`; 
+            } finally { 
+                btnGerar.disabled = false; 
+                btnGerar.textContent = '🤖 Gerar Ofício com IA'; 
+                loadingIA.style.display = 'none'; 
+            }
         };
-        window.copiarTexto = function() { navigator.clipboard.writeText(document.getElementById('resultado').textContent).then(() => alert('✅ Texto copiado!')).catch(() => alert('❌ Erro ao copiar.')); };
-        window.baixarTexto = function() { const blob = new Blob([document.getElementById('resultado').textContent], { type: 'text/plain;charset=utf-8' }); const link = document.createElement('a'); link.href = URL.createObjectURL(blob); link.download = 'oficio-amovin-' + new Date().toISOString().slice(0,10) + '.txt'; link.click(); };
-        window.novoOfício = function() { document.getElementById('resultado').innerHTML = '<div class="resultado-placeholder"><div style="font-size: 60px; margin-bottom: 20px;">📄</div><div>Preencha o formulário e clique em</div><div><strong>"Gerar Ofício com IA"</strong></div></div>'; document.getElementById('acoes').style.display = 'none'; };
-        let timeout; function resetTimeout() { clearTimeout(timeout); timeout = setTimeout(() => { signOut(auth); sessionStorage.clear(); alert('⏰ Sessão expirada.'); window.location.href = 'index.html'; }, 30 * 60 * 1000); }
-        document.addEventListener('mousemove', resetTimeout); document.addEventListener('keypress', resetTimeout); document.addEventListener('click', resetTimeout); resetTimeout();
+
+        window.copiarTexto = function() { 
+            navigator.clipboard.writeText(document.getElementById('resultado').textContent)
+                .then(() => alert('✅ Texto copiado!'))
+                .catch(() => alert('❌ Erro ao copiar.')); 
+        };
+        
+        window.baixarTexto = function() { 
+            const blob = new Blob([document.getElementById('resultado').textContent], { type: 'text/plain;charset=utf-8' }); 
+            const link = document.createElement('a'); 
+            link.href = URL.createObjectURL(blob); 
+            link.download = 'oficio-amovin-' + new Date().toISOString().slice(0,10) + '.txt'; 
+            link.click(); 
+        };
+        
+        window.novoOficio = function() { 
+            document.getElementById('resultado').innerHTML = '<div class="resultado-placeholder"><div style="font-size: 60px; margin-bottom: 20px;">📄</div><div>Preencha o formulário e clique em</div><div><strong>"Gerar Ofício com IA"</strong></div></div>'; 
+            document.getElementById('acoes').style.display = 'none'; 
+            document.querySelectorAll('.card:first-child input, .card:first-child textarea').forEach(el => el.value = '');
+            document.getElementById('contador').textContent = '0';
+        };
+
+        let timeout; 
+        function resetTimeout() { 
+            clearTimeout(timeout); 
+            timeout = setTimeout(() => { 
+                signOut(auth); 
+                sessionStorage.clear(); 
+                alert('⏰ Sessão expirada.'); 
+                window.location.href = 'index.html'; 
+            }, 30 * 60 * 1000); 
+        }
+        document.addEventListener('mousemove', resetTimeout); 
+        document.addEventListener('keypress', resetTimeout); 
+        document.addEventListener('click', resetTimeout); 
+        resetTimeout();
     </script>
     <script src="config.js"></script>
     <script src="menu.js?v=20260904"></script>
