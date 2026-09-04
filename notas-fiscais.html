@@ -30,12 +30,15 @@
         .btn-outline { background: transparent; color: var(--cinza); border: 1px solid #E5E0D8; } .btn-outline:hover { background: #F8F4ED; }
         .btn-danger { background: var(--vermelho); color: white; } .btn-danger:hover { background: #C62828; }
         .btn-warning { background: var(--dourado); color: white; } .btn-warning:hover { background: #B45309; }
-        .dropzone { border: 3px dashed #E5E0D8; border-radius: 14px; padding: 40px 20px; text-align: center; transition: all 0.3s; cursor: pointer; background: #FAFAFA; }
+        
+        /* Dropzone Compacta */
+        .dropzone { border: 2px dashed #E5E0D8; border-radius: 10px; padding: 20px; text-align: center; transition: all 0.3s; cursor: pointer; background: #FAFAFA; }
         .dropzone:hover, .dropzone.dragover { border-color: var(--roxo); background: #F5F0FF; }
-        .dropzone .icone { font-size: 48px; display: block; margin-bottom: 12px; }
-        .dropzone p { font-size: 14px; color: var(--cinza); }
-        .dropzone .formatos { font-size: 11px; color: #B0A99F; margin-top: 6px; }
-        .dropzone .btn-upload { margin-top: 14px; padding: 10px 30px; background: var(--roxo); color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 13px; }
+        .dropzone .icone { font-size: 32px; display: block; margin-bottom: 8px; }
+        .dropzone p { font-size: 13px; color: var(--cinza); margin: 4px 0; }
+        .dropzone .formatos { font-size: 10px; color: #B0A99F; }
+        .dropzone .btn-upload { margin-top: 10px; padding: 8px 20px; background: var(--roxo); color: white; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 12px; }
+
         .preview-ia { background: #F8F4ED; border-radius: 10px; padding: 16px 20px; margin-top: 16px; border: 1px solid #E5E0D8; display: none; }
         .preview-ia.visivel { display: block; }
         .preview-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 20px; }
@@ -43,9 +46,20 @@
         .preview-item .label { color: var(--cinza); font-weight: 500; }
         .preview-item .valor { font-weight: 600; color: var(--grafite); }
         .preview-item .valor.destaque { color: var(--roxo); font-size: 15px; }
-        .preview-itens { margin-top: 8px; max-height: 200px; overflow-y: auto; }
-        .item-linha-header { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 8px; padding: 6px 0; font-size: 11px; font-weight: 700; color: var(--cinza); border-bottom: 2px solid var(--cinza); margin-bottom: 4px; }
-        .item-linha { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 8px; padding: 4px 0; font-size: 12px; border-bottom: 1px solid #F0E9DF; }
+
+        /* Seções de Destino */
+        .destino-secao { background: white; border-radius: 10px; padding: 16px; margin-top: 12px; border: 2px solid #E5E0D8; }
+        .destino-secao.crm { border-color: var(--azul); background: #F0F9FF; }
+        .destino-secao.bp { border-color: var(--laranja); background: #FFF7ED; }
+        .destino-secao.estoque { border-color: var(--verde); background: #F0FDF4; }
+        .destino-secao h4 { font-size: 14px; font-weight: 700; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+        .destino-secao.crm h4 { color: var(--azul); }
+        .destino-secao.bp h4 { color: var(--laranja); }
+        .destino-secao.estoque h4 { color: var(--verde); }
+        .item-destino { padding: 8px; background: white; border-radius: 6px; margin-bottom: 6px; font-size: 12px; display: flex; justify-content: space-between; align-items: center; }
+        .item-destino .desc { flex: 1; color: var(--grafite); }
+        .item-destino .valor { font-weight: 700; color: var(--grafite); }
+
         .status-ia { display: inline-block; padding: 4px 14px; border-radius: 20px; font-size: 11px; font-weight: 600; }
         .status-ia.sucesso { background: #D1FAE5; color: #065F46; }
         .status-ia.erro { background: #FEE2E2; color: #991B1B; }
@@ -109,7 +123,7 @@
     <div class="topo-bar">
         <div>
             <h1>📄 Notas Fiscais <span>+ IA</span></h1>
-            <span class="sub">Leitura inteligente com validação e aprovação</span>
+            <span class="sub">Leitura inteligente com separação automática de destinos</span>
         </div>
         <button class="btn-sair-topo" onclick="window.location.href='dashboard.html'">🏠 Dashboard</button>
     </div>
@@ -136,17 +150,29 @@
         <h3>📤 Envie a Nota Fiscal <span class="badge badge-ia">🤖 IA</span></h3>
         <div class="dropzone" id="dropzone" onclick="document.getElementById('fileInput').click()">
             <span class="icone">📄</span>
-            <p><strong>Arraste o arquivo aqui</strong> ou clique para selecionar</p>
-            <span class="formatos">Formatos: PDF, XML, JPG, PNG, DOC, TXT</span>
+            <p><strong>Clique para selecionar</strong> ou arraste o arquivo</p>
+            <span class="formatos">PDF, XML, JPG, PNG</span>
             <input type="file" id="fileInput" accept=".pdf,.xml,.jpg,.jpeg,.png,.doc,.docx,.txt" style="display:none;" onchange="processarNota(event)" />
-            <button class="btn-upload" onclick="event.stopPropagation();document.getElementById('fileInput').click()">📂 Selecionar</button>
+            <button class="btn-upload" onclick="event.stopPropagation();document.getElementById('fileInput').click()">📂 Selecionar Arquivo</button>
         </div>
         <div style="margin-top:12px;font-size:12px;color:var(--cinza);" id="infoArquivo">📎 Nenhum arquivo selecionado</div>
     </div>
 
     <div class="card" id="passoPreview" style="display:none;">
         <h3>🧠 Dados Extraídos pela IA <span class="badge badge-ia" id="statusExtraido">⏳ Processando...</span></h3>
+        
+        <div style="background:#F8F4ED;border-radius:10px;padding:16px;margin-bottom:16px;">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:13px;">
+                <div><strong>📋 Número:</strong> <span id="resumoNumero">---</span></div>
+                <div><strong>🏢 Emitente:</strong> <span id="resumoEmitente">---</span></div>
+                <div><strong>📄 CNPJ:</strong> <span id="resumoCnpj">---</span></div>
+                <div><strong>📅 Data:</strong> <span id="resumoData">---</span></div>
+                <div style="grid-column:1/-1;"><strong>💰 Valor Total:</strong> <span id="resumoValor" style="color:var(--roxo);font-weight:700;font-size:16px;">R$ 0,00</span></div>
+            </div>
+        </div>
+
         <div id="previewIA" class="preview-ia visivel"></div>
+
         <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;">
             <button class="btn btn-success" onclick="avancarParaVinculo()" id="btnAvancar" disabled>✅ Avançar para Vinculação</button>
             <button class="btn btn-outline" onclick="limparDados()">🔄 Nova Nota</button>
@@ -207,14 +233,6 @@
 
         <div class="form-group"><label>📅 Data de Entrega *</label><input type="date" id="dataEntrega" required></div>
         <div class="form-group"><label>📝 Observações</label><textarea id="obsVinculo" rows="2" placeholder="Ex: Compra para o projeto..." style="width:100%;padding:10px 12px;border:1px solid #E5E0D8;border-radius:8px;font-size:13px;font-family:'Inter',sans-serif;"></textarea></div>
-
-        <div style="background:#F8F4ED;border-radius:10px;padding:16px;margin:12px 0;">
-            <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;">
-                <span><strong>Nota:</strong> <span id="resumoNumero">---</span></span>
-                <span><strong>Emitente:</strong> <span id="resumoEmitente">---</span></span>
-                <span><strong>Valor:</strong> <span id="resumoValor" style="color:var(--roxo);font-weight:700;">R$ 0,00</span></span>
-            </div>
-        </div>
 
         <div style="display:flex;gap:12px;flex-wrap:wrap;">
             <button class="btn btn-success" onclick="confirmarVinculo()" style="flex:2;">✅ Confirmar Vinculação</button>
@@ -369,7 +387,6 @@ async function testarConexao() {
     statusEl.className = 'status-ia aviso';
 
     try {
-        // ✅ CHAMADA CENTRALIZADA PELO CONFIG.JS (Usa o modelo seguro definido lá)
         var resposta = await AMOVIN_CONFIG.callGeminiAPI('Responda apenas com a palavra: OK', { json: false });
         
         if (resposta && resposta.includes('OK')) { 
@@ -456,27 +473,37 @@ async function extrairDadosComIA(texto) {
 - telefone (string, se disponível)
 - dataEmissao (string, formato YYYY-MM-DD)
 - valorTotal (número)
-- itens (array de objetos com: descricao, quantidade, valor_unitario, valor_total)
+- itens (array de objetos com: descricao, quantidade, valor_unitario, valor_total, tipo)
+  IMPORTANTE: Para cada item, classifique o "tipo" como:
+  - "bp" se for Bem Permanente (equipamentos, móveis, computadores, veículos, etc - duram mais de 1 ano)
+  - "estoque" se for material de consumo (material de escritório, produtos de limpeza, alimentos, etc)
+  - "servico" se for serviço (manutenção, consultoria, etc)
 IMPORTANTE: Se algum campo não for encontrado, use null. Retorne APENAS o JSON válido, sem markdown ou texto adicional.
 
 Texto da nota:
 ${texto.substring(0, 8000)}`;
 
     try {
-        // ✅ CHAMADA CENTRALIZADA PELO CONFIG.JS (Garante uso do modelo correto e JSON nativo)
         var dados = await AMOVIN_CONFIG.callGeminiAPI(prompt, { json: true, temperature: 0.1 });
         
         if (!dados.numero && !dados.emitente) throw new Error('Dados insuficientes extraídos.');
 
         dadosNota = dados;
         if (!dados.itens || dados.itens.length === 0) {
-            dados.itens = [{ descricao: 'Item da NF ' + (dados.numero || ''), quantidade: 1, valor_unitario: dados.valorTotal || 0, valor_total: dados.valorTotal || 0 }];
+            dados.itens = [{ descricao: 'Item da NF ' + (dados.numero || ''), quantidade: 1, valor_unitario: dados.valorTotal || 0, valor_total: dados.valorTotal || 0, tipo: 'bp' }];
         }
+
+        // Atualizar resumo no topo
+        document.getElementById('resumoNumero').textContent = dados.numero || '---';
+        document.getElementById('resumoEmitente').textContent = dados.emitente || '---';
+        document.getElementById('resumoCnpj').textContent = dados.cnpj || '---';
+        document.getElementById('resumoData').textContent = dados.dataEmissao || '---';
+        document.getElementById('resumoValor').textContent = fm(dados.valorTotal || 0);
 
         document.getElementById('statusExtraido').textContent = '✅ Concluído';
         document.getElementById('statusExtraido').className = 'badge badge-ia status-ia sucesso';
         document.getElementById('btnAvancar').disabled = false;
-        mostrarPreview(dados);
+        mostrarPreviewComDestinos(dados);
         AMOVIN_CONFIG.mostrarToast('✅ Dados extraídos com sucesso!', 'success');
 
     } catch (e) {
@@ -496,36 +523,76 @@ ${texto.substring(0, 8000)}`;
     }
 }
 
-function mostrarPreview(dados) {
+function mostrarPreviewComDestinos(dados) {
     var preview = document.getElementById('previewIA');
-    var itensHtml = '';
+    
+    // Separar itens por destino
+    var itensCRM = [];
+    var itensBP = [];
+    var itensEstoque = [];
+    var itensServico = [];
+    
     if (dados.itens && dados.itens.length > 0) {
-        itensHtml = '<div class="preview-itens"><div class="item-linha-header"><span>Descrição</span><span>Qtd</span><span>Unitário</span><span>Total</span></div>';
         dados.itens.forEach(function(item) {
-            itensHtml += '<div class="item-linha"><span>' + (item.descricao || '—') + '</span><span>' + (item.quantidade || 1) + '</span><span>' + fm(item.valor_unitario || 0) + '</span><span>' + fm(item.valor_total || 0) + '</span></div>';
+            var tipo = (item.tipo || 'bp').toLowerCase();
+            if (tipo === 'bp') itensBP.push(item);
+            else if (tipo === 'estoque') itensEstoque.push(item);
+            else if (tipo === 'servico') itensServico.push(item);
         });
-        itensHtml += '</div>';
     }
-    preview.innerHTML = `
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
-            <span style="font-weight:700;font-size:14px;color:var(--roxo);">🧠 Dados Extraídos</span>
-            <span style="font-size:11px;color:var(--cinza);">${new Date().toLocaleString('pt-BR')}</span>
-        </div>
-        <div class="preview-grid">
-            <div class="preview-item"><span class="label">📋 Número</span><span class="valor destaque">${dados.numero || '—'}</span></div>
-            <div class="preview-item"><span class="label">🏢 Emitente</span><span class="valor">${dados.emitente || '—'}</span></div>
-            <div class="preview-item"><span class="label">📄 CNPJ</span><span class="valor">${dados.cnpj || '—'}</span></div>
-            <div class="preview-item"><span class="label">📞 Telefone</span><span class="valor">${dados.telefone || '—'}</span></div>
-            <div class="preview-item"><span class="label">📅 Data Emissão</span><span class="valor">${dados.dataEmissao || '—'}</span></div>
-            <div class="preview-item"><span class="label">💰 Valor Total</span><span class="valor destaque">${fm(dados.valorTotal)}</span></div>
-        </div>
-        ${itensHtml}
-        <div style="margin-top:12px;font-size:11px;color:var(--cinza);padding:8px;background:white;border-radius:8px;border:1px solid #E5E0D8;">
-            🤖 Processado com ${AMOVIN_CONFIG.MODELO_IA.replace('models/', '')} (JSON Nativo)
+    
+    // Se não classificou nada, assume BP por padrão
+    if (itensBP.length === 0 && itensEstoque.length === 0 && itensServico.length === 0) {
+        dados.itens.forEach(function(item) {
+            item.tipo = 'bp';
+            itensBP.push(item);
+        });
+    }
+
+    var html = '';
+    
+    // Seção CRM (Fornecedor)
+    if (dados.emitente && dados.emitente !== '---') {
+        html += `
+        <div class="destino-secao crm">
+            <h4>☎️ CRM - Fornecedor</h4>
+            <div class="item-destino">
+                <span class="desc">${dados.emitente}</span>
+                <span class="valor">CNPJ: ${dados.cnpj || '---'}</span>
+            </div>
         </div>`;
-    document.getElementById('resumoNumero').textContent = dados.numero || '---';
-    document.getElementById('resumoEmitente').textContent = dados.emitente || '---';
-    document.getElementById('resumoValor').textContent = fm(dados.valorTotal || 0);
+    }
+    
+    // Seção BP (Bens Permanentes)
+    if (itensBP.length > 0) {
+        html += `<div class="destino-secao bp"><h4>🏢 Patrimônio / BP (${itensBP.length} ${itensBP.length === 1 ? 'item' : 'itens'})</h4>`;
+        itensBP.forEach(function(item) {
+            html += `<div class="item-destino"><span class="desc">${item.descricao}</span><span class="valor">${fm(item.valor_total || 0)}</span></div>`;
+        });
+        html += `</div>`;
+    }
+    
+    // Seção Estoque
+    if (itensEstoque.length > 0) {
+        html += `<div class="destino-secao estoque"><h4>📦 Estoque / Consumo (${itensEstoque.length} ${itensEstoque.length === 1 ? 'item' : 'itens'})</h4>`;
+        itensEstoque.forEach(function(item) {
+            html += `<div class="item-destino"><span class="desc">${item.descricao}</span><span class="valor">${fm(item.valor_total || 0)}</span></div>`;
+        });
+        html += `</div>`;
+    }
+    
+    // Seção Serviço
+    if (itensServico.length > 0) {
+        html += `<div class="destino-secao" style="border-color:var(--roxo);background:#F5F0FF;"><h4 style="color:var(--roxo);">🛠️ Serviço (${itensServico.length} ${itensServico.length === 1 ? 'item' : 'itens'})</h4>`;
+        itensServico.forEach(function(item) {
+            html += `<div class="item-destino"><span class="desc">${item.descricao}</span><span class="valor">${fm(item.valor_total || 0)}</span></div>`;
+        });
+        html += `</div>`;
+    }
+    
+    html += `<div style="margin-top:12px;font-size:11px;color:var(--cinza);padding:8px;background:white;border-radius:8px;border:1px solid #E5E0D8;">🤖 Processado com ${AMOVIN_CONFIG.MODELO_IA.replace('models/', '')} (Classificação Automática)</div>`;
+    
+    preview.innerHTML = html;
 }
 
 function fecharPreviewEabrirManual() {
@@ -559,13 +626,13 @@ function salvarManual() {
         linhas.forEach(function(linha) {
             var partes = linha.split(';').map(function(p) { return p.trim(); });
             if (partes.length >= 4) {
-                itens.push({ descricao: partes[0], quantidade: parseFloat(partes[1]) || 1, valor_unitario: parseFloat(partes[2].replace(',', '.')) || 0, valor_total: parseFloat(partes[3].replace(',', '.')) || 0 });
+                itens.push({ descricao: partes[0], quantidade: parseFloat(partes[1]) || 1, valor_unitario: parseFloat(partes[2].replace(',', '.')) || 0, valor_total: parseFloat(partes[3].replace(',', '.')) || 0, tipo: 'bp' });
             } else if (partes.length === 1) {
-                itens.push({ descricao: partes[0], quantidade: 1, valor_unitario: valor, valor_total: valor });
+                itens.push({ descricao: partes[0], quantidade: 1, valor_unitario: valor, valor_total: valor, tipo: 'bp' });
             }
         });
     }
-    if (itens.length === 0) { itens.push({ descricao: 'Item da NF ' + numero, quantidade: 1, valor_unitario: valor, valor_total: valor }); }
+    if (itens.length === 0) { itens.push({ descricao: 'Item da NF ' + numero, quantidade: 1, valor_unitario: valor, valor_total: valor, tipo: 'bp' }); }
 
     dadosNota = { numero: numero, emitente: emitente, cnpj: cnpj, telefone: telefone, dataEmissao: data, valorTotal: valor, itens: itens, manual: true };
     
@@ -574,7 +641,15 @@ function salvarManual() {
     document.getElementById('statusExtraido').textContent = '✏️ Manual';
     document.getElementById('statusExtraido').className = 'badge badge-ia status-ia sucesso';
     document.getElementById('btnAvancar').disabled = false;
-    mostrarPreview(dadosNota);
+    
+    // Atualizar resumo
+    document.getElementById('resumoNumero').textContent = numero;
+    document.getElementById('resumoEmitente').textContent = emitente;
+    document.getElementById('resumoCnpj').textContent = cnpj;
+    document.getElementById('resumoData').textContent = data;
+    document.getElementById('resumoValor').textContent = fm(valor);
+    
+    mostrarPreviewComDestinos(dadosNota);
     AMOVIN_CONFIG.mostrarToast('✅ Dados inseridos manualmente com sucesso!', 'success');
 }
 
@@ -686,6 +761,7 @@ function confirmarVinculo() {
 }
 
 function direcionarParaModulos(nota) {
+    // CRM
     if (modulosSelecionados.indexOf('crm') >= 0 && nota.emitente && nota.emitente.razaoSocial && nota.emitente.razaoSocial !== '---' && nota.emitente.razaoSocial !== 'Fornecedor') {
         var existe = contatos.some(function(c) { return (c.cnpj && c.cnpj === nota.emitente.cnpj) || c.nome === nota.emitente.razaoSocial; });
         if (!existe) {
@@ -699,14 +775,17 @@ function direcionarParaModulos(nota) {
         }
     }
 
+    // Sala de Espera (BP e Estoque)
     if (nota.itens && nota.itens.length > 0) {
         nota.itens.forEach(function(item) {
             var nomeProduto = item.descricao || 'Item da NF ' + nota.numero;
+            var tipo = item.tipo || 'bp';
             produtosEspera.push({
                 id: Date.now() + Math.random() * 1000, descricao: nomeProduto, quantidade: item.quantidade || 1,
                 valor_unitario: item.valor_unitario || 0, valor_total: item.valor_total || (item.valor_unitario || 0) * (item.quantidade || 1),
                 nota_id: nota.id, nota_numero: nota.numero, projeto_id: nota.projeto_id, categoria: nota.categoria_orcamento || 'Diversos',
-                destino_sugerido: nota.destino || 'patrimonio', status: 'aguardando', data_criacao: new Date().toISOString()
+                tipo: tipo, destino_sugerido: tipo === 'bp' ? 'patrimonio' : (tipo === 'estoque' ? 'estoque' : 'servico'),
+                status: 'aguardando', data_criacao: new Date().toISOString()
             });
         });
         salvarProdutosEspera();
