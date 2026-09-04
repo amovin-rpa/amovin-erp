@@ -9,15 +9,8 @@
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@4/dist/tesseract.min.js"></script>
     <style>
         :root {
-            --roxo: #7C3AED;
-            --grafite: #1A1A1A;
-            --cinza: #6B7280;
-            --branco: #FFFFFF;
-            --vermelho: #E53935;
-            --verde: #57C220;
-            --dourado: #D97706;
-            --ciano: #06B6D4;
-            --laranja: #C65A11;
+            --roxo: #7C3AED; --grafite: #1A1A1A; --cinza: #6B7280; --branco: #FFFFFF;
+            --vermelho: #E53935; --verde: #57C220; --dourado: #D97706; --ciano: #06B6D4; --laranja: #C65A11;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Inter', system-ui, sans-serif; background: #F8F4ED; display: flex; min-height: 100vh; }
@@ -95,7 +88,7 @@
             </div>
             <div>
                 <span class="status-ia" id="statusIA">⏳ Verificando...</span>
-                <span style="font-size:12px;color:var(--cinza);margin-left:12px;" id="modeloIA">Gemini 1.5 Flash (Free Tier)</span>
+                <span style="font-size:12px;color:var(--cinza);margin-left:12px;" id="modeloIA">Gemini 1.5 Flash (Latest)</span>
             </div>
         </div>
         <div style="font-size:12px;color:var(--cinza);margin-top:4px;">
@@ -116,16 +109,11 @@
             <button class="btn-upload" onclick="event.stopPropagation();document.getElementById('fileInputNota').click()">📂 Selecionar</button>
         </div>
 
-        <div style="margin-top:12px;font-size:12px;color:var(--cinza);" id="infoArquivo">
-            📎 Nenhum arquivo selecionado
-        </div>
-
+        <div style="margin-top:12px;font-size:12px;color:var(--cinza);" id="infoArquivo">📎 Nenhum arquivo selecionado</div>
         <div class="ia-resultado" id="resultadoNota"></div>
 
         <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;">
-            <button class="btn btn-primary" onclick="processarNotaIA()" id="btnProcessarNota" disabled>
-                🤖 Processar com IA
-            </button>
+            <button class="btn btn-primary" onclick="processarNotaIA()" id="btnProcessarNota" disabled>🤖 Processar com IA</button>
             <button class="btn btn-outline" onclick="limparResultado()">🗑️ Limpar</button>
         </div>
     </div>
@@ -155,76 +143,13 @@ var textoExtraido = '';
 var dadosExtraidos = {};
 
 // ============================================================
-// USAR CONFIG.JS OU LOCALSTORAGE (FALLBACK)
-// ============================================================
-function getGeminiKey() {
-    if (typeof AMOVIN_CONFIG !== 'undefined' && AMOVIN_CONFIG) {
-        return AMOVIN_CONFIG.getGeminiKey();
-    }
-    return localStorage.getItem('amovin_gemini_key');
-}
-
-function setGeminiKey(key) {
-    if (typeof AMOVIN_CONFIG !== 'undefined' && AMOVIN_CONFIG) {
-        AMOVIN_CONFIG.setGeminiKey(key);
-    } else {
-        localStorage.setItem('amovin_gemini_key', key);
-    }
-}
-
-// ============================================================
-// EXTRAIR TEXTO DO ARQUIVO
-// ============================================================
-async function extrairTextoDoArquivo(file) {
-    if (file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf')) {
-        console.log('📄 Detectado PDF, extraindo texto...');
-        const arrayBuffer = await file.arrayBuffer();
-        const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
-        let textoCompleto = '';
-        
-        for (let i = 1; i <= pdf.numPages; i++) {
-            const page = await pdf.getPage(i);
-            const textContent = await page.getTextContent();
-            const textoPagina = textContent.items.map(item => item.str).join(' ');
-            textoCompleto += textoPagina + '\n';
-        }
-        
-        console.log('✅ Texto extraído do PDF:', textoCompleto.length, 'caracteres');
-        return textoCompleto;
-    }
-    
-    if (file.type.startsWith('image/')) {
-        console.log('🖼️ Detectada imagem, aplicando OCR...');
-        const resultado = await Tesseract.recognize(file, 'por+eng', {
-            logger: m => {
-                if (m.status === 'recognizing text') {
-                    document.getElementById('infoArquivo').innerHTML = 
-                        `🔍 OCR em progresso: ${Math.round(m.progress * 100)}%`;
-                }
-            }
-        });
-        console.log('✅ OCR concluído:', resultado.data.text.length, 'caracteres');
-        return resultado.data.text;
-    }
-    
-    console.log('📝 Detectado texto, lendo diretamente...');
-    return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = (e) => resolve(e.target.result);
-        reader.onerror = reject;
-        reader.readAsText(file);
-    });
-}
-
-// ============================================================
-// VERIFICAR CHAVE (ACEITA FORMATOS AQ E AIza)
+// VERIFICAR CHAVE (USANDO CONFIG.JS)
 // ============================================================
 function verificarChave() {
-    var key = getGeminiKey();
     var statusEl = document.getElementById('statusIA');
     var chaveEl = document.getElementById('statusChave');
 
-    if (key && key.length > 20 && key !== 'undefined') {
+    if (AMOVIN_CONFIG.isKeyConfigured()) {
         statusEl.textContent = '✅ Conectado';
         statusEl.className = 'status-ia sucesso';
         chaveEl.textContent = 'Configurada ✅';
@@ -239,47 +164,69 @@ function verificarChave() {
 
 function configurarChave() {
     var key = prompt('🔑 Digite sua chave do Gemini (Google AI Studio):\n\nObtenha grátis em: https://aistudio.google.com/app/apikey\n\n(Nova chave começa com AQ ou AIza)');
-    if (key && key.length > 20) {
-        setGeminiKey(key.trim());
+    if (key && key.trim().length > 20) {
+        AMOVIN_CONFIG.setGeminiKey(key);
         verificarChave();
-        mostrarToast('✅ Chave Gemini configurada com sucesso!', 'success');
+        AMOVIN_CONFIG.mostrarToast('✅ Chave Gemini configurada com sucesso!', 'success');
     } else if (key !== null) {
-        mostrarToast('⚠️ Chave inválida. Deve ter mais de 20 caracteres.', 'warning');
+        AMOVIN_CONFIG.mostrarToast('⚠️ Chave inválida. Deve ter mais de 20 caracteres.', 'warning');
     }
 }
 
 async function testarConexao() {
-    var key = getGeminiKey();
-    if (!key || key.length < 20 || key === 'undefined') {
-        mostrarToast('⚠️ Configure a chave primeiro!', 'warning');
+    if (!AMOVIN_CONFIG.isKeyConfigured()) {
+        AMOVIN_CONFIG.mostrarToast('⚠️ Configure a chave primeiro!', 'warning');
         return;
     }
 
-    mostrarToast('🧪 Testando conexão com Gemini 1.5 Flash...', 'info');
+    AMOVIN_CONFIG.mostrarToast('🧪 Testando conexão com Gemini...', 'info');
 
     try {
-        // ✅ API OFICIAL GRATUITA DO GOOGLE (GEMINI 1.5 FLASH)
-        var response = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=' + key, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ 
-                contents: [{ parts: [{ text: 'Diga "ok" em uma palavra' }] }]
-            })
-        });
-
-        var data = await response.json();
-
+        var data = await AMOVIN_CONFIG.callGeminiAPI('Diga "ok" em uma palavra', { temperature: 0.1, maxTokens: 10, mimeType: 'text/plain' });
         if (data.candidates && data.candidates[0]) {
-            mostrarToast('✅ Conexão OK! Gemini 1.5 Flash funcionando.', 'success');
+            AMOVIN_CONFIG.mostrarToast('✅ Conexão OK! Gemini funcionando.', 'success');
             verificarChave();
-        } else if (data.error) {
-            mostrarToast('❌ Erro: ' + (data.error.message || 'desconhecido'), 'error');
         } else {
-            mostrarToast('❌ Resposta inválida da API', 'error');
+            AMOVIN_CONFIG.mostrarToast('❌ Resposta inválida da API', 'error');
         }
     } catch (e) {
-        mostrarToast('❌ Erro de conexão: ' + e.message, 'error');
+        AMOVIN_CONFIG.mostrarToast('❌ Erro de conexão: ' + e.message, 'error');
     }
+}
+
+// ============================================================
+// EXTRAIR TEXTO DO ARQUIVO
+// ============================================================
+async function extrairTextoDoArquivo(file) {
+    if (file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf')) {
+        const arrayBuffer = await file.arrayBuffer();
+        const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+        let textoCompleto = '';
+        for (let i = 1; i <= pdf.numPages; i++) {
+            const page = await pdf.getPage(i);
+            const textContent = await page.getTextContent();
+            textoCompleto += textContent.items.map(item => item.str).join(' ') + '\n';
+        }
+        return textoCompleto;
+    }
+    
+    if (file.type.startsWith('image/')) {
+        const resultado = await Tesseract.recognize(file, 'por+eng', {
+            logger: m => {
+                if (m.status === 'recognizing text') {
+                    document.getElementById('infoArquivo').innerHTML = `🔍 OCR em progresso: ${Math.round(m.progress * 100)}%`;
+                }
+            }
+        });
+        return resultado.data.text;
+    }
+    
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = (e) => resolve(e.target.result);
+        reader.onerror = reject;
+        reader.readAsText(file);
+    });
 }
 
 // ============================================================
@@ -301,94 +248,73 @@ async function processarNota(event) {
         
         if (!textoExtraido || textoExtraido.trim().length < 10) {
             info.innerHTML = '⚠️ Não foi possível extrair texto deste arquivo';
-            mostrarToast('⚠️ Arquivo sem texto legível.', 'warning');
+            AMOVIN_CONFIG.mostrarToast('⚠️ Arquivo sem texto legível.', 'warning');
             preview.classList.remove('visivel');
             return;
         }
         
         info.innerHTML = '📎 Arquivo lido: ' + file.name + ' (' + textoExtraido.length + ' caracteres)';
         document.getElementById('btnProcessarNota').disabled = false;
-        mostrarToast('✅ Texto extraído! Clique em "Processar com IA".', 'success');
+        AMOVIN_CONFIG.mostrarToast('✅ Texto extraído! Clique em "Processar com IA".', 'success');
         
     } catch (error) {
         console.error('❌ Erro ao processar arquivo:', error);
         info.innerHTML = '❌ Erro ao processar: ' + file.name;
-        mostrarToast('❌ Erro: ' + error.message, 'error');
+        AMOVIN_CONFIG.mostrarToast('❌ Erro: ' + error.message, 'error');
         preview.classList.remove('visivel');
     }
 }
 
+// ============================================================
+// PROCESSAR COM IA (ALTA PRECISÃO)
+// ============================================================
 async function processarNotaIA() {
     var preview = document.getElementById('resultadoNota');
 
     if (!textoExtraido || textoExtraido.length < 10) {
-        mostrarToast('⚠️ Nenhum texto para processar.', 'warning');
+        AMOVIN_CONFIG.mostrarToast('⚠️ Nenhum texto para processar.', 'warning');
         return;
     }
 
-    var key = getGeminiKey();
-    if (!key || key.length < 20 || key === 'undefined') {
-        mostrarToast('⚠️ Chave Gemini não configurada.', 'warning');
+    if (!AMOVIN_CONFIG.isKeyConfigured()) {
+        AMOVIN_CONFIG.mostrarToast('⚠️ Chave Gemini não configurada.', 'warning');
         return;
     }
 
-    preview.innerHTML = '<div style="text-align:center;padding:20px;"><span style="font-size:32px;">🤖</span><p style="margin-top:8px;color:var(--cinza);">Processando com Gemini 1.5 Flash...</p></div>';
+    preview.innerHTML = '<div style="text-align:center;padding:20px;"><span style="font-size:32px;">🤖</span><p style="margin-top:8px;color:var(--cinza);">Processando com IA de Alta Precisão...</p></div>';
     preview.classList.add('visivel');
 
-    var prompt = `Analise a nota fiscal abaixo e extraia os seguintes dados estritamente em formato JSON:
-- numero (string)
-- emitente (string, razão social)
-- cnpj (string, apenas números)
-- telefone (string, se disponível)
-- dataEmissao (string, formato YYYY-MM-DD)
-- valorTotal (número)
-- itens (array de objetos com: descricao, quantidade, valor_unitario, valor_total)
-IMPORTANTE: Se algum campo não for encontrado, use null. Retorne APENAS o JSON válido, sem markdown ou texto adicional.
+    var prompt = `Você é um especialista em extração de dados de documentos fiscais. Analise o texto da nota fiscal abaixo e extraia os dados estritamente no formato JSON solicitado.
 
-Texto da nota:
+Campos obrigatórios no JSON:
+- numero: string (Número da nota)
+- emitente: string (Razão social do emitente)
+- cnpj: string (Apenas números, 14 dígitos)
+- telefone: string (Telefone do emitente, se houver)
+- dataEmissao: string (Formato YYYY-MM-DD)
+- valorTotal: number (Valor total da nota, use ponto para decimais)
+- itens: array de objetos, cada um com: descricao (string), quantidade (number), valor_unitario (number), valor_total (number)
+
+Regras CRÍTICAS:
+1. Se um campo não for encontrado, use null.
+2. Retorne APENAS o JSON válido, sem markdown, sem texto explicativo.
+
+Texto da nota fiscal:
 ${textoExtraido.substring(0, 8000)}`;
 
     try {
-        // ✅ API OFICIAL GRATUITA DO GOOGLE + JSON NATIVO
-        var response = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=' + key, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ 
-                contents: [{ parts: [{ text: prompt }] }],
-                generationConfig: {
-                    response_mime_type: "application/json",
-                    temperature: 0.1
-                }
-            })
+        var data = await AMOVIN_CONFIG.callGeminiAPI(prompt, {
+            mimeType: 'application/json',
+            temperature: 0.1
         });
 
-        // Tratamento de erros HTTP
-        if (!response.ok) {
-            if (response.status === 400) throw new Error('Chave inválida ou expirada (400).');
-            if (response.status === 429) throw new Error('Limite de requisições atingido (429). Aguarde um minuto.');
-            if (response.status === 503) throw new Error('Serviço temporariamente indisponível (503). Tente novamente em instantes.');
-            throw new Error('Erro na API: ' + response.status);
-        }
-
-        var data = await response.json();
-
-        if (data.error) {
-            throw new Error(data.error.message || 'Erro desconhecido na API');
-        }
-
-        if (!data.candidates || !data.candidates[0] || !data.candidates[0].content) {
-            throw new Error('Resposta inválida da IA');
-        }
-
-        // Com response_mime_type: "application/json", o retorno é JSON puro
-        var resposta = data.candidates[0].content.parts[0].text;
         var dados;
-        
         try {
-            dados = JSON.parse(resposta);
+            // Com response_mime_type: "application/json", o retorno já é JSON puro
+            dados = JSON.parse(data.candidates[0].content.parts[0].text);
         } catch (parseErr) {
-            // Fallback: tentar extrair JSON com regex
-            var match = resposta.match(/\{[\s\S]*\}/);
+            // Fallback de segurança: tentar extrair JSON com regex
+            var match = data.candidates[0].content.parts[0].text.match(/\{[\s\S]*\}/);
             if (!match) throw new Error('Não foi possível extrair JSON da resposta');
             dados = JSON.parse(match[0]);
         }
@@ -397,7 +323,7 @@ ${textoExtraido.substring(0, 8000)}`;
 
         dadosExtraidos = dados;
         mostrarResultado(dados);
-        mostrarToast('✅ Dados extraídos com sucesso!', 'success');
+        AMOVIN_CONFIG.mostrarToast('✅ Dados extraídos com sucesso e alta precisão!', 'success');
 
     } catch (e) {
         console.error('❌ Erro:', e);
@@ -411,6 +337,9 @@ ${textoExtraido.substring(0, 8000)}`;
     }
 }
 
+// ============================================================
+// MOSTRAR RESULTADO
+// ============================================================
 function mostrarResultado(dados) {
     var preview = document.getElementById('resultadoNota');
     function fm(v) { return 'R$ ' + (v || 0).toFixed(2).replace('.', ','); }
@@ -444,7 +373,7 @@ function mostrarResultado(dados) {
         </div>
         ${itensHtml}
         <div style="margin-top:12px;font-size:11px;color:var(--cinza);padding:8px;background:white;border-radius:8px;border:1px solid #E5D9F5;">
-            🤖 Processado com Gemini 1.5 Flash (JSON Nativo)
+            🤖 Processado com Gemini 1.5 Flash (JSON Nativo + Alta Precisão)
         </div>
     `;
 }
@@ -457,20 +386,6 @@ function limparResultado() {
     textoExtraido = '';
     dadosExtraidos = {};
     document.getElementById('fileInputNota').value = '';
-}
-
-function mostrarToast(mensagem, tipo) {
-    var toast = document.createElement('div');
-    var classes = { 'success': 'toast-success', 'error': 'toast-error', 'info': 'toast-info', 'warning': 'toast-warning' };
-    toast.className = 'toast ' + (classes[tipo] || 'toast-info');
-    toast.textContent = mensagem;
-    document.body.appendChild(toast);
-    setTimeout(function() {
-        toast.style.opacity = '0';
-        toast.style.transform = 'translateX(100%)';
-        toast.style.transition = 'all 0.4s ease';
-        setTimeout(function() { toast.remove(); }, 400);
-    }, 4000);
 }
 
 // ============================================================
@@ -491,17 +406,14 @@ dz.addEventListener('drop', function(e) {
 });
 
 // ============================================================
-// VERIFICAÇÃO DE SESSÃO
+// VERIFICAÇÃO DE SESSÃO E INICIALIZAÇÃO
 // ============================================================
 if (!sessionStorage.getItem('amovin_logado')) { window.location.href = 'index.html'; }
 
-// ============================================================
-// INICIALIZAÇÃO
-// ============================================================
 document.addEventListener('DOMContentLoaded', function() {
     verificarChave();
     console.log('🧠 Central de IA - AMOVIN ERP');
-    console.log('🔑 Chave:', getGeminiKey() ? 'Configurada ✅' : 'Não configurada ❌');
+    console.log('🔑 Chave:', AMOVIN_CONFIG.isKeyConfigured() ? 'Configurada ✅' : 'Não configurada ❌');
 });
 </script>
 </body>
