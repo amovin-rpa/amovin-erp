@@ -108,7 +108,7 @@
 <main class="main-content">
     <div class="topo-bar">
         <div>
-            <h1> Notas Fiscais <span>+ IA</span></h1>
+            <h1>📄 Notas Fiscais <span>+ IA</span></h1>
             <span class="sub">Leitura inteligente com validação e aprovação</span>
         </div>
         <button class="btn-sair-topo" onclick="window.location.href='dashboard.html'">🏠 Dashboard</button>
@@ -121,8 +121,8 @@
                 <span style="font-weight:700;font-size:16px;color:var(--grafite);">Status da IA</span>
             </div>
             <div>
-                <span class="status-ia" id="statusIA"> Verificando...</span>
-                <span style="font-size:12px;color:var(--cinza);margin-left:12px;" id="modeloIA">Gemini 3.6 Flash (Gratuito)</span>
+                <span class="status-ia" id="statusIA">⏳ Verificando...</span>
+                <span style="font-size:12px;color:var(--cinza);margin-left:12px;" id="modeloIA">Gemini 1.5 Flash (Free Tier)</span>
             </div>
         </div>
         <div style="font-size:12px;color:var(--cinza);margin-top:4px;">
@@ -133,7 +133,7 @@
     </div>
 
     <div class="card" id="passoUpload">
-        <h3>📤 Envie a Nota Fiscal <span class="badge badge-ia"> IA</span></h3>
+        <h3>📤 Envie a Nota Fiscal <span class="badge badge-ia">🤖 IA</span></h3>
         <div class="dropzone" id="dropzone" onclick="document.getElementById('fileInput').click()">
             <span class="icone">📄</span>
             <p><strong>Arraste o arquivo aqui</strong> ou clique para selecionar</p>
@@ -155,7 +155,7 @@
     </div>
 
     <div class="card" id="passoVinculo" style="display:none;">
-        <h3> Vincular Nota ao Projeto <span class="badge">Defina o destino</span></h3>
+        <h3>🔗 Vincular Nota ao Projeto <span class="badge">Defina o destino</span></h3>
         <div class="form-group">
             <label>📋 Projeto *</label>
             <select id="projetoVinculo" onchange="atualizarSaldo()"><option value="">Selecione um projeto...</option></select>
@@ -177,11 +177,11 @@
         </div>
 
         <div style="margin:16px 0;">
-            <label style="font-size:11px;font-weight:600;color:var(--cinza);text-transform:uppercase;display:block;margin-bottom:8px;">️ Destino dos Produtos</label>
+            <label style="font-size:11px;font-weight:600;color:var(--cinza);text-transform:uppercase;display:block;margin-bottom:8px;">🏷️ Destino dos Produtos</label>
             <div class="destinos-grid">
                 <div class="destino-card" data-destino="estoque" onclick="selecionarDestino(this)"><span class="icone">📦</span><span class="nome">Estoque</span><span class="desc">Consumíveis</span></div>
                 <div class="destino-card selecionado" data-destino="patrimonio" onclick="selecionarDestino(this)"><span class="icone">🏢</span><span class="nome">Patrimônio</span><span class="desc">Bens duráveis</span></div>
-                <div class="destino-card" data-destino="servico" onclick="selecionarDestino(this)"><span class="icone">️</span><span class="nome">Serviço</span><span class="desc">Contratação</span></div>
+                <div class="destino-card" data-destino="servico" onclick="selecionarDestino(this)"><span class="icone">🛠️</span><span class="nome">Serviço</span><span class="desc">Contratação</span></div>
             </div>
         </div>
 
@@ -189,7 +189,7 @@
             <label style="font-size:11px;font-weight:600;color:var(--cinza);text-transform:uppercase;display:block;margin-bottom:8px;">📤 Módulos para encaminhar</label>
             <div class="modulos-grid">
                 <div class="modulo-card selecionado" data-modulo="financeiro" onclick="toggleModulo(this)"><span class="icone">💰</span><span class="nome">Financeiro</span></div>
-                <div class="modulo-card selecionado" data-modulo="prestacao" onclick="toggleModulo(this)"><span class="icone"></span><span class="nome">Prest. Contas</span></div>
+                <div class="modulo-card selecionado" data-modulo="prestacao" onclick="toggleModulo(this)"><span class="icone">📋</span><span class="nome">Prest. Contas</span></div>
                 <div class="modulo-card selecionado" data-modulo="orcamento" onclick="toggleModulo(this)"><span class="icone">📊</span><span class="nome">Orçamento</span></div>
                 <div class="modulo-card selecionado" data-modulo="crm" onclick="toggleModulo(this)"><span class="icone">☎️</span><span class="nome">CRM</span></div>
             </div>
@@ -206,7 +206,7 @@
         </div>
 
         <div class="form-group"><label>📅 Data de Entrega *</label><input type="date" id="dataEntrega" required></div>
-        <div class="form-group"><label> Observações</label><textarea id="obsVinculo" rows="2" placeholder="Ex: Compra para o projeto..." style="width:100%;padding:10px 12px;border:1px solid #E5E0D8;border-radius:8px;font-size:13px;font-family:'Inter',sans-serif;"></textarea></div>
+        <div class="form-group"><label>📝 Observações</label><textarea id="obsVinculo" rows="2" placeholder="Ex: Compra para o projeto..." style="width:100%;padding:10px 12px;border:1px solid #E5E0D8;border-radius:8px;font-size:13px;font-family:'Inter',sans-serif;"></textarea></div>
 
         <div style="background:#F8F4ED;border-radius:10px;padding:16px;margin:12px 0;">
             <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;">
@@ -225,13 +225,13 @@
     <div class="card" id="passoConfirmacao" style="display:none;border:2px solid var(--verde);">
         <h3>✅ Vinculação Concluída! <span class="badge" style="background:#E8F5E9;color:#2E7D32;">Sucesso</span></h3>
         <div style="text-align:center;padding:20px 0;">
-            <span style="font-size:64px;"></span>
+            <span style="font-size:64px;">🎉</span>
             <h2 style="margin:12px 0 4px;color:var(--verde);">Nota vinculada com sucesso!</h2>
             <p style="color:var(--cinza);">A nota foi vinculada ao projeto e os produtos foram direcionados.</p>
         </div>
         <div style="background:#F8F4ED;border-radius:10px;padding:16px;margin:12px 0;">
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:13px;">
-                <div><strong> Projeto:</strong> <span id="confProjeto">---</span></div>
+                <div><strong>📋 Projeto:</strong> <span id="confProjeto">---</span></div>
                 <div><strong>📂 Categoria:</strong> <span id="confCategoria">---</span></div>
                 <div><strong>🏷️ Destino:</strong> <span id="confDestino">---</span></div>
                 <div><strong>💰 Valor:</strong> <span id="confValor" style="color:var(--roxo);font-weight:700;">R$ 0,00</span></div>
@@ -370,14 +370,14 @@ async function testarConexao() {
     var key = getGeminiKey();
     if (!key || key.length < 20 || key === 'undefined') { mostrarToast('⚠️ Configure a chave primeiro!', 'warning'); return; }
     try {
-        // ✅ MODELO ATUALIZADO: gemini-3.6-flash (Recomendado pelo Google)
-        var response = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key=' + key, {
+        // ✅ MODELO ESTÁVEL: gemini-1.5-flash (Padrão oficial Free Tier)
+        var response = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=' + key, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ contents: [{ parts: [{ text: 'Diga "ok" em uma palavra' }] }] })
         });
         var data = await response.json();
-        if (data.candidates && data.candidates[0]) { mostrarToast('✅ Conexão OK! Gemini 3.6 Flash funcionando.', 'success'); } 
+        if (data.candidates && data.candidates[0]) { mostrarToast('✅ Conexão OK! Gemini 1.5 Flash funcionando.', 'success'); } 
         else { mostrarToast('❌ Erro: ' + (data.error?.message || 'desconhecido'), 'error'); }
     } catch (e) { mostrarToast('❌ Erro: ' + e.message, 'error'); }
 }
@@ -455,8 +455,8 @@ Texto da nota:
 ${texto.substring(0, 8000)}`;
 
     try {
-        // ✅ MODELO ATUALIZADO: gemini-3.6-flash + JSON Nativo
-        var response = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key=' + key, {
+        // ✅ MODELO ESTÁVEL: gemini-1.5-flash + JSON Nativo
+        var response = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=' + key, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ 
@@ -471,6 +471,7 @@ ${texto.substring(0, 8000)}`;
         if (!response.ok) {
             if (response.status === 400) throw new Error('Chave inválida ou expirada (400).');
             if (response.status === 429) throw new Error('Limite de requisições atingido (429). Aguarde.');
+            if (response.status === 503) throw new Error('Serviço temporariamente indisponível (503). Tente o modo manual.');
             throw new Error('Erro na API: ' + response.status);
         }
 
@@ -504,7 +505,7 @@ ${texto.substring(0, 8000)}`;
                 <p style="color:var(--cinza);font-size:13px;margin-top:8px;">${e.message}</p>
                 <div style="margin-top:16px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
                     <button class="btn btn-outline" onclick="limparDados()" style="border-color:var(--cinza);">🔄 Tentar Novamente</button>
-                    <button class="btn btn-warning" onclick="fecharPreviewEabrirManual()">️ Inserir Manualmente (Recomendado)</button>
+                    <button class="btn btn-warning" onclick="fecharPreviewEabrirManual()">✏️ Inserir Manualmente (Recomendado)</button>
                 </div>
             </div>`;
     }
@@ -530,12 +531,12 @@ function mostrarPreview(dados) {
             <div class="preview-item"><span class="label">🏢 Emitente</span><span class="valor">${dados.emitente || '—'}</span></div>
             <div class="preview-item"><span class="label">📄 CNPJ</span><span class="valor">${dados.cnpj || '—'}</span></div>
             <div class="preview-item"><span class="label">📞 Telefone</span><span class="valor">${dados.telefone || '—'}</span></div>
-            <div class="preview-item"><span class="label"> Data Emissão</span><span class="valor">${dados.dataEmissao || '—'}</span></div>
+            <div class="preview-item"><span class="label">📅 Data Emissão</span><span class="valor">${dados.dataEmissao || '—'}</span></div>
             <div class="preview-item"><span class="label">💰 Valor Total</span><span class="valor destaque">${fm(dados.valorTotal)}</span></div>
         </div>
         ${itensHtml}
         <div style="margin-top:12px;font-size:11px;color:var(--cinza);padding:8px;background:white;border-radius:8px;border:1px solid #E5E0D8;">
-            🤖 Processado com Gemini 3.6 Flash (JSON Nativo)
+            🤖 Processado com Gemini 1.5 Flash (JSON Nativo)
         </div>`;
     document.getElementById('resumoNumero').textContent = dados.numero || '---';
     document.getElementById('resumoEmitente').textContent = dados.emitente || '---';
