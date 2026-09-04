@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Amovin ERP Social • Certificados</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --laranja: #C65A11;
+  --amarelo: #F5C518;
+  --verde: #57C220;
+  --azul: #1E88E5;
+  --grafite: #1A1A1A;
+  --cinza: #6B7280;
+  --cinza-claro: #F8F4ED;
+  --branco: #FFFFFF;
+  --vermelho: #E53935;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family: 'Inter', system-ui, sans-serif; background: #F8F4ED; display: flex; min-height: 100vh; }
+
+.main-content { flex: 1; margin-left: 270px; padding: 24px 30px; }
+.topo-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 10px; }
+.topo-bar h1 { font-size: 24px; font-weight: 700; color: var(--grafite); }
+.btn-sair-topo { background: #F8F4ED; color: #1A1A1A; border: 1px solid #F0E9DF; padding: 8px 16px; border-radius: 10px; font-size: 12px; font-weight: 600; cursor: pointer; }
+
+.kpi-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 22px; }
+.kpi-card { background: #FFFFFF; padding: 18px; border-radius: 14px; border: 1px solid #F0E9DF; text-align: center; }
+.kpi-card .kpi-valor { font-size: 24px; font-weight: 800; color: var(--laranja); }
+.kpi-card .kpi-label { font-size: 11px; color: var(--cinza); }
+
+.grid-cert { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.card { background: #FFFFFF; padding: 24px; border-radius: 14px; border: 1px solid #F0E9DF; }
+.card h3 { font-size: 16px; font-weight: 700; color: var(--grafite); margin-bottom: 18px; padding-bottom: 12px; border-bottom: 1px solid #F0E9DF; display: flex; justify-content: space-between; align-items: center; }
+
+.form-group { margin-bottom: 14px; }
+.form-group label { display: block; font-size: 11px; font-weight: 600; color: var(--cinza); margin-bottom: 4px; text-transform: uppercase; }
+.form-group input, .form-group select { width: 100%; padding: 10px 12px; border: 1px solid #E5E0D8; border-radius: 8px; font-size: 13px; font-family: 'Inter', sans-serif; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+.btn { padding: 10px 18px; border-radius: 8px; border: none; cursor: pointer; font-weight: 600; font-size: 12px; }
+.btn-salvar { background: var(--laranja); color: white; }
+.btn-editar { background: var(--amarelo); color: #1A1A1A; }
+.btn-excluir { background: var(--vermelho); color: white; }
+.btn-azul { background: var(--azul); color: white; }
+
+.cert-item { padding: 12px 16px; border-bottom: 1px solid #F0E9DF; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px; }
+.cert-item .nome { font-weight: 600; color: var(--grafite); font-size: 13px; }
+.cert-item .tipo { font-size: 10px; padding: 2px 10px; border-radius: 12px; font-weight: 600; background: #FFF3E0; color: #E65100; }
+.cert-item .data { font-size: 11px; color: var(--cinza); }
+.sem-dados { text-align: center; padding: 30px; color: #9CA3AF; }
+
+.rodape { background: #FFFFFF; border-radius: 14px; padding: 12px 18px; border: 1px solid #F0E9DF; margin-top: 20px; }
+.rodape-grid { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.rodape-logo { flex-shrink: 0; } .rodape-logo .logo-vigorre { width: 50px; }
+.rodape-info { flex: 1; } .rodape-info .copyright { font-size: 8px; color: #8A8F98; } .rodape-info .tm { font-size: 6px; vertical-align: super; }
+.rodape-info .contato { font-size: 9px; color: #8A8F98; } .rodape-info a { color: #C65A11; text-decoration: none; } .rodape-info .email { font-size: 8px; color: #aaa; }
+.logo-vigorre-fallback { font-size: 12px; font-weight: 700; display: none; }
+
+@media (max-width: 900px) { .main-content { margin-left: 0; } .grid-cert { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<div id="menu-container"></div>
+
+<main class="main-content">
+  <div class="topo-bar"><h1>🎓 Certificados</h1><button class="btn-sair-topo" onclick="window.location.href='dashboard.html'">🏠 Dashboard</button></div>
+
+  <div class="kpi-row">
+    <div class="kpi-card"><div class="kpi-valor" id="kpiTotal">0</div><div class="kpi-label">🎓 Total</div></div>
+    <div class="kpi-card"><div class="kpi-valor" id="kpiVoluntarios">0</div><div class="kpi-label">💪 Voluntários</div></div>
+    <div class="kpi-card"><div class="kpi-valor" id="kpiParticipacao">0</div><div class="kpi-label">📋 Participação</div></div>
+  </div>
+
+  <div class="grid-cert">
+    <div class="card">
+      <h3>📝 Emitir Certificado</h3>
+      <input type="hidden" id="certId">
+      <div class="form-group"><label>Nome do Certificado *</label><input type="text" id="nomeCert" placeholder="Ex: Certificado de Voluntário"></div>
+      <div class="form-group"><label>Nome do Beneficiário *</label><input type="text" id="beneficiarioCert" placeholder="Nome da pessoa"></div>
+      <div class="form-row"><div class="form-group"><label>Tipo</label><select id="tipoCert"><option>Voluntário</option><option>Participação</option><option>Curso</option><option>Palestra</option><option>Empresa Parceira</option><option>Embaixador</option></select></div><div class="form-group"><label>Carga Horária</label><input type="text" id="cargaCert" placeholder="Ex: 40 horas"></div></div>
+      <div class="form-row"><div class="form-group"><label>Data Emissão</label><input type="date" id="dataCert"></div><div class="form-group"><label>Validade</label><input type="date" id="validadeCert"></div></div>
+      <div class="form-group"><label>Observações</label><input type="text" id="obsCert" placeholder="Informações adicionais..."></div>
+      <button class="btn btn-salvar" onclick="salvarCertificado()" style="width:100%;padding:12px;font-size:14px;">💾 Salvar e Emitir</button>
+    </div>
+    <div class="card">
+      <h3>📋 Certificados Emitidos</h3>
+      <div id="listaCertificados"><div class="sem-dados">Nenhum certificado.</div></div>
+    </div>
+  </div>
+
+  <div class="rodape"><div class="rodape-grid"><div class="rodape-logo"><img src="images/logo-vigorre.png" alt="Vigorre" class="logo-vigorre" onerror="this.style.display='none';this.nextElementSibling.style.display='block';"><span class="logo-vigorre-fallback">Vigorre</span></div><div class="rodape-info"><div class="copyright">© 2026 VIGORRE DESIGNER<span class="tm">™</span></div><div class="contato"><a href="https://www.vigorre.com.br">www.vigorre.com.br</a> | <a href="https://wa.me/5534991850735">(34) 99185-0735</a></div><div class="email">contato@vigorre.com.br</div></div></div></div>
+</main>
+
+<script src="config.js"></script>
+<script src="menu.js?v=20260904"></script>
+<script>
+var certificados = JSON.parse(localStorage.getItem('amovin_certificados') || '[]');
+var editandoId = null;
+
+if (certificados.length === 0) {
+    certificados = [
+        { id: 1, nome: 'Certificado de Voluntário', beneficiario: 'Fernanda Lima', tipo: 'Voluntário', carga: '40 horas', data: new Date().toISOString().split('T')[0], validade: '2027-06-23', obs: '' }
+    ];
+    salvar();
+}
+function salvar() { localStorage.setItem('amovin_certificados', JSON.stringify(certificados)); }
+
+function atualizarKPIs() {
+    var total = certificados.length;
+    var voluntarios = certificados.filter(function(c) { return c.tipo === 'Voluntário'; }).length;
+    var participacao = certificados.filter(function(c) { return c.tipo === 'Participação' || c.tipo === 'Curso' || c.tipo === 'Palestra'; }).length;
+
+    document.getElementById('kpiTotal').textContent = total;
+    document.getElementById('kpiVoluntarios').textContent = voluntarios;
+    document.getElementById('kpiParticipacao').textContent = participacao;
+}
+
+function renderizarCertificados() {
+    var lista = certificados.slice().sort(function(a, b) { return new Date(b.data) - new Date(a.data); });
+    var container = document.getElementById('listaCertificados');
+    if (lista.length === 0) {
+        container.innerHTML = '<div class="sem-dados">Nenhum certificado.</div>';
+        return;
+    }
+    container.innerHTML = lista.map(function(c) {
+        var data = c.data ? new Date(c.data + 'T00:00:00').toLocaleDateString('pt-BR') : '-';
+        var validade = c.validade ? new Date(c.validade + 'T00:00:00').toLocaleDateString('pt-BR') : '-';
+        return '<div class="cert-item">' +
+            '<div><span class="nome">' + c.nome + '</span> <span class="tipo">' + c.tipo + '</span><br>' +
+            '<span style="font-size:12px;color:var(--cinza);">👤 ' + c.beneficiario + (c.carga ? ' | ⏱️ ' + c.carga : '') + '</span><br>' +
+            '<span class="data">📅 Emissão: ' + data + (c.validade ? ' | Válido até: ' + validade : '') + '</span></div>' +
+            '<div><button class="btn btn-azul" onclick="imprimirCertificado(' + c.id + ')" style="padding:4px 8px;font-size:10px;">🖨️</button>' +
+            '<button class="btn btn-editar" onclick="editarCertificado(' + c.id + ')" style="padding:4px 8px;font-size:10px;">✏️</button>' +
+            '<button class="btn btn-excluir" onclick="excluirCertificado(' + c.id + ')" style="padding:4px 8px;font-size:10px;">🗑️</button></div></div>';
+    }).join('');
+}
+
+window.salvarCertificado = function() {
+    var nome = document.getElementById('nomeCert').value.trim();
+    var beneficiario = document.getElementById('beneficiarioCert').value.trim();
+
+    if (!nome) { alert('Preencha o nome do certificado!'); return; }
+    if (!beneficiario) { alert('Preencha o nome do beneficiário!'); return; }
+
+    var dados = {
+        nome: nome,
+        beneficiario: beneficiario,
+        tipo: document.getElementById('tipoCert').value,
+        carga: document.getElementById('cargaCert').value.trim(),
+        data: document.getElementById('dataCert').value,
+        validade: document.getElementById('validadeCert').value,
+        obs: document.getElementById('obsCert').value.trim()
+    };
+
+    if (editandoId) {
+        var idx = certificados.findIndex(function(c) { return c.id === editandoId; });
+        if (idx >= 0) {
+            for (var k in dados) certificados[idx][k] = dados[k];
+        }
+        editandoId = null;
+    } else {
+        dados.id = Date.now();
+        certificados.push(dados);
+    }
+
+    salvar();
+    limparForm();
+    atualizarKPIs();
+    renderizarCertificados();
+    alert('✅ Certificado emitido com sucesso!');
+};
+
+window.editarCertificado = function(id) {
+    var c = certificados.find(function(x) { return x.id === id; });
+    if (!c) return;
+    editandoId = id;
+    document.getElementById('certId').value = id;
+    document.getElementById('nomeCert').value = c.nome;
+    document.getElementById('beneficiarioCert').value = c.beneficiario;
+    document.getElementById('tipoCert').value = c.tipo;
+    document.getElementById('cargaCert').value = c.carga || '';
+    document.getElementById('dataCert').value = c.data || '';
+    document.getElementById('validadeCert').value = c.validade || '';
+    document.getElementById('obsCert').value = c.obs || '';
+    document.querySelector('.card h3').textContent = '✏️ Editando: ' + c.nome;
+};
+
+window.excluirCertificado = function(id) {
+    if (!confirm('Excluir este certificado?')) return;
+    certificados = certificados.filter(function(c) { return c.id !== id; });
+    salvar();
+    atualizarKPIs();
+    renderizarCertificados();
+};
+
+window.imprimirCertificado = function(id) {
+    var c = certificados.find(function(x) { return x.id === id; });
+    if (!c) return;
+
+    var data = c.data ? new Date(c.data + 'T00:00:00').toLocaleDateString('pt-BR', {day:'numeric', month:'long', year:'numeric'}) : '';
+    var validade = c.validade ? new Date(c.validade + 'T00:00:00').toLocaleDateString('pt-BR', {day:'numeric', month:'long', year:'numeric'}) : '';
+
+    var w = window.open('', '_blank');
+    w.document.write('<html><head><title>Certificado</title><style>');
+    w.document.write('body{font-family:Georgia,serif;text-align:center;padding:40px;background:#fff}');
+    w.document.write('.cert{border:6px double #C65A11;padding:40px;max-width:700px;margin:0 auto;background:white}');
+    w.document.write('h1{color:#C65A11;font-size:28px;margin:0;letter-spacing:2px}');
+    w.document.write('h2{font-size:20px;margin:8px 0;color:#1A1A1A}');
+    w.document.write('p{font-size:14px;line-height:1.8;margin:6px 0}');
+    w.document.write('.assinatura{margin-top:40px}');
+    w.document.write('.linha{width:280px;border-top:1px solid #000;margin:0 auto 8px}');
+    w.document.write('.cargo{font-size:12px;color:#666}');
+    w.document.write('.validade{font-size:11px;color:#888;margin-top:20px;border-top:1px solid #ddd;padding-top:15px}');
+    w.document.write('</style></head><body>');
+    w.document.write('<div class="cert">');
+    w.document.write('<h1>AMOVIN</h1>');
+    w.document.write('<p style="font-size:12px;color:#666;">Associação e Movimento pela Inclusão</p>');
+    w.document.write('<h2>' + c.nome + '</h2>');
+    w.document.write('<p>Certificamos que <strong>' + c.beneficiario + '</strong></p>');
+    w.document.write('<p>participou da atividade <strong>' + c.nome + '</strong></p>');
+    w.document.write('<p>' + c.tipo + (c.carga ? ' | Carga Horária: ' + c.carga : '') + '</p>');
+    w.document.write('<p style="margin-top:15px;">Rio Paranaíba/MG, ' + data + '</p>');
+    if (c.validade) {
+        w.document.write('<p style="font-size:12px;color:#666;">Válido até: ' + validade + '</p>');
+    }
+    w.document.write('<div class="assinatura"><div class="linha"></div>');
+    w.document.write('<p style="margin:4px 0;">Presidência AMOVIN</p>');
+    w.document.write('<p class="cargo">CNPJ: XX.XXX.XXX/XXXX-XX</p></div>');
+    w.document.write('</div>');
+    w.document.write('<script>window.onload=function(){window.print()}<\/script>');
+    w.document.write('</body></html>');
+    w.document.close();
+};
+
+function limparForm() {
+    editandoId = null;
+    document.getElementById('certId').value = '';
+    document.getElementById('nomeCert').value = '';
+    document.getElementById('beneficiarioCert').value = '';
+    document.getElementById('tipoCert').value = 'Voluntário';
+    document.getElementById('cargaCert').value = '';
+    document.getElementById('dataCert').value = new Date().toISOString().split('T')[0];
+    document.getElementById('validadeCert').value = '';
+    document.getElementById('obsCert').value = '';
+    document.querySelector('.card h3').textContent = '📝 Emitir Certificado';
+}
+
+document.getElementById('dataCert').value = new Date().toISOString().split('T')[0];
+
+if (!sessionStorage.getItem('amovin_logado')) { window.location.href = 'index.html'; }
+
+atualizarKPIs();
+renderizarCertificados();
+</script>
+</body>
+</html>

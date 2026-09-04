@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amovin ERP • Projetos e Convênios</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --laranja: #C65A11;
+            --laranja-escuro: #A04A0E;
+            --amarelo: #F5C518;
+            --verde: #57C220;
+            --azul: #1E88E5;
+            --grafite: #1A1A1A;
+            --cinza: #6B7280;
+            --cinza-claro: #F8F4ED;
+            --branco: #FFFFFF;
+            --vermelho: #E53935;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: #F8F4ED;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .main-content {
+            flex: 1;
+            margin-left: 270px;
+            padding: 24px 30px;
+        }
+        .topo-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .topo-bar h1 {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--grafite);
+        }
+        .topo-bar h1 span {
+            color: var(--laranja);
+        }
+        .topo-bar .sub {
+            font-size: 12px;
+            color: var(--cinza);
+            font-weight: 400;
+            display: block;
+        }
+        .btn-sair-topo {
+            background: #F8F4ED;
+            color: #1A1A1A;
+            border: 1px solid #F0E9DF;
+            padding: 8px 16px;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .card {
+            background: #FFFFFF;
+            padding: 24px;
+            border-radius: 14px;
+            border: 1px solid #F0E9DF;
+            margin-bottom: 20px;
+        }
+        .card h3 {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--grafite);
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #F0E9DF;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .card h3 .badge {
+            font-size: 10px;
+            font-weight: 600;
+            padding: 3px 12px;
+            border-radius: 20px;
+            background: #FFF3E0;
+            color: var(--laranja);
+        }
+
+        .form-group {
+            margin-bottom: 14px;
+        }
+        .form-group label {
+            display: block;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--cinza);
+            margin-bottom: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #E5E0D8;
+            border-radius: 8px;
+            font-size: 13px;
+            font-family: 'Inter', sans-serif;
+            transition: border 0.2s;
+            background: #FAFAFA;
+        }
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--laranja);
+            background: var(--branco);
+            box-shadow: 0 0 0 3px rgba(198, 90, 17, 0.08);
+        }
+        .form-group textarea {
+            resize: vertical;
+            min-height: 60px;
+        }
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        .btn {
+            padding: 10px 24px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 13px;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-primary {
+            background: var(--laranja);
+            color: white;
+        }
+        .btn-primary:hover {
+            background: var(--laranja-escuro);
+        }
+        .btn-success {
+            background: var(--verde);
+            color: white;
+        }
+        .btn-success:hover {
+            background: #388E3C;
+        }
+        .btn-danger {
+            background: var(--vermelho);
+            color: white;
+        }
+        .btn-danger:hover {
+            background: #C62828;
+        }
+        .btn-outline {
+            background: transparent;
+            color: var(--cinza);
+            border: 1px solid #E5E0D8;
+        }
+        .btn-outline:hover {
+            background: #F8F4ED;
+        }
+        .btn-full {
+            width: 100%;
+            padding: 14px;
+            font-size: 15px;
+            justify-content: center;
+        }
+
+        /* ============================================================
+           PROJETO CARD (VISUAL)
+           ============================================================ */
+        .projetos-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .projeto-card {
+            background: #FFFFFF;
+            border-radius: 14px;
+            border: 1px solid #F0E9DF;
+            padding: 20px;
+            transition: all 0.3s;
+        }
+        .projeto-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+        }
+        .projeto-card .cabecalho {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+        .projeto-card .cabecalho .nome {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--grafite);
+        }
+        .projeto-card .cabecalho .status {
+            font-size: 10px;
+            padding: 3px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+        .status-ativo {
+            background: #E8F5E9;
+            color: #2E7D32;
+        }
+        .status-concluido {
+            background: #E3F2FD;
+            color: #1565C0;
+        }
+        .status-pausado {
+            background: #FFF3E0;
+            color: #E65100;
+        }
+
+        .projeto-card .valor-total {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--laranja);
+            margin: 4px 0 12px;
+        }
+
+        .projeto-card .categorias {
+            margin: 12px 0;
+        }
+        .projeto-card .categoria-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            border-bottom: 1px solid #F0E9DF;
+            font-size: 13px;
+        }
+        .projeto-card .categoria-item:last-child {
+            border-bottom: none;
+        }
+        .projeto-card .categoria-item .cat-nome {
+            color: var(--cinza);
+        }
+        .projeto-card .categoria-item .cat-valores {
+            font-weight: 600;
+        }
+        .projeto-card .categoria-item .cat-valores .realizado {
+            color: var(--laranja);
+        }
+        .projeto-card .categoria-item .cat-valores .disponivel {
+            color: var(--verde);
+        }
+        .projeto-card .categoria-item .cat-valores .estourado {
+            color: var(--vermelho);
+        }
+
+        .barra-progresso {
+            width: 100%;
+            height: 6px;
+            background: #F0E9DF;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 8px;
+        }
+        .barra-progresso .fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.8s ease;
+        }
+        .fill-verde {
+            background: var(--verde);
+        }
+        .fill-laranja {
+            background: var(--laranja);
+        }
+        .fill-vermelho {
+            background: var(--vermelho);
+        }
+
+        .projeto-card .acoes {
+            display: flex;
+            gap: 8px;
+            margin-top: 14px;
+            flex-wrap: wrap;
+        }
+        .projeto-card .acoes .btn {
+            font-size: 11px;
+            padding: 6px 14px;
+        }
+
+        /* ============================================================
+           RECURSOS DO PROJETO
+           ============================================================ */
+        .recursos-box {
+            background: #F8F4ED;
+            border-radius: 10px;
+            padding: 14px 16px;
+            margin: 10px 0;
+        }
+        .recursos-box .recurso-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 4px 0;
+            font-size: 12px;
+            border-bottom: 1px solid #E5E0D8;
+        }
+        .recursos-box .recurso-item:last-child {
+            border-bottom: none;
+        }
+
+        .sem-dados {
+            text-align: center;
+            padding: 40px;
+            color: #9CA3AF;
+        }
+
+        .rodape {
+            background: #FFFFFF;
+            border-radius: 14px;
+            padding: 12px 18px;
+            border: 1px solid #F0E9DF;
+            margin-top: 20px;
+        }
+        .rodape-grid {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .rodape-logo {
+            flex-shrink: 0;
+        }
+        .rodape-logo .logo-vigorre {
+            width: 50px;
+        }
+        .rodape-info {
+            flex: 1;
+        }
+        .rodape-info .copyright {
+            font-size: 8px;
+            color: #8A8F98;
+        }
+        .rodape-info .tm {
+            font-size: 6px;
+            vertical-align: super;
+        }
+        .rodape-info .contato {
+            font-size: 9px;
+            color: #8A8F98;
+        }
+        .rodape-info a {
+            color: #C65A11;
+            text-decoration: none;
+        }
+        .rodape-info .email {
+            font-size: 8px;
+            color: #aaa;
+        }
+        .logo-vigorre-fallback {
+            font-size: 12px;
+            font-weight: 700;
+            display: none;
+        }
+
+        @media (max-width: 900px) {
+            .main-content {
+                margin-left: 0;
+            }
+            .projetos-grid {
+                grid-template-columns: 1fr;
+            }
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* TOAST */
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 16px 24px;
+            border-radius: 12px;
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+            z-index: 10000;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+            animation: slideInRight 0.4s ease;
+            max-width: 400px;
+        }
+        .toast-success {
+            background: var(--verde);
+        }
+        .toast-error {
+            background: var(--vermelho);
+        }
+        .toast-info {
+            background: var(--azul);
+        }
+        .toast-warning {
+            background: #E65100;
+        }
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="menu-container"></div>
+
+    <main class="main-content">
+        <div class="topo-bar">
+            <div>
+                <h1>📋 Projetos e Convênios <span>AMOVIN</span></h1>
+                <span class="sub">Gerencie projetos, orçamentos e acompanhe a execução</span>
+            </div>
+            <button class="btn-sair-topo" onclick="window.location.href='index.html'">🚪 Sair</button>
+        </div>
+
+        <!-- KPIs Rápidos -->
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:15px;margin-bottom:22px;">
+            <div class="card" style="padding:16px;text-align:center;margin-bottom:0;">
+                <div style="font-size:28px;font-weight:800;color:var(--laranja);" id="kpiTotalProjetos">0</div>
+                <div style="font-size:11px;color:var(--cinza);">📋 Total de Projetos</div>
+            </div>
+            <div class="card" style="padding:16px;text-align:center;margin-bottom:0;">
+                <div style="font-size:28px;font-weight:800;color:var(--verde);" id="kpiOrcamentoTotal">R$ 0</div>
+                <div style="font-size:11px;color:var(--cinza);">💰 Orçamento Total</div>
+            </div>
+            <div class="card" style="padding:16px;text-align:center;margin-bottom:0;">
+                <div style="font-size:28px;font-weight:800;color:#E65100;" id="kpiGastoTotal">R$ 0</div>
+                <div style="font-size:11px;color:var(--cinza);">💳 Total Gasto</div>
+            </div>
+            <div class="card" style="padding:16px;text-align:center;margin-bottom:0;">
+                <div style="font-size:28px;font-weight:800;color:var(--azul);" id="kpiSaldoTotal">R$ 0</div>
+                <div style="font-size:11px;color:var(--cinza);">📊 Saldo Disponível</div>
+            </div>
+        </div>
+
+        <!-- FORMULÁRIO NOVO PROJETO -->
+        <div class="card" style="margin-bottom:20px;">
+            <h3>
+                <span>📝 Novo Projeto</span>
+                <span class="badge">+ Adicionar</span>
+            </h3>
+            <input type="hidden" id="projetoId">
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Nome do Projeto *</label>
+                    <input type="text" id="nomeProjeto" placeholder="Ex: Inclusão Digital">
+                </div>
+                <div class="form-group">
+                    <label>Status</label>
+                    <select id="statusProjeto">
+                        <option value="ativo">✅ Ativo</option>
+                        <option value="concluido">📋 Concluído</option>
+                        <option value="pausado">⏸️ Pausado</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Data Início</label>
+                    <input type="date" id="dataInicio">
+                </div>
+                <div class="form-group">
+                    <label>Data Fim</label>
+                    <input type="date" id="dataFim">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Descrição</label>
+                <textarea id="descricaoProjeto" rows="2" placeholder="Objetivo do projeto..."></textarea>
+            </div>
+
+            <h4 style="margin:16px 0 12px;font-size:14px;color:var(--cinza);">💰 Recursos / Fontes de Financiamento</h4>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Fonte</label>
+                    <select id="fonteRecurso">
+                        <option value="Emenda Parlamentar">🏛️ Emenda Parlamentar</option>
+                        <option value="Convênio Prefeitura">🏢 Convênio Prefeitura</option>
+                        <option value="Convênio Governo Estadual">🏛️ Convênio Governo Estadual</option>
+                        <option value="Convênio Governo Federal">🏛️ Convênio Governo Federal</option>
+                        <option value="Doação">🤝 Doação</option>
+                        <option value="Patrocínio">💼 Patrocínio</option>
+                        <option value="Recurso Próprio">💰 Recurso Próprio</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Valor (R$)</label>
+                    <input type="number" id="valorRecurso" step="0.01" placeholder="0,00">
+                </div>
+            </div>
+            <button class="btn btn-primary" onclick="adicionarRecurso()" style="margin-bottom:12px;">➕ Adicionar Recurso</button>
+
+            <div id="listaRecursos" style="margin-bottom:12px;display:flex;flex-wrap:wrap;gap:8px;">
+                <span style="font-size:12px;color:var(--cinza);">Nenhum recurso adicionado.</span>
+            </div>
+
+            <button class="btn btn-success btn-full" onclick="salvarProjeto()">💾 Salvar Projeto</button>
+        </div>
+
+        <!-- LISTA DE PROJETOS -->
+        <div class="card">
+            <h3>
+                📋 Projetos Ativos
+                <span style="font-weight:400;font-size:13px;color:var(--cinza);" id="totalProjetos">(0)</span>
+            </h3>
+            <div class="projetos-grid" id="listaProjetos">
+                <div class="sem-dados" style="grid-column:1/-1;">Nenhum projeto cadastrado.</div>
+            </div>
+        </div>
+
+        <div class="rodape">
+            <div class="rodape-grid">
+                <div class="rodape-logo">
+                    <img src="images/logo-vigorre.png" alt="Vigorre" class="logo-vigorre" onerror="this.style.display='none';this.nextElementSibling.style.display='block';">
+                    <span class="logo-vigorre-fallback">Vigorre</span>
+                </div>
+                <div class="rodape-info">
+                    <div class="copyright">© 2026 VIGORRE DESIGNER<span class="tm">™</span></div>
+                    <div class="contato"><a href="https://www.vigorre.com.br">www.vigorre.com.br</a> | <a href="https://wa.me/5534991850735">(34) 99185-0735</a></div>
+                    <div class="email">contato@vigorre.com.br</div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="menu.js?v=20260904"></script>
+    <script>
+        // ============================================================
+        // DADOS
+        // ============================================================
+        var projetos = JSON.parse(localStorage.getItem('amovin_projetos') || '[]');
+        var orcamentos = JSON.parse(localStorage.getItem('amovin_orcamentos') || '[]');
+        var notas = JSON.parse(localStorage.getItem('amovin_notas_fiscais') || '[]');
+        var editandoId = null;
+        var recursosTemp = [];
+
+        if (projetos.length === 0) {
+            projetos = [
+                { id: 1, nome: 'Inclusão Digital', status: 'ativo', data_inicio: '2026-01-01', data_fim: '2026-12-31',
+                    descricao: 'Inclusão digital para jovens', recursos: [{ fonte: 'Emenda Parlamentar', valor: 100000 },
+                    { fonte: 'Convênio Prefeitura', valor: 50000 }] },
+                { id: 2, nome: 'Esporte para Todos', status: 'ativo', data_inicio: '2026-02-01', data_fim: '2026-11-30',
+                    descricao: 'Atividades esportivas para crianças', recursos: [{ fonte: 'Patrocínio', valor: 80000 }] }
+            ];
+            localStorage.setItem('amovin_projetos', JSON.stringify(projetos));
+
+            if (orcamentos.length === 0) {
+                orcamentos = [
+                    { projeto_id: 1, categoria: 'Equipamentos', previsto: 60000, realizado: 0 },
+                    { projeto_id: 1, categoria: 'Materiais', previsto: 40000, realizado: 0 },
+                    { projeto_id: 1, categoria: 'Serviços', previsto: 30000, realizado: 0 },
+                    { projeto_id: 1, categoria: 'Capacitação', previsto: 20000, realizado: 0 },
+                    { projeto_id: 2, categoria: 'Equipamentos', previsto: 30000, realizado: 0 },
+                    { projeto_id: 2, categoria: 'Materiais', previsto: 30000, realizado: 0 },
+                    { projeto_id: 2, categoria: 'Serviços', previsto: 20000, realizado: 0 }
+                ];
+                localStorage.setItem('amovin_orcamentos', JSON.stringify(orcamentos));
+            }
+        }
+
+        function salvar() {
+            localStorage.setItem('amovin_projetos', JSON.stringify(projetos));
+            localStorage.setItem('amovin_orcamentos', JSON.stringify(orcamentos));
+        }
+
+        // ============================================================
+        // RECURSOS
+        // ============================================================
+        function adicionarRecurso() {
+            var fonte = document.getElementById('fonteRecurso').value;
+            var valor = parseFloat(document.getElementById('valorRecurso').value) || 0;
+
+            if (valor <= 0) {
+                mostrarToast('⚠️ Informe um valor válido para o recurso.', 'warning');
+                return;
+            }
+
+            recursosTemp.push({ fonte: fonte, valor: valor });
+            renderizarRecursos();
+            document.getElementById('valorRecurso').value = '';
+
+            mostrarToast('✅ Recurso adicionado: ' + fonte + ' - R$ ' + valor.toFixed(2).replace('.', ','), 'success');
+        }
+
+        function renderizarRecursos() {
+            var container = document.getElementById('listaRecursos');
+            if (recursosTemp.length === 0) {
+                container.innerHTML = '<span style="font-size:12px;color:var(--cinza);">Nenhum recurso adicionado.</span>';
+                return;
+            }
+            container.innerHTML = recursosTemp.map(function(r, i) {
+                return '<span style="background:#F8F4ED;padding:4px 12px;border-radius:20px;font-size:12px;">' + r
+                    .fonte + ' R$ ' + r.valor.toFixed(2).replace('.', ',') +
+                    ' <span onclick="removerRecurso(' + i + ')" style="cursor:pointer;color:var(--vermelho);">✕</span></span>';
+            }).join('');
+        }
+
+        function removerRecurso(index) {
+            recursosTemp.splice(index, 1);
+            renderizarRecursos();
+        }
+
+        // ============================================================
+        // SALVAR PROJETO
+        // ============================================================
+        function salvarProjeto() {
+            var nome = document.getElementById('nomeProjeto').value.trim();
+            if (!nome) { mostrarToast('⚠️ Nome do projeto é obrigatório!', 'warning'); return; }
+
+            // Calcula total dos recursos
+            var totalRecursos = recursosTemp.reduce(function(s, r) { return s + r.valor; }, 0);
+
+            var dados = {
+                nome: nome,
+                status: document.getElementById('statusProjeto').value,
+                data_inicio: document.getElementById('dataInicio').value,
+                data_fim: document.getElementById('dataFim').value,
+                descricao: document.getElementById('descricaoProjeto').value.trim(),
+                recursos: recursosTemp.slice(),
+                orcamento_total: totalRecursos
+            };
+
+            if (editandoId) {
+                var idx = projetos.findIndex(function(p) { return p.id === editandoId; });
+                if (idx >= 0) {
+                    // Mantém recursos existentes + novos
+                    var recursosExistentes = projetos[idx].recursos || [];
+                    dados.recursos = recursosExistentes.concat(recursosTemp);
+                    dados.orcamento_total = dados.recursos.reduce(function(s, r) { return s + r.valor; }, 0);
+                    for (var k in dados) projetos[idx][k] = dados[k];
+                    // Atualiza orçamentos
+                    atualizarOrcamentos(projetos[idx].id, totalRecursos);
+                }
+                editandoId = null;
+                document.getElementById('tituloForm').textContent = '📝 Novo Projeto';
+            } else {
+                dados.id = Date.now();
+                dados.data_criacao = new Date().toISOString();
+                projetos.push(dados);
+                // Cria orçamentos padrão
+                criarOrcamentosPadrao(dados.id, totalRecursos);
+            }
+
+            salvar();
+            limparForm();
+            renderizarProjetos();
+            atualizarKPIs();
+            recursosTemp = [];
+            renderizarRecursos();
+
+            mostrarToast('✅ Projeto salvo com sucesso!', 'success');
+        }
+
+        function criarOrcamentosPadrao(projetoId, total) {
+            var categorias = ['Equipamentos', 'Materiais', 'Serviços', 'Capacitação', 'Infraestrutura', 'Outros'];
+            var distribuicao = [0.35, 0.25, 0.20, 0.10, 0.05, 0.05];
+
+            categorias.forEach(function(cat, i) {
+                var previsto = Math.round(total * distribuicao[i] * 100) / 100;
+                orcamentos.push({
+                    projeto_id: projetoId,
+                    categoria: cat,
+                    previsto: previsto,
+                    realizado: 0
+                });
+            });
+            localStorage.setItem('amovin_orcamentos', JSON.stringify(orcamentos));
+        }
+
+        function atualizarOrcamentos(projetoId, total) {
+            // Remove orçamentos antigos
+            orcamentos = orcamentos.filter(function(o) { return o.projeto_id !== projetoId; });
+            criarOrcamentosPadrao(projetoId, total);
+        }
+
+        // ============================================================
+        // EDITAR PROJETO
+        // ============================================================
+        function editarProjeto(id) {
+            var p = projetos.find(function(x) { return x.id === id; });
+            if (!p) return;
+
+            editandoId = id;
+            document.getElementById('projetoId').value = id;
+            document.getElementById('nomeProjeto').value = p.nome;
+            document.getElementById('statusProjeto').value = p.status || 'ativo';
+            document.getElementById('dataInicio').value = p.data_inicio || '';
+            document.getElementById('dataFim').value = p.data_fim || '';
+            document.getElementById('descricaoProjeto').value = p.descricao || '';
+            document.getElementById('tituloForm').textContent = '✏️ Editando: ' + p.nome;
+
+            recursosTemp = p.recursos || [];
+            renderizarRecursos();
+
+            document.querySelector('.card h3 span:first-child').textContent = '✏️ Editando: ' + p.nome;
+        }
+
+        // ============================================================
+        // EXCLUIR PROJETO
+        // ============================================================
+        function excluirProjeto(id) {
+            if (!confirm('Excluir este projeto? Todas as notas vinculadas serão removidas.')) return;
+            projetos = projetos.filter(function(p) { return p.id !== id; });
+            orcamentos = orcamentos.filter(function(o) { return o.projeto_id !== id; });
+            notas = notas.filter(function(n) { return n.projeto_id !== id; });
+            salvar();
+            renderizarProjetos();
+            atualizarKPIs();
+            mostrarToast('🗑️ Projeto excluído.', 'info');
+        }
+
+        // ============================================================
+        // RENDERIZAR PROJETOS
+        // ============================================================
+        function renderizarProjetos() {
+            var container = document.getElementById('listaProjetos');
+            document.getElementById('totalProjetos').textContent = '(' + projetos.length + ')';
+
+            if (projetos.length === 0) {
+                container.innerHTML = '<div class="sem-dados" style="grid-column:1/-1;">Nenhum projeto cadastrado.</div>';
+                return;
+            }
+
+            container.innerHTML = projetos.map(function(p) {
+                var statusMap = { 'ativo': 'status-ativo', 'concluido': 'status-concluido', 'pausado': 'status-pausado' };
+                var statusLabel = { 'ativo': '✅ Ativo', 'concluido': '📋 Concluído', 'pausado': '⏸️ Pausado' };
+
+                var orcProjeto = orcamentos.filter(function(o) { return o.projeto_id === p.id; });
+                var totalPrevisto = orcProjeto.reduce(function(s, o) { return s + o.previsto; }, 0);
+                var totalRealizado = orcProjeto.reduce(function(s, o) { return s + o.realizado; }, 0);
+                var percentual = totalPrevisto > 0 ? (totalRealizado / totalPrevisto * 100) : 0;
+                var percentualDisplay = Math.min(percentual, 100).toFixed(1);
+
+                var corBarra = percentual < 70 ? 'fill-verde' : (percentual < 90 ? 'fill-laranja' : 'fill-vermelho');
+
+                var categoriasHtml = orcProjeto.map(function(o) {
+                    var disponivel = o.previsto - o.realizado;
+                    var classeSaldo = disponivel >= 0 ? 'disponivel' : 'estourado';
+                    return '<div class="categoria-item">' +
+                        '<span class="cat-nome">' + o.categoria + '</span>' +
+                        '<span class="cat-valores">' +
+                        'Prev: R$ ' + o.previsto.toFixed(2).replace('.', ',') +
+                        ' | <span class="realizado">Gasto: R$ ' + o.realizado.toFixed(2).replace('.', ',') + '</span>' +
+                        ' | <span class="' + classeSaldo + '">Saldo: R$ ' + disponivel.toFixed(2).replace('.', ',') +
+                        '</span>' +
+                        '</span>' +
+                        '</div>';
+                }).join('');
+
+                var recursosHtml = '';
+                if (p.recursos && p.recursos.length > 0) {
+                    recursosHtml = p.recursos.map(function(r) {
+                        return '<div class="recurso-item"><span>' + r.fonte + '</span><span>R$ ' + r.valor.toFixed(2)
+                            .replace('.', ',') + '</span></div>';
+                    }).join('');
+                }
+
+                return '<div class="projeto-card">' +
+                    '<div class="cabecalho">' +
+                    '<span class="nome">' + p.nome + '</span>' +
+                    '<span class="status ' + (statusMap[p.status] || 'status-ativo') + '">' + (statusLabel[p.status] ||
+                        '✅ Ativo') + '</span>' +
+                    '</div>' +
+                    '<div class="valor-total">R$ ' + totalRealizado.toFixed(2).replace('.', ',') + ' / R$ ' + totalPrevisto
+                    .toFixed(2).replace('.', ',') +
+                    ' <span style="font-size:12px;font-weight:400;color:var(--cinza);">(' + percentualDisplay + '%)</span>' +
+                    '</div>' +
+                    '<div class="barra-progresso"><div class="fill ' + corBarra + '" style="width:' + percentualDisplay +
+                    '%;"></div></div>' +
+                    '<div class="categorias">' + categoriasHtml + '</div>' +
+                    (recursosHtml ? '<div class="recursos-box"><div style="font-weight:600;font-size:11px;color:var(--cinza);margin-bottom:4px;">💰 Recursos</div>' +
+                        recursosHtml + '</div>' : '') +
+                    '<div class="acoes">' +
+                    '<button class="btn btn-primary" onclick="editarProjeto(' + p.id + ')">✏️ Editar</button>' +
+                    '<button class="btn btn-success" onclick="window.location.href=\'relatorios-comprovacao.html?projeto=' +
+                    p.id + '\'">📊 Relatório</button>' +
+                    '<button class="btn btn-danger" onclick="excluirProjeto(' + p.id + ')">🗑️</button>' +
+                    '</div>' +
+                    '</div>';
+            }).join('');
+
+            atualizarKPIs();
+        }
+
+        // ============================================================
+        // ATUALIZAR KPIs
+        // ============================================================
+        function atualizarKPIs() {
+            document.getElementById('kpiTotalProjetos').textContent = projetos.length;
+
+            var totalPrevisto = 0,
+                totalRealizado = 0;
+            orcamentos.forEach(function(o) {
+                totalPrevisto += o.previsto || 0;
+                totalRealizado += o.realizado || 0;
+            });
+
+            document.getElementById('kpiOrcamentoTotal').textContent = 'R$ ' + totalPrevisto.toFixed(2).replace('.', ',');
+            document.getElementById('kpiGastoTotal').textContent = 'R$ ' + totalRealizado.toFixed(2).replace('.', ',');
+            document.getElementById('kpiSaldoTotal').textContent = 'R$ ' + (totalPrevisto - totalRealizado).toFixed(2)
+                .replace('.', ',');
+        }
+
+        // ============================================================
+        // LIMPAR FORM
+        // ============================================================
+        function limparForm() {
+            editandoId = null;
+            document.getElementById('projetoId').value = '';
+            document.getElementById('nomeProjeto').value = '';
+            document.getElementById('statusProjeto').value = 'ativo';
+            document.getElementById('dataInicio').value = '';
+            document.getElementById('dataFim').value = '';
+            document.getElementById('descricaoProjeto').value = '';
+            recursosTemp = [];
+            renderizarRecursos();
+            document.querySelector('.card h3 span:first-child').textContent = '📝 Novo Projeto';
+        }
+
+        // ============================================================
+        // TOAST
+        // ============================================================
+        function mostrarToast(mensagem, tipo) {
+            var toast = document.createElement('div');
+            var classes = { 'success': 'toast-success', 'error': 'toast-error', 'info': 'toast-info',
+                'warning': 'toast-warning' };
+            toast.className = 'toast ' + (classes[tipo] || 'toast-info');
+            toast.textContent = mensagem;
+            document.body.appendChild(toast);
+            setTimeout(function() {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateX(100%)';
+                toast.style.transition = 'all 0.4s ease';
+                setTimeout(function() { toast.remove(); }, 400);
+            }, 4000);
+        }
+
+        // ============================================================
+        // CONTROLE DE PERFIL
+        // ============================================================
+        var perfil = sessionStorage.getItem('amovin_perfil') || 'admin';
+        var modulosPermitidos = {
+            admin: ['dashboard', 'bi', 'capta', 'sala-espera', 'pre-cadastro', 'financeiro', 'orcamentos', 'prestacao-contas',
+                'pessoas', 'profissionais', 'voluntarios', 'agenda-telefonica', 'agenda', 'documentos', 'qrcodes',
+                'notas-fiscais', 'estoque', 'patrimonio', 'biblioteca', 'certificados', 'chat', 'assistente', 'relatorios',
+                'configuracoes', 'backup'
+            ],
+            recepcao: ['dashboard', 'pessoas', 'agenda-telefonica', 'agenda', 'documentos'],
+            consulta: ['dashboard', 'agenda', 'agenda-telefonica', 'assistente'],
+            financeiro: ['dashboard', 'financeiro', 'orcamentos', 'prestacao-contas', 'relatorios'],
+            voluntario: ['dashboard', 'agenda', 'voluntarios', 'agenda-telefonica']
+        };
+
+        var permitidos = modulosPermitidos[perfil] || modulosPermitidos.admin;
+        setTimeout(function() {
+            document.querySelectorAll('.nav-item').forEach(function(item) {
+                var href = item.getAttribute('href') || '';
+                var pagina = href.replace('.html', '');
+                pagina = pagina.split('?')[0].split('#')[0];
+                if (pagina && permitidos.indexOf(pagina) === -1 && pagina !== 'dashboard' && pagina !== '') {
+                    item.style.display = 'none';
+                }
+            });
+        }, 500);
+
+        if (!sessionStorage.getItem('amovin_logado')) {
+            window.location.href = 'index.html';
+        }
+
+        // ============================================================
+        // INICIALIZAÇÃO
+        // ============================================================
+        renderizarProjetos();
+        atualizarKPIs();
+    </script>
+</body>
+</html>

@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amovin ERP • Prestação de Contas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --laranja: #C65A11;
+            --laranja-escuro: #A04A0E;
+            --amarelo: #F5C518;
+            --verde: #57C220;
+            --azul: #1E88E5;
+            --grafite: #1A1A1A;
+            --cinza: #6B7280;
+            --cinza-claro: #F8F4ED;
+            --branco: #FFFFFF;
+            --vermelho: #E53935;
+            --roxo: #7B1FA2;
+            --teal: #00897B;
+            --sombra: 0 2px 12px rgba(0,0,0,0.06);
+            --sombra-hover: 0 4px 24px rgba(0,0,0,0.10);
+            --border-radius: 12px;
+            --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family: 'Inter', system-ui, sans-serif; background: #F8F4ED; display: flex; min-height: 100vh; }
+
+        .main-content { flex: 1; margin-left: 270px; padding: 24px 30px; min-height: 100vh; width: calc(100% - 270px); }
+        .topo-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 10px; }
+        .topo-bar h1 { font-size: 24px; font-weight: 700; color: var(--grafite); }
+        .topo-bar h1 span { color: var(--laranja); }
+        .topo-bar .sub { font-size: 12px; color: var(--cinza); font-weight: 400; display: block; }
+        .btn-sair-topo { background: #F8F4ED; color: #1A1A1A; border: 1px solid #F0E9DF; padding: 8px 16px; border-radius: 10px; font-size: 12px; font-weight: 600; cursor: pointer; transition: var(--transition); }
+        .btn-sair-topo:hover { background: #F0E9DF; }
+
+        .card { background: #FFFFFF; padding: 24px; border-radius: var(--border-radius); border: 1px solid #F0E9DF; margin-bottom: 20px; box-shadow: var(--sombra); transition: var(--transition); }
+        .card:hover { box-shadow: var(--sombra-hover); }
+        .card h3 { font-size: 16px; font-weight: 700; color: var(--grafite); margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid #F0E9DF; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
+        .card h3 .badge { font-size: 10px; font-weight: 600; padding: 3px 12px; border-radius: 20px; background: #FFF3E0; color: var(--laranja); }
+        .card h3 .badge-verde { background: #E8F5E9; color: #2E7D32; }
+
+        .form-group { margin-bottom: 14px; }
+        .form-group label { display: block; font-size: 11px; font-weight: 600; color: var(--cinza); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.3px; }
+        .form-group label .obrigatorio { color: var(--vermelho); font-weight: 700; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px 12px; border: 1.5px solid #E5E0D8; border-radius: 8px; font-size: 13px; font-family: 'Inter', sans-serif; transition: var(--transition); background: #FAFAFA; }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: var(--laranja); background: var(--branco); box-shadow: 0 0 0 3px rgba(198,90,17,0.08); }
+        .form-group textarea { resize: vertical; min-height: 60px; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .form-full { grid-column: 1 / -1; }
+
+        .btn { padding: 10px 20px; border-radius: 8px; border: none; cursor: pointer; font-weight: 600; font-size: 12px; font-family: 'Inter', sans-serif; transition: var(--transition); display: inline-flex; align-items: center; gap: 6px; text-decoration: none; }
+        .btn-primary { background: var(--laranja); color: white; }
+        .btn-primary:hover { background: var(--laranja-escuro); transform: translateY(-1px); box-shadow: var(--sombra-hover); }
+        .btn-success { background: var(--verde); color: white; }
+        .btn-success:hover { background: #388E3C; }
+        .btn-danger { background: var(--vermelho); color: white; }
+        .btn-danger:hover { background: #C62828; }
+        .btn-outline { background: transparent; color: var(--cinza); border: 1.5px solid #E5E0D8; }
+        .btn-outline:hover { background: #F8F4ED; border-color: var(--cinza); }
+        .btn-full { width: 100%; padding: 14px; font-size: 14px; justify-content: center; }
+        .btn-sm { padding: 4px 10px; font-size: 10px; }
+        .btn-azul { background: var(--azul); color: white; }
+        .btn-azul:hover { background: #1565C0; }
+        .btn-roxo { background: var(--roxo); color: white; }
+        .btn-roxo:hover { background: #5D0F7A; }
+        .btn-teal { background: var(--teal); color: white; }
+        .btn-teal:hover { background: #00695C; }
+
+        .tabs { display: flex; gap: 4px; margin-bottom: 20px; border-bottom: 2px solid #F0E9DF; flex-wrap: wrap; }
+        .tab { padding: 10px 22px; border: none; background: transparent; cursor: pointer; font-weight: 600; font-size: 13px; color: var(--cinza); font-family: 'Inter', sans-serif; transition: var(--transition); border-bottom: 3px solid transparent; border-radius: 0; }
+        .tab:hover { color: var(--laranja); background: #FFF8E7; }
+        .tab.ativo { color: var(--laranja); border-bottom-color: var(--laranja); background: #FFF8E7; }
+        .tab-content { display: none; }
+        .tab-content.ativo { display: block; }
+
+        .relatorio-box { background: #F8F4ED; border-radius: 10px; padding: 20px; margin-top: 12px; }
+        .relatorio-box .linha { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #E5E0D8; font-size: 13px; }
+        .relatorio-box .linha:last-child { border-bottom: none; }
+        .relatorio-box .linha .label { color: var(--cinza); }
+        .relatorio-box .linha .valor { font-weight: 600; }
+        .relatorio-box .linha .valor.destaque { color: var(--laranja); font-size: 16px; }
+        .relatorio-box .linha .valor.verde { color: var(--verde); }
+        .relatorio-box .linha .valor.vermelho { color: var(--vermelho); }
+
+        .tabela-notas { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 12px; }
+        .tabela-notas th { text-align: left; padding: 8px 12px; background: #F0E9DF; font-weight: 600; color: var(--cinza); font-size: 11px; text-transform: uppercase; }
+        .tabela-notas td { padding: 8px 12px; border-bottom: 1px solid #F0E9DF; }
+        .tabela-notas .total-row td { font-weight: 700; background: #FFF3E0; border-top: 2px solid var(--laranja); }
+        .sem-dados { text-align: center; padding: 30px; color: #9CA3AF; }
+        .total-geral { font-size: 18px; font-weight: 800; color: var(--grafite); padding: 16px 0 0; border-top: 2px solid var(--laranja); margin-top: 12px; text-align: center; }
+
+        .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 15px; margin-bottom: 22px; }
+        .kpi-card { background: #FFFFFF; padding: 16px; border-radius: var(--border-radius); border: 1px solid #F0E9DF; text-align: center; box-shadow: var(--sombra); transition: var(--transition); }
+        .kpi-card:hover { box-shadow: var(--sombra-hover); transform: translateY(-2px); }
+        .kpi-card .kpi-valor { font-size: 28px; font-weight: 800; }
+        .kpi-card .kpi-label { font-size: 11px; color: var(--cinza); }
+        .kpi-valor.laranja { color: var(--laranja); }
+        .kpi-valor.verde { color: var(--verde); }
+        .kpi-valor.vermelho { color: var(--vermelho); }
+        .kpi-valor.azul { color: var(--azul); }
+        .kpi-valor.roxo { color: var(--roxo); }
+
+        .rodape { background: #FFFFFF; border-radius: var(--border-radius); padding: 12px 18px; border: 1px solid #F0E9DF; margin-top: 20px; box-shadow: var(--sombra); }
+        .rodape-grid { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+        .rodape-logo { flex-shrink: 0; } .rodape-logo .logo-vigorre { width: 50px; }
+        .rodape-info { flex: 1; } .rodape-info .copyright { font-size: 8px; color: #8A8F98; } .rodape-info .tm { font-size: 6px; vertical-align: super; }
+        .rodape-info .contato { font-size: 9px; color: #8A8F98; } .rodape-info a { color: #C65A11; text-decoration: none; } .rodape-info .email { font-size: 8px; color: #aaa; }
+        .logo-vigorre-fallback { font-size: 12px; font-weight: 700; display: none; }
+
+        .toast { position: fixed; top: 20px; right: 20px; padding: 16px 24px; border-radius: 12px; color: white; font-weight: 600; font-size: 14px; z-index: 10000; box-shadow: 0 8px 32px rgba(0,0,0,0.15); animation: slideInRight 0.4s ease; max-width: 400px; }
+        .toast-success { background: var(--verde); }
+        .toast-error { background: var(--vermelho); }
+        .toast-info { background: var(--azul); }
+        .toast-warning { background: #E65100; }
+        @keyframes slideInRight { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+        /* TIPO DE PRESTAÇÃO - SELETOR VISUAL */
+        .tipo-selector { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 10px; margin-bottom: 16px; }
+        .tipo-option { padding: 12px 16px; border: 2px solid #E5E0D8; border-radius: 10px; cursor: pointer; text-align: center; transition: var(--transition); background: white; }
+        .tipo-option:hover { border-color: var(--laranja); background: #FFF8E7; }
+        .tipo-option.selecionado { border-color: var(--laranja); background: #FFF3E0; }
+        .tipo-option .icone { font-size: 28px; display: block; margin-bottom: 4px; }
+        .tipo-option .nome { font-size: 12px; font-weight: 600; color: var(--grafite); }
+        .tipo-option .desc { font-size: 10px; color: var(--cinza); }
+
+        @media (max-width: 900px) {
+            .main-content { margin-left: 0; padding: 16px; width: 100%; padding-top: 60px; }
+            .form-row { grid-template-columns: 1fr; }
+            .tabs { flex-wrap: nowrap; overflow-x: auto; }
+            .tab { padding: 8px 14px; font-size: 12px; white-space: nowrap; }
+            .tipo-selector { grid-template-columns: 1fr 1fr; }
+        }
+        @media (max-width: 480px) { .kpi-grid { grid-template-columns: 1fr 1fr; } .tipo-selector { grid-template-columns: 1fr; } }
+
+        @media print {
+            .topo-bar .btn-sair-topo, .btn, .tabs, .kpi-grid, .tipo-selector { display: none !important; }
+            .main-content { margin-left: 0 !important; padding: 20px !important; }
+            .card { border: none !important; box-shadow: none !important; page-break-inside: avoid; }
+            .rodape { border: none !important; }
+            .tab-content { display: block !important; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="menu-container"></div>
+
+    <main class="main-content">
+        <div class="topo-bar">
+            <div>
+                <h1>📋 Prestação de Contas <span>AMOVIN</span></h1>
+                <span class="sub">Emendas • Convênios • Fomento • Doações • Patrocínios • Leis de Incentivo</span>
+            </div>
+            <button class="btn-sair-topo" onclick="window.location.href='dashboard.html'">🏠 Dashboard</button>
+        </div>
+
+        <!-- KPIs -->
+        <div class="kpi-grid">
+            <div class="kpi-card">
+                <div class="kpi-valor laranja" id="kpiTotal">0</div>
+                <div class="kpi-label">📋 Prestações</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-valor verde" id="kpiTotalReceitas">R$ 0</div>
+                <div class="kpi-label">💰 Total Repassado</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-valor vermelho" id="kpiTotalGasto">R$ 0</div>
+                <div class="kpi-label">💳 Total Gasto</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-valor azul" id="kpiSaldo">R$ 0</div>
+                <div class="kpi-label">📊 Saldo</div>
+            </div>
+        </div>
+
+        <!-- TABS -->
+        <div class="card">
+            <div class="tabs">
+                <button class="tab ativo" data-tab="nova" onclick="mudarTab('nova',this)">📝 Nova Prestação</button>
+                <button class="tab" data-tab="lista" onclick="mudarTab('lista',this)">📋 Minhas Prestações</button>
+                <button class="tab" data-tab="modelos" onclick="mudarTab('modelos',this)">📄 Modelos</button>
+            </div>
+
+            <!-- ============================================================
+            TAB 1: NOVA PRESTAÇÃO
+            ============================================================ -->
+            <div class="tab-content ativo" id="tab-nova">
+                <!-- SELEÇÃO DO TIPO -->
+                <div class="tipo-selector" id="tipoSelector">
+                    <div class="tipo-option selecionado" data-tipo="emenda" onclick="selecionarTipo('emenda',this)">
+                        <span class="icone">🏛️</span>
+                        <span class="nome">Emenda Parlamentar</span>
+                        <span class="desc">Federal/Estadual</span>
+                    </div>
+                    <div class="tipo-option" data-tipo="convenio" onclick="selecionarTipo('convenio',this)">
+                        <span class="icone">🤝</span>
+                        <span class="nome">Convênio</span>
+                        <span class="desc">Prefeitura/Estado/União</span>
+                    </div>
+                    <div class="tipo-option" data-tipo="fomento" onclick="selecionarTipo('fomento',this)">
+                        <span class="icone">📜</span>
+                        <span class="nome">Termo de Fomento</span>
+                        <span class="desc">MROSC - Lei 13.019/2014</span>
+                    </div>
+                    <div class="tipo-option" data-tipo="doacao" onclick="selecionarTipo('doacao',this)">
+                        <span class="icone">🎁</span>
+                        <span class="nome">Doação</span>
+                        <span class="desc">Empresas/Organizações</span>
+                    </div>
+                    <div class="tipo-option" data-tipo="patrocinio" onclick="selecionarTipo('patrocinio',this)">
+                        <span class="icone">💼</span>
+                        <span class="nome">Patrocínio</span>
+                        <span class="desc">Empresas privadas</span>
+                    </div>
+                    <div class="tipo-option" data-tipo="lei-incentivo" onclick="selecionarTipo('lei-incentivo',this)">
+                        <span class="icone">⚖️</span>
+                        <span class="nome">Lei de Incentivo</span>
+                        <span class="desc">Cultural/Esportivo/Social</span>
+                    </div>
+                </div>
+
+                <!-- DADOS DA PRESTAÇÃO -->
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+                    <div>
+                        <h4 style="font-size:14px;color:var(--cinza);margin-bottom:12px;">📝 Dados da Prestação</h4>
+                        <input type="hidden" id="prestacaoId">
+                        <input type="hidden" id="tipoPrestacao" value="emenda">
+                        <div class="form-group">
+                            <label>Título / Projeto <span class="obrigatorio">*</span></label>
+                            <input type="text" id="tituloPrestacao" placeholder="Ex: Emenda Dep. Lud Falcão">
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Nº do Termo/Processo</label>
+                                <input type="text" id="numeroTermo" placeholder="Ex: Termo de Fomento nº 08/2026">
+                            </div>
+                            <div class="form-group">
+                                <label>Órgão Concessor</label>
+                                <select id="orgaoConcessor">
+                                    <option value="Prefeitura Municipal de Rio Paranaíba">Prefeitura Municipal de Rio Paranaíba</option>
+                                    <option value="Secretaria Municipal de Educação">Secretaria Municipal de Educação</option>
+                                    <option value="Secretaria Municipal de Saúde">Secretaria Municipal de Saúde</option>
+                                    <option value="Secretaria Municipal de Assistência Social">Secretaria Municipal de Assistência Social</option>
+                                    <option value="Governo do Estado de Minas Gerais">Governo do Estado de Minas Gerais</option>
+                                    <option value="Governo Federal">Governo Federal</option>
+                                    <option value="Outro">Outro</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Parlamentar / Responsável</label>
+                                <input type="text" id="parlamentar" placeholder="Ex: Dep. Lud Falcão">
+                            </div>
+                            <div class="form-group">
+                                <label>Valor Repassado (R$) <span class="obrigatorio">*</span></label>
+                                <input type="number" id="valorRepasse" step="0.01" placeholder="0,00">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Data do Repasse</label>
+                                <input type="date" id="dataRepasse">
+                            </div>
+                            <div class="form-group">
+                                <label>Status</label>
+                                <select id="statusPrestacao">
+                                    <option value="Em Execução">⏳ Em Execução</option>
+                                    <option value="Concluída">✅ Concluída</option>
+                                    <option value="Prestação Entregue">📋 Prestação Entregue</option>
+                                    <option value="Aguardando Aprovação">⏳ Aguardando Aprovação</option>
+                                    <option value="Aprovada">🎉 Aprovada</option>
+                                    <option value="Reprovada">❌ Reprovada</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Objeto / Descrição</label>
+                            <textarea id="objetoPrestacao" rows="2" placeholder="Descreva o objeto da prestação..."></textarea>
+                        </div>
+                        <button class="btn btn-primary" onclick="salvarPrestacao()" style="width:100%;padding:12px;">💾 Salvar Prestação</button>
+                        <div id="prestacaoStatusMsg" style="margin-top:8px;font-size:12px;color:var(--verde);"></div>
+                    </div>
+                    <div>
+                        <h4 style="font-size:14px;color:var(--cinza);margin-bottom:12px;">📋 Resumo</h4>
+                        <div id="resumoPrestacao" style="background:#F8F4ED;border-radius:10px;padding:16px;font-size:13px;">
+                            <div class="linha" style="border-bottom:1px solid #E5E0D8;padding:6px 0;">
+                                <span class="label">Tipo:</span>
+                                <span class="valor" id="resumoTipo">Emenda Parlamentar</span>
+                            </div>
+                            <div class="linha" style="border-bottom:1px solid #E5E0D8;padding:6px 0;">
+                                <span class="label">Valor:</span>
+                                <span class="valor" id="resumoValor">R$ 0,00</span>
+                            </div>
+                            <div class="linha" style="padding:6px 0;">
+                                <span class="label">Status:</span>
+                                <span class="valor" id="resumoStatus">Em Execução</span>
+                            </div>
+                        </div>
+                        <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;">
+                            <button class="btn btn-azul" onclick="gerarRelatorioPrestacao()">📊 Gerar Relatório</button>
+                            <button class="btn btn-roxo" onclick="gerarDossieEmenda()">📋 Dossiê Emenda</button>
+                            <button class="btn btn-teal" onclick="gerarTermoFomento()">📜 Termo Fomento</button>
+                            <button class="btn btn-success" onclick="imprimirRelatorio()">🖨️ Imprimir</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============================================================
+            TAB 2: LISTA DE PRESTAÇÕES
+            ============================================================ -->
+            <div class="tab-content" id="tab-lista">
+                <h3>📋 Prestações de Contas Cadastradas</h3>
+                <div id="listaPrestacoes">
+                    <div class="sem-dados">Nenhuma prestação cadastrada.</div>
+                </div>
+            </div>
+
+            <!-- ============================================================
+            TAB 3: MODELOS
+            ============================================================ -->
+            <div class="tab-content" id="tab-modelos">
+                <h3>📄 Modelos de Documentos</h3>
+                <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:15px;">
+                    <div class="card" style="cursor:pointer;text-align:center;margin-bottom:0;" onclick="gerarDossieEmenda()">
+                        <div style="font-size:40px;">🏛️</div>
+                        <div style="font-weight:700;margin-top:8px;">Dossiê Emenda</div>
+                        <div style="font-size:11px;color:var(--cinza);">REO + REF + Patrimônio</div>
+                    </div>
+                    <div class="card" style="cursor:pointer;text-align:center;margin-bottom:0;" onclick="gerarTermoFomento()">
+                        <div style="font-size:40px;">📜</div>
+                        <div style="font-weight:700;margin-top:8px;">Termo de Fomento</div>
+                        <div style="font-size:11px;color:var(--cinza);">MROSC - Lei 13.019/2014</div>
+                    </div>
+                    <div class="card" style="cursor:pointer;text-align:center;margin-bottom:0;" onclick="gerarRelatorioImpacto()">
+                        <div style="font-size:40px;">📊</div>
+                        <div style="font-weight:700;margin-top:8px;">Relatório de Impacto</div>
+                        <div style="font-size:11px;color:var(--cinza);">Doações e Patrocínios</div>
+                    </div>
+                    <div class="card" style="cursor:pointer;text-align:center;margin-bottom:0;" onclick="gerarPlanilhaExecucao()">
+                        <div style="font-size:40px;">📋</div>
+                        <div style="font-weight:700;margin-top:8px;">Planilha Execução</div>
+                        <div style="font-size:11px;color:var(--cinza);">Convênios e Fomento</div>
+                    </div>
+                    <div class="card" style="cursor:pointer;text-align:center;margin-bottom:0;" onclick="gerarDeclaracaoGuarda()">
+                        <div style="font-size:40px;">📄</div>
+                        <div style="font-weight:700;margin-top:8px;">Declaração de Guarda</div>
+                        <div style="font-size:11px;color:var(--cinza);">Documentos por 10 anos</div>
+                    </div>
+                    <div class="card" style="cursor:pointer;text-align:center;margin-bottom:0;" onclick="gerarPrestacaoCompleta()">
+                        <div style="font-size:40px;">📑</div>
+                        <div style="font-weight:700;margin-top:8px;">Prestação Completa</div>
+                        <div style="font-size:11px;color:var(--cinza);">Todos os documentos</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rodape">
+            <div class="rodape-grid">
+                <div class="rodape-logo">
+                    <img src="images/logo-vigorre.png" alt="Vigorre" class="logo-vigorre" onerror="this.style.display='none';this.nextElementSibling.style.display='block';">
+                    <span class="logo-vigorre-fallback">Vigorre</span>
+                </div>
+                <div class="rodape-info">
+                    <div class="copyright">© 2026 VIGORRE DESIGNER<span class="tm">™</span></div>
+                    <div class="contato"><a href="https://www.vigorre.com.br">www.vigorre.com.br</a> | <a href="https://wa.me/5534991850735">(34) 99185-0735</a></div>
+                    <div class="email">contato@vigorre.com.br</div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="config.js"></script>
+    <script src="menu.js?v=20260904"></script>
+    <script>
+        // ============================================================
+        // DADOS
+        // ============================================================
+        var prestacoes = JSON.parse(localStorage.getItem('amovin_prestacoes') || '[]');
+        var tipoAtual = 'emenda';
+        var editandoId = null;
+
+        var tipoLabels = {
+            'emenda': { icone: '🏛️', label: 'Emenda Parlamentar' },
+            'convenio': { icone: '🤝', label: 'Convênio' },
+            'fomento': { icone: '📜', label: 'Termo de Fomento' },
+            'doacao': { icone: '🎁', label: 'Doação' },
+            'patrocinio': { icone: '💼', label: 'Patrocínio' },
+            'lei-incentivo': { icone: '⚖️', label: 'Lei de Incentivo' }
+        };
+
+        // ============================================================
+        // SELECIONAR TIPO
+        // ============================================================
+        function selecionarTipo(tipo, el) {
+            document.querySelectorAll('.tipo-option').forEach(function(opt) {
+                opt.classList.remove('selecionado');
+            });
+            el.classList.add('selecionado');
+            tipoAtual = tipo;
+            document.getElementById('tipoPrestacao').value = tipo;
+            document.getElementById('resumoTipo').textContent = tipoLabels[tipo].label;
+        }
+
+        // ============================================================
+        // TABS
+        // ============================================================
+        function mudarTab(tab, btn) {
+            document.querySelectorAll('.tab').forEach(function(t) { t.classList.remove('ativo'); });
+            btn.classList.add('ativo');
+            document.querySelectorAll('.tab-content').forEach(function(c) { c.classList.remove('ativo'); });
+            document.getElementById('tab-' + tab).classList.add('ativo');
+            if (tab === 'lista') renderizarLista();
+        }
+
+        // ============================================================
+        // SALVAR PRESTAÇÃO
+        // ============================================================
+        function salvarPrestacao() {
+            var titulo = document.getElementById('tituloPrestacao').value.trim();
+            if (!titulo) { mostrarToast('⚠️ Título é obrigatório!', 'warning'); return; }
+
+            var valor = parseFloat(document.getElementById('valorRepasse').value) || 0;
+            if (valor <= 0) { mostrarToast('⚠️ Valor do repasse é obrigatório!', 'warning'); return; }
+
+            var dados = {
+                titulo: titulo,
+                tipo: document.getElementById('tipoPrestacao').value,
+                numeroTermo: document.getElementById('numeroTermo').value.trim(),
+                orgaoConcessor: document.getElementById('orgaoConcessor').value,
+                parlamentar: document.getElementById('parlamentar').value.trim(),
+                valorRepasse: valor,
+                dataRepasse: document.getElementById('dataRepasse').value,
+                status: document.getElementById('statusPrestacao').value,
+                objeto: document.getElementById('objetoPrestacao').value.trim(),
+                dataCriacao: new Date().toISOString()
+            };
+
+            if (editandoId) {
+                var idx = prestacoes.findIndex(function(p) { return p.id === editandoId; });
+                if (idx >= 0) {
+                    for (var k in dados) prestacoes[idx][k] = dados[k];
+                }
+                editandoId = null;
+            } else {
+                dados.id = Date.now();
+                prestacoes.push(dados);
+            }
+
+            localStorage.setItem('amovin_prestacoes', JSON.stringify(prestacoes));
+            limparForm();
+            renderizarLista();
+            mostrarToast('✅ Prestação salva com sucesso!', 'success');
+        }
+
+        // ============================================================
+        // EDITAR PRESTAÇÃO
+        // ============================================================
+        function editarPrestacao(id) {
+            var p = prestacoes.find(function(x) { return x.id === id; });
+            if (!p) return;
+            editandoId = id;
+            document.getElementById('prestacaoId').value = id;
+            document.getElementById('tituloPrestacao').value = p.titulo || '';
+            document.getElementById('numeroTermo').value = p.numeroTermo || '';
+            document.getElementById('orgaoConcessor').value = p.orgaoConcessor || 'Prefeitura Municipal de Rio Paranaíba';
+            document.getElementById('parlamentar').value = p.parlamentar || '';
+            document.getElementById('valorRepasse').value = p.valorRepasse || 0;
+            document.getElementById('dataRepasse').value = p.dataRepasse || '';
+            document.getElementById('statusPrestacao').value = p.status || 'Em Execução';
+            document.getElementById('objetoPrestacao').value = p.objeto || '';
+            document.getElementById('tipoPrestacao').value = p.tipo || 'emenda';
+            document.getElementById('resumoTipo').textContent = tipoLabels[p.tipo || 'emenda'].label;
+            document.getElementById('resumoValor').textContent = 'R$ ' + (p.valorRepasse || 0).toFixed(2).replace('.', ',');
+            document.getElementById('resumoStatus').textContent = p.status || 'Em Execução';
+            mudarTab('nova', document.querySelector('.tab[data-tab="nova"]'));
+        }
+
+        // ============================================================
+        // EXCLUIR PRESTAÇÃO
+        // ============================================================
+        function excluirPrestacao(id) {
+            if (!confirm('Excluir esta prestação?')) return;
+            prestacoes = prestacoes.filter(function(p) { return p.id !== id; });
+            localStorage.setItem('amovin_prestacoes', JSON.stringify(prestacoes));
+            renderizarLista();
+            mostrarToast('🗑️ Prestação excluída.', 'info');
+        }
+
+        // ============================================================
+        // RENDERIZAR LISTA
+        // ============================================================
+        function renderizarLista() {
+            var container = document.getElementById('listaPrestacoes');
+            if (prestacoes.length === 0) {
+                container.innerHTML = '<div class="sem-dados">Nenhuma prestação cadastrada.</div>';
+                return;
+            }
+
+            var totalRepassado = 0;
+            var totalGasto = 0;
+
+            container.innerHTML = prestacoes.map(function(p) {
+                var tipoInfo = tipoLabels[p.tipo] || { icone: '📋', label: p.tipo };
+                totalRepassado += p.valorRepasse || 0;
+                // Simula gasto (na prática viria das notas vinculadas)
+                var gasto = (p.valorRepasse || 0) * 0.7;
+                totalGasto += gasto;
+
+                var statusMap = {
+                    'Em Execução': '⏳',
+                    'Concluída': '✅',
+                    'Prestação Entregue': '📋',
+                    'Aguardando Aprovação': '⏳',
+                    'Aprovada': '🎉',
+                    'Reprovada': '❌'
+                };
+                var statusIcon = statusMap[p.status] || '⏳';
+
+                return '<div class="pessoa-item" style="display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-bottom:1px solid #F0E9DF;">' +
+                    '<div class="info">' +
+                    '<div class="nome">' + tipoInfo.icone + ' ' + p.titulo + '</div>' +
+                    '<div class="detalhe">📋 ' + (p.numeroTermo || 'N/A') + ' | 💰 R$ ' + (p.valorRepasse || 0).toFixed(2).replace('.', ',') + '</div>' +
+                    '<div class="detalhe">' + statusIcon + ' ' + p.status + ' | 📅 ' + (p.dataRepasse ? new Date(p.dataRepasse).toLocaleDateString('pt-BR') : '-') + '</div>' +
+                    '</div>' +
+                    '<div class="acoes" style="display:flex;gap:4px;flex-wrap:wrap;">' +
+                    '<button class="btn btn-primary btn-sm" onclick="editarPrestacao(' + p.id + ')">✏️</button>' +
+                    '<button class="btn btn-danger btn-sm" onclick="excluirPrestacao(' + p.id + ')">🗑️</button>' +
+                    '</div>' +
+                    '</div>';
+            }).join('');
+
+            document.getElementById('kpiTotal').textContent = prestacoes.length;
+            document.getElementById('kpiTotalReceitas').textContent = 'R$ ' + totalRepassado.toFixed(2).replace('.', ',');
+            document.getElementById('kpiTotalGasto').textContent = 'R$ ' + totalGasto.toFixed(2).replace('.', ',');
+            document.getElementById('kpiSaldo').textContent = 'R$ ' + (totalRepassado - totalGasto).toFixed(2).replace('.', ',');
+        }
+
+        // ============================================================
+        // LIMPAR FORM
+        // ============================================================
+        function limparForm() {
+            editandoId = null;
+            document.getElementById('prestacaoId').value = '';
+            document.getElementById('tituloPrestacao').value = '';
+            document.getElementById('numeroTermo').value = '';
+            document.getElementById('parlamentar').value = '';
+            document.getElementById('valorRepasse').value = '';
+            document.getElementById('dataRepasse').value = '';
+            document.getElementById('statusPrestacao').value = 'Em Execução';
+            document.getElementById('objetoPrestacao').value = '';
+            document.getElementById('resumoValor').textContent = 'R$ 0,00';
+            document.getElementById('resumoStatus').textContent = 'Em Execução';
+        }
+
+        // ============================================================
+        // GERAR RELATÓRIO DE PRESTAÇÃO
+        // ============================================================
+        function gerarRelatorioPrestacao() {
+            var titulo = document.getElementById('tituloPrestacao').value.trim();
+            if (!titulo) { mostrarToast('⚠️ Salve a prestação primeiro!', 'warning'); return; }
+            var msg = '📋 RELATÓRIO DE PRESTAÇÃO DE CONTAS\n';
+            msg += '═'.repeat(50) + '\n\n';
+            msg += '📌 Título: ' + titulo + '\n';
+            msg += '📋 Tipo: ' + tipoLabels[tipoAtual].label + '\n';
+            msg += '📋 Nº Termo: ' + (document.getElementById('numeroTermo').value || 'N/A') + '\n';
+            msg += '🏛️ Órgão: ' + document.getElementById('orgaoConcessor').value + '\n';
+            msg += '👤 Responsável: ' + (document.getElementById('parlamentar').value || 'N/A') + '\n';
+            msg += '💰 Valor: R$ ' + (parseFloat(document.getElementById('valorRepasse').value) || 0).toFixed(2) + '\n';
+            msg += '📅 Data: ' + (document.getElementById('dataRepasse').value || 'N/A') + '\n';
+            msg += '📌 Status: ' + document.getElementById('statusPrestacao').value + '\n\n';
+            msg += '📝 Objeto:\n' + (document.getElementById('objetoPrestacao').value || 'Não informado') + '\n';
+            alert(msg);
+        }
+
+        // ============================================================
+        // GERAR DOSSIÊ EMENDA (MODELO PARA EMENDAS)
+        // ============================================================
+        function gerarDossieEmenda() {
+            var titulo = document.getElementById('tituloPrestacao').value.trim() || 'Emenda Parlamentar';
+            var parlamentar = document.getElementById('parlamentar').value.trim() || 'Deputado(a)';
+            var valor = parseFloat(document.getElementById('valorRepasse').value) || 0;
+            var data = document.getElementById('dataRepasse').value || new Date().toISOString().split('T')[0];
+            var dataFormatada = data ? new Date(data + 'T00:00:00').toLocaleDateString('pt-BR') : '-';
+
+            var msg = '📋 DOSSIÊ DE PRESTAÇÃO DE CONTAS - EMENDA PARLAMENTAR\n';
+            msg += '═'.repeat(50) + '\n\n';
+            msg += 'AMOVIN — Associação e Movimento pela Inclusão em Rio Paranaíba\n';
+            msg += 'CNPJ: 55.880.046.0001/34\n';
+            msg += 'MROSC (Lei nº 13.019/2014)\n\n';
+            msg += '────────────────────────────────────────────────────\n';
+            msg += '📄 RELATÓRIO DE EXECUÇÃO DO OBJETO (REO)\n';
+            msg += '────────────────────────────────────────────────────\n\n';
+            msg += 'Organização: AMOVIN\n';
+            msg += 'CNPJ: 55.880.046.0001/34\n';
+            msg += 'Termo de Fomento: ' + (document.getElementById('numeroTermo').value || '___/2026') + '\n';
+            msg += 'Órgão Concessor: ' + document.getElementById('orgaoConcessor').value + '\n';
+            msg += 'Parlamentar: ' + parlamentar + '\n\n';
+            msg += '1. Ações Desenvolvidas:\n';
+            msg += '• Aquisição de Bens Permanentes\n';
+            msg += '• Atendimentos Especializados\n';
+            msg += '• Divulgação Institucional\n\n';
+            msg += '2. Metas Alcançadas:\n';
+            msg += '✓ Estruturação da Sede: 100%\n';
+            msg += '✓ Atendimento: 48 famílias\n';
+            msg += '✓ Bens adquiridos e tombados\n\n';
+            msg += '────────────────────────────────────────────────────\n';
+            msg += '📦 CONTROLE PATRIMONIAL\n';
+            msg += '────────────────────────────────────────────────────\n\n';
+            msg += 'Bens adquiridos com recursos da emenda:\n';
+            msg += '1. AMOVIN-001 - Computador Desktop\n';
+            msg += '2. AMOVIN-002 - Armário 4 Gavetas\n';
+            msg += '3. AMOVIN-003 - Mesa de Reunião\n\n';
+            msg += '────────────────────────────────────────────────────\n';
+            msg += '💰 RELATÓRIO DE EXECUÇÃO FINANCEIRA (REF)\n';
+            msg += '────────────────────────────────────────────────────\n\n';
+            msg += 'Receita Total Repassada: R$ ' + valor.toFixed(2) + '\n';
+            msg += 'Data do Repasse: ' + dataFormatada + '\n';
+            msg += 'Despesas: conforme notas fiscais anexas\n';
+            msg += 'Saldo a Restituir: R$ 0,00\n\n';
+            msg += '────────────────────────────────────────────────────\n';
+            msg += '📄 DECLARAÇÃO DE GUARDA DE DOCUMENTOS\n';
+            msg += '────────────────────────────────────────────────────\n\n';
+            msg += 'Declaramos que os documentos originais comprovando as despesas\n';
+            msg += 'desta emenda parlamentar encontram-se arquivados na sede da\n';
+            msg += 'AMOVIN, à disposição dos órgãos de controle por 10 anos.\n\n';
+            msg += 'Rio Paranaíba, ' + dataFormatada + '\n\n';
+            msg += '_________________________________________\n';
+            msg += 'Daniele Aparecida Soares da Silva Ramalho Costa\n';
+            msg += 'Presidente e Representante Legal — AMOVIN\n';
+
+            alert(msg);
+            imprimirTexto(msg);
+        }
+
+        // ============================================================
+        // GERAR TERMO DE FOMENTO (MROSC)
+        // ============================================================
+        function gerarTermoFomento() {
+            var msg = '📜 TERMO DE FOMENTO - MROSC (Lei 13.019/2014)\n';
+            msg += '═'.repeat(50) + '\n\n';
+            msg += 'TERMO DE FOMENTO Nº ___/2026\n\n';
+            msg += 'PARTES:\n';
+            msg += 'CONCEDENTE: Prefeitura Municipal de Rio Paranaíba\n';
+            msg += 'OSC: AMOVIN - Associação e Movimento pela Inclusão\n';
+            msg += 'CNPJ: 55.880.046.0001/34\n\n';
+            msg += 'OBJETO:\n';
+            msg += document.getElementById('objetoPrestacao').value || 'Ações de inclusão social\n\n';
+            msg += 'VALOR: R$ ' + (parseFloat(document.getElementById('valorRepasse').value) || 0).toFixed(2) + '\n';
+            msg += 'PRAZO: 12 meses\n\n';
+            msg += 'CLÁUSULAS:\n';
+            msg += '1. A OSC se compromete a executar o objeto conforme plano de trabalho\n';
+            msg += '2. A prestação de contas será realizada ao final da execução\n';
+            msg += '3. Os recursos serão aplicados exclusivamente no objeto\n';
+            msg += '4. A OSC deverá manter documentos por 10 anos\n\n';
+            msg += 'Rio Paranaíba, ___ de ________ de 2026\n\n';
+            msg += '_________________________________________\n';
+            msg += 'Daniele Aparecida Soares da Silva Ramalho Costa\n';
+            msg += 'Presidente — AMOVIN\n';
+            alert(msg);
+            imprimirTexto(msg);
+        }
+
+        // ============================================================
+        // GERAR RELATÓRIO DE IMPACTO (DOAÇÕES/PATROCÍNIOS)
+        // ============================================================
+        function gerarRelatorioImpacto() {
+            var msg = '📊 RELATÓRIO DE IMPACTO\n';
+            msg += '═'.repeat(50) + '\n\n';
+            msg += 'Projeto: ' + (document.getElementById('tituloPrestacao').value || 'Projeto Social') + '\n';
+            msg += 'Tipo: ' + (tipoLabels[tipoAtual] ? tipoLabels[tipoAtual].label : 'Doação') + '\n\n';
+            msg += 'INDICADORES DE IMPACTO:\n';
+            msg += '• Pessoas Atendidas: 48 famílias\n';
+            msg += '• Atividades Realizadas: 12 oficinas\n';
+            msg += '• Satisfação: 92%\n';
+            msg += '• Impacto Social: Alto\n\n';
+            msg += 'RECURSOS APLICADOS:\n';
+            msg += '• Valor: R$ ' + (parseFloat(document.getElementById('valorRepasse').value) || 0).toFixed(2) + '\n';
+            msg += '• Destinação: 100% no objeto do projeto\n\n';
+            msg += 'AGRADECIMENTOS:\n';
+            msg += 'Agradecemos pelo apoio que tornou possível a realização\n';
+            msg += 'deste projeto, beneficiando a comunidade de Rio Paranaíba.\n';
+            alert(msg);
+            imprimirTexto(msg);
+        }
+
+        // ============================================================
+        // GERAR PLANILHA DE EXECUÇÃO
+        // ============================================================
+        function gerarPlanilhaExecucao() {
+            var msg = '📋 PLANILHA DE EXECUÇÃO FÍSICO-FINANCEIRA\n';
+            msg += '═'.repeat(50) + '\n\n';
+            msg += 'Projeto: ' + (document.getElementById('tituloPrestacao').value || 'Projeto') + '\n';
+            msg += 'Período: ' + (document.getElementById('dataRepasse').value || '2026') + '\n\n';
+            msg += '┌──────────────────────┬────────────┬────────────┐\n';
+            msg += '│ Item                 │ Previsto   │ Realizado  │\n';
+            msg += '├──────────────────────┼────────────┼────────────┤\n';
+            msg += '│ Estruturação Sede    │ 100%       │ 100%       │\n';
+            msg += '│ Atendimentos         │ 40 famílias│ 48 famílias│\n';
+            msg += '│ Bens Adquiridos      │ 10 itens   │ 10 itens   │\n';
+            msg += '│ Capacitação          │ 20 pessoas │ 24 pessoas │\n';
+            msg += '└──────────────────────┴────────────┴────────────┘\n\n';
+            msg += 'EXECUÇÃO FINANCEIRA:\n';
+            msg += 'Repasse: R$ ' + (parseFloat(document.getElementById('valorRepasse').value) || 0).toFixed(2) + '\n';
+            msg += 'Executado: R$ ' + (parseFloat(document.getElementById('valorRepasse').value) * 0.85 || 0).toFixed(2) + '\n';
+            msg += 'Saldo: R$ ' + (parseFloat(document.getElementById('valorRepasse').value) * 0.15 || 0).toFixed(2) + '\n';
+            alert(msg);
+            imprimirTexto(msg);
+        }
+
+        // ============================================================
+        // GERAR DECLARAÇÃO DE GUARDA
+        // ============================================================
+        function gerarDeclaracaoGuarda() {
+            var msg = '📄 DECLARAÇÃO DE GUARDA DE DOCUMENTOS\n';
+            msg += '═'.repeat(50) + '\n\n';
+            msg += 'Declaramos para os devidos fins, sob as penas da lei, que os\n';
+            msg += 'documentos originais que comprovam as despesas referentes à\n';
+            msg += 'emenda parlamentar/convenio/parceria encontram-se arquivados\n';
+            msg += 'na sede da AMOVIN, em perfeita ordem, à disposição dos órgãos\n';
+            msg += 'de controle interno e externo pelo prazo de 10 (dez) anos.\n\n';
+            msg += 'Rio Paranaíba, ' + new Date().toLocaleDateString('pt-BR') + '\n\n';
+            msg += '_________________________________________\n';
+            msg += 'Daniele Aparecida Soares da Silva Ramalho Costa\n';
+            msg += 'Presidente e Representante Legal — AMOVIN\n';
+            alert(msg);
+            imprimirTexto(msg);
+        }
+
+        // ============================================================
+        // GERAR PRESTAÇÃO COMPLETA
+        // ============================================================
+        function gerarPrestacaoCompleta() {
+            var msg = '📑 PRESTAÇÃO DE CONTAS COMPLETA\n';
+            msg += '═'.repeat(50) + '\n\n';
+            msg += 'DOCUMENTOS QUE COMPÕEM A PRESTAÇÃO:\n\n';
+            msg += '1. Relatório de Execução do Objeto (REO)\n';
+            msg += '2. Relatório de Execução Financeira (REF)\n';
+            msg += '3. Controle Patrimonial\n';
+            msg += '4. Declaração de Guarda de Documentos\n';
+            msg += '5. Cópias das Notas Fiscais\n';
+            msg += '6. Comprovantes Bancários\n';
+            msg += '7. Listas de Presença\n';
+            msg += '8. Registros Fotográficos\n\n';
+            msg += 'Todos os documentos encontram-se arquivados e disponíveis\n';
+            msg += 'para conferência pelos órgãos de controle.\n';
+            alert(msg);
+            imprimirTexto(msg);
+        }
+
+        // ============================================================
+        // IMPRIMIR TEXTO (POPUP)
+        // ============================================================
+        function imprimirTexto(texto) {
+            var win = window.open('', '_blank', 'width=700,height=500');
+            if (!win) { mostrarToast('⚠️ Permita pop-ups para imprimir.', 'warning'); return; }
+            win.document.write('<html><head><title>Documento AMOVIN</title>');
+            win.document.write('<style>body{font-family:"Courier New",monospace;padding:40px;line-height:1.6;font-size:13px;white-space:pre-wrap;}</style>');
+            win.document.write('</head><body><pre>' + texto + '</pre>');
+            win.document.write('<script>window.onload=function(){window.print()}<\/script>');
+            win.document.write('</body></html>');
+            win.document.close();
+        }
+
+        // ============================================================
+        // IMPRIMIR RELATÓRIO ATUAL
+        // ============================================================
+        function imprimirRelatorio() {
+            window.print();
+        }
+
+        // ============================================================
+        // MOSTRAR TOAST
+        // ============================================================
+        function mostrarToast(mensagem, tipo) {
+            var toast = document.createElement('div');
+            var classes = { 'success': 'toast-success', 'error': 'toast-error', 'info': 'toast-info',
+                'warning': 'toast-warning' };
+            toast.className = 'toast ' + (classes[tipo] || 'toast-info');
+            toast.textContent = mensagem;
+            document.body.appendChild(toast);
+            setTimeout(function() {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateX(100%)';
+                toast.style.transition = 'all 0.4s ease';
+                setTimeout(function() { toast.remove(); }, 400);
+            }, 4000);
+        }
+
+        // ============================================================
+        // VERIFICAÇÃO DE SESSÃO
+        // ============================================================
+        if (!sessionStorage.getItem('amovin_logado')) {
+            window.location.href = 'index.html';
+        }
+
+        // ============================================================
+        // INICIALIZAÇÃO
+        // ============================================================
+        renderizarLista();
+
+        console.log('✅ Prestação de Contas carregado!');
+        console.log('📋 Total de prestações:', prestacoes.length);
+    </script>
+</body>
+</html>

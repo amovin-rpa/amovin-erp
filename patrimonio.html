@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Amovin ERP Social • Patrimônio</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --laranja: #C65A11;
+  --amarelo: #F5C518;
+  --verde: #57C220;
+  --azul: #1E88E5;
+  --grafite: #1A1A1A;
+  --cinza: #6B7280;
+  --cinza-claro: #F8F4ED;
+  --branco: #FFFFFF;
+  --vermelho: #E53935;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family: 'Inter', system-ui, sans-serif; background: #F8F4ED; display: flex; min-height: 100vh; }
+
+.main-content { flex: 1; margin-left: 270px; padding: 24px 30px; }
+.topo-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 10px; }
+.topo-bar h1 { font-size: 24px; font-weight: 700; color: var(--grafite); }
+.btn-sair-topo { background: #F8F4ED; color: #1A1A1A; border: 1px solid #F0E9DF; padding: 8px 16px; border-radius: 10px; font-size: 12px; font-weight: 600; cursor: pointer; }
+
+.kpi-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 22px; }
+.kpi-card { background: #FFFFFF; padding: 18px; border-radius: 14px; border: 1px solid #F0E9DF; text-align: center; }
+.kpi-card .kpi-valor { font-size: 24px; font-weight: 800; color: var(--laranja); }
+.kpi-card .kpi-label { font-size: 11px; color: var(--cinza); }
+
+.grid-patrimonio { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.card { background: #FFFFFF; padding: 24px; border-radius: 14px; border: 1px solid #F0E9DF; }
+.card h3 { font-size: 16px; font-weight: 700; color: var(--grafite); margin-bottom: 18px; padding-bottom: 12px; border-bottom: 1px solid #F0E9DF; display: flex; justify-content: space-between; align-items: center; }
+
+.form-group { margin-bottom: 14px; }
+.form-group label { display: block; font-size: 11px; font-weight: 600; color: var(--cinza); margin-bottom: 4px; text-transform: uppercase; }
+.form-group input, .form-group select { width: 100%; padding: 10px 12px; border: 1px solid #E5E0D8; border-radius: 8px; font-size: 13px; font-family: 'Inter', sans-serif; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+.btn { padding: 10px 18px; border-radius: 8px; border: none; cursor: pointer; font-weight: 600; font-size: 12px; }
+.btn-salvar { background: var(--laranja); color: white; }
+.btn-editar { background: var(--amarelo); color: #1A1A1A; }
+.btn-excluir { background: var(--vermelho); color: white; }
+.btn-azul { background: var(--azul); color: white; }
+
+.patrimonio-item { padding: 12px 16px; border-bottom: 1px solid #F0E9DF; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px; }
+.patrimonio-item .nome { font-weight: 600; color: var(--grafite); font-size: 13px; }
+.patrimonio-item .numero { font-size: 11px; color: var(--cinza); font-weight: 600; }
+.patrimonio-item .status { font-size: 10px; padding: 2px 10px; border-radius: 12px; font-weight: 600; }
+.status-operacao { background: #E8F5E9; color: #2E7D32; }
+.status-manutencao { background: #FFF3E0; color: #E65100; }
+.status-baixado { background: #FFEBEE; color: #C62828; }
+.patrimonio-item .valor { font-weight: 700; color: var(--verde); }
+.sem-dados { text-align: center; padding: 30px; color: #9CA3AF; }
+
+.rodape { background: #FFFFFF; border-radius: 14px; padding: 12px 18px; border: 1px solid #F0E9DF; margin-top: 20px; }
+.rodape-grid { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.rodape-logo { flex-shrink: 0; } .rodape-logo .logo-vigorre { width: 50px; }
+.rodape-info { flex: 1; } .rodape-info .copyright { font-size: 8px; color: #8A8F98; } .rodape-info .tm { font-size: 6px; vertical-align: super; }
+.rodape-info .contato { font-size: 9px; color: #8A8F98; } .rodape-info a { color: #C65A11; text-decoration: none; } .rodape-info .email { font-size: 8px; color: #aaa; }
+.logo-vigorre-fallback { font-size: 12px; font-weight: 700; display: none; }
+
+@media (max-width: 900px) { .main-content { margin-left: 0; } .grid-patrimonio { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<div id="menu-container"></div>
+
+<main class="main-content">
+  <div class="topo-bar"><h1>🏢 Patrimônio</h1><button class="btn-sair-topo" onclick="window.location.href='dashboard.html'">🏠 Dashboard</button></div>
+
+  <div class="kpi-row">
+    <div class="kpi-card"><div class="kpi-valor" id="kpiTotal">0</div><div class="kpi-label">🏢 Bens</div></div>
+    <div class="kpi-card"><div class="kpi-valor" id="kpiOperacao">0</div><div class="kpi-label">✅ Em Operação</div></div>
+    <div class="kpi-card"><div class="kpi-valor" id="kpiManutencao">0</div><div class="kpi-label">🔧 Em Manutenção</div></div>
+    <div class="kpi-card"><div class="kpi-valor" id="kpiValorTotal">R$ 0</div><div class="kpi-label">💰 Valor Total</div></div>
+  </div>
+
+  <div class="grid-patrimonio">
+    <div class="card">
+      <h3>📝 Novo Bem</h3>
+      <input type="hidden" id="bemId">
+      <div class="form-group"><label>Nome do Bem *</label><input type="text" id="nomeBem" placeholder="Ex: Notebook Dell"></div>
+      <div class="form-row"><div class="form-group"><label>Número Patrimonial</label><input type="text" id="numeroBem" placeholder="AMOVIN-0001"></div><div class="form-group"><label>Categoria</label><select id="categoriaBem"><option>Informática</option><option>Mobiliário</option><option>Veículo</option><option>Equipamento</option><option>Eletrodoméstico</option><option>Outros</option></select></div></div>
+      <div class="form-row"><div class="form-group"><label>Marca</label><input type="text" id="marcaBem"></div><div class="form-group"><label>Modelo</label><input type="text" id="modeloBem"></div></div>
+      <div class="form-row"><div class="form-group"><label>Valor (R$)</label><input type="number" id="valorBem" step="0.01" placeholder="0,00"></div><div class="form-group"><label>Status</label><select id="statusBem"><option value="Em Operação">✅ Em Operação</option><option value="Em Manutenção">🔧 Em Manutenção</option><option value="Baixado">❌ Baixado</option></select></div></div>
+      <div class="form-group"><label>Localização</label><input type="text" id="localBem" value="Sede AMOVIN"></div>
+      <div class="form-group"><label>Observações</label><input type="text" id="obsBem"></div>
+      <button class="btn btn-salvar" onclick="salvarBem()" style="width:100%;padding:12px;font-size:14px;">💾 Salvar Bem</button>
+    </div>
+    <div class="card">
+      <h3>📋 Bens Cadastrados</h3>
+      <div id="listaBens"><div class="sem-dados">Nenhum bem.</div></div>
+    </div>
+  </div>
+
+  <div class="rodape"><div class="rodape-grid"><div class="rodape-logo"><img src="images/logo-vigorre.png" alt="Vigorre" class="logo-vigorre" onerror="this.style.display='none';this.nextElementSibling.style.display='block';"><span class="logo-vigorre-fallback">Vigorre</span></div><div class="rodape-info"><div class="copyright">© 2026 VIGORRE DESIGNER<span class="tm">™</span></div><div class="contato"><a href="https://www.vigorre.com.br">www.vigorre.com.br</a> | <a href="https://wa.me/5534991850735">(34) 99185-0735</a></div><div class="email">contato@vigorre.com.br</div></div></div></div>
+</main>
+
+<script src="config.js"></script>
+<script src="menu.js?v=20260904"></script>
+<script>
+var bens = JSON.parse(localStorage.getItem('amovin_bens') || '[]');
+var editandoId = null;
+var ultimoNumero = parseInt(localStorage.getItem('amovin_patrimonio_num') || '0');
+
+if (bens.length === 0) {
+    bens = [
+        { id: 1, nome: 'Notebook Dell', numero: 'AMOVIN-0001', categoria: 'Informática', marca: 'Dell', modelo: 'Inspiron', valor: 3500, status: 'Em Operação', local: 'Sala Admin', obs: '' },
+        { id: 2, nome: 'Mesa de Reunião', numero: 'AMOVIN-0002', categoria: 'Mobiliário', marca: 'Madesa', modelo: 'MR-200', valor: 1200, status: 'Em Operação', local: 'Sala Reuniões', obs: '' }
+    ];
+    ultimoNumero = 2;
+    salvar();
+}
+function salvar() {
+    localStorage.setItem('amovin_bens', JSON.stringify(bens));
+    localStorage.setItem('amovin_patrimonio_num', ultimoNumero);
+}
+
+function fm(v) { return 'R$ ' + (v||0).toFixed(2).replace('.', ','); }
+function getProximoNumero() { ultimoNumero++; return 'AMOVIN-' + String(ultimoNumero).padStart(4, '0'); }
+
+function getStatusClass(status) {
+    var map = { 'Em Operação': 'status-operacao', 'Em Manutenção': 'status-manutencao', 'Baixado': 'status-baixado' };
+    return map[status] || 'status-operacao';
+}
+
+function atualizarKPIs() {
+    var total = bens.length;
+    var operacao = bens.filter(function(b) { return b.status === 'Em Operação'; }).length;
+    var manutencao = bens.filter(function(b) { return b.status === 'Em Manutenção'; }).length;
+    var valorTotal = bens.reduce(function(s, b) { return s + (b.valor || 0); }, 0);
+
+    document.getElementById('kpiTotal').textContent = total;
+    document.getElementById('kpiOperacao').textContent = operacao;
+    document.getElementById('kpiManutencao').textContent = manutencao;
+    document.getElementById('kpiValorTotal').textContent = fm(valorTotal);
+}
+
+function renderizarBens() {
+    var lista = bens.slice().sort(function(a, b) { return a.nome.localeCompare(b.nome); });
+    var container = document.getElementById('listaBens');
+    if (lista.length === 0) {
+        container.innerHTML = '<div class="sem-dados">Nenhum bem.</div>';
+        return;
+    }
+    container.innerHTML = lista.map(function(b) {
+        var statusClass = getStatusClass(b.status);
+        return '<div class="patrimonio-item">' +
+            '<div><span class="nome">' + b.nome + '</span> <span class="numero">' + b.numero + '</span><br><span style="font-size:11px;color:var(--cinza);">' + b.categoria + ' | ' + b.marca + ' ' + b.modelo + ' | 📍 ' + b.local + '</span></div>' +
+            '<div><span class="valor">' + fm(b.valor) + '</span> <span class="status ' + statusClass + '">' + b.status + '</span>' +
+            '<button class="btn btn-editar" onclick="editarBem(' + b.id + ')" style="padding:4px 8px;font-size:10px;">✏️</button>' +
+            '<button class="btn btn-excluir" onclick="excluirBem(' + b.id + ')" style="padding:4px 8px;font-size:10px;">🗑️</button></div></div>';
+    }).join('');
+}
+
+window.salvarBem = function() {
+    var nome = document.getElementById('nomeBem').value.trim();
+    var numero = document.getElementById('numeroBem').value.trim() || getProximoNumero();
+
+    if (!nome) { alert('Preencha o nome!'); return; }
+
+    var dados = {
+        nome: nome,
+        numero: numero,
+        categoria: document.getElementById('categoriaBem').value,
+        marca: document.getElementById('marcaBem').value.trim(),
+        modelo: document.getElementById('modeloBem').value.trim(),
+        valor: parseFloat(document.getElementById('valorBem').value) || 0,
+        status: document.getElementById('statusBem').value,
+        local: document.getElementById('localBem').value.trim() || 'Sede AMOVIN',
+        obs: document.getElementById('obsBem').value.trim()
+    };
+
+    if (editandoId) {
+        var idx = bens.findIndex(function(b) { return b.id === editandoId; });
+        if (idx >= 0) {
+            for (var k in dados) bens[idx][k] = dados[k];
+        }
+        editandoId = null;
+    } else {
+        dados.id = Date.now();
+        bens.push(dados);
+    }
+
+    salvar();
+    limparForm();
+    atualizarKPIs();
+    renderizarBens();
+    alert('✅ Bem salvo com sucesso!');
+};
+
+window.editarBem = function(id) {
+    var b = bens.find(function(x) { return x.id === id; });
+    if (!b) return;
+    editandoId = id;
+    document.getElementById('bemId').value = id;
+    document.getElementById('nomeBem').value = b.nome;
+    document.getElementById('numeroBem').value = b.numero;
+    document.getElementById('categoriaBem').value = b.categoria;
+    document.getElementById('marcaBem').value = b.marca || '';
+    document.getElementById('modeloBem').value = b.modelo || '';
+    document.getElementById('valorBem').value = b.valor || '';
+    document.getElementById('statusBem').value = b.status;
+    document.getElementById('localBem').value = b.local || 'Sede AMOVIN';
+    document.getElementById('obsBem').value = b.obs || '';
+    document.querySelector('.card h3').textContent = '✏️ Editando: ' + b.nome;
+};
+
+window.excluirBem = function(id) {
+    if (!confirm('Excluir este bem?')) return;
+    bens = bens.filter(function(b) { return b.id !== id; });
+    salvar();
+    atualizarKPIs();
+    renderizarBens();
+};
+
+function limparForm() {
+    editandoId = null;
+    document.getElementById('bemId').value = '';
+    document.getElementById('nomeBem').value = '';
+    document.getElementById('numeroBem').value = getProximoNumero();
+    document.getElementById('categoriaBem').value = 'Informática';
+    document.getElementById('marcaBem').value = '';
+    document.getElementById('modeloBem').value = '';
+    document.getElementById('valorBem').value = '';
+    document.getElementById('statusBem').value = 'Em Operação';
+    document.getElementById('localBem').value = 'Sede AMOVIN';
+    document.getElementById('obsBem').value = '';
+    document.querySelector('.card h3').textContent = '📝 Novo Bem';
+}
+
+if (!sessionStorage.getItem('amovin_logado')) { window.location.href = 'index.html'; }
+
+document.getElementById('numeroBem').value = getProximoNumero();
+
+atualizarKPIs();
+renderizarBens();
+</script>
+</body>
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AMOVIN - Gerador de Projetos</title>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f6fa; min-height: 100vh; }
+        .topo { background: linear-gradient(135deg, #1a5c2e 0%, #2d8a4e 100%); color: white; padding: 12px 30px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.2); }
+        .topo h2 { font-size: 18px; }
+        .btn-topo { background: rgba(255,255,255,0.2); color: white; border: 1px solid rgba(255,255,255,0.3); padding: 8px 15px; border-radius: 8px; cursor: pointer; font-size: 13px; text-decoration: none; margin-left: 8px; }
+        .btn-topo:hover { background: rgba(255,255,255,0.3); }
+        .container { max-width: 1500px; margin: 0 auto; padding: 20px; }
+        .grid-principal { display: grid; grid-template-columns: 480px 1fr; gap: 20px; }
+        .card { background: white; padding: 25px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        .card h3 { color: #1a5c2e; margin-bottom: 20px; font-size: 18px; border-bottom: 3px solid #2d8a4e; padding-bottom: 10px; }
+        .form-group { margin-bottom: 16px; }
+        .form-group label { display: block; margin-bottom: 5px; color: #333; font-weight: 600; font-size: 13px; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 14px; font-family: inherit; }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: #2d8a4e; outline: none; }
+        .linha-dupla { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .btn-gerar { width: 100%; padding: 14px; background: linear-gradient(135deg, #1a5c2e 0%, #2d8a4e 100%); color: white; border: none; border-radius: 10px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 10px; transition: transform 0.2s; }
+        .btn-gerar:hover { transform: translateY(-2px); }
+        .btn-gerar:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+        .resultado-box { min-height: 600px; max-height: 850px; overflow-y: auto; background: #fafafa; padding: 30px; border-radius: 8px; border: 2px solid #e0e0e0; white-space: pre-wrap; line-height: 1.8; font-size: 13px; font-family: 'Courier New', monospace; }
+        .placeholder { text-align: center; padding-top: 250px; color: #bbb; }
+        .loading-ia { text-align: center; padding: 40px; color: #2d8a4e; }
+        .spinner { display: inline-block; width: 30px; height: 30px; border: 3px solid #e0e0e0; border-top: 3px solid #2d8a4e; border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 15px; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .acoes { display: flex; gap: 10px; margin-top: 15px; }
+        .btn-acao { flex: 1; padding: 10px; border-radius: 8px; border: 2px solid #2d8a4e; background: white; color: #2d8a4e; cursor: pointer; font-size: 13px; font-weight: bold; }
+        .btn-acao:hover { background: #2d8a4e; color: white; }
+        .btn-acao.destaque { background: #2d8a4e; color: white; }
+        .btn-acao.destaque:hover { background: #1a5c2e; }
+        @media (max-width: 1000px) { .grid-principal { grid-template-columns: 1fr; } .linha-dupla { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <div class="topo"><h2>📋 Gerador Inteligente de Projetos Sociais</h2><div><a href="dashboard.html" class="btn-topo">🏠 Dashboard</a><a href="oficios.html" class="btn-topo">📄 Ofícios</a><button class="btn-topo" onclick="fazerLogout()">🚪 Sair</button></div></div>
+    <div class="container"><div class="grid-principal">
+        <div class="card"><h3>📝 Dados do Projeto</h3>
+            <div class="form-group"><label>Nome do Projeto *</label><input type="text" id="nomeProjeto" placeholder="Ex: Inclusão Digital para Jovens" required></div>
+            <div class="form-group"><label>Categoria *</label><select id="categoria" required><option value="">Selecione...</option><option value="social">Social</option><option value="esportivo">Esportivo</option><option value="educacional">Educacional</option><option value="inclusivo">Inclusão</option><option value="cultural">Cultural</option><option value="saude">Saúde</option><option value="meio_ambiente">Meio Ambiente</option></select></div>
+            <div class="linha-dupla"><div class="form-group"><label>Público-Alvo *</label><input type="text" id="publicoAlvo" placeholder="Ex: Jovens de 15 a 29 anos" required></div><div class="form-group"><label>Qtd. Beneficiários *</label><input type="number" id="qtdBeneficiarios" placeholder="Ex: 200" required></div></div>
+            <div class="linha-dupla"><div class="form-group"><label>Cidade *</label><input type="text" id="cidade" value="Rio Paranaíba" required></div><div class="form-group"><label>Estado *</label><input type="text" id="estado" value="MG" required></div></div>
+            <div class="linha-dupla"><div class="form-group"><label>Duração *</label><input type="text" id="duracao" placeholder="Ex: 12 meses" required></div><div class="form-group"><label>Valor Estimado (R$) *</label><input type="text" id="valorEstimado" placeholder="Ex: 50.000,00" required></div></div>
+            <div class="form-group"><label>Resumo da Ideia *</label><textarea id="resumoIdeia" rows="4" placeholder="Descreva brevemente o projeto..." required></textarea></div>
+            <div class="form-group"><label>Tipo de Financiador</label><select id="tipoFinanciador"><option value="municipal">Governo Municipal</option><option value="estadual">Governo Estadual</option><option value="federal">Governo Federal</option><option value="privado">Empresa Privada</option><option value="internacional">Organismo Internacional</option><option value="leis_incentivo">Leis de Incentivo</option></select></div>
+            <button class="btn-gerar" id="btnGerar" onclick="gerarProjeto()">🤖 Gerar Projeto Completo com IA</button></div>
+        <div class="card"><h3>📋 Projeto Gerado</h3>
+            <div id="loadingIA" class="loading-ia" style="display: none;"><div class="spinner"></div><div>IA criando projeto profissional...</div><div style="font-size: 12px; color: #999;">Isso pode levar até 30 segundos</div></div>
+            <div id="resultado" class="resultado-box"><div class="placeholder"><div style="font-size: 60px;">📋</div><div>Preencha o formulário e clique em</div><div><strong>"Gerar Projeto Completo com IA"</strong></div></div></div>
+            <div class="acoes" id="acoes" style="display: none;"><button class="btn-acao" onclick="copiarTexto()">📋 Copiar</button><button class="btn-acao" onclick="baixarTexto()">💾 Baixar</button><button class="btn-acao destaque" onclick="novoProjeto()">🔄 Novo Projeto</button></div></div>
+    </div></div>
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+        const firebaseConfig = { apiKey: "AIzaSyDu5663V7pAamG2lzjD1i2CNTKh6uPZO3U", authDomain: "amovin-oficios-teste.firebaseapp.com", projectId: "amovin-oficios-teste", storageBucket: "amovin-oficios-teste.firebasestorage.app", messagingSenderId: "901387183295", appId: "1:901387183295:web:b9a445cbe259d1c14c120a" };
+        const app = initializeApp(firebaseConfig); const auth = getAuth(app);
+        onAuthStateChanged(auth, (user) => { if (!user) window.location.href = 'index.html'; });
+        window.fazerLogout = async function() { await signOut(auth); sessionStorage.clear(); window.location.href = 'index.html'; };
+        history.pushState(null, null, location.href);
+        window.addEventListener('popstate', () => { history.pushState(null, null, location.href); signOut(auth); sessionStorage.clear(); window.location.href = 'index.html'; });
+        window.gerarProjeto = async function() {
+            const nome = document.getElementById('nomeProjeto').value.trim(), categoria = document.getElementById('categoria').value, publicoAlvo = document.getElementById('publicoAlvo').value.trim(), qtd = document.getElementById('qtdBeneficiarios').value.trim(), cidade = document.getElementById('cidade').value.trim(), estado = document.getElementById('estado').value.trim(), duracao = document.getElementById('duracao').value.trim(), valor = document.getElementById('valorEstimado').value.trim(), resumo = document.getElementById('resumoIdeia').value.trim(), financiador = document.getElementById('tipoFinanciador').value;
+            if (!nome || !categoria || !publicoAlvo || !qtd || !cidade || !estado || !duracao || !valor || !resumo) { alert('❌ Preencha todos os campos com *'); return; }
+            const btnGerar = document.getElementById('btnGerar'), loadingIA = document.getElementById('loadingIA'), resultado = document.getElementById('resultado'), acoes = document.getElementById('acoes');
+            btnGerar.disabled = true; btnGerar.textContent = '⏳ Gerando projeto...'; loadingIA.style.display = 'block'; resultado.innerHTML = ''; acoes.style.display = 'none';
+            const prompt = `Crie um PROJETO SOCIAL COMPLETO para a AMOVIN (Associação e Movimento pela Inclusão), Rio Paranaíba/MG.\nDADOS: Nome: ${nome}, Categoria: ${categoria}, Público: ${publicoAlvo}, Beneficiários: ${qtd}, Local: ${cidade}/${estado}, Duração: ${duracao}, Valor: R$ ${valor}, Resumo: ${resumo}, Financiador: ${financiador}.\nGERE AS 30 SEÇÕES: Capa, Sumário, Apresentação, Diagnóstico, Justificativa, Problema, Objetivo Geral, Objetivos Específicos, Metodologia, Execução, Cronograma Mensal, Cronograma Físico, Cronograma Financeiro, Indicadores de Resultado, Indicadores de Impacto, Indicadores de Inclusão, Metas Quantitativas, Metas Qualitativas, Sustentabilidade, Gestão de Riscos, Equipe Técnica, Plano de Comunicação, Plano de Divulgação, Monitoramento, Prestação de Contas, Avaliação de Impacto, ODS, LGPD, ESG, Conclusão. Use linguagem profissional para ${financiador}.`;
+            try {
+                // 🔒 CHAVE PROTEGIDA - Busca do navegador, NUNCA exposta no código
+                const API_KEY = localStorage.getItem('amovin_gemini_key') || '';
+                if (!API_KEY) { alert('⚠️ Chave Gemini não configurada!\n\nAcesse config-chave.html para configurar.'); btnGerar.disabled = false; btnGerar.textContent = '🤖 Gerar Projeto Completo com IA'; loadingIA.style.display = 'none'; return; }
+                const url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=' + API_KEY;
+                const response = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }], generationConfig: { temperature: 0.7, maxOutputTokens: 4000 } }) });
+                const data = await response.json(); resultado.textContent = data.candidates[0].content.parts[0].text; acoes.style.display = 'flex';
+            } catch (erro) { resultado.innerHTML = '<div style="color:red;text-align:center;padding:40px;">❌ Erro ao gerar projeto. Tente novamente.</div>'; }
+            finally { btnGerar.disabled = false; btnGerar.textContent = '🤖 Gerar Projeto Completo com IA'; loadingIA.style.display = 'none'; }
+        };
+        window.copiarTexto = function() { navigator.clipboard.writeText(document.getElementById('resultado').textContent); alert('✅ Copiado!'); };
+        window.baixarTexto = function() { const blob = new Blob([document.getElementById('resultado').textContent], { type: 'text/plain' }); const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'projeto-amovin.txt'; a.click(); };
+        window.novoProjeto = function() { document.getElementById('resultado').innerHTML = '<div class="placeholder"><div style="font-size:60px;">📋</div><div>Preencha e clique em</div><div><strong>"Gerar Projeto Completo com IA"</strong></div></div>'; document.getElementById('acoes').style.display = 'none'; };
+        let timeout; function resetTimeout() { clearTimeout(timeout); timeout = setTimeout(() => { signOut(auth); sessionStorage.clear(); alert('⏰ Sessão expirada.'); window.location.href = 'index.html'; }, 30 * 60 * 1000); }
+        document.addEventListener('mousemove', resetTimeout); document.addEventListener('keypress', resetTimeout); document.addEventListener('click', resetTimeout); resetTimeout();
+    </script>
+<script src="menu.js?v=20260904"></script>
+</body>
+</html>

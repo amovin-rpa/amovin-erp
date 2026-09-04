@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Amovin ERP Social • Backup</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --laranja: #C65A11;
+  --amarelo: #F5C518;
+  --verde: #57C220;
+  --azul: #1E88E5;
+  --grafite: #1A1A1A;
+  --cinza: #6B7280;
+  --cinza-claro: #F8F4ED;
+  --branco: #FFFFFF;
+  --vermelho: #E53935;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family: 'Inter', system-ui, sans-serif; background: #F8F4ED; display: flex; min-height: 100vh; }
+
+.main-content { flex: 1; margin-left: 270px; padding: 24px 30px; }
+.topo-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+.topo-bar h1 { font-size: 24px; font-weight: 700; color: var(--grafite); }
+.btn-sair-topo { background: #F8F4ED; color: #1A1A1A; border: 1px solid #F0E9DF; padding: 8px 16px; border-radius: 10px; font-size: 12px; font-weight: 600; cursor: pointer; }
+
+.kpi-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 15px; margin-bottom: 25px; }
+.kpi-card { background: #FFFFFF; padding: 20px; border-radius: 14px; border: 1px solid #F0E9DF; text-align: center; }
+.kpi-card .kpi-valor { font-size: 24px; font-weight: 800; color: var(--laranja); }
+.kpi-card .kpi-label { font-size: 11px; color: var(--cinza); }
+.kpi-card .kpi-valor.verde { color: var(--verde); }
+.kpi-card .kpi-valor.vermelho { color: var(--vermelho); }
+
+.grid-backup { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.card { background: #FFFFFF; padding: 24px; border-radius: 14px; border: 1px solid #F0E9DF; }
+.card h3 { font-size: 16px; font-weight: 700; color: var(--grafite); margin-bottom: 18px; padding-bottom: 12px; border-bottom: 1px solid #F0E9DF; display: flex; align-items: center; gap: 10px; }
+.card h3 .badge { font-size: 10px; font-weight: 600; padding: 2px 10px; border-radius: 20px; background: #E8F5E9; color: #2E7D32; }
+.card h3 .badge-danger { background: #FFEBEE; color: #C62828; }
+
+.btn { padding: 10px 18px; border-radius: 8px; border: none; cursor: pointer; font-weight: 600; font-size: 12px; font-family: 'Inter', sans-serif; }
+.btn-verde { background: var(--verde); color: white; }
+.btn-verde:hover { background: #388E3C; }
+.btn-azul { background: var(--azul); color: white; }
+.btn-azul:hover { background: #1565C0; }
+.btn-vermelho { background: var(--vermelho); color: white; }
+.btn-vermelho:hover { background: #C62828; }
+.btn-laranja { background: var(--laranja); color: white; }
+.btn-laranja:hover { background: #A04A0E; }
+.btn-cinza { background: #E5E0D8; color: var(--grafite); }
+.btn-cinza:hover { background: #D5D0C8; }
+
+.backup-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; background: #F8F4ED; border-radius: 8px; margin-bottom: 8px; border-left: 4px solid var(--verde); }
+.backup-item .backup-info { font-size: 13px; }
+.backup-item .backup-info .nome { font-weight: 600; color: var(--grafite); }
+.backup-item .backup-info .detalhe { font-size: 11px; color: var(--cinza); }
+.backup-item .backup-acoes { display: flex; gap: 6px; }
+
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 20px; }
+.modal { background: white; border-radius: 16px; width: 100%; max-width: 500px; max-height: 85vh; overflow-y: auto; }
+.modal-header { padding: 18px 22px; border-bottom: 1px solid #F0E9DF; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; background: white; z-index: 2; }
+.modal-header h3 { font-size: 18px; }
+.modal-body { padding: 22px; }
+.modal-body p { font-size: 13px; color: var(--cinza); margin-bottom: 14px; line-height: 1.6; }
+.modal-body .form-group { margin-bottom: 14px; }
+.modal-body .form-group label { display: block; font-size: 11px; font-weight: 600; color: var(--cinza); margin-bottom: 4px; text-transform: uppercase; }
+.modal-body .form-group input { width: 100%; padding: 10px 12px; border: 1px solid #E5E0D8; border-radius: 8px; font-size: 13px; font-family: 'Inter', sans-serif; }
+.btn-fechar { background: none; border: none; font-size: 22px; cursor: pointer; color: var(--cinza); }
+.modal-actions { display: flex; gap: 10px; margin-top: 15px; flex-wrap: wrap; }
+.modal-actions .btn { flex: 1; text-align: center; }
+
+.rodape { background: #FFFFFF; border-radius: 14px; padding: 12px 18px; border: 1px solid #F0E9DF; margin-top: 20px; }
+.rodape-grid { display: flex; align-items: center; gap: 12px; }
+.rodape-logo { flex-shrink: 0; } .rodape-logo .logo-vigorre { width: 50px; }
+.rodape-info { flex: 1; } .rodape-info .copyright { font-size: 8px; color: #8A8F98; } .rodape-info .tm { font-size: 6px; vertical-align: super; }
+.rodape-info .contato { font-size: 9px; color: #8A8F98; } .rodape-info a { color: #C65A11; text-decoration: none; } .rodape-info .email { font-size: 8px; color: #aaa; }
+.logo-vigorre-fallback { font-size: 12px; font-weight: 700; display: none; }
+
+@media (max-width: 900px) { .main-content { margin-left: 0; } .grid-backup { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<div id="menu-container"></div>
+
+<main class="main-content">
+  <div class="topo-bar">
+    <h1>💾 Backup e Restauração</h1>
+    <button class="btn-sair-topo" onclick="window.location.href='dashboard.html'">🏠 Dashboard</button>
+  </div>
+
+  <div class="kpi-row">
+    <div class="kpi-card"><div class="kpi-valor" id="kpiBackups">0</div><div class="kpi-label">Backups Salvos</div></div>
+    <div class="kpi-card"><div class="kpi-valor verde" id="kpiUltimo">-</div><div class="kpi-label">Último Backup</div></div>
+    <div class="kpi-card"><div class="kpi-valor" id="kpiRegistros">0</div><div class="kpi-label">Total de Registros</div></div>
+    <div class="kpi-card"><div class="kpi-valor" id="kpiTamanho">0 KB</div><div class="kpi-label">Tamanho Estimado</div></div>
+  </div>
+
+  <div class="grid-backup">
+    <div class="card">
+      <h3>📤 Exportar Backup <span class="badge">Manual</span></h3>
+      <p style="font-size:13px;color:var(--cinza);margin-bottom:16px;">Exporte todos os dados do sistema em formato JSON. Recomendado fazer antes de grandes alterações.</p>
+      <button class="btn btn-verde" onclick="exportarBackup()" style="width:100%;padding:14px;font-size:14px;">📤 Exportar Backup Completo</button>
+      <div style="margin-top:12px;">
+        <button class="btn btn-azul" onclick="exportarBackupParcial('pessoas')" style="width:48%;">👥 Pessoas</button>
+        <button class="btn btn-azul" onclick="exportarBackupParcial('financeiro')" style="width:48%;">💰 Financeiro</button>
+      </div>
+      <div id="statusExport" style="margin-top:10px;font-size:12px;color:var(--cinza);"></div>
+    </div>
+
+    <div class="card">
+      <h3>📥 Importar Backup <span class="badge badge-danger">Atenção</span></h3>
+      <p style="font-size:13px;color:var(--cinza);margin-bottom:16px;">Restaura dados de um backup anterior. <strong>Isso sobrescreverá todos os dados atuais.</strong></p>
+      <button class="btn btn-laranja" onclick="importarBackup()" style="width:100%;padding:14px;font-size:14px;">📥 Importar Backup</button>
+      <div id="statusImport" style="margin-top:10px;font-size:12px;color:var(--cinza);"></div>
+    </div>
+
+    <div class="card" style="grid-column: 1 / -1;">
+      <h3>📋 Histórico de Backups <span class="badge">Local</span></h3>
+      <div id="listaBackups"><div style="text-align:center;padding:20px;color:var(--cinza);">Nenhum backup salvo.</div></div>
+    </div>
+
+    <div class="card" style="grid-column: 1 / -1;">
+      <h3>🔄 Agendamento <span class="badge">Beta</span></h3>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div>
+          <div class="form-group" style="margin-bottom:8px;">
+            <label>Frequência</label>
+            <select id="frequenciaBackup" style="width:100%;padding:10px;border:1px solid #E5E0D8;border-radius:8px;font-size:13px;font-family:'Inter',sans-serif;">
+              <option value="diario">Diário</option>
+              <option value="semanal" selected>Semanal</option>
+              <option value="mensal">Mensal</option>
+              <option value="desativado">Desativado</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <div class="form-group" style="margin-bottom:8px;">
+            <label>Horário</label>
+            <input type="time" id="horarioBackup" value="02:00" style="width:100%;padding:10px;border:1px solid #E5E0D8;border-radius:8px;font-size:13px;font-family:'Inter',sans-serif;">
+          </div>
+        </div>
+      </div>
+      <button class="btn btn-laranja" onclick="salvarAgendamento()" style="width:100%;padding:12px;font-size:13px;">💾 Salvar Agendamento</button>
+      <div id="statusAgendamento" style="margin-top:10px;font-size:12px;color:var(--cinza);"></div>
+    </div>
+  </div>
+
+  <div class="rodape">
+    <div class="rodape-grid">
+      <div class="rodape-logo"><img src="images/logo-vigorre.png" alt="Vigorre" class="logo-vigorre" onerror="this.style.display='none';this.nextElementSibling.style.display='block';"><span class="logo-vigorre-fallback">Vigorre</span></div>
+      <div class="rodape-info">
+        <div class="copyright">© 2026 VIGORRE DESIGNER<span class="tm">™</span></div>
+        <div class="contato"><a href="https://www.vigorre.com.br">www.vigorre.com.br</a> | <a href="https://wa.me/5534991850735">(34) 99185-0735</a></div>
+        <div class="email">contato@vigorre.com.br</div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- MODAL CONFIRMAÇÃO -->
+<div class="modal-overlay" id="modalConfirmacao" style="display:none;">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="modalConfirmacaoTitulo">⚠️ Confirmar Ação</h3>
+      <button class="btn-fechar" onclick="fecharModalConfirmacao()">✕</button>
+    </div>
+    <div class="modal-body">
+      <p id="modalConfirmacaoMensagem">Tem certeza que deseja realizar esta ação?</p>
+      <div class="modal-actions">
+        <button class="btn btn-verde" id="modalConfirmacaoBtnSim" onclick="fecharModalConfirmacao()">✅ Sim</button>
+        <button class="btn btn-vermelho" onclick="fecharModalConfirmacao()">❌ Cancelar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="config.js"></script>
+<script src="menu.js?v=20260904"></script>
+<script>
+// ============================================================
+// BANCO DE DADOS
+// ============================================================
+var backups = JSON.parse(localStorage.getItem('amovin_backups_lista') || '[]');
+var acaoConfirmacao = null;
+
+function salvarBackups() {
+    localStorage.setItem('amovin_backups_lista', JSON.stringify(backups));
+}
+
+function getDadosCompletos() {
+    var chaves = ['pessoas', 'contatos', 'documentos_oficiais', 'estoque', 'bens', 'agendamentos', 'certificados', 'orcamentos', 'documentos', 'perfis'];
+    var dados = {};
+    chaves.forEach(function(k) {
+        var val = localStorage.getItem('amovin_' + k);
+        dados[k] = val ? JSON.parse(val) : [];
+    });
+    dados.instituicao = JSON.parse(localStorage.getItem('amovin_instituicao'));
+    dados.seguranca = JSON.parse(localStorage.getItem('amovin_seguranca'));
+    dados.gemini_key = localStorage.getItem('amovin_gemini_key') ? '****' : null;
+    dados.data = new Date().toISOString();
+    return dados;
+}
+
+function contarRegistros() {
+    var total = 0;
+    var chaves = ['pessoas', 'contatos', 'documentos_oficiais', 'estoque', 'bens', 'agendamentos', 'certificados', 'orcamentos', 'documentos', 'perfis'];
+    chaves.forEach(function(k) {
+        var val = localStorage.getItem('amovin_' + k);
+        if (val) {
+            try { total += JSON.parse(val).length; } catch(e) {}
+        }
+    });
+    return total;
+}
+
+function calcularTamanho() {
+    var total = 0;
+    for (var i = 0; i < localStorage.length; i++) {
+        var key = localStorage.key(i);
+        if (key && key.startsWith('amovin_')) {
+            total += localStorage.getItem(key).length;
+        }
+    }
+    return total;
+}
+
+function atualizarKPIs() {
+    document.getElementById('kpiBackups').textContent = backups.length;
+    if (backups.length > 0) {
+        var ultimo = backups[backups.length - 1];
+        document.getElementById('kpiUltimo').textContent = new Date(ultimo.data).toLocaleDateString('pt-BR') + ' ' + new Date(ultimo.data).toLocaleTimeString('pt-BR', {hour:'2-digit',minute:'2-digit'});
+    } else {
+        document.getElementById('kpiUltimo').textContent = '-';
+    }
+    document.getElementById('kpiRegistros').textContent = contarRegistros();
+    var tam = calcularTamanho();
+    if (tam > 1024 * 1024) {
+        document.getElementById('kpiTamanho').textContent = (tam / (1024 * 1024)).toFixed(2) + ' MB';
+    } else if (tam > 1024) {
+        document.getElementById('kpiTamanho').textContent = (tam / 1024).toFixed(2) + ' KB';
+    } else {
+        document.getElementById('kpiTamanho').textContent = tam + ' B';
+    }
+}
+
+function renderizarBackups() {
+    var container = document.getElementById('listaBackups');
+    if (backups.length === 0) {
+        container.innerHTML = '<div style="text-align:center;padding:20px;color:var(--cinza);">Nenhum backup salvo.</div>';
+        return;
+    }
+    container.innerHTML = backups.slice().reverse().map(function(b, idx) {
+        var data = new Date(b.data);
+        var dataStr = data.toLocaleDateString('pt-BR') + ' ' + data.toLocaleTimeString('pt-BR', {hour:'2-digit',minute:'2-digit'});
+        var tamanho = b.tamanho || 'N/A';
+        var registros = b.registros || 'N/A';
+        return '<div class="backup-item">' +
+            '<div class="backup-info"><span class="nome">📦 Backup #' + (backups.length - idx) + '</span><br><span class="detalhe">📅 ' + dataStr + ' | 📊 ' + registros + ' registros | 💾 ' + tamanho + '</span></div>' +
+            '<div class="backup-acoes">' +
+            '<button class="btn btn-azul" style="padding:4px 10px;font-size:10px;" onclick="baixarBackup(' + (backups.length - idx - 1) + ')">📥</button>' +
+            '<button class="btn btn-vermelho" style="padding:4px 10px;font-size:10px;" onclick="excluirBackup(' + (backups.length - idx - 1) + ')">🗑️</button>' +
+            '</div></div>';
+    }).join('');
+}
+
+window.exportarBackup = function() {
+    var dados = getDadosCompletos();
+    var json = JSON.stringify(dados, null, 2);
+    var blob = new Blob([json], { type: 'application/json' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = 'backup-amovin-' + new Date().toISOString().split('T')[0] + '.json';
+    a.click();
+    URL.revokeObjectURL(url);
+
+    var entry = {
+        data: new Date().toISOString(),
+        tamanho: (blob.size / 1024).toFixed(2) + ' KB',
+        registros: contarRegistros()
+    };
+    backups.push(entry);
+    salvarBackups();
+    atualizarKPIs();
+    renderizarBackups();
+
+    document.getElementById('statusExport').textContent = '✅ Backup exportado com sucesso em ' + new Date().toLocaleString('pt-BR');
+    setTimeout(function() { document.getElementById('statusExport').textContent = ''; }, 5000);
+};
+
+window.exportarBackupParcial = function(tipo) {
+    var map = { 'pessoas': ['pessoas', 'contatos'], 'financeiro': ['orcamentos', 'documentos_oficiais'] };
+    var chaves = map[tipo] || [];
+    if (chaves.length === 0) { alert('Tipo inválido!'); return; }
+
+    var dados = {};
+    chaves.forEach(function(k) {
+        var val = localStorage.getItem('amovin_' + k);
+        dados[k] = val ? JSON.parse(val) : [];
+    });
+    dados.data = new Date().toISOString();
+    dados.tipo = tipo;
+
+    var json = JSON.stringify(dados, null, 2);
+    var blob = new Blob([json], { type: 'application/json' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = 'backup-' + tipo + '-' + new Date().toISOString().split('T')[0] + '.json';
+    a.click();
+    URL.revokeObjectURL(url);
+
+    document.getElementById('statusExport').textContent = '✅ Backup parcial (' + tipo + ') exportado!';
+    setTimeout(function() { document.getElementById('statusExport').textContent = ''; }, 3000);
+};
+
+window.importarBackup = function() {
+    var input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.json';
+    input.onchange = function(e) {
+        var file = e.target.files[0];
+        if (!file) return;
+        var reader = new FileReader();
+        reader.onload = function(ev) {
+            try {
+                var dados = JSON.parse(ev.target.result);
+                if (!confirm('⚠️ Isso sobrescreverá TODOS os dados atuais. Continuar?')) return;
+
+                for (var key in dados) {
+                    if (key === 'data' || key === 'tipo') continue;
+                    if (typeof dados[key] === 'object') {
+                        localStorage.setItem('amovin_' + key, JSON.stringify(dados[key]));
+                    } else if (key === 'gemini_key') {
+                        if (dados[key] && dados[key] !== '****') {
+                            localStorage.setItem('amovin_gemini_key', dados[key]);
+                        }
+                    }
+                }
+                document.getElementById('statusImport').textContent = '✅ Backup importado! Recarregando...';
+                alert('✅ Backup importado! A página será recarregada.');
+                location.reload();
+            } catch (err) {
+                alert('❌ Erro ao ler o arquivo. Verifique se é um backup válido.');
+            }
+        };
+        reader.readAsText(file);
+    };
+    input.click();
+};
+
+window.baixarBackup = function(idx) {
+    if (idx < 0 || idx >= backups.length) return;
+    alert('📥 Para baixar um backup do histórico, use a opção "Exportar Backup" para gerar um novo arquivo. Os backups listados são apenas referências.');
+};
+
+window.excluirBackup = function(idx) {
+    if (idx < 0 || idx >= backups.length) return;
+    if (!confirm('Excluir este registro de backup?')) return;
+    backups.splice(idx, 1);
+    salvarBackups();
+    atualizarKPIs();
+    renderizarBackups();
+};
+
+window.salvarAgendamento = function() {
+    var config = { frequencia: document.getElementById('frequenciaBackup').value, horario: document.getElementById('horarioBackup').value };
+    localStorage.setItem('amovin_backup_agendamento', JSON.stringify(config));
+    document.getElementById('statusAgendamento').textContent = '✅ Agendamento salvo! (' + config.frequencia + ' às ' + config.horario + ')';
+    setTimeout(function() { document.getElementById('statusAgendamento').textContent = ''; }, 5000);
+    alert('✅ Agendamento salvo!');
+};
+
+function carregarAgendamento() {
+    var config = JSON.parse(localStorage.getItem('amovin_backup_agendamento'));
+    if (config) {
+        document.getElementById('frequenciaBackup').value = config.frequencia || 'semanal';
+        document.getElementById('horarioBackup').value = config.horario || '02:00';
+        document.getElementById('statusAgendamento').textContent = '📌 Agendamento: ' + config.frequencia + ' às ' + config.horario;
+    }
+}
+
+function abrirModalConfirmacao(titulo, mensagem, acao) {
+    document.getElementById('modalConfirmacaoTitulo').textContent = titulo;
+    document.getElementById('modalConfirmacaoMensagem').textContent = mensagem;
+    document.getElementById('modalConfirmacao').style.display = 'flex';
+    acaoConfirmacao = acao;
+}
+
+function fecharModalConfirmacao() {
+    document.getElementById('modalConfirmacao').style.display = 'none';
+    if (acaoConfirmacao) {
+        acaoConfirmacao();
+        acaoConfirmacao = null;
+    }
+}
+
+if (!sessionStorage.getItem('amovin_logado')) window.location.href = 'index.html';
+
+atualizarKPIs();
+renderizarBackups();
+carregarAgendamento();
+</script>
+</body>
+</html>
