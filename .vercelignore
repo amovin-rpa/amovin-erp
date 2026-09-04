@@ -1,0 +1,32 @@
+# Ignorar tudo que não for v2-segura/public/
+/*
+!/v2-segura/
+/v2-segura/*
+!/v2-segura/public/
+/v2-segura/public/*
+!/v2-segura/public/**/*.html
+!/v2-segura/public/**/*.js
+!/v2-segura/public/**/*.css
+!/v2-segura/public/images/
+
+# Ignorar Next.js
+v2-segura/app/
+v2-segura/components/
+v2-segura/lib/
+v2-segura/types/
+v2-segura/supabase/
+v2-segura/node_modules/
+v2-segura/package.json
+v2-segura/package-lock.json
+v2-segura/next.config.js
+v2-segura/postcss.config.js
+v2-segura/tailwind.config.js
+v2-segura/tsconfig.json
+v2-segura/.env.local
+v2-segura/.env.example
+
+# Sistema
+.DS_Store
+*.log
+*.tmp
+.vercel/

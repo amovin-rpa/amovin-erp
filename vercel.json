@@ -1,0 +1,47 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "v2-segura/public/**/*.html",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "v2-segura/public/**/*.js",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "v2-segura/public/**/*.css",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "v2-segura/public/images/**",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/",
+      "dest": "/v2-segura/public/index.html"
+    },
+    {
+      "src": "/(.*)\\.html",
+      "dest": "/v2-segura/public/$1.html"
+    },
+    {
+      "src": "/(.*)\\.js",
+      "dest": "/v2-segura/public/$1.js"
+    },
+    {
+      "src": "/(.*)\\.css",
+      "dest": "/v2-segura/public/$1.css"
+    },
+    {
+      "src": "/images/(.*)",
+      "dest": "/v2-segura/public/images/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/v2-segura/public/$1"
+    }
+  ]
+}
