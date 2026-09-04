@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Amovin ERP Social • Sala de Espera</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --laranja: #C65A11;
+  --laranja-escuro: #A04A0E;
+  --amarelo: #F5C518;
+  --verde: #57C220;
+  --azul: #1E88E5;
+  --grafite: #1A1A1A;
+  --cinza: #6B7280;
+  --cinza-claro: #F8F4ED;
+  --branco: #FFFFFF;
+  --vermelho: #E53935;
+  --sombra: 0 2px 12px rgba(0,0,0,0.06);
+  --sombra-hover: 0 4px 24px rgba(0,0,0,0.10);
+  --border-radius: 12px;
+  --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family: 'Inter', system-ui, sans-serif; background: #F8F4ED; display: flex; min-height: 100vh; }
+
+/* ============================================================
+   CONTEÚDO PRINCIPAL
+   ============================================================ */
+.main-content { flex: 1; margin-left: 270px; padding: 24px 30px; min-height: 100vh; width: calc(100% - 270px); }
+.topo-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 10px; }
+.topo-bar h1 { font-size: 24px; font-weight: 700; color: var(--grafite); }
+.topo-bar h1 span { color: var(--laranja); font-weight: 300; }
+.topo-bar .sub { font-size: 12px; color: var(--cinza); font-weight: 400; display: block; }
+.btn-sair-topo { background: #F8F4ED; color: #1A1A1A; border: 1px solid #F0E9DF; padding: 8px 16px; border-radius: 10px; font-size: 12px; font-weight: 600; cursor: pointer; transition: var(--transition); }
+.btn-sair-topo:hover { background: #F0E9DF; }
+
+/* ============================================================
+   KPIs
+   ============================================================ */
+.kpi-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-bottom: 22px; }
+.kpi-card { background: #FFFFFF; padding: 16px; border-radius: var(--border-radius); border: 1px solid #F0E9DF; text-align: center; box-shadow: var(--sombra); transition: var(--transition); }
+.kpi-card:hover { box-shadow: var(--sombra-hover); transform: translateY(-2px); }
+.kpi-card .kpi-valor { font-size: 28px; font-weight: 800; color: var(--laranja); }
+.kpi-card .kpi-label { font-size: 11px; color: var(--cinza); }
+
+/* ============================================================
+   LISTA DE PENDENTES
+   ============================================================ */
+.pendente-card { background: #FFFFFF; padding: 16px 20px; border-radius: var(--border-radius); border: 1px solid #F0E9DF; margin-bottom: 8px; border-left: 4px solid var(--amarelo); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; box-shadow: var(--sombra); transition: var(--transition); }
+.pendente-card:hover { box-shadow: var(--sombra-hover); }
+.pendente-info h4 { font-size: 14px; color: var(--grafite); margin-bottom: 2px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.pendente-info h4 .tipo-badge { font-size: 10px; font-weight: 600; padding: 2px 12px; border-radius: 20px; background: #FFF3E0; color: #E65100; }
+.pendente-info p { font-size: 11px; color: var(--cinza); margin: 1px 0; }
+.btn-acao { padding: 6px 14px; border-radius: 6px; border: none; cursor: pointer; font-size: 10px; font-weight: 600; font-family: 'Inter', sans-serif; transition: var(--transition); }
+.btn-aprovar { background: var(--verde); color: white; }
+.btn-aprovar:hover { background: #388E3C; }
+.btn-reprovar { background: var(--vermelho); color: white; }
+.btn-reprovar:hover { background: #C62828; }
+.btn-visualizar { background: var(--azul); color: white; }
+.btn-visualizar:hover { background: #1565C0; }
+.sem-dados { text-align: center; padding: 40px; color: #9CA3AF; }
+
+/* ============================================================
+   RODAPÉ
+   ============================================================ */
+.rodape { background: #FFFFFF; border-radius: var(--border-radius); padding: 12px 18px; border: 1px solid #F0E9DF; margin-top: 20px; box-shadow: var(--sombra); }
+.rodape-grid { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.rodape-logo { flex-shrink: 0; } .rodape-logo .logo-vigorre { width: 50px; }
+.rodape-info { flex: 1; } .rodape-info .copyright { font-size: 8px; color: #8A8F98; } .rodape-info .tm { font-size: 6px; vertical-align: super; }
+.rodape-info .contato { font-size: 9px; color: #8A8F98; } .rodape-info a { color: #C65A11; text-decoration: none; } .rodape-info .email { font-size: 8px; color: #aaa; }
+.logo-vigorre-fallback { font-size: 12px; font-weight: 700; display: none; }
+
+/* ============================================================
+   RESPONSIVO
+   ============================================================ */
+@media (max-width: 900px) {
+    .main-content { margin-left: 0; padding: 16px; width: 100%; padding-top: 60px; }
+    .pendente-card { flex-direction: column; align-items: stretch; }
+    .pendente-card .acoes { justify-content: flex-end; }
+}
+
+/* ============================================================
+   TOAST
+   ============================================================ */
+.toast { position: fixed; top: 20px; right: 20px; padding: 16px 24px; border-radius: 12px; color: white; font-weight: 600; font-size: 14px; z-index: 10000; box-shadow: 0 8px 32px rgba(0,0,0,0.15); animation: slideInRight 0.4s ease; max-width: 400px; }
+.toast-success { background: var(--verde); }
+.toast-error { background: var(--vermelho); }
+.toast-info { background: var(--azul); }
+.toast-warning { background: #E65100; }
+@keyframes slideInRight { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+</style>
+</head>
+<body>
+
+<div id="menu-container"></div>
+
+<main class="main-content">
+  <div class="topo-bar">
+    <div>
+      <h1>📋 Sala de Espera <span>Pré-Cadastros</span></h1>
+      <span class="sub">Aprove pré-cadastros e migre para Beneficiários, Profissionais ou Voluntários</span>
+    </div>
+    <button class="btn-sair-topo" onclick="window.location.href='dashboard.html'">🏠 Dashboard</button>
+  </div>
+
+  <div class="kpi-row">
+    <div class="kpi-card"><div class="kpi-valor" id="kpiTotal">0</div><div class="kpi-label">📋 Total</div></div>
+    <div class="kpi-card"><div class="kpi-valor" id="kpiPendentes" style="color:#E65100;">0</div><div class="kpi-label">⏳ Pendentes</div></div>
+    <div class="kpi-card"><div class="kpi-valor" id="kpiAprovados" style="color:var(--verde);">0</div><div class="kpi-label">✅ Aprovados</div></div>
+  </div>
+
+  <div id="listaPendentes"><div class="sem-dados">Nenhum pré-cadastro pendente.</div></div>
+
+  <div class="rodape">
+    <div class="rodape-grid">
+      <div class="rodape-logo">
+        <img src="images/logo-vigorre.png" alt="Vigorre" class="logo-vigorre" onerror="this.style.display='none';this.nextElementSibling.style.display='block';">
+        <span class="logo-vigorre-fallback">Vigorre</span>
+      </div>
+      <div class="rodape-info">
+        <div class="copyright">© 2026 VIGORRE DESIGNER<span class="tm">™</span></div>
+        <div class="contato"><a href="https://www.vigorre.com.br">www.vigorre.com.br</a> | <a href="https://wa.me/5534991850735">(34) 99185-0735</a></div>
+        <div class="email">contato@vigorre.com.br</div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script src="config.js"></script>
+<script src="menu.js?v=20260904"></script>
+<script>
+// ============================================================
+// BANCO DE DADOS LOCAL
+// ============================================================
+var preCadastros = JSON.parse(localStorage.getItem('amovin_pre_cadastros') || '[]');
+
+if (preCadastros.length === 0) {
+    preCadastros = [
+        {
+            id: 1,
+            nome: 'João Silva',
+            tipo: 'beneficiario',
+            cpf: '123.456.789-00',
+            telefone: '(34) 99999-1111',
+            email: 'joao@email.com',
+            cidade: 'Rio Paranaíba',
+            estado: 'MG',
+            responsavel: 'Mãe do beneficiário João Silva',
+            dataCadastro: new Date().toISOString(),
+            status: 'pendente'
+        },
+        {
+            id: 2,
+            nome: 'Dr. Carlos Mendes',
+            tipo: 'profissional',
+            cpf: '987.654.321-00',
+            telefone: '(34) 99999-2222',
+            email: 'carlos@email.com',
+            cidade: 'Rio Paranaíba',
+            estado: 'MG',
+            responsavel: '',
+            dataCadastro: new Date().toISOString(),
+            status: 'pendente'
+        },
+        {
+            id: 3,
+            nome: 'Fernanda Lima',
+            tipo: 'voluntario',
+            cpf: '111.222.333-44',
+            telefone: '(34) 99999-3333',
+            email: 'fernanda@email.com',
+            cidade: 'Rio Paranaíba',
+            estado: 'MG',
+            responsavel: '',
+            dataCadastro: new Date().toISOString(),
+            status: 'pendente'
+        }
+    ];
+    localStorage.setItem('amovin_pre_cadastros', JSON.stringify(preCadastros));
+}
+
+function salvar() {
+    localStorage.setItem('amovin_pre_cadastros', JSON.stringify(preCadastros));
+}
+
+function formatarData(data) {
+    if (!data) return '-';
+    var d = new Date(data);
+    return d.toLocaleDateString('pt-BR') + ' ' + d.toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'});
+}
+
+function getTipoLabel(tipo) {
+    var map = {
+        'beneficiario': '👥 Beneficiário',
+        'profissional': '👨‍⚕️ Profissional',
+        'voluntario': '💪 Voluntário'
+    };
+    return map[tipo] || tipo;
+}
+
+function getTipoDestino(tipo) {
+    var map = {
+        'beneficiario': 'Beneficiários (IDP)',
+        'profissional': 'Profissionais (IDP)',
+        'voluntario': 'Voluntários (IDP)'
+    };
+    return map[tipo] || tipo;
+}
+
+function atualizarKPIs() {
+    var total = preCadastros.length;
+    var pendentes = preCadastros.filter(function(p) { return p.status === 'pendente'; }).length;
+    var aprovados = preCadastros.filter(function(p) { return p.status === 'aprovado'; }).length;
+    
+    document.getElementById('kpiTotal').textContent = total;
+    document.getElementById('kpiPendentes').textContent = pendentes;
+    document.getElementById('kpiAprovados').textContent = aprovados;
+}
+
+function renderizarLista() {
+    var pendentes = preCadastros.filter(function(p) { return p.status === 'pendente'; });
+    var container = document.getElementById('listaPendentes');
+    
+    if (pendentes.length === 0) {
+        container.innerHTML = '<div class="sem-dados">✅ Nenhum pré-cadastro pendente.</div>';
+        return;
+    }
+    
+    container.innerHTML = pendentes.map(function(p) {
+        var destino = getTipoDestino(p.tipo);
+        var tipoLabel = getTipoLabel(p.tipo);
+        return '<div class="pendente-card">' +
+            '<div class="pendente-info">' +
+            '<h4>' + p.nome + ' <span class="tipo-badge">' + tipoLabel + '</span></h4>' +
+            '<p>📞 ' + (p.telefone || 'N/A') + ' | 📧 ' + (p.email || 'N/A') + '</p>' +
+            '<p>📍 ' + (p.cidade || '') + (p.estado ? '/' + p.estado : '') + ' | 📅 ' + formatarData(p.dataCadastro) + '</p>' +
+            (p.responsavel ? '<p>👤 Responsável: ' + p.responsavel + '</p>' : '') +
+            '<p style="font-size:10px;color:var(--azul);">🚀 Será migrado para: ' + destino + '</p>' +
+            '</div>' +
+            '<div class="acoes" style="display:flex;gap:6px;flex-wrap:wrap;">' +
+            '<button class="btn-acao btn-aprovar" onclick="aprovar(' + p.id + ')">✅ Aprovar</button>' +
+            '<button class="btn-acao btn-reprovar" onclick="reprovar(' + p.id + ')">❌ Reprovar</button>' +
+            '<button class="btn-acao btn-visualizar" onclick="visualizar(' + p.id + ')">👁️ Visualizar</button>' +
+            '</div>' +
+            '</div>';
+    }).join('');
+    
+    atualizarKPIs();
+}
+
+// ============================================================
+// MIGRAÇÃO: Sala de Espera → Beneficiários
+// ============================================================
+function migrarParaBeneficiario(preCadastro) {
+    var pessoas = JSON.parse(localStorage.getItem('amovin_pessoas') || '[]');
+    
+    var existe = pessoas.some(function(b) {
+        return b.cpf === preCadastro.cpf && b.nome === preCadastro.nome;
+    });
+    
+    if (existe) {
+        return { sucesso: false, mensagem: 'Beneficiário já cadastrado!' };
+    }
+    
+    var novo = {
+        id: Date.now(),
+        nome: preCadastro.nome || '',
+        tipo: 'beneficiario',
+        cpf: preCadastro.cpf || '',
+        rg: preCadastro.rg || '',
+        nascimento: preCadastro.dataNascimento || '',
+        sexo: preCadastro.sexo || '',
+        telefone: preCadastro.telefone || '',
+        whatsapp: preCadastro.whatsapp || preCadastro.telefone || '',
+        email: preCadastro.email || '',
+        endereco: preCadastro.endereco || '',
+        cidade: preCadastro.cidade || '',
+        estado: preCadastro.estado || '',
+        responsavel: preCadastro.responsavel || '',
+        obs: preCadastro.observacoes || '',
+        status: 'Ativo',
+        dataCadastro: new Date().toISOString().split('T')[0],
+        origem: 'pre_cadastro'
+    };
+    
+    pessoas.push(novo);
+    localStorage.setItem('amovin_pessoas', JSON.stringify(pessoas));
+    return { sucesso: true, mensagem: '✅ Beneficiário criado!', id: novo.id };
+}
+
+// ============================================================
+// MIGRAÇÃO: Sala de Espera → Profissionais
+// ============================================================
+function migrarParaProfissional(preCadastro) {
+    var pessoas = JSON.parse(localStorage.getItem('amovin_pessoas') || '[]');
+    
+    var existe = pessoas.some(function(p) {
+        return p.cpf === preCadastro.cpf && p.nome === preCadastro.nome && p.tipo === 'profissional';
+    });
+    
+    if (existe) {
+        return { sucesso: false, mensagem: 'Profissional já cadastrado!' };
+    }
+    
+    var novo = {
+        id: Date.now(),
+        nome: preCadastro.nome || '',
+        tipo: 'profissional',
+        cpf: preCadastro.cpf || '',
+        nascimento: preCadastro.dataNascimento || '',
+        sexo: preCadastro.sexo || '',
+        telefone: preCadastro.telefone || '',
+        whatsapp: preCadastro.whatsapp || preCadastro.telefone || '',
+        email: preCadastro.email || '',
+        especialidade: preCadastro.profissao || 'Profissional',
+        vinculo: preCadastro.vinculo || 'Parceiro Social',
+        usuario: preCadastro.email ? preCadastro.email.split('@')[0] : '',
+        senha: preCadastro.senha || '123456',
+        acesso: 'consulta',
+        status: 'Ativo',
+        dataCadastro: new Date().toISOString().split('T')[0],
+        origem: 'pre_cadastro'
+    };
+    
+    pessoas.push(novo);
+    localStorage.setItem('amovin_pessoas', JSON.stringify(pessoas));
+    return { sucesso: true, mensagem: '✅ Profissional criado!', id: novo.id };
+}
+
+// ============================================================
+// MIGRAÇÃO: Sala de Espera → Voluntários
+// ============================================================
+function migrarParaVoluntario(preCadastro) {
+    var pessoas = JSON.parse(localStorage.getItem('amovin_pessoas') || '[]');
+    
+    var existe = pessoas.some(function(v) {
+        return v.cpf === preCadastro.cpf && v.nome === preCadastro.nome && v.tipo === 'voluntario';
+    });
+    
+    if (existe) {
+        return { sucesso: false, mensagem: 'Voluntário já cadastrado!' };
+    }
+    
+    var novo = {
+        id: Date.now(),
+        nome: preCadastro.nome || '',
+        tipo: 'voluntario',
+        cpf: preCadastro.cpf || '',
+        nascimento: preCadastro.dataNascimento || '',
+        sexo: preCadastro.sexo || '',
+        telefone: preCadastro.telefone || '',
+        whatsapp: preCadastro.whatsapp || preCadastro.telefone || '',
+        email: preCadastro.email || '',
+        funcao: preCadastro.funcao || 'Voluntário',
+        area: preCadastro.area || 'Social',
+        status: 'Ativo',
+        dataCadastro: new Date().toISOString().split('T')[0],
+        origem: 'pre_cadastro'
+    };
+    
+    pessoas.push(novo);
+    localStorage.setItem('amovin_pessoas', JSON.stringify(pessoas));
+    return { sucesso: true, mensagem: '✅ Voluntário criado!', id: novo.id };
+}
+
+// ============================================================
+// MIGRAÇÃO: Sala de Espera → CRM Social
+// ============================================================
+function migrarParaCRM(preCadastro) {
+    var contatos = JSON.parse(localStorage.getItem('amovin_contatos') || '[]');
+    
+    var existe = contatos.some(function(c) {
+        return c.cpf === preCadastro.cpf && c.nome === preCadastro.nome;
+    });
+    
+    if (existe) return;
+    
+    var tipoMap = {
+        'beneficiario': 'Beneficiário',
+        'profissional': 'Profissional',
+        'voluntario': 'Voluntário'
+    };
+    
+    var novo = {
+        id: Date.now(),
+        nome: preCadastro.nome || '',
+        tipo: 'crm',
+        cpf: preCadastro.cpf || '',
+        rg: preCadastro.rg || '',
+        tel1: preCadastro.telefone || '',
+        whatsapp: preCadastro.whatsapp || preCadastro.telefone || '',
+        email: preCadastro.email || '',
+        endereco: preCadastro.endereco || '',
+        cidade: preCadastro.cidade || '',
+        estado: preCadastro.estado || '',
+        responsavel: preCadastro.responsavel || '',
+        categoria: tipoMap[preCadastro.tipo] || 'CRM',
+        obs: preCadastro.observacoes || '',
+        favorito: false,
+        origem: 'pre_cadastro',
+        status: 'Ativo',
+        dataCadastro: new Date().toISOString().split('T')[0]
+    };
+    
+    contatos.push(novo);
+    localStorage.setItem('amovin_contatos', JSON.stringify(contatos));
+}
+
+// ============================================================
+// FUNÇÃO PRINCIPAL DE APROVAÇÃO (ROTEADOR)
+// ============================================================
+function aprovarPreCadastro(preCadastro) {
+    var resultado = null;
+    
+    switch (preCadastro.tipo) {
+        case 'beneficiario':
+            resultado = migrarParaBeneficiario(preCadastro);
+            break;
+        case 'profissional':
+            resultado = migrarParaProfissional(preCadastro);
+            break;
+        case 'voluntario':
+            resultado = migrarParaVoluntario(preCadastro);
+            break;
+        default:
+            return { sucesso: false, mensagem: 'Tipo de cadastro desconhecido!' };
+    }
+    
+    if (resultado.sucesso) {
+        migrarParaCRM(preCadastro);
+    }
+    
+    return resultado;
+}
+
+// ============================================================
+// FUNÇÕES DA INTERFACE
+// ============================================================
+window.visualizar = function(id) {
+    var p = preCadastros.find(function(item) { return item.id === id; });
+    if (!p) return;
+    
+    var msg = '📋 PRÉ-CADASTRO\n';
+    msg += '═'.repeat(40) + '\n\n';
+    msg += '👤 Nome: ' + p.nome + '\n';
+    msg += '📋 Tipo: ' + getTipoLabel(p.tipo) + '\n';
+    msg += '📋 CPF: ' + (p.cpf || 'N/A') + '\n';
+    msg += '📞 Telefone: ' + (p.telefone || 'N/A') + '\n';
+    msg += '📧 Email: ' + (p.email || 'N/A') + '\n';
+    msg += '📍 Cidade: ' + (p.cidade || 'N/A') + (p.estado ? '/' + p.estado : '') + '\n';
+    msg += '👤 Responsável: ' + (p.responsavel || 'N/A') + '\n';
+    msg += '📅 Cadastro: ' + formatarData(p.dataCadastro) + '\n';
+    msg += '📌 Status: ' + (p.status || 'pendente') + '\n';
+    msg += '\n🚀 Será migrado para: ' + getTipoDestino(p.tipo);
+    
+    alert(msg);
+};
+
+window.aprovar = function(id) {
+    if (!confirm('✅ Aprovar este cadastro? Ele será migrado para o módulo correspondente e para o CRM.')) return;
+    
+    var p = preCadastros.find(function(item) { return item.id === id; });
+    if (!p) {
+        alert('❌ Pré-cadastro não encontrado!');
+        return;
+    }
+    
+    p.status = 'aprovado';
+    p.dataAprovacao = new Date().toISOString();
+    salvar();
+    
+    var resultado = aprovarPreCadastro(p);
+    
+    if (resultado.sucesso) {
+        alert('✅ ' + p.nome + ' foi aprovado e migrado para ' + getTipoDestino(p.tipo) + ' e CRM!');
+        renderizarLista();
+    } else {
+        alert('⚠️ ' + p.nome + ' foi aprovado, mas NÃO foi migrado: ' + resultado.mensagem);
+        renderizarLista();
+    }
+};
+
+window.reprovar = function(id) {
+    var motivo = prompt('Motivo da reprovação:');
+    if (motivo === null) return;
+    
+    var p = preCadastros.find(function(item) { return item.id === id; });
+    if (p) {
+        p.status = 'reprovado';
+        p.motivoReprovacao = motivo;
+        salvar();
+        renderizarLista();
+        alert('❌ ' + p.nome + ' foi reprovado.');
+    }
+};
+
+// ============================================================
+// VERIFICAÇÃO DE SESSÃO
+// ============================================================
+if (!sessionStorage.getItem('amovin_logado')) {
+    window.location.href = 'index.html';
+}
+
+// ============================================================
+// INICIALIZAÇÃO
+// ============================================================
+renderizarLista();
+
+console.log('✅ Sala de Espera carregada!');
+console.log('📋 Total de pré-cadastros:', preCadastros.length);
+console.log('⏳ Pendentes:', preCadastros.filter(function(p) { return p.status === 'pendente'; }).length);
+</script>
+</body>
+</html>

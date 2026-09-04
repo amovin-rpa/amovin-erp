@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Amovin ERP Social • CRM Social</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --laranja: #C65A11;
+  --amarelo: #F5C518;
+  --verde: #57C220;
+  --azul: #1E88E5;
+  --grafite: #1A1A1A;
+  --cinza: #6B7280;
+  --cinza-claro: #F8F4ED;
+  --branco: #FFFFFF;
+  --vermelho: #E53935;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family: 'Inter', system-ui, sans-serif; background: #F8F4ED; display: flex; min-height: 100vh; }
+
+.main-content { flex: 1; margin-left: 270px; padding: 24px 30px; }
+.topo-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 10px; }
+.topo-bar h1 { font-size: 24px; font-weight: 700; color: var(--grafite); }
+.btn-sair-topo { background: #F8F4ED; color: #1A1A1A; border: 1px solid #F0E9DF; padding: 8px 16px; border-radius: 10px; font-size: 12px; font-weight: 600; cursor: pointer; }
+
+.kpi-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 22px; }
+.kpi-card { background: #FFFFFF; padding: 16px; border-radius: 14px; border: 1px solid #F0E9DF; text-align: center; }
+.kpi-card .kpi-valor { font-size: 24px; font-weight: 800; color: var(--laranja); }
+.kpi-card .kpi-label { font-size: 11px; color: var(--cinza); }
+
+.grid-crm { display: grid; grid-template-columns: 280px 1fr; gap: 20px; }
+.sidebar-categorias { background: #FFFFFF; border-radius: 14px; border: 1px solid #F0E9DF; padding: 20px; max-height: 600px; overflow-y: auto; }
+.sidebar-categorias h3 { font-size: 15px; font-weight: 700; color: var(--grafite); margin-bottom: 14px; }
+.cat-item { display: block; width: 100%; padding: 9px 14px; margin-bottom: 3px; border: none; border-radius: 8px; cursor: pointer; text-align: left; font-size: 12px; background: transparent; transition: all 0.2s; color: var(--cinza); font-family: 'Inter', sans-serif; }
+.cat-item:hover { background: #F8F4ED; }
+.cat-item.ativo { background: var(--laranja); color: white; font-weight: 600; }
+.cat-item .count { float: right; opacity: 0.7; font-size: 10px; }
+
+.busca-bar { background: #FFFFFF; padding: 14px 18px; border-radius: 14px; border: 1px solid #F0E9DF; margin-bottom: 15px; display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+.busca-bar input { flex: 1; padding: 10px 14px; border: 1px solid #E5E0D8; border-radius: 8px; font-size: 13px; font-family: 'Inter', sans-serif; min-width: 200px; }
+.busca-bar select { padding: 10px; border: 1px solid #E5E0D8; border-radius: 8px; font-family: 'Inter', sans-serif; background: white; }
+.btn-novo { padding: 10px 20px; background: var(--laranja); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 13px; }
+
+.contato-card { background: #FFFFFF; padding: 14px 18px; border-radius: 12px; border: 1px solid #F0E9DF; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; cursor: pointer; transition: all 0.2s; }
+.contato-card:hover { transform: translateX(3px); border-left: 4px solid var(--laranja); }
+.contato-card.favorito { border-left: 4px solid var(--amarelo); }
+.contato-info h4 { font-size: 14px; color: var(--grafite); margin-bottom: 2px; }
+.contato-info p { font-size: 11px; color: var(--cinza); }
+.contato-info .tag { font-size: 9px; padding: 2px 10px; border-radius: 12px; margin-left: 6px; }
+.tag-crm { background: #F3E5F5; color: #7B1FA2; }
+.tag-beneficiario { background: #E3F2FD; color: #1565C0; }
+.tag-profissional { background: #E8F5E9; color: #2E7D32; }
+.tag-voluntario { background: #FFF3E0; color: #E65100; }
+.btn-acao { padding: 6px 10px; border-radius: 6px; border: none; cursor: pointer; font-size: 10px; font-weight: 600; }
+.btn-wpp { background: #25D366; color: white; }
+.btn-ligar { background: var(--verde); color: white; }
+.btn-email { background: var(--azul); color: white; }
+.btn-fav { background: var(--amarelo); color: #1A1A1A; }
+.btn-editar { background: #F5A623; color: white; }
+.sem-dados { text-align: center; padding: 40px; color: #9CA3AF; }
+
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 20px; }
+.modal { background: white; border-radius: 16px; width: 100%; max-width: 650px; max-height: 85vh; overflow-y: auto; }
+.modal-header { padding: 18px 22px; border-bottom: 1px solid #F0E9DF; display: flex; justify-content: space-between; align-items: center; }
+.modal-body { padding: 22px; }
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.form-full { grid-column: 1 / -1; }
+.form-group { margin-bottom: 14px; }
+.form-group label { display: block; font-size: 11px; font-weight: 600; color: var(--cinza); margin-bottom: 4px; text-transform: uppercase; }
+.form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px 12px; border: 1px solid #E5E0D8; border-radius: 8px; font-size: 13px; font-family: 'Inter', sans-serif; }
+.btn-salvar { width: 100%; padding: 14px; background: var(--laranja); color: white; border: none; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; margin-top: 10px; }
+.btn-salvar:hover { background: #A04A0E; }
+.btn-fechar { background: none; border: none; font-size: 22px; cursor: pointer; color: var(--cinza); }
+.section-title { font-size: 14px; font-weight: 700; color: var(--grafite); border-bottom: 1px solid #F0E9DF; padding-bottom: 8px; grid-column: 1 / -1; }
+
+.rodape { background: #FFFFFF; border-radius: 14px; padding: 12px 18px; border: 1px solid #F0E9DF; margin-top: 20px; }
+.rodape-grid { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.rodape-logo { flex-shrink: 0; } .rodape-logo .logo-vigorre { width: 50px; }
+.rodape-info { flex: 1; } .rodape-info .copyright { font-size: 8px; color: #8A8F98; } .rodape-info .tm { font-size: 6px; vertical-align: super; }
+.rodape-info .contato { font-size: 9px; color: #8A8F98; } .rodape-info a { color: #C65A11; text-decoration: none; } .rodape-info .email { font-size: 8px; color: #aaa; }
+.logo-vigorre-fallback { font-size: 12px; font-weight: 700; display: none; }
+
+@media (max-width: 768px) { .main-content { margin-left: 0; } .grid-crm { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<div id="menu-container"></div>
+
+<main class="main-content">
+  <div class="topo-bar"><h1>☎️ CRM Social</h1><button class="btn-sair-topo" onclick="window.location.href='dashboard.html'">🏠 Dashboard</button></div>
+
+  <div class="kpi-row">
+    <div class="kpi-card"><div class="kpi-valor" id="kpiTotal">0</div><div class="kpi-label">Total</div></div>
+    <div class="kpi-card"><div class="kpi-valor" id="kpiBeneficiarios">0</div><div class="kpi-label">👥 Beneficiários</div></div>
+    <div class="kpi-card"><div class="kpi-valor" id="kpiProfissionais">0</div><div class="kpi-label">👨‍⚕️ Profissionais</div></div>
+    <div class="kpi-card"><div class="kpi-valor" id="kpiVoluntarios">0</div><div class="kpi-label">💪 Voluntários</div></div>
+  </div>
+
+  <div class="grid-crm">
+    <div class="sidebar-categorias">
+      <h3>📂 Categorias</h3>
+      <div id="menuCategorias"></div>
+    </div>
+    <div>
+      <div class="busca-bar">
+        <input type="text" id="buscaContato" placeholder="Buscar por nome, empresa..." oninput="filtrar()">
+        <button class="btn-novo" onclick="abrirForm()">+ Novo</button>
+      </div>
+      <div id="listaContatos"><div class="sem-dados">Nenhum contato.</div></div>
+    </div>
+  </div>
+
+  <div class="rodape"><div class="rodape-grid"><div class="rodape-logo"><img src="images/logo-vigorre.png" alt="Vigorre" class="logo-vigorre" onerror="this.style.display='none';this.nextElementSibling.style.display='block';"><span class="logo-vigorre-fallback">Vigorre</span></div><div class="rodape-info"><div class="copyright">© 2026 VIGORRE DESIGNER<span class="tm">™</span></div><div class="contato"><a href="https://www.vigorre.com.br">www.vigorre.com.br</a> | <a href="https://wa.me/5534991850735">(34) 99185-0735</a></div><div class="email">contato@vigorre.com.br</div></div></div></div>
+</main>
+
+<div class="modal-overlay" id="modalForm" style="display:none;"><div class="modal"><div class="modal-header"><h3 id="tituloModal">Novo Contato</h3><button class="btn-fechar" onclick="fecharForm()">✕</button></div><div class="modal-body"><input type="hidden" id="contatoId"><div class="form-grid">
+  <div class="section-title">Dados Básicos</div>
+  <div class="form-group"><label>Nome *</label><input type="text" id="nomeContato"></div>
+  <div class="form-group"><label>Cargo</label><input type="text" id="cargoContato"></div>
+  <div class="form-group"><label>Instituição</label><input type="text" id="instituicaoContato"></div>
+  <div class="form-group"><label>Categoria</label><select id="categoriaContato"><option value="">Selecione...</option><option>Prefeitura</option><option>Empresa</option><option>Patrocinador</option><option>Doador</option><option>Fundação</option><option>Fornecedor</option><option>Profissional</option><option>Voluntário</option><option>Beneficiário</option><option>Outros</option></select></div>
+  <div class="section-title">Contatos</div>
+  <div class="form-group"><label>Telefone</label><input type="text" id="tel1Contato"></div>
+  <div class="form-group"><label>WhatsApp</label><input type="text" id="whatsappContato"></div>
+  <div class="form-group"><label>Email</label><input type="email" id="emailContato"></div>
+  <div class="section-title">Informações</div>
+  <div class="form-full"><label>Observações</label><textarea id="obsContato" rows="2"></textarea></div>
+</div><button class="btn-salvar" onclick="salvarContato()">💾 Salvar</button></div></div></div>
+
+<script src="config.js"></script>
+<script src="menu.js?v=20260904"></script>
+<script>
+// ============================================================
+// TODAS AS FUNÇÕES ORIGINAIS MANTIDAS
+// ============================================================
+var contatos = JSON.parse(localStorage.getItem('amovin_contatos') || '[]');
+var categoriaAtual = 'todos', editandoId = null;
+
+function importarPessoasParaCRM() {
+    var pessoas = JSON.parse(localStorage.getItem('amovin_pessoas') || '[]');
+    var contatosExistentes = JSON.parse(localStorage.getItem('amovin_contatos') || '[]');
+    
+    pessoas.forEach(function(p) {
+        var existe = contatosExistentes.some(function(c) {
+            return c.nome === p.nome && c.tipo === p.tipo && c.origem === 'pessoas';
+        });
+        if (!existe && p.nome) {
+            var tag = p.tipo === 'beneficiario' ? 'Beneficiário' : p.tipo === 'profissional' ? 'Profissional' : 'Voluntário';
+            contatosExistentes.push({
+                id: Date.now() + Math.random() * 1000,
+                nome: p.nome || '',
+                cargo: tag,
+                instituicao: '',
+                categoria: tag,
+                tel1: p.telefone || '',
+                whatsapp: p.whatsapp || p.telefone || '',
+                email: p.email || '',
+                obs: p.obs || '',
+                favorito: false,
+                origem: 'pessoas',
+                tipo: p.tipo || 'crm'
+            });
+        }
+    });
+    localStorage.setItem('amovin_contatos', JSON.stringify(contatosExistentes));
+    return contatosExistentes;
+}
+
+function carregarContatos() {
+    var dados = JSON.parse(localStorage.getItem('amovin_contatos') || '[]');
+    if (dados.length === 0) {
+        dados = importarPessoasParaCRM();
+    }
+    if (dados.length === 0) {
+        dados = [
+            {id:1,nome:'Prefeito Municipal',cargo:'Prefeito',instituicao:'Prefeitura',categoria:'Prefeitura',tel1:'(34) 99999-0001',whatsapp:'(34) 99999-0001',email:'prefeito@rioparanaiba.mg.gov.br',favorito:true,origem:'crm',tipo:'crm'},
+            {id:2,nome:'Empresa ABC',cargo:'Diretor',instituicao:'ABC Ltda',categoria:'Empresa',tel1:'(34) 99999-0003',email:'contato@abc.com.br',origem:'crm',tipo:'crm'}
+        ];
+        localStorage.setItem('amovin_contatos', JSON.stringify(dados));
+    }
+    return dados;
+}
+
+contatos = carregarContatos();
+
+function salvar() { localStorage.setItem('amovin_contatos', JSON.stringify(contatos)); }
+
+function renderizarMenu() {
+    var cats = {}; contatos.forEach(function(c){ cats[c.categoria] = (cats[c.categoria]||0)+1; });
+    var h = '<button class="cat-item '+(categoriaAtual==='todos'?'ativo':'')+'" onclick="filtrarPorCat(\'todos\')">📋 Todos <span class="count">'+contatos.length+'</span></button>';
+    h += '<button class="cat-item '+(categoriaAtual==='favoritos'?'ativo':'')+'" onclick="filtrarPorCat(\'favoritos\')">⭐ Favoritos <span class="count">'+contatos.filter(function(c){return c.favorito;}).length+'</span></button>';
+    Object.keys(cats).sort().forEach(function(c){ h += '<button class="cat-item '+(categoriaAtual===c?'ativo':'')+'" onclick="filtrarPorCat(\''+c+'\')">'+c+' <span class="count">'+cats[c]+'</span></button>'; });
+    document.getElementById('menuCategorias').innerHTML = h;
+}
+window.filtrarPorCat = function(c) { categoriaAtual = c; renderizarMenu(); filtrar(); };
+
+function getTagClass(tipo) {
+    if (tipo === 'beneficiario') return 'tag-beneficiario';
+    if (tipo === 'profissional') return 'tag-profissional';
+    if (tipo === 'voluntario') return 'tag-voluntario';
+    return 'tag-crm';
+}
+function getTagLabel(tipo) {
+    if (tipo === 'beneficiario') return '👥 Beneficiário';
+    if (tipo === 'profissional') return '👨‍⚕️ Profissional';
+    if (tipo === 'voluntario') return '💪 Voluntário';
+    return '📝 CRM';
+}
+
+function filtrar() {
+    var l = contatos.slice(); if (categoriaAtual==='favoritos') l = l.filter(function(c){return c.favorito;}); else if (categoriaAtual!=='todos') l = l.filter(function(c){return c.categoria===categoriaAtual;});
+    var b = document.getElementById('buscaContato').value.toLowerCase(); if (b) l = l.filter(function(c){return (c.nome||'').toLowerCase().indexOf(b)>=0||(c.instituicao||'').toLowerCase().indexOf(b)>=0;});
+    l.sort(function(a,b){return (a.nome||'').localeCompare(b.nome||'');});
+    var c = document.getElementById('listaContatos');
+    if (l.length===0) { c.innerHTML = '<div class="sem-dados">Nenhum contato.</div>'; return; }
+    c.innerHTML = l.map(function(x){
+        var tagClass = getTagClass(x.tipo || x.origem || 'crm');
+        var tagLabel = getTagLabel(x.tipo || x.origem || 'crm');
+        var origemLabel = x.origem === 'pessoas' ? ' 🔗 Importado' : '';
+        return '<div class="contato-card'+(x.favorito?' favorito':'')+'"><div class="contato-info"><h4>'+(x.favorito?'⭐ ':'')+x.nome+' <span class="tag '+tagClass+'">'+tagLabel+'</span>'+origemLabel+'</h4><p>'+(x.cargo||'')+' '+(x.instituicao?'| '+x.instituicao:'')+'</p><p>📞 '+(x.tel1||x.whatsapp||'-')+' | 📧 '+(x.email||'-')+'</p></div><div class="contato-acoes">'+(x.whatsapp?'<button class="btn-acao btn-wpp" onclick="event.stopPropagation();window.open(\'https://wa.me/55\'+x.whatsapp.replace(/\\D/g,\'\'))">💬</button>':'')+(x.tel1?'<button class="btn-acao btn-ligar" onclick="event.stopPropagation();window.open(\'tel:\'+x.tel1)">📞</button>':'')+(x.email?'<button class="btn-acao btn-email" onclick="event.stopPropagation();window.open(\'mailto:\'+x.email)">📧</button>':'')+'<button class="btn-acao btn-fav" onclick="event.stopPropagation();toggleFav('+x.id+')">'+(x.favorito?'★':'☆')+'</button><button class="btn-acao btn-editar" onclick="event.stopPropagation();abrirForm('+x.id+')">✏️</button></div></div>';
+    }).join('');
+    atualizarKPIs();
+}
+
+function atualizarKPIs() {
+    document.getElementById('kpiTotal').textContent = contatos.length;
+    document.getElementById('kpiBeneficiarios').textContent = contatos.filter(function(c){return c.tipo==='beneficiario' || c.categoria==='Beneficiário';}).length;
+    document.getElementById('kpiProfissionais').textContent = contatos.filter(function(c){return c.tipo==='profissional' || c.categoria==='Profissional';}).length;
+    document.getElementById('kpiVoluntarios').textContent = contatos.filter(function(c){return c.tipo==='voluntario' || c.categoria==='Voluntário';}).length;
+}
+
+window.abrirForm = function(id) {
+    editandoId = id || null; document.getElementById('modalForm').style.display = 'flex';
+    document.getElementById('tituloModal').textContent = id ? 'Editar' : 'Novo';
+    if (id) { var x = contatos.find(function(c){return c.id===id;}); if (!x) return;
+        document.getElementById('contatoId').value=x.id;document.getElementById('nomeContato').value=x.nome||'';document.getElementById('cargoContato').value=x.cargo||'';document.getElementById('instituicaoContato').value=x.instituicao||'';document.getElementById('categoriaContato').value=x.categoria||'';document.getElementById('tel1Contato').value=x.tel1||'';document.getElementById('whatsappContato').value=x.whatsapp||'';document.getElementById('emailContato').value=x.email||'';document.getElementById('obsContato').value=x.obs||'';
+    } else { document.getElementById('contatoId').value='';document.getElementById('nomeContato').value='';document.getElementById('cargoContato').value='';document.getElementById('instituicaoContato').value='';document.getElementById('categoriaContato').value='';document.getElementById('tel1Contato').value='';document.getElementById('whatsappContato').value='';document.getElementById('emailContato').value='';document.getElementById('obsContato').value=''; }
+};
+window.fecharForm = function() { document.getElementById('modalForm').style.display = 'none'; };
+window.salvarContato = function() {
+    var n = document.getElementById('nomeContato').value.trim(); if (!n) { alert('Nome obrigatório!'); return; }
+    var d = { nome:n, cargo:document.getElementById('cargoContato').value.trim(), instituicao:document.getElementById('instituicaoContato').value.trim(), categoria:document.getElementById('categoriaContato').value, tel1:document.getElementById('tel1Contato').value.trim(), whatsapp:document.getElementById('whatsappContato').value.trim(), email:document.getElementById('emailContato').value.trim(), obs:document.getElementById('obsContato').value.trim(), origem:'crm', tipo:'crm' };
+    if (editandoId) { var i = contatos.findIndex(function(x){return x.id===editandoId;}); if (i>=0) for (var k in d) contatos[i][k]=d[k]; }
+    else { d.id = Date.now(); d.favorito = false; contatos.push(d); }
+    salvar(); fecharForm(); renderizarMenu(); filtrar();
+};
+window.toggleFav = function(id) { var x = contatos.find(function(c){return c.id===id;}); if (x) { x.favorito = !x.favorito; salvar(); filtrar(); renderizarMenu(); } };
+
+// ============================================================
+// VERIFICAÇÃO DE SESSÃO
+// ============================================================
+if (!sessionStorage.getItem('amovin_logado')) { window.location.href = 'index.html'; }
+
+renderizarMenu(); filtrar();
+</script>
+</body>
+</html>

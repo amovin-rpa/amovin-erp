@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Amovin ERP Social • Biblioteca</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --laranja: #C65A11;
+  --amarelo: #F5C518;
+  --verde: #57C220;
+  --azul: #1E88E5;
+  --grafite: #1A1A1A;
+  --cinza: #6B7280;
+  --cinza-claro: #F8F4ED;
+  --branco: #FFFFFF;
+  --vermelho: #E53935;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family: 'Inter', system-ui, sans-serif; background: #F8F4ED; display: flex; min-height: 100vh; }
+
+.main-content { flex: 1; margin-left: 270px; padding: 24px 30px; }
+.topo-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 10px; }
+.topo-bar h1 { font-size: 24px; font-weight: 700; color: var(--grafite); }
+.btn-sair-topo { background: #F8F4ED; color: #1A1A1A; border: 1px solid #F0E9DF; padding: 8px 16px; border-radius: 10px; font-size: 12px; font-weight: 600; cursor: pointer; }
+
+.kpi-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 22px; }
+.kpi-card { background: #FFFFFF; padding: 18px; border-radius: 14px; border: 1px solid #F0E9DF; text-align: center; }
+.kpi-card .kpi-valor { font-size: 24px; font-weight: 800; color: var(--laranja); }
+.kpi-card .kpi-label { font-size: 11px; color: var(--cinza); }
+
+.grid-biblioteca { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.card { background: #FFFFFF; padding: 24px; border-radius: 14px; border: 1px solid #F0E9DF; }
+.card h3 { font-size: 16px; font-weight: 700; color: var(--grafite); margin-bottom: 18px; padding-bottom: 12px; border-bottom: 1px solid #F0E9DF; display: flex; justify-content: space-between; align-items: center; }
+
+.form-group { margin-bottom: 14px; }
+.form-group label { display: block; font-size: 11px; font-weight: 600; color: var(--cinza); margin-bottom: 4px; text-transform: uppercase; }
+.form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px 12px; border: 1px solid #E5E0D8; border-radius: 8px; font-size: 13px; font-family: 'Inter', sans-serif; }
+.form-group textarea { resize: vertical; min-height: 60px; }
+
+.btn { padding: 10px 18px; border-radius: 8px; border: none; cursor: pointer; font-weight: 600; font-size: 12px; }
+.btn-salvar { background: var(--laranja); color: white; }
+.btn-editar { background: var(--amarelo); color: #1A1A1A; }
+.btn-excluir { background: var(--vermelho); color: white; }
+
+.doc-item { padding: 12px 16px; border-bottom: 1px solid #F0E9DF; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px; }
+.doc-item .titulo { font-weight: 600; color: var(--grafite); font-size: 13px; }
+.doc-item .categoria { font-size: 10px; background: #F8F4ED; padding: 2px 10px; border-radius: 12px; color: var(--cinza); }
+.doc-item .data { font-size: 11px; color: var(--cinza); }
+.doc-item .tags { font-size: 10px; color: var(--azul); }
+.sem-dados { text-align: center; padding: 30px; color: #9CA3AF; }
+
+.rodape { background: #FFFFFF; border-radius: 14px; padding: 12px 18px; border: 1px solid #F0E9DF; margin-top: 20px; }
+.rodape-grid { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.rodape-logo { flex-shrink: 0; } .rodape-logo .logo-vigorre { width: 50px; }
+.rodape-info { flex: 1; } .rodape-info .copyright { font-size: 8px; color: #8A8F98; } .rodape-info .tm { font-size: 6px; vertical-align: super; }
+.rodape-info .contato { font-size: 9px; color: #8A8F98; } .rodape-info a { color: #C65A11; text-decoration: none; } .rodape-info .email { font-size: 8px; color: #aaa; }
+.logo-vigorre-fallback { font-size: 12px; font-weight: 700; display: none; }
+
+@media (max-width: 900px) { .main-content { margin-left: 0; } .grid-biblioteca { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<div id="menu-container"></div>
+
+<main class="main-content">
+  <div class="topo-bar"><h1>📚 Biblioteca Digital</h1><button class="btn-sair-topo" onclick="window.location.href='dashboard.html'">🏠 Dashboard</button></div>
+
+  <div class="kpi-row">
+    <div class="kpi-card"><div class="kpi-valor" id="kpiTotal">0</div><div class="kpi-label">📚 Documentos</div></div>
+    <div class="kpi-card"><div class="kpi-valor" id="kpiCategorias">0</div><div class="kpi-label">📂 Categorias</div></div>
+    <div class="kpi-card"><div class="kpi-valor" id="kpiMes">0</div><div class="kpi-label">📅 Este Mês</div></div>
+  </div>
+
+  <div class="grid-biblioteca">
+    <div class="card">
+      <h3>📝 Novo Documento</h3>
+      <input type="hidden" id="docId">
+      <div class="form-group"><label>Nome do Documento *</label><input type="text" id="nomeDoc" placeholder="Ex: Estatuto Social"></div>
+      <div class="form-group"><label>Categoria</label><select id="categoriaDoc"><option>Certidão</option><option>Ata</option><option>Estatuto</option><option>Licença</option><option>Contrato</option><option>Convênio</option><option>Manual</option><option>Relatório</option><option>Outros</option></select></div>
+      <div class="form-group"><label>Descrição</label><textarea id="descricaoDoc" rows="2" placeholder="Breve descrição do documento..."></textarea></div>
+      <div class="form-row"><div class="form-group"><label>Data</label><input type="date" id="dataDoc"></div><div class="form-group"><label>Tags</label><input type="text" id="tagsDoc" placeholder="palavras-chave separadas por vírgula"></div></div>
+      <div class="form-group"><label>Observações</label><input type="text" id="obsDoc" placeholder="Informações adicionais..."></div>
+      <button class="btn btn-salvar" onclick="salvarDocumento()" style="width:100%;padding:12px;font-size:14px;">💾 Salvar Documento</button>
+    </div>
+    <div class="card">
+      <h3>📋 Documentos</h3>
+      <div id="listaDocumentos"><div class="sem-dados">Nenhum documento.</div></div>
+    </div>
+  </div>
+
+  <div class="rodape"><div class="rodape-grid"><div class="rodape-logo"><img src="images/logo-vigorre.png" alt="Vigorre" class="logo-vigorre" onerror="this.style.display='none';this.nextElementSibling.style.display='block';"><span class="logo-vigorre-fallback">Vigorre</span></div><div class="rodape-info"><div class="copyright">© 2026 VIGORRE DESIGNER<span class="tm">™</span></div><div class="contato"><a href="https://www.vigorre.com.br">www.vigorre.com.br</a> | <a href="https://wa.me/5534991850735">(34) 99185-0735</a></div><div class="email">contato@vigorre.com.br</div></div></div></div>
+</main>
+
+<script src="config.js"></script>
+<script src="menu.js?v=20260904"></script>
+<script>
+var documentos = JSON.parse(localStorage.getItem('amovin_biblioteca') || '[]');
+var editandoId = null;
+
+if (documentos.length === 0) {
+    documentos = [
+        { id: 1, nome: 'Estatuto Social', categoria: 'Estatuto', descricao: 'Documento oficial da AMOVIN', data: '2026-01-01', tags: 'estatuto, institucional', obs: '' },
+        { id: 2, nome: 'Certidão CNPJ', categoria: 'Certidão', descricao: 'Comprovante de inscrição no CNPJ', data: '2026-01-15', tags: 'cnpj, certidão', obs: '' },
+        { id: 3, nome: 'Manual do Voluntário', categoria: 'Manual', descricao: 'Guia para novos voluntários', data: '2026-03-10', tags: 'voluntário, manual', obs: '' }
+    ];
+    salvar();
+}
+function salvar() { localStorage.setItem('amovin_biblioteca', JSON.stringify(documentos)); }
+
+function atualizarKPIs() {
+    var total = documentos.length;
+    var categorias = {};
+    documentos.forEach(function(d) { categorias[d.categoria] = true; });
+    var qtdCategorias = Object.keys(categorias).length;
+    
+    var hoje = new Date();
+    var mes = hoje.getMonth();
+    var ano = hoje.getFullYear();
+    var mesCount = documentos.filter(function(d) {
+        if (!d.data) return false;
+        var data = new Date(d.data + 'T00:00:00');
+        return data.getMonth() === mes && data.getFullYear() === ano;
+    }).length;
+
+    document.getElementById('kpiTotal').textContent = total;
+    document.getElementById('kpiCategorias').textContent = qtdCategorias;
+    document.getElementById('kpiMes').textContent = mesCount;
+}
+
+function renderizarDocumentos() {
+    var lista = documentos.slice().sort(function(a, b) { return new Date(b.data) - new Date(a.data); });
+    var container = document.getElementById('listaDocumentos');
+    if (lista.length === 0) {
+        container.innerHTML = '<div class="sem-dados">Nenhum documento.</div>';
+        return;
+    }
+    container.innerHTML = lista.map(function(d) {
+        var data = d.data ? new Date(d.data + 'T00:00:00').toLocaleDateString('pt-BR') : '-';
+        return '<div class="doc-item">' +
+            '<div><span class="titulo">' + d.nome + '</span> <span class="categoria">' + d.categoria + '</span><br>' +
+            (d.descricao ? '<span style="font-size:12px;color:var(--cinza);">' + d.descricao + '</span><br>' : '') +
+            '<span class="data">📅 ' + data + '</span>' + (d.tags ? ' <span class="tags">🏷️ ' + d.tags + '</span>' : '') + '</div>' +
+            '<div><button class="btn btn-editar" onclick="editarDocumento(' + d.id + ')" style="padding:4px 8px;font-size:10px;">✏️</button>' +
+            '<button class="btn btn-excluir" onclick="excluirDocumento(' + d.id + ')" style="padding:4px 8px;font-size:10px;">🗑️</button></div></div>';
+    }).join('');
+}
+
+window.salvarDocumento = function() {
+    var nome = document.getElementById('nomeDoc').value.trim();
+    if (!nome) { alert('Preencha o nome do documento!'); return; }
+
+    var dados = {
+        nome: nome,
+        categoria: document.getElementById('categoriaDoc').value,
+        descricao: document.getElementById('descricaoDoc').value.trim(),
+        data: document.getElementById('dataDoc').value,
+        tags: document.getElementById('tagsDoc').value.trim(),
+        obs: document.getElementById('obsDoc').value.trim()
+    };
+
+    if (editandoId) {
+        var idx = documentos.findIndex(function(d) { return d.id === editandoId; });
+        if (idx >= 0) {
+            for (var k in dados) documentos[idx][k] = dados[k];
+        }
+        editandoId = null;
+    } else {
+        dados.id = Date.now();
+        documentos.push(dados);
+    }
+
+    salvar();
+    limparForm();
+    atualizarKPIs();
+    renderizarDocumentos();
+    alert('✅ Documento salvo com sucesso!');
+};
+
+window.editarDocumento = function(id) {
+    var d = documentos.find(function(x) { return x.id === id; });
+    if (!d) return;
+    editandoId = id;
+    document.getElementById('docId').value = id;
+    document.getElementById('nomeDoc').value = d.nome;
+    document.getElementById('categoriaDoc').value = d.categoria;
+    document.getElementById('descricaoDoc').value = d.descricao || '';
+    document.getElementById('dataDoc').value = d.data || '';
+    document.getElementById('tagsDoc').value = d.tags || '';
+    document.getElementById('obsDoc').value = d.obs || '';
+    document.querySelector('.card h3').textContent = '✏️ Editando: ' + d.nome;
+};
+
+window.excluirDocumento = function(id) {
+    if (!confirm('Excluir este documento?')) return;
+    documentos = documentos.filter(function(d) { return d.id !== id; });
+    salvar();
+    atualizarKPIs();
+    renderizarDocumentos();
+};
+
+function limparForm() {
+    editandoId = null;
+    document.getElementById('docId').value = '';
+    document.getElementById('nomeDoc').value = '';
+    document.getElementById('categoriaDoc').value = 'Certidão';
+    document.getElementById('descricaoDoc').value = '';
+    document.getElementById('dataDoc').value = new Date().toISOString().split('T')[0];
+    document.getElementById('tagsDoc').value = '';
+    document.getElementById('obsDoc').value = '';
+    document.querySelector('.card h3').textContent = '📝 Novo Documento';
+}
+
+document.getElementById('dataDoc').value = new Date().toISOString().split('T')[0];
+
+if (!sessionStorage.getItem('amovin_logado')) { window.location.href = 'index.html'; }
+
+atualizarKPIs();
+renderizarDocumentos();
+</script>
+</body>
+</html>
