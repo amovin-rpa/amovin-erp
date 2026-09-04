@@ -9,15 +9,8 @@
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@4/dist/tesseract.min.js"></script>
     <style>
         :root {
-            --laranja: #C65A11;
-            --verde: #57C220;
-            --azul: #1E88E5;
-            --grafite: #1A1A1A;
-            --cinza: #6B7280;
-            --branco: #FFFFFF;
-            --vermelho: #E53935;
-            --roxo: #7C3AED;
-            --dourado: #D97706;
+            --laranja: #C65A11; --verde: #57C220; --azul: #1E88E5; --grafite: #1A1A1A;
+            --cinza: #6B7280; --branco: #FFFFFF; --vermelho: #E53935; --roxo: #7C3AED; --dourado: #D97706;
         }
         * { margin:0; padding:0; box-sizing:border-box; }
         body { font-family: 'Inter', system-ui, sans-serif; background: #F8F4ED; display: flex; min-height: 100vh; }
@@ -32,16 +25,11 @@
         .card h3 .badge { font-size: 10px; font-weight: 600; padding: 3px 12px; border-radius: 20px; background: #FFF3E0; color: var(--laranja); }
         .card h3 .badge-ia { background: linear-gradient(135deg, var(--roxo), var(--azul)); color: white; }
         .btn { padding: 10px 24px; border-radius: 8px; border: none; cursor: pointer; font-weight: 600; font-size: 13px; font-family: 'Inter', sans-serif; transition: all 0.2s; display: inline-flex; align-items: center; gap: 8px; }
-        .btn-primary { background: var(--roxo); color: white; }
-        .btn-primary:hover { background: #6D28D9; }
-        .btn-success { background: var(--verde); color: white; }
-        .btn-success:hover { background: #388E3C; }
-        .btn-outline { background: transparent; color: var(--cinza); border: 1px solid #E5E0D8; }
-        .btn-outline:hover { background: #F8F4ED; }
-        .btn-danger { background: var(--vermelho); color: white; }
-        .btn-danger:hover { background: #C62828; }
-        .btn-warning { background: var(--dourado); color: white; }
-        .btn-warning:hover { background: #B45309; }
+        .btn-primary { background: var(--roxo); color: white; } .btn-primary:hover { background: #6D28D9; }
+        .btn-success { background: var(--verde); color: white; } .btn-success:hover { background: #388E3C; }
+        .btn-outline { background: transparent; color: var(--cinza); border: 1px solid #E5E0D8; } .btn-outline:hover { background: #F8F4ED; }
+        .btn-danger { background: var(--vermelho); color: white; } .btn-danger:hover { background: #C62828; }
+        .btn-warning { background: var(--dourado); color: white; } .btn-warning:hover { background: #B45309; }
         .dropzone { border: 3px dashed #E5E0D8; border-radius: 14px; padding: 40px 20px; text-align: center; transition: all 0.3s; cursor: pointer; background: #FAFAFA; }
         .dropzone:hover, .dropzone.dragover { border-color: var(--roxo); background: #F5F0FF; }
         .dropzone .icone { font-size: 48px; display: block; margin-bottom: 12px; }
@@ -63,10 +51,8 @@
         .status-ia.erro { background: #FEE2E2; color: #991B1B; }
         .status-ia.aviso { background: #FEF3C7; color: #92400E; }
         .toast { position: fixed; top: 20px; right: 20px; padding: 16px 24px; border-radius: 12px; color: white; font-weight: 600; font-size: 14px; z-index: 10000; box-shadow: 0 8px 32px rgba(0,0,0,0.15); animation: slideInRight 0.4s ease; max-width: 400px; }
-        .toast-success { background: var(--verde); }
-        .toast-error { background: var(--vermelho); }
-        .toast-info { background: var(--azul); }
-        .toast-warning { background: var(--dourado); }
+        .toast-success { background: var(--verde); } .toast-error { background: var(--vermelho); }
+        .toast-info { background: var(--azul); } .toast-warning { background: var(--dourado); }
         @keyframes slideInRight { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
 
         .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 9999; justify-content: center; align-items: center; }
@@ -157,9 +143,7 @@
             <input type="file" id="fileInput" accept=".pdf,.xml,.jpg,.jpeg,.png,.doc,.docx,.txt" style="display:none;" onchange="processarNota(event)" />
             <button class="btn-upload" onclick="event.stopPropagation();document.getElementById('fileInput').click()">📂 Selecionar</button>
         </div>
-        <div style="margin-top:12px;font-size:12px;color:var(--cinza);" id="infoArquivo">
-            📎 Nenhum arquivo selecionado
-        </div>
+        <div style="margin-top:12px;font-size:12px;color:var(--cinza);" id="infoArquivo">📎 Nenhum arquivo selecionado</div>
     </div>
 
     <!-- PASSO 2: PREVIEW -->
@@ -176,23 +160,17 @@
     <!-- PASSO 3: VINCULAÇÃO -->
     <div class="card" id="passoVinculo" style="display:none;">
         <h3>🔗 Vincular Nota ao Projeto <span class="badge">Defina o destino</span></h3>
-
         <div class="form-group">
             <label>📋 Projeto *</label>
-            <select id="projetoVinculo" onchange="atualizarSaldo()">
-                <option value="">Selecione um projeto...</option>
-            </select>
+            <select id="projetoVinculo" onchange="atualizarSaldo()"><option value="">Selecione um projeto...</option></select>
         </div>
         <div class="form-group">
             <label>📂 Categoria do Orçamento *</label>
             <select id="categoriaVinculo" onchange="atualizarSaldo()">
                 <option value="">Selecione...</option>
-                <option value="Equipamentos">🖥️ Equipamentos</option>
-                <option value="Materiais">📦 Materiais</option>
-                <option value="Serviços">🛠️ Serviços</option>
-                <option value="Capacitação">📚 Capacitação</option>
-                <option value="Infraestrutura">🏗️ Infraestrutura</option>
-                <option value="Outros">📌 Outros</option>
+                <option value="Equipamentos">🖥️ Equipamentos</option><option value="Materiais">📦 Materiais</option>
+                <option value="Serviços">🛠️ Serviços</option><option value="Capacitação">📚 Capacitação</option>
+                <option value="Infraestrutura">🏗️ Infraestrutura</option><option value="Outros">📌 Outros</option>
             </select>
         </div>
 
@@ -231,15 +209,8 @@
             </div>
         </div>
 
-        <div class="form-group">
-            <label>📅 Data de Entrega *</label>
-            <input type="date" id="dataEntrega" required>
-        </div>
-
-        <div class="form-group">
-            <label>📝 Observações</label>
-            <textarea id="obsVinculo" rows="2" placeholder="Ex: Compra para o projeto..." style="width:100%;padding:10px 12px;border:1px solid #E5E0D8;border-radius:8px;font-size:13px;font-family:'Inter',sans-serif;"></textarea>
-        </div>
+        <div class="form-group"><label>📅 Data de Entrega *</label><input type="date" id="dataEntrega" required></div>
+        <div class="form-group"><label>📝 Observações</label><textarea id="obsVinculo" rows="2" placeholder="Ex: Compra para o projeto..." style="width:100%;padding:10px 12px;border:1px solid #E5E0D8;border-radius:8px;font-size:13px;font-family:'Inter',sans-serif;"></textarea></div>
 
         <div style="background:#F8F4ED;border-radius:10px;padding:16px;margin:12px 0;">
             <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;">
@@ -277,51 +248,25 @@
         </div>
     </div>
 
-    <!-- ============================================================
-    MODAL - INSERÇÃO MANUAL
-    ============================================================ -->
+    <!-- MODAL - INSERÇÃO MANUAL -->
     <div class="modal-overlay" id="modalManual">
         <div class="modal">
             <h2>✏️ Inserir Nota Fiscal Manualmente</h2>
             <p style="color:var(--cinza);font-size:13px;margin-bottom:16px;">Preencha os campos abaixo com os dados da nota fiscal.</p>
-
             <div class="form-row">
-                <div class="form-group">
-                    <label>📋 Número da Nota *</label>
-                    <input type="text" id="manualNumero" placeholder="Ex: 138960">
-                </div>
-                <div class="form-group">
-                    <label>📅 Data Emissão *</label>
-                    <input type="date" id="manualData">
-                </div>
+                <div class="form-group"><label>📋 Número da Nota *</label><input type="text" id="manualNumero" placeholder="Ex: 138960"></div>
+                <div class="form-group"><label>📅 Data Emissão *</label><input type="date" id="manualData"></div>
             </div>
-
-            <div class="form-group">
-                <label>🏢 Emitente (Razão Social) *</label>
-                <input type="text" id="manualEmitente" placeholder="Ex: EBAZAR.COM.BR LTDA">
-            </div>
-
+            <div class="form-group"><label>🏢 Emitente (Razão Social) *</label><input type="text" id="manualEmitente" placeholder="Ex: EBAZAR.COM.BR LTDA"></div>
             <div class="form-row">
-                <div class="form-group">
-                    <label>📄 CNPJ *</label>
-                    <input type="text" id="manualCnpj" placeholder="Ex: 03.007.331/0122-39">
-                </div>
-                <div class="form-group">
-                    <label>📞 Telefone</label>
-                    <input type="text" id="manualTelefone" placeholder="Ex: (11) 99999-9999">
-                </div>
+                <div class="form-group"><label>📄 CNPJ *</label><input type="text" id="manualCnpj" placeholder="Ex: 03.007.331/0122-39"></div>
+                <div class="form-group"><label>📞 Telefone</label><input type="text" id="manualTelefone" placeholder="Ex: (11) 99999-9999"></div>
             </div>
-
-            <div class="form-group">
-                <label>💰 Valor Total *</label>
-                <input type="number" id="manualValor" step="0.01" placeholder="0,00">
-            </div>
-
+            <div class="form-group"><label>💰 Valor Total *</label><input type="number" id="manualValor" step="0.01" placeholder="0,00"></div>
             <div class="form-group">
                 <label>📦 Itens (um por linha: Descrição; Quantidade; Valor Unitário; Valor Total)</label>
                 <textarea id="manualItens" rows="4" placeholder="Ex:&#10;Balanca Bioimpedancia; 1; 39,99; 39,99&#10;Mouse; 2; 25,00; 50,00"></textarea>
             </div>
-
             <div class="btn-group">
                 <button class="btn btn-outline" onclick="fecharModalManual()">Cancelar</button>
                 <button class="btn btn-success" onclick="salvarManual()">✅ Salvar Nota</button>
@@ -358,22 +303,11 @@ var orcamentos = JSON.parse(localStorage.getItem('amovin_orcamentos') || '[]');
 var produtosEspera = JSON.parse(localStorage.getItem('amovin_produtos_espera') || '[]');
 var contatos = JSON.parse(localStorage.getItem('amovin_contatos') || '[]');
 
-// ============================================================
-// FUNÇÕES AUXILIARES
-// ============================================================
 function fm(v) { return 'R$ ' + (v || 0).toFixed(2).replace('.', ','); }
 function salvarNotas() { localStorage.setItem('amovin_notas_fiscais', JSON.stringify(notas)); }
 function salvarProdutosEspera() { localStorage.setItem('amovin_produtos_espera', JSON.stringify(produtosEspera)); }
 function salvarContatos() { localStorage.setItem('amovin_contatos', JSON.stringify(contatos)); }
 
-function limparString(str) {
-    if (!str) return '';
-    return str.replace(/[^\w\s@.\-()/]/g, ' ').replace(/\s+/g, ' ').trim();
-}
-
-// ============================================================
-// USAR CONFIG.JS OU LOCALSTORAGE (FALLBACK)
-// ============================================================
 function getGeminiKey() {
     if (typeof AMOVIN_CONFIG !== 'undefined' && AMOVIN_CONFIG) {
         return AMOVIN_CONFIG.getGeminiKey();
@@ -393,7 +327,6 @@ function setGeminiKey(key) {
 // EXTRAIR TEXTO DO ARQUIVO
 // ============================================================
 async function extrairTextoDoArquivo(file) {
-    // 1. PDF - PDF.js
     if (file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf')) {
         try {
             const arrayBuffer = await file.arrayBuffer();
@@ -405,20 +338,14 @@ async function extrairTextoDoArquivo(file) {
                 textoCompleto += textContent.items.map(item => item.str).join(' ') + '\n';
             }
             return textoCompleto;
-        } catch (e) {
-            throw new Error('Erro ao ler PDF: ' + e.message);
-        }
+        } catch (e) { throw new Error('Erro ao ler PDF: ' + e.message); }
     }
-    // 2. Imagens - Tesseract OCR
     if (file.type.startsWith('image/')) {
         try {
             const resultado = await Tesseract.recognize(file, 'por+eng');
             return resultado.data.text;
-        } catch (e) {
-            throw new Error('Erro ao ler imagem: ' + e.message);
-        }
+        } catch (e) { throw new Error('Erro ao ler imagem: ' + e.message); }
     }
-    // 3. Outros - FileReader
     return new Promise((resolve, reject) => {
         const reader = new FileReader();
         reader.onload = (e) => resolve(e.target.result);
@@ -434,8 +361,7 @@ function verificarChave() {
     var key = getGeminiKey();
     var statusEl = document.getElementById('statusIA');
     var chaveEl = document.getElementById('statusChave');
-
-    if (key && key.length > 10) {
+    if (key && key.length > 10 && key !== 'undefined') {
         statusEl.textContent = '✅ Conectado';
         statusEl.className = 'status-ia sucesso';
         chaveEl.textContent = 'Configurada ✅';
@@ -457,31 +383,17 @@ function configurarChave() {
 
 async function testarConexao() {
     var key = getGeminiKey();
-    if (!key) { mostrarToast('⚠️ Configure a chave primeiro!', 'warning'); return; }
+    if (!key || key.length < 10 || key === 'undefined') { mostrarToast('⚠️ Configure a chave primeiro!', 'warning'); return; }
     try {
         var response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
             method: 'POST',
-            headers: {
-                'Authorization': 'Bearer ' + key,
-                'Content-Type': 'application/json',
-                'HTTP-Referer': window.location.origin,
-                'X-Title': 'AMOVIN ERP'
-            },
-            body: JSON.stringify({
-                model: 'google/gemini-2.5-flash',
-                max_tokens: 200,
-                messages: [{ role: 'user', content: 'Diga "olá"' }]
-            })
+            headers: { 'Authorization': 'Bearer ' + key, 'Content-Type': 'application/json', 'HTTP-Referer': window.location.origin, 'X-Title': 'AMOVIN ERP' },
+            body: JSON.stringify({ model: 'google/gemini-2.5-flash', max_tokens: 200, messages: [{ role: 'user', content: 'Diga "olá"' }] })
         });
         var data = await response.json();
-        if (data.choices && data.choices[0]) {
-            mostrarToast('✅ Conexão OK!', 'success');
-        } else {
-            mostrarToast('❌ Erro: ' + (data.error?.message || 'desconhecido'), 'error');
-        }
-    } catch (e) {
-        mostrarToast('❌ Erro: ' + e.message, 'error');
-    }
+        if (data.choices && data.choices[0]) { mostrarToast('✅ Conexão OK!', 'success'); } 
+        else { mostrarToast('❌ Erro: ' + (data.error?.message || 'desconhecido'), 'error'); }
+    } catch (e) { mostrarToast('❌ Erro: ' + e.message, 'error'); }
 }
 
 // ============================================================
@@ -502,29 +414,12 @@ async function processarNota(event) {
 
     try {
         textoExtraido = await extrairTextoDoArquivo(file);
-
         if (!textoExtraido || textoExtraido.trim().length < 10) {
-            info.innerHTML = '⚠️ Não foi possível extrair texto. A nota pode estar ilegível.';
-            document.getElementById('statusExtraido').textContent = '⚠️ Ilegível';
-            document.getElementById('statusExtraido').className = 'badge badge-ia status-ia aviso';
-            preview.innerHTML = `
-                <div style="text-align:center;padding:20px;">
-                    <span style="font-size:48px;">⚠️</span>
-                    <p style="margin-top:12px;color:var(--dourado);font-weight:600;">Não foi possível ler a nota fiscal automaticamente.</p>
-                    <p style="color:var(--cinza);font-size:13px;margin-top:8px;">O arquivo pode estar ilegível ou em um formato não suportado.</p>
-                    <div style="margin-top:16px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
-                        <button class="btn btn-outline" onclick="limparDados()" style="border-color:var(--cinza);">🔄 Tentar Novamente</button>
-                        <button class="btn btn-warning" onclick="fecharPreviewEabrirManual()">✏️ Inserir Manualmente</button>
-                    </div>
-                </div>
-            `;
-            return;
+            throw new Error('Arquivo ilegível ou vazio.');
         }
-
         info.innerHTML = '📎 Arquivo lido: ' + file.name + ' (' + textoExtraido.length + ' caracteres)';
         document.getElementById('statusExtraido').textContent = '🤖 Analisando com IA...';
         await extrairDadosComIA(textoExtraido);
-
     } catch (error) {
         console.error('❌ Erro:', error);
         info.innerHTML = '❌ Erro ao processar';
@@ -532,109 +427,79 @@ async function processarNota(event) {
         document.getElementById('statusExtraido').className = 'badge badge-ia status-ia erro';
         preview.innerHTML = `
             <div style="text-align:center;padding:20px;">
-                <span style="font-size:48px;">❌</span>
-                <p style="margin-top:12px;color:var(--vermelho);font-weight:600;">Erro ao processar o arquivo</p>
-                <p style="color:var(--cinza);font-size:13px;margin-top:8px;">${error.message || 'Tente novamente ou insira manualmente.'}</p>
+                <span style="font-size:48px;">⚠️</span>
+                <p style="margin-top:12px;color:var(--dourado);font-weight:600;">Não foi possível ler a nota automaticamente.</p>
+                <p style="color:var(--cinza);font-size:13px;margin-top:8px;">${error.message || 'A nota pode estar ilegível.'}</p>
                 <div style="margin-top:16px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
                     <button class="btn btn-outline" onclick="limparDados()" style="border-color:var(--cinza);">🔄 Tentar Novamente</button>
                     <button class="btn btn-warning" onclick="fecharPreviewEabrirManual()">✏️ Inserir Manualmente</button>
                 </div>
-            </div>
-        `;
+            </div>`;
     }
 }
 
 // ============================================================
-// EXTRAIR DADOS COM IA
+// EXTRAIR DADOS COM IA (BLINDADO CONTRA ERRO 401)
 // ============================================================
 async function extrairDadosComIA(texto) {
     var preview = document.getElementById('previewIA');
     var key = getGeminiKey();
 
-    if (!key || key.length < 10) {
-        mostrarToast('⚠️ Chave não configurada. Use a inserção manual.', 'warning');
+    // 🔒 BLINDAGEM: Verifica a chave ANTES de tentar enviar
+    if (!key || key.trim() === '' || key === 'undefined' || key.length < 10) {
         document.getElementById('statusExtraido').textContent = '⚠️ Sem chave';
         document.getElementById('statusExtraido').className = 'badge badge-ia status-ia aviso';
         preview.innerHTML = `
             <div style="text-align:center;padding:20px;">
                 <span style="font-size:48px;">🔑</span>
-                <p style="margin-top:12px;color:var(--dourado);font-weight:600;">Chave da IA não configurada.</p>
-                <p style="color:var(--cinza);font-size:13px;margin-top:8px;">Configure a chave OpenRouter ou insira a nota manualmente.</p>
+                <p style="margin-top:12px;color:var(--dourado);font-weight:600;">Chave da IA não configurada ou inválida.</p>
+                <p style="color:var(--cinza);font-size:13px;margin-top:8px;">Para evitar erros, por favor, insira os dados manualmente ou configure a chave.</p>
                 <div style="margin-top:16px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
                     <button class="btn btn-primary" onclick="configurarChave()" style="background:var(--roxo);">🔑 Configurar Chave</button>
                     <button class="btn btn-warning" onclick="fecharPreviewEabrirManual()">✏️ Inserir Manualmente</button>
                 </div>
-            </div>
-        `;
+            </div>`;
         return;
     }
 
     var prompt = `Extraia os campos da nota fiscal abaixo e retorne APENAS UM JSON VÁLIDO.
-
-Campos obrigatórios:
-- numero: Número da Nota (string)
-- emitente: Nome do Emitente (string)
-- cnpj: CNPJ do Emitente (string, apenas números)
-- telefone: Telefone do Emitente (string, se disponível)
-- dataEmissao: Data de Emissão (string no formato YYYY-MM-DD)
-- valorTotal: Valor Total (número, use 0 se não encontrar)
-- itens: Lista com descricao (string), quantidade (número), valor_unitario (número), valor_total (número)
-
-Texto da nota:
-${texto.substring(0, 6000)}
-
-IMPORTANTE:
-- Se algum campo não for encontrado, use null
-- O JSON deve ser válido e conter TODOS os campos acima
-- Retorne APENAS o JSON, sem texto adicional`;
+Campos obrigatórios: numero, emitente, cnpj (apenas números), telefone, dataEmissao (YYYY-MM-DD), valorTotal (número), itens (array com descricao, quantidade, valor_unitario, valor_total).
+Texto da nota: ${texto.substring(0, 6000)}
+IMPORTANTE: Se algum campo não for encontrado, use null. Retorne APENAS o JSON, sem texto adicional.`;
 
     try {
         var response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
             method: 'POST',
-            headers: {
-                'Authorization': 'Bearer ' + key,
-                'Content-Type': 'application/json',
-                'HTTP-Referer': window.location.origin,
-                'X-Title': 'AMOVIN ERP'
+            headers: { 
+                'Authorization': 'Bearer ' + key, 
+                'Content-Type': 'application/json', 
+                'HTTP-Referer': window.location.origin, 
+                'X-Title': 'AMOVIN ERP' 
             },
-            body: JSON.stringify({
-                model: 'google/gemini-2.5-flash',
-                max_tokens: 6000,
-                messages: [{ role: 'user', content: prompt }]
-            })
+            body: JSON.stringify({ model: 'google/gemini-2.5-flash', max_tokens: 4000, messages: [{ role: 'user', content: prompt }] })
         });
 
+        // 🔒 BLINDAGEM: Trata erro 401 e outros erros HTTP explicitamente
+        if (!response.ok) {
+            if (response.status === 401) throw new Error('Erro de autenticação (401). Sua chave é inválida ou expirou.');
+            if (response.status === 429) throw new Error('Limite de requisições atingido (429). Tente novamente em instantes.');
+            throw new Error('Erro na API: ' + response.status);
+        }
+
         var data = await response.json();
-
-        if (data.error) {
-            throw new Error(data.error.message || 'Erro na API');
-        }
-
-        if (!data.choices || !data.choices[0] || !data.choices[0].message) {
-            throw new Error('Resposta inválida da IA');
-        }
+        if (data.error) throw new Error(data.error.message || 'Erro na API');
+        if (!data.choices || !data.choices[0] || !data.choices[0].message) throw new Error('Resposta inválida da IA');
 
         var resposta = data.choices[0].message.content;
         var match = resposta.match(/\{[\s\S]*\}/);
-        if (!match) {
-            throw new Error('JSON não encontrado na resposta');
-        }
+        if (!match) throw new Error('JSON não encontrado na resposta da IA');
 
         var dados = JSON.parse(match[0]);
-
-        if (!dados.numero && !dados.emitente) {
-            throw new Error('Dados insuficientes extraídos. A nota pode estar ilegível.');
-        }
+        if (!dados.numero && !dados.emitente) throw new Error('Dados insuficientes extraídos. A nota pode estar ilegível.');
 
         dadosNota = dados;
-
         if (!dados.itens || dados.itens.length === 0) {
-            dados.itens = [{
-                descricao: 'Item da NF ' + (dados.numero || ''),
-                quantidade: 1,
-                valor_unitario: dados.valorTotal || 0,
-                valor_total: dados.valorTotal || 0
-            }];
+            dados.itens = [{ descricao: 'Item da NF ' + (dados.numero || ''), quantidade: 1, valor_unitario: dados.valorTotal || 0, valor_total: dados.valorTotal || 0 }];
         }
 
         document.getElementById('statusExtraido').textContent = '✅ Concluído';
@@ -650,14 +515,13 @@ IMPORTANTE:
         preview.innerHTML = `
             <div style="text-align:center;padding:20px;">
                 <span style="font-size:48px;">⚠️</span>
-                <p style="margin-top:12px;color:var(--dourado);font-weight:600;">Não foi possível extrair os dados automaticamente.</p>
-                <p style="color:var(--cinza);font-size:13px;margin-top:8px;">${e.message || 'A nota pode estar ilegível ou incompleta.'}</p>
+                <p style="margin-top:12px;color:var(--dourado);font-weight:600;">Falha na leitura automática.</p>
+                <p style="color:var(--cinza);font-size:13px;margin-top:8px;">${e.message}</p>
                 <div style="margin-top:16px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
                     <button class="btn btn-outline" onclick="limparDados()" style="border-color:var(--cinza);">🔄 Tentar Novamente</button>
-                    <button class="btn btn-warning" onclick="fecharPreviewEabrirManual()">✏️ Inserir Manualmente</button>
+                    <button class="btn btn-warning" onclick="fecharPreviewEabrirManual()">✏️ Inserir Manualmente (Recomendado)</button>
                 </div>
-            </div>
-        `;
+            </div>`;
     }
 }
 
@@ -666,7 +530,6 @@ IMPORTANTE:
 // ============================================================
 function mostrarPreview(dados) {
     var preview = document.getElementById('previewIA');
-
     var itensHtml = '';
     if (dados.itens && dados.itens.length > 0) {
         itensHtml = '<div class="preview-itens"><div class="item-linha-header"><span>Descrição</span><span>Qtd</span><span>Unitário</span><span>Total</span></div>';
@@ -675,7 +538,6 @@ function mostrarPreview(dados) {
         });
         itensHtml += '</div>';
     }
-
     preview.innerHTML = `
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
             <span style="font-weight:700;font-size:14px;color:var(--roxo);">🧠 Dados Extraídos</span>
@@ -692,25 +554,20 @@ function mostrarPreview(dados) {
         ${itensHtml}
         <div style="margin-top:12px;font-size:11px;color:var(--cinza);padding:8px;background:white;border-radius:8px;border:1px solid #E5E0D8;">
             🤖 Processado com Gemini 2.5 Flash via OpenRouter
-        </div>
-    `;
-
+        </div>`;
     document.getElementById('resumoNumero').textContent = dados.numero || '---';
     document.getElementById('resumoEmitente').textContent = dados.emitente || '---';
     document.getElementById('resumoValor').textContent = fm(dados.valorTotal || 0);
 }
 
 // ============================================================
-// FECHAR PREVIEW E ABRIR MANUAL
+// MODAL MANUAL E FLUXO
 // ============================================================
 function fecharPreviewEabrirManual() {
     document.getElementById('passoPreview').style.display = 'none';
     abrirModalManual();
 }
 
-// ============================================================
-// MODAL MANUAL
-// ============================================================
 function abrirModalManual() {
     document.getElementById('modalManual').classList.add('ativo');
     document.getElementById('manualData').value = new Date().toISOString().split('T')[0];
@@ -729,9 +586,7 @@ function salvarManual() {
     var valor = parseFloat(document.getElementById('manualValor').value) || 0;
     var itensText = document.getElementById('manualItens').value.trim();
 
-    if (!numero) { mostrarToast('⚠️ Número da nota é obrigatório!', 'warning'); return; }
-    if (!emitente) { mostrarToast('⚠️ Emitente é obrigatório!', 'warning'); return; }
-    if (!data) { mostrarToast('⚠️ Data é obrigatória!', 'warning'); return; }
+    if (!numero || !emitente || !data) { mostrarToast('⚠️ Preencha Número, Emitente e Data!', 'warning'); return; }
 
     var itens = [];
     if (itensText) {
@@ -739,55 +594,25 @@ function salvarManual() {
         linhas.forEach(function(linha) {
             var partes = linha.split(';').map(function(p) { return p.trim(); });
             if (partes.length >= 4) {
-                itens.push({
-                    descricao: partes[0],
-                    quantidade: parseFloat(partes[1]) || 1,
-                    valor_unitario: parseFloat(partes[2].replace(',', '.')) || 0,
-                    valor_total: parseFloat(partes[3].replace(',', '.')) || 0
-                });
+                itens.push({ descricao: partes[0], quantidade: parseFloat(partes[1]) || 1, valor_unitario: parseFloat(partes[2].replace(',', '.')) || 0, valor_total: parseFloat(partes[3].replace(',', '.')) || 0 });
             } else if (partes.length === 1) {
-                itens.push({
-                    descricao: partes[0],
-                    quantidade: 1,
-                    valor_unitario: valor,
-                    valor_total: valor
-                });
+                itens.push({ descricao: partes[0], quantidade: 1, valor_unitario: valor, valor_total: valor });
             }
         });
     }
+    if (itens.length === 0) { itens.push({ descricao: 'Item da NF ' + numero, quantidade: 1, valor_unitario: valor, valor_total: valor }); }
 
-    if (itens.length === 0) {
-        itens.push({
-            descricao: 'Item da NF ' + numero,
-            quantidade: 1,
-            valor_unitario: valor,
-            valor_total: valor
-        });
-    }
-
-    dadosNota = {
-        numero: numero,
-        emitente: emitente,
-        cnpj: cnpj,
-        telefone: telefone,
-        dataEmissao: data,
-        valorTotal: valor,
-        itens: itens,
-        manual: true
-    };
-
+    dadosNota = { numero: numero, emitente: emitente, cnpj: cnpj, telefone: telefone, dataEmissao: data, valorTotal: valor, itens: itens, manual: true };
+    
     fecharModalManual();
     document.getElementById('passoPreview').style.display = 'block';
     document.getElementById('statusExtraido').textContent = '✏️ Manual';
     document.getElementById('statusExtraido').className = 'badge badge-ia status-ia sucesso';
     document.getElementById('btnAvancar').disabled = false;
     mostrarPreview(dadosNota);
-    mostrarToast('✅ Dados inseridos manualmente!', 'success');
+    mostrarToast('✅ Dados inseridos manualmente com sucesso!', 'success');
 }
 
-// ============================================================
-// AVANÇAR PARA VÍNCULO
-// ============================================================
 function avancarParaVinculo() {
     if (!dadosNota) { mostrarToast('⚠️ Nenhuma nota processada.', 'warning'); return; }
     document.getElementById('passoPreview').style.display = 'none';
@@ -802,14 +627,11 @@ function voltarPreview() {
     document.getElementById('passoPreview').style.display = 'block';
 }
 
-// ============================================================
-// PREENCHER PROJETOS
-// ============================================================
 function preencherProjetos() {
     var select = document.getElementById('projetoVinculo');
     select.innerHTML = '<option value="">Selecione um projeto...</option>';
     projetos.forEach(function(p) {
-        if (p.status === 'ativo') {
+        if (p.status === 'ativo' || !p.status) {
             select.innerHTML += '<option value="' + p.id + '">' + p.nome + ' (R$ ' + (p.orcamento_total || 0).toFixed(2).replace('.', ',') + ')</option>';
         }
     });
@@ -817,14 +639,7 @@ function preencherProjetos() {
 
 function sugerirProjeto(emitente) {
     if (!emitente || emitente === '---') return;
-    var keywords = {
-        'informática': 'Inclusão Digital',
-        'computador': 'Inclusão Digital',
-        'notebook': 'Inclusão Digital',
-        'esporte': 'Esporte para Todos',
-        'bola': 'Esporte para Todos',
-        'material': 'Inclusão Digital'
-    };
+    var keywords = { 'informática': 'Inclusão Digital', 'computador': 'Inclusão Digital', 'notebook': 'Inclusão Digital', 'esporte': 'Esporte para Todos', 'bola': 'Esporte para Todos', 'material': 'Inclusão Digital' };
     var texto = emitente.toLowerCase();
     for (var key in keywords) {
         if (texto.indexOf(key) >= 0) {
@@ -845,16 +660,11 @@ function atualizarSaldo() {
     document.getElementById('saldoPrevisto').textContent = fm(previsto);
     document.getElementById('saldoRealizado').textContent = fm(realizado);
     document.getElementById('saldoDisponivel').textContent = fm(previsto - realizado);
-
-    var saldo = previsto - realizado;
-    if (saldo < (dadosNota ? dadosNota.valorTotal || 0 : 0)) {
+    if ((previsto - realizado) < (dadosNota ? dadosNota.valorTotal || 0 : 0)) {
         mostrarToast('⚠️ Atenção: Saldo insuficiente para esta nota!', 'warning');
     }
 }
 
-// ============================================================
-// SELECIONAR DESTINO E MÓDULOS
-// ============================================================
 function selecionarDestino(el) {
     document.querySelectorAll('.destino-card').forEach(function(c) { c.classList.remove('selecionado'); });
     el.classList.add('selecionado');
@@ -869,7 +679,7 @@ function toggleModulo(el) {
 }
 
 // ============================================================
-// CONFIRMAR VÍNCULO
+// CONFIRMAR VÍNCULO E DIRECIONAMENTO (CRM, SALA DE ESPERA, ORÇAMENTO)
 // ============================================================
 function confirmarVinculo() {
     var projetoId = parseInt(document.getElementById('projetoVinculo').value);
@@ -877,58 +687,31 @@ function confirmarVinculo() {
     var dataEntrega = document.getElementById('dataEntrega').value;
     var obs = document.getElementById('obsVinculo').value.trim();
 
-    if (!projetoId) { mostrarToast('⚠️ Selecione um projeto!', 'warning'); return; }
-    if (!categoria) { mostrarToast('⚠️ Selecione uma categoria!', 'warning'); return; }
-    if (!dataEntrega) { mostrarToast('⚠️ Data de entrega é obrigatória!', 'warning'); return; }
+    if (!projetoId || !categoria || !dataEntrega) { mostrarToast('⚠️ Preencha Projeto, Categoria e Data!', 'warning'); return; }
 
     var valorNota = dadosNota ? dadosNota.valorTotal || 0 : 0;
     var numeroInterno = 'AMOVIN-' + new Date().getFullYear() + '-' + String(notas.length + 1).padStart(4, '0');
 
     var novaNota = {
-        id: Date.now(),
-        numero: dadosNota.numero || '*',
-        numeroInterno: numeroInterno,
-        emitente: {
-            razaoSocial: dadosNota.emitente || 'Fornecedor',
-            cnpj: dadosNota.cnpj || '',
-            telefone: dadosNota.telefone || ''
-        },
-        valores: { valorTotal: valorNota },
-        dataEmissao: dadosNota.dataEmissao || '',
-        dataEntrega: dataEntrega,
-        itens: dadosNota.itens || [],
-        projeto_id: projetoId,
-        categoria_orcamento: categoria,
-        destino: destinoSelecionado,
-        modulos: modulosSelecionados,
-        status: 'vinculado',
-        observacao: obs,
-        data_criacao: new Date().toISOString(),
-        origem: dadosNota.manual ? 'manual' : 'ia'
+        id: Date.now(), numero: dadosNota.numero || '*', numeroInterno: numeroInterno,
+        emitente: { razaoSocial: dadosNota.emitente || 'Fornecedor', cnpj: dadosNota.cnpj || '', telefone: dadosNota.telefone || '' },
+        valores: { valorTotal: valorNota }, dataEmissao: dadosNota.dataEmissao || '', dataEntrega: dataEntrega,
+        itens: dadosNota.itens || [], projeto_id: projetoId, categoria_orcamento: categoria,
+        destino: destinoSelecionado, modulos: modulosSelecionados, status: 'vinculado', observacao: obs,
+        data_criacao: new Date().toISOString(), origem: dadosNota.manual ? 'manual' : 'ia'
     };
 
     notas.push(novaNota);
     salvarNotas();
 
     var orc = orcamentos.find(function(o) { return o.projeto_id === projetoId && o.categoria === categoria; });
-    if (orc) {
-        orc.realizado += valorNota;
-        localStorage.setItem('amovin_orcamentos', JSON.stringify(orcamentos));
-    } else {
-        orcamentos.push({
-            projeto_id: projetoId,
-            categoria: categoria,
-            previsto: 0,
-            realizado: valorNota
-        });
-        localStorage.setItem('amovin_orcamentos', JSON.stringify(orcamentos));
-    }
+    if (orc) { orc.realizado += valorNota; localStorage.setItem('amovin_orcamentos', JSON.stringify(orcamentos)); } 
+    else { orcamentos.push({ projeto_id: projetoId, categoria: categoria, previsto: 0, realizado: valorNota }); localStorage.setItem('amovin_orcamentos', JSON.stringify(orcamentos)); }
 
     direcionarParaModulos(novaNota);
 
     document.getElementById('passoVinculo').style.display = 'none';
     document.getElementById('passoConfirmacao').style.display = 'block';
-
     var projeto = projetos.find(function(p) { return p.id === projetoId; });
     document.getElementById('confProjeto').textContent = projeto ? projeto.nome : '---';
     document.getElementById('confCategoria').textContent = categoria;
@@ -940,52 +723,32 @@ function confirmarVinculo() {
     mostrarToast('✅ Nota vinculada com sucesso! Nº: ' + numeroInterno, 'success');
 }
 
-// ============================================================
-// DIRECIONAR PARA MÓDULOS
-// ============================================================
 function direcionarParaModulos(nota) {
-    if (modulosSelecionados.indexOf('crm') >= 0 && nota.emitente && nota.emitente.razaoSocial && nota.emitente.razaoSocial !== '---') {
-        var existe = contatos.some(function(c) {
-            return c.nome === nota.emitente.razaoSocial || c.cnpj === nota.emitente.cnpj;
-        });
+    // 1. CRM: Cadastra fornecedor se não existir
+    if (modulosSelecionados.indexOf('crm') >= 0 && nota.emitente && nota.emitente.razaoSocial && nota.emitente.razaoSocial !== '---' && nota.emitente.razaoSocial !== 'Fornecedor') {
+        var existe = contatos.some(function(c) { return (c.cnpj && c.cnpj === nota.emitente.cnpj) || c.nome === nota.emitente.razaoSocial; });
         if (!existe) {
             contatos.push({
-                id: Date.now(),
-                nome: nota.emitente.razaoSocial,
-                cargo: 'Fornecedor',
-                categoria: 'Fornecedor',
-                tel1: nota.emitente.telefone || '',
-                cnpj: nota.emitente.cnpj || '',
-                origem: 'nota_fiscal',
+                id: Date.now(), nome: nota.emitente.razaoSocial, cargo: 'Fornecedor', categoria: 'Fornecedor',
+                tel1: nota.emitente.telefone || '', cnpj: nota.emitente.cnpj || '', origem: 'nota_fiscal',
                 obs: 'Cadastrado via NF ' + nota.numero + ' - ' + nota.numeroInterno
             });
             salvarContatos();
-            mostrarToast('✅ Fornecedor enviado para CRM!', 'success');
+            mostrarToast('✅ Fornecedor enviado para o CRM!', 'success');
         }
     }
 
+    // 2. Sala de Espera: Envia produtos para definição de BP
     if (nota.itens && nota.itens.length > 0) {
         nota.itens.forEach(function(item) {
             var nomeProduto = item.descricao || 'Item da NF ' + nota.numero;
-
-            var produtoEspera = {
-                id: Date.now() + Math.random() * 1000,
-                descricao: nomeProduto,
-                quantidade: item.quantidade || 1,
-                valor_unitario: item.valor_unitario || 0,
-                valor_total: item.valor_total || (item.valor_unitario || 0) * (item.quantidade || 1),
-                nota_id: nota.id,
-                nota_numero: nota.numero,
-                projeto_id: nota.projeto_id,
-                categoria: nota.categoria_orcamento || 'Diversos',
-                destino_sugerido: nota.destino || 'patrimonio',
-                status: 'aguardando',
-                data_criacao: new Date().toISOString()
-            };
-
-            produtosEspera.push(produtoEspera);
+            produtosEspera.push({
+                id: Date.now() + Math.random() * 1000, descricao: nomeProduto, quantidade: item.quantidade || 1,
+                valor_unitario: item.valor_unitario || 0, valor_total: item.valor_total || (item.valor_unitario || 0) * (item.quantidade || 1),
+                nota_id: nota.id, nota_numero: nota.numero, projeto_id: nota.projeto_id, categoria: nota.categoria_orcamento || 'Diversos',
+                destino_sugerido: nota.destino || 'patrimonio', status: 'aguardando', data_criacao: new Date().toISOString()
+            });
         });
-
         salvarProdutosEspera();
         mostrarToast('📦 ' + nota.itens.length + ' produto(s) enviado(s) para Sala de Espera!', 'success');
     }
@@ -995,27 +758,17 @@ function direcionarParaModulos(nota) {
 // FUNÇÕES DE NAVEGAÇÃO
 // ============================================================
 function limparDados() {
-    dadosNota = null;
-    textoExtraido = '';
-    document.getElementById('previewIA').innerHTML = '';
-    document.getElementById('previewIA').classList.remove('visivel');
-    document.getElementById('passoPreview').style.display = 'none';
-    document.getElementById('passoVinculo').style.display = 'none';
+    dadosNota = null; textoExtraido = '';
+    document.getElementById('previewIA').innerHTML = ''; document.getElementById('previewIA').classList.remove('visivel');
+    document.getElementById('passoPreview').style.display = 'none'; document.getElementById('passoVinculo').style.display = 'none';
     document.getElementById('passoConfirmacao').style.display = 'none';
     document.getElementById('infoArquivo').innerHTML = '📎 Nenhum arquivo selecionado';
-    document.getElementById('btnAvancar').disabled = true;
-    document.getElementById('fileInput').value = '';
+    document.getElementById('btnAvancar').disabled = true; document.getElementById('fileInput').value = '';
     document.getElementById('passoUpload').style.display = 'block';
 }
 
-function novaNota() {
-    document.getElementById('passoConfirmacao').style.display = 'none';
-    limparDados();
-}
-
-function verNotaVinculada() {
-    mostrarToast('📋 Nota salva com sucesso!', 'info');
-}
+function novaNota() { document.getElementById('passoConfirmacao').style.display = 'none'; limparDados(); }
+function verNotaVinculada() { mostrarToast('📋 Nota salva com sucesso no histórico!', 'info'); }
 
 function mostrarToast(mensagem, tipo) {
     var toast = document.createElement('div');
@@ -1024,38 +777,23 @@ function mostrarToast(mensagem, tipo) {
     toast.textContent = mensagem;
     document.body.appendChild(toast);
     setTimeout(function() {
-        toast.style.opacity = '0';
-        toast.style.transform = 'translateX(100%)';
-        toast.style.transition = 'all 0.4s ease';
+        toast.style.opacity = '0'; toast.style.transform = 'translateX(100%)'; toast.style.transition = 'all 0.4s ease';
         setTimeout(function() { toast.remove(); }, 400);
     }, 4000);
 }
 
-// ============================================================
-// DRAG AND DROP
-// ============================================================
+// Drag and Drop
 var dz = document.getElementById('dropzone');
 dz.addEventListener('dragover', function(e) { e.preventDefault(); this.classList.add('dragover'); });
 dz.addEventListener('dragleave', function(e) { e.preventDefault(); this.classList.remove('dragover'); });
 dz.addEventListener('drop', function(e) {
-    e.preventDefault();
-    this.classList.remove('dragover');
+    e.preventDefault(); this.classList.remove('dragover');
     var files = e.dataTransfer.files;
-    if (files.length > 0) {
-        var input = document.getElementById('fileInput');
-        input.files = files;
-        input.dispatchEvent(new Event('change'));
-    }
+    if (files.length > 0) { var input = document.getElementById('fileInput'); input.files = files; input.dispatchEvent(new Event('change')); }
 });
 
-// ============================================================
-// VERIFICAÇÃO DE SESSÃO
-// ============================================================
+// Inicialização
 if (!sessionStorage.getItem('amovin_logado')) { window.location.href = 'index.html'; }
-
-// ============================================================
-// INICIALIZAÇÃO
-// ============================================================
 document.addEventListener('DOMContentLoaded', function() {
     verificarChave();
     console.log('📄 Notas Fiscais - AMOVIN ERP');
