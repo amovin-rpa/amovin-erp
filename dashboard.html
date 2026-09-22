@@ -18,11 +18,7 @@
             --branco: #FFFFFF;
             --vermelho: #E53935;
         }
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Inter', system-ui, sans-serif;
             background: #F8F4ED;
@@ -43,20 +39,9 @@
             flex-wrap: wrap;
             gap: 10px;
         }
-        .topo-bar h1 {
-            font-size: 24px;
-            font-weight: 700;
-            color: var(--grafite);
-        }
-        .topo-bar h1 span {
-            color: var(--laranja);
-        }
-        .topo-bar .sub {
-            font-size: 12px;
-            color: var(--cinza);
-            font-weight: 400;
-            display: block;
-        }
+        .topo-bar h1 { font-size: 24px; font-weight: 700; color: var(--grafite); }
+        .topo-bar h1 span { color: var(--laranja); }
+        .topo-bar .sub { font-size: 12px; color: var(--cinza); font-weight: 400; display: block; }
         .btn-sair-topo {
             background: #F8F4ED;
             color: #1A1A1A;
@@ -95,15 +80,9 @@
             border-radius: 20px;
             background: #F8F4ED;
         }
-        .status-bar .status-firebase .conectado {
-            color: var(--verde);
-        }
-        .status-bar .status-firebase .offline {
-            color: var(--vermelho);
-        }
-        .status-bar .status-firebase .verificando {
-            color: var(--cinza);
-        }
+        .status-bar .status-firebase .conectado { color: var(--verde); }
+        .status-bar .status-firebase .offline { color: var(--vermelho); }
+        .status-bar .status-firebase .verificando { color: var(--cinza); }
 
         /* ============================================================
            BANNER DO LINK PÚBLICO
@@ -130,9 +109,7 @@
             align-items: center;
             gap: 14px;
         }
-        .public-link-banner .info .icone {
-            font-size: 32px;
-        }
+        .public-link-banner .info .icone { font-size: 32px; }
         .public-link-banner .info .texto h4 {
             font-size: 16px;
             color: var(--grafite);
@@ -166,15 +143,10 @@
             font-family: 'Inter', sans-serif;
             background: white;
             min-width: 280px;
-            transition: border 0.2s;
         }
         .public-link-banner .link-actions input:focus {
             outline: none;
             border-color: var(--laranja);
-        }
-        .public-link-banner .link-actions input::selection {
-            background: var(--laranja);
-            color: white;
         }
         .btn-copiar-link {
             padding: 10px 20px;
@@ -185,14 +157,9 @@
             cursor: pointer;
             font-weight: 600;
             font-size: 13px;
-            transition: background 0.2s;
         }
-        .btn-copiar-link:hover {
-            background: var(--laranja-escuro);
-        }
-        .btn-copiar-link.copiado {
-            background: var(--verde);
-        }
+        .btn-copiar-link:hover { background: var(--laranja-escuro); }
+        .btn-copiar-link.copiado { background: var(--verde); }
         .btn-abrir-link {
             padding: 10px 20px;
             background: var(--azul);
@@ -202,12 +169,9 @@
             cursor: pointer;
             font-weight: 600;
             font-size: 13px;
-            transition: background 0.2s;
             text-decoration: none;
         }
-        .btn-abrir-link:hover {
-            background: #1565C0;
-        }
+        .btn-abrir-link:hover { background: #1565C0; }
 
         .card {
             background: #FFFFFF;
@@ -256,33 +220,13 @@
             transform: translateY(-3px);
             box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
         }
-        .kpi-card .kpi-icon {
-            font-size: 28px;
-            display: block;
-            margin-bottom: 6px;
-        }
-        .kpi-card .kpi-valor {
-            font-size: 28px;
-            font-weight: 800;
-            color: var(--grafite);
-        }
-        .kpi-card .kpi-label {
-            font-size: 12px;
-            color: var(--cinza);
-            margin-top: 2px;
-        }
-        .kpi-card .kpi-valor.verde {
-            color: var(--verde);
-        }
-        .kpi-card .kpi-valor.laranja {
-            color: var(--laranja);
-        }
-        .kpi-card .kpi-valor.vermelho {
-            color: var(--vermelho);
-        }
-        .kpi-card .kpi-valor.azul {
-            color: var(--azul);
-        }
+        .kpi-card .kpi-icon { font-size: 28px; display: block; margin-bottom: 6px; }
+        .kpi-card .kpi-valor { font-size: 28px; font-weight: 800; color: var(--grafite); }
+        .kpi-card .kpi-label { font-size: 12px; color: var(--cinza); margin-top: 2px; }
+        .kpi-card .kpi-valor.verde { color: var(--verde); }
+        .kpi-card .kpi-valor.laranja { color: var(--laranja); }
+        .kpi-card .kpi-valor.vermelho { color: var(--vermelho); }
+        .kpi-card .kpi-valor.azul { color: var(--azul); }
 
         .alertas-grid {
             display: grid;
@@ -298,55 +242,19 @@
             gap: 14px;
             border-left: 4px solid;
         }
-        .alerta-item .icone {
-            font-size: 24px;
-        }
-        .alerta-item .texto {
-            flex: 1;
-        }
-        .alerta-item .texto .titulo {
-            font-weight: 600;
-            font-size: 13px;
-            color: var(--grafite);
-        }
-        .alerta-item .texto .desc {
-            font-size: 12px;
-            color: var(--cinza);
-        }
-        .alerta-item .btn-link {
-            font-size: 11px;
-            font-weight: 600;
-            color: var(--azul);
-            text-decoration: none;
-        }
-        .alerta-item .btn-link:hover {
-            text-decoration: underline;
-        }
+        .alerta-item .icone { font-size: 24px; }
+        .alerta-item .texto { flex: 1; }
+        .alerta-item .texto .titulo { font-weight: 600; font-size: 13px; color: var(--grafite); }
+        .alerta-item .texto .desc { font-size: 12px; color: var(--cinza); }
+        .alerta-item .btn-link { font-size: 11px; font-weight: 600; color: var(--azul); text-decoration: none; }
+        .alerta-item .btn-link:hover { text-decoration: underline; }
+        .alerta-urgente { background: #FFEBEE; border-color: var(--vermelho); }
+        .alerta-atencao { background: #FFF3E0; border-color: #E65100; }
+        .alerta-info { background: #E3F2FD; border-color: var(--azul); }
+        .alerta-sucesso { background: #E8F5E9; border-color: var(--verde); }
 
-        .alerta-urgente {
-            background: #FFEBEE;
-            border-color: var(--vermelho);
-        }
-        .alerta-atencao {
-            background: #FFF3E0;
-            border-color: #E65100;
-        }
-        .alerta-info {
-            background: #E3F2FD;
-            border-color: var(--azul);
-        }
-        .alerta-sucesso {
-            background: #E8F5E9;
-            border-color: var(--verde);
-        }
-
-        .projeto-item {
-            padding: 12px 0;
-            border-bottom: 1px solid #F0E9DF;
-        }
-        .projeto-item:last-child {
-            border-bottom: none;
-        }
+        .projeto-item { padding: 12px 0; border-bottom: 1px solid #F0E9DF; }
+        .projeto-item:last-child { border-bottom: none; }
         .projeto-item .header {
             display: flex;
             justify-content: space-between;
@@ -354,19 +262,9 @@
             flex-wrap: wrap;
             gap: 6px;
         }
-        .projeto-item .header .nome {
-            font-weight: 600;
-            font-size: 14px;
-            color: var(--grafite);
-        }
-        .projeto-item .header .valores {
-            font-size: 13px;
-            color: var(--cinza);
-        }
-        .projeto-item .header .valores .realizado {
-            color: var(--laranja);
-            font-weight: 600;
-        }
+        .projeto-item .header .nome { font-weight: 600; font-size: 14px; color: var(--grafite); }
+        .projeto-item .header .valores { font-size: 13px; color: var(--cinza); }
+        .projeto-item .header .valores .realizado { color: var(--laranja); font-weight: 600; }
         .projeto-item .barra {
             width: 100%;
             height: 6px;
@@ -375,20 +273,10 @@
             margin-top: 6px;
             overflow: hidden;
         }
-        .projeto-item .barra .fill {
-            height: 100%;
-            border-radius: 4px;
-            transition: width 0.8s ease;
-        }
-        .fill-verde {
-            background: var(--verde);
-        }
-        .fill-laranja {
-            background: var(--laranja);
-        }
-        .fill-vermelho {
-            background: var(--vermelho);
-        }
+        .projeto-item .barra .fill { height: 100%; border-radius: 4px; transition: width 0.8s ease; }
+        .fill-verde { background: var(--verde); }
+        .fill-laranja { background: var(--laranja); }
+        .fill-vermelho { background: var(--vermelho); }
 
         .nota-item {
             padding: 10px 0;
@@ -400,21 +288,10 @@
             gap: 6px;
             font-size: 13px;
         }
-        .nota-item:last-child {
-            border-bottom: none;
-        }
-        .nota-item .info .num {
-            font-weight: 600;
-            color: var(--grafite);
-        }
-        .nota-item .info .projeto {
-            color: var(--cinza);
-            font-size: 12px;
-        }
-        .nota-item .valor {
-            font-weight: 700;
-            color: var(--laranja);
-        }
+        .nota-item:last-child { border-bottom: none; }
+        .nota-item .info .num { font-weight: 600; color: var(--grafite); }
+        .nota-item .info .projeto { color: var(--cinza); font-size: 12px; }
+        .nota-item .valor { font-weight: 700; color: var(--laranja); }
 
         .grid-2col {
             display: grid;
@@ -436,69 +313,26 @@
             gap: 12px;
             flex-wrap: wrap;
         }
-        .rodape-logo {
-            flex-shrink: 0;
-        }
-        .rodape-logo .logo-vigorre {
-            width: 50px;
-        }
-        .rodape-info {
-            flex: 1;
-        }
-        .rodape-info .copyright {
-            font-size: 8px;
-            color: #8A8F98;
-        }
-        .rodape-info .tm {
-            font-size: 6px;
-            vertical-align: super;
-        }
-        .rodape-info .contato {
-            font-size: 9px;
-            color: #8A8F98;
-        }
-        .rodape-info a {
-            color: #C65A11;
-            text-decoration: none;
-        }
-        .rodape-info .email {
-            font-size: 8px;
-            color: #aaa;
-        }
-        .logo-vigorre-fallback {
-            font-size: 12px;
-            font-weight: 700;
-            display: none;
-        }
+        .rodape-logo .logo-vigorre { width: 50px; }
+        .rodape-info { flex: 1; }
+        .rodape-info .copyright { font-size: 8px; color: #8A8F98; }
+        .rodape-info .tm { font-size: 6px; vertical-align: super; }
+        .rodape-info .contato { font-size: 9px; color: #8A8F98; }
+        .rodape-info a { color: #C65A11; text-decoration: none; }
+        .rodape-info .email { font-size: 8px; color: #aaa; }
+        .logo-vigorre-fallback { font-size: 12px; font-weight: 700; display: none; }
 
         @media (max-width: 900px) {
-            .main-content {
-                margin-left: 0;
-            }
-            .grid-2col {
-                grid-template-columns: 1fr;
-            }
-            .alertas-grid {
-                grid-template-columns: 1fr;
-            }
-            .public-link-banner {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            .public-link-banner .link-actions input {
-                min-width: 180px;
-            }
+            .main-content { margin-left: 0; }
+            .grid-2col { grid-template-columns: 1fr; }
+            .alertas-grid { grid-template-columns: 1fr; }
+            .public-link-banner { flex-direction: column; align-items: stretch; }
+            .public-link-banner .link-actions input { min-width: 180px; }
         }
         @media (max-width: 480px) {
-            .kpi-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-            .public-link-banner .link-actions {
-                flex-direction: column;
-            }
-            .public-link-banner .link-actions input {
-                min-width: 100%;
-            }
+            .kpi-grid { grid-template-columns: 1fr 1fr; }
+            .public-link-banner .link-actions { flex-direction: column; }
+            .public-link-banner .link-actions input { min-width: 100%; }
         }
     </style>
 </head>
@@ -515,9 +349,7 @@
             <button class="btn-sair-topo" onclick="window.location.href='index.html'">🚪 Sair</button>
         </div>
 
-        <!-- ============================================================
-        STATUS BAR - SAUDAÇÃO + FIREBASE
-        ============================================================ -->
+        <!-- STATUS BAR -->
         <div class="status-bar">
             <div class="saudacao">
                 <span id="mensagemSaudacao">🌅 Bom dia, Administrador!</span>
@@ -527,9 +359,7 @@
             </div>
         </div>
 
-        <!-- ============================================================
-        BANNER DO LINK PÚBLICO - PRÉ-CADASTRO
-        ============================================================ -->
+        <!-- BANNER LINK PRÉ-CADASTRO -->
         <div class="public-link-banner">
             <div class="info">
                 <span class="icone">🌟</span>
@@ -540,15 +370,13 @@
                 </div>
             </div>
             <div class="link-actions">
-                <input type="text" id="linkPublico" value="https://amovin-erp-social.vercel.app/pre-cadastro-externo.html" readonly>
+                <input type="text" id="linkPublico" value="https://erpsocial-amovin.vercel.app/pre-cadastro-externo.html" readonly>
                 <button class="btn-copiar-link" id="btnCopiarLink" onclick="copiarLink()">📋 Copiar</button>
                 <a href="#" class="btn-abrir-link" onclick="abrirLink(event)" target="_blank">🔗 Abrir</a>
             </div>
         </div>
 
-        <!-- ============================================================
-        KPIs
-        ============================================================ -->
+        <!-- KPIs -->
         <div class="kpi-grid" id="kpiContainer">
             <div class="kpi-card">
                 <span class="kpi-icon">📋</span>
@@ -631,15 +459,12 @@
         function copiarLink() {
             var input = document.getElementById('linkPublico');
             var btn = document.getElementById('btnCopiarLink');
-
             input.select();
             input.setSelectionRange(0, 99999);
-
             try {
                 document.execCommand('copy');
                 btn.textContent = '✅ Copiado!';
                 btn.classList.add('copiado');
-
                 setTimeout(function() {
                     btn.textContent = '📋 Copiar';
                     btn.classList.remove('copiado');
@@ -656,10 +481,19 @@
         }
 
         // ============================================================
-        // SAUDAÇÃO PERSONALIZADA
+        // SAUDAÇÃO PERSONALIZADA (COM FALLBACK ROBUSTO)
         // ============================================================
         function atualizarSaudacao() {
-            var nome = sessionStorage.getItem('amovin_nome') || 'Administrador';
+            // Tenta pegar o nome de várias fontes
+            var nome = sessionStorage.getItem('amovin_nome')
+                    || localStorage.getItem('amovin_usuario')
+                    || 'Administrador';
+
+            // Se for 'admin' (usuário), mostra 'Administrador'
+            if (nome === 'admin' || nome === 'Admin' || nome === 'ADMIN') {
+                nome = 'Administrador';
+            }
+
             var agora = new Date();
             var hora = agora.getHours();
             var saudacao = '';
@@ -674,25 +508,27 @@
                 saudacao = '🌙 Boa madrugada';
             }
 
-            document.getElementById('mensagemSaudacao').textContent = saudacao + ', ' + nome + '!';
+            var el = document.getElementById('mensagemSaudacao');
+            if (el) {
+                el.textContent = saudacao + ', ' + nome + '!';
+            }
         }
 
         // ============================================================
-        // STATUS FIREBASE
+        // STATUS FIREBASE (PROJETO CORRETO: gestao-amovin)
         // ============================================================
         function verificarStatusFirebase() {
             var statusEl = document.getElementById('statusFirebase');
 
-            // Verifica se o Firebase está disponível globalmente
+            // Se o Firebase já está carregado
             if (typeof firebase !== 'undefined' && firebase.apps && firebase.apps.length > 0) {
                 statusEl.innerHTML = '🟢 Firebase Conectado';
                 statusEl.className = 'conectado';
                 return;
             }
 
-            // Tenta carregar o Firebase via CDN se não estiver disponível
+            // Carrega o Firebase dinamicamente
             if (typeof firebase === 'undefined') {
-                // Carrega Firebase dinamicamente
                 var script = document.createElement('script');
                 script.src = 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js';
                 script.onload = function() {
@@ -701,20 +537,27 @@
                     authScript.onload = function() {
                         try {
                             var firebaseConfig = {
-                                apiKey: "AIzaSyDu5663V7pAamG2lzjD1i2CNTKh6uPZO3U",
-                                authDomain: "amovin-oficios-teste.firebaseapp.com",
-                                projectId: "amovin-oficios-teste",
-                                storageBucket: "amovin-oficios-teste.firebasestorage.app",
-                                messagingSenderId: "901387183295",
-                                appId: "1:901387183295:web:b9a445cbe259d1c14c120a"
+                                apiKey: "AIzaSyDQO-69vVBhmBK8oLt0DzfyigBmjxzu7b4",
+                                authDomain: "gestao-amovin.firebaseapp.com",
+                                projectId: "gestao-amovin",
+                                storageBucket: "gestao-amovin.firebasestorage.app",
+                                messagingSenderId: "316793420445",
+                                appId: "1:316793420445:web:68e9898bbfcd30853f3274",
+                                measurementId: "G-WTKFCF0LRD"
                             };
                             firebase.initializeApp(firebaseConfig);
                             statusEl.innerHTML = '🟢 Firebase Conectado';
                             statusEl.className = 'conectado';
+                            console.log('🔥 Firebase conectado: gestao-amovin');
                         } catch (e) {
-                            statusEl.innerHTML = '🟡 Firebase Offline (modo local)';
+                            console.error('❌ Erro ao conectar Firebase:', e);
+                            statusEl.innerHTML = '🔴 Erro na conexão';
                             statusEl.className = 'offline';
                         }
+                    };
+                    authScript.onerror = function() {
+                        statusEl.innerHTML = '🟡 Firebase Offline (modo local)';
+                        statusEl.className = 'offline';
                     };
                     document.head.appendChild(authScript);
                 };
@@ -723,9 +566,6 @@
                     statusEl.className = 'offline';
                 };
                 document.head.appendChild(script);
-            } else {
-                statusEl.innerHTML = '🟡 Firebase Offline (modo local)';
-                statusEl.className = 'offline';
             }
         }
 
@@ -740,22 +580,24 @@
 
             // KPIs
             var projetosAtivos = projetos.filter(function(p) { return p.status === 'ativo'; });
-            var totalPrevisto = 0,
-                totalRealizado = 0;
+            var totalPrevisto = 0, totalRealizado = 0;
             orcamentos.forEach(function(o) {
                 totalPrevisto += o.previsto || 0;
                 totalRealizado += o.realizado || 0;
             });
 
-            var notasPendentes = notas.filter(function(n) { return n.status === 'pendente' || n.status === 'pendente_vinculo'; })
-                .length;
-            var emEspera = produtosEspera.filter(function(p) { return p.status === 'aguardando'; }).length;
+            var notasPendentes = notas.filter(function(n) {
+                return n.status === 'pendente' || n.status === 'pendente_vinculo';
+            }).length;
+
+            var emEspera = produtosEspera.filter(function(p) {
+                return p.status === 'aguardando';
+            }).length;
 
             document.getElementById('kpiProjetos').textContent = projetosAtivos.length;
             document.getElementById('kpiOrcamento').textContent = 'R$ ' + totalPrevisto.toFixed(2).replace('.', ',');
             document.getElementById('kpiGasto').textContent = 'R$ ' + totalRealizado.toFixed(2).replace('.', ',');
-            document.getElementById('kpiSaldo').textContent = 'R$ ' + (totalPrevisto - totalRealizado).toFixed(2).replace('.',
-                ',');
+            document.getElementById('kpiSaldo').textContent = 'R$ ' + (totalPrevisto - totalRealizado).toFixed(2).replace('.', ',');
             document.getElementById('kpiPendentes').textContent = notasPendentes;
             document.getElementById('kpiEspera').textContent = emEspera;
 
@@ -795,10 +637,8 @@
                         alertas.push({
                             tipo: 'atencao',
                             icone: '📊',
-                            titulo: 'Projeto "' + (projeto ? projeto.nome : '---') + '" - ' + percentual.toFixed(
-                                0) + '% do orçamento utilizado',
-                            desc: 'Categoria: ' + o.categoria + ' | Disponível: R$ ' + (previsto - realizado)
-                                .toFixed(2).replace('.', ','),
+                            titulo: 'Projeto "' + (projeto ? projeto.nome : '---') + '" - ' + percentual.toFixed(0) + '% do orçamento utilizado',
+                            desc: 'Categoria: ' + o.categoria + ' | Disponível: R$ ' + (previsto - realizado).toFixed(2).replace('.', ','),
                             link: 'projetos-convenios.html',
                             linkText: 'Ver Projeto'
                         });
@@ -832,8 +672,7 @@
                     '<div class="titulo">' + a.titulo + '</div>' +
                     '<div class="desc">' + a.desc + '</div>' +
                     '</div>' +
-                    (a.link && a.link !== '#' ? '<a href="' + a.link + '" class="btn-link">' + a.linkText +
-                        ' →</a>' : '') +
+                    (a.link && a.link !== '#' ? '<a href="' + a.link + '" class="btn-link">' + a.linkText + ' →</a>' : '') +
                     '</div>';
             }).join('');
 
@@ -842,8 +681,7 @@
             document.getElementById('totalProjetosBadge').textContent = projetosAtivos.length;
 
             if (projetosAtivos.length === 0) {
-                listaProjetos.innerHTML =
-                    '<div style="text-align:center;padding:20px;color:#9CA3AF;font-size:13px;">Nenhum projeto ativo.</div>';
+                listaProjetos.innerHTML = '<div style="text-align:center;padding:20px;color:#9CA3AF;font-size:13px;">Nenhum projeto ativo.</div>';
             } else {
                 listaProjetos.innerHTML = projetosAtivos.slice(0, 5).map(function(p) {
                     var orcProjeto = orcamentos.filter(function(o) { return o.projeto_id === p.id; });
@@ -868,26 +706,23 @@
 
             // NOTAS
             var listaNotas = document.getElementById('listaNotas');
-            var notasVinculadas = notas.filter(function(n) { return n.status === 'vinculado' || n.status === 'aprovado'; })
-                .sort(function(a, b) {
-                    return new Date(b.data_criacao) - new Date(a.data_criacao);
-                });
+            var notasVinculadas = notas.filter(function(n) {
+                return n.status === 'vinculado' || n.status === 'aprovado';
+            }).sort(function(a, b) {
+                return new Date(b.data_criacao) - new Date(a.data_criacao);
+            });
 
             document.getElementById('totalNotasBadge').textContent = notasVinculadas.length;
 
             if (notasVinculadas.length === 0) {
-                listaNotas.innerHTML =
-                    '<div style="text-align:center;padding:20px;color:#9CA3AF;font-size:13px;">Nenhuma nota vinculada.</div>';
+                listaNotas.innerHTML = '<div style="text-align:center;padding:20px;color:#9CA3AF;font-size:13px;">Nenhuma nota vinculada.</div>';
             } else {
                 listaNotas.innerHTML = notasVinculadas.slice(0, 5).map(function(n) {
                     var projeto = projetos.find(function(p) { return p.id === n.projeto_id; });
-                    var data = n.data_emissao ? new Date(n.data_emissao + 'T00:00:00').toLocaleDateString(
-                        'pt-BR') : '-';
                     return '<div class="nota-item">' +
                         '<div class="info">' +
                         '<span class="num">NF ' + (n.numero || '---') + '</span>' +
-                        '<span class="projeto"> • ' + (projeto ? projeto.nome : 'Projeto não identificado') +
-                        '</span>' +
+                        '<span class="projeto"> • ' + (projeto ? projeto.nome : 'Projeto não identificado') + '</span>' +
                         '</div>' +
                         '<span class="valor">R$ ' + (n.valor_total || 0).toFixed(2).replace('.', ',') + '</span>' +
                         '</div>';
@@ -900,16 +735,14 @@
             document.getElementById('totalEsperaBadge').textContent = emEsperaLista.length;
 
             if (emEsperaLista.length === 0) {
-                listaEspera.innerHTML =
-                    '<div style="text-align:center;padding:20px;color:#9CA3AF;font-size:13px;">Nenhum produto aguardando.</div>';
+                listaEspera.innerHTML = '<div style="text-align:center;padding:20px;color:#9CA3AF;font-size:13px;">Nenhum produto aguardando.</div>';
             } else {
                 listaEspera.innerHTML = emEsperaLista.slice(0, 5).map(function(p) {
                     var destinos = { 'estoque': '📦 Estoque', 'patrimonio': '🏢 Patrimônio', 'servico': '🛠️ Serviço' };
                     return '<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #F0E9DF;font-size:13px;">' +
                         '<span><strong>' + p.descricao + '</strong> (' + p.quantidade + 'x) <span style="color:var(--cinza);font-size:12px;">Sugestão: ' +
                         destinos[p.destino_sugerido] + '</span></span>' +
-                        '<span style="color:var(--laranja);font-weight:600;">R$ ' + p.valor_total.toFixed(2)
-                        .replace('.', ',') + '</span>' +
+                        '<span style="color:var(--laranja);font-weight:600;">R$ ' + p.valor_total.toFixed(2).replace('.', ',') + '</span>' +
                         '</div>';
                 }).join('');
             }
@@ -930,13 +763,8 @@
             verificarStatusFirebase();
             carregarDados();
 
-            // Atualiza saudação a cada minuto
             setInterval(atualizarSaudacao, 60000);
-
-            // Tenta reconectar Firebase a cada 30 segundos
             setInterval(verificarStatusFirebase, 30000);
-
-            // Recarrega dados a cada 30 segundos
             setInterval(carregarDados, 30000);
         });
     </script>
