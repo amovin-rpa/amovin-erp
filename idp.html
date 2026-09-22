@@ -18,11 +18,7 @@
             --branco: #FFFFFF;
             --vermelho: #E53935;
         }
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Inter', system-ui, sans-serif;
             background: #F8F4ED;
@@ -30,11 +26,7 @@
             min-height: 100vh;
         }
 
-        .main-content {
-            flex: 1;
-            margin-left: 270px;
-            padding: 24px 30px;
-        }
+        .main-content { flex: 1; margin-left: 270px; padding: 24px 30px; }
         .topo-bar {
             display: flex;
             justify-content: space-between;
@@ -43,14 +35,8 @@
             flex-wrap: wrap;
             gap: 10px;
         }
-        .topo-bar h1 {
-            font-size: 24px;
-            font-weight: 700;
-            color: var(--grafite);
-        }
-        .topo-bar h1 span {
-            color: var(--laranja);
-        }
+        .topo-bar h1 { font-size: 24px; font-weight: 700; color: var(--grafite); }
+        .topo-bar h1 span { color: var(--laranja); }
         .btn-sair-topo {
             background: #F8F4ED;
             color: #1A1A1A;
@@ -102,24 +88,13 @@
             transition: all 0.2s;
             border-bottom: 3px solid transparent;
         }
-        .tab:hover {
-            color: var(--laranja);
-        }
-        .tab.ativo {
-            color: var(--laranja);
-            border-bottom-color: var(--laranja);
-        }
+        .tab:hover { color: var(--laranja); }
+        .tab.ativo { color: var(--laranja); border-bottom-color: var(--laranja); }
 
-        .tab-content {
-            display: none;
-        }
-        .tab-content.ativo {
-            display: block;
-        }
+        .tab-content { display: none; }
+        .tab-content.ativo { display: block; }
 
-        .form-group {
-            margin-bottom: 14px;
-        }
+        .form-group { margin-bottom: 14px; }
         .form-group label {
             display: block;
             font-size: 11px;
@@ -149,15 +124,8 @@
             background: var(--branco);
             box-shadow: 0 0 0 3px rgba(198, 90, 17, 0.08);
         }
-        .form-group textarea {
-            resize: vertical;
-            min-height: 60px;
-        }
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-        }
+        .form-group textarea { resize: vertical; min-height: 60px; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 
         .btn {
             padding: 10px 24px;
@@ -172,48 +140,17 @@
             align-items: center;
             gap: 8px;
         }
-        .btn-primary {
-            background: var(--laranja);
-            color: white;
-        }
-        .btn-primary:hover {
-            background: var(--laranja-escuro);
-        }
-        .btn-success {
-            background: var(--verde);
-            color: white;
-        }
-        .btn-success:hover {
-            background: #388E3C;
-        }
-        .btn-danger {
-            background: var(--vermelho);
-            color: white;
-        }
-        .btn-danger:hover {
-            background: #C62828;
-        }
-        .btn-outline {
-            background: transparent;
-            color: var(--cinza);
-            border: 1px solid #E5E0D8;
-        }
-        .btn-outline:hover {
-            background: #F8F4ED;
-        }
-        .btn-full {
-            width: 100%;
-            padding: 14px;
-            font-size: 15px;
-            justify-content: center;
-        }
-        .btn-azul {
-            background: var(--azul);
-            color: white;
-        }
-        .btn-azul:hover {
-            background: #1565C0;
-        }
+        .btn-primary { background: var(--laranja); color: white; }
+        .btn-primary:hover { background: var(--laranja-escuro); }
+        .btn-success { background: var(--verde); color: white; }
+        .btn-success:hover { background: #388E3C; }
+        .btn-danger { background: var(--vermelho); color: white; }
+        .btn-danger:hover { background: #C62828; }
+        .btn-outline { background: transparent; color: var(--cinza); border: 1px solid #E5E0D8; }
+        .btn-outline:hover { background: #F8F4ED; }
+        .btn-full { width: 100%; padding: 14px; font-size: 15px; justify-content: center; }
+        .btn-azul { background: var(--azul); color: white; }
+        .btn-azul:hover { background: #1565C0; }
 
         .pessoa-item {
             padding: 12px 16px;
@@ -225,36 +162,13 @@
             gap: 8px;
             transition: background 0.2s;
         }
-        .pessoa-item:hover {
-            background: #FFF8E7;
-        }
-        .pessoa-item .info {
-            flex: 1;
-            min-width: 150px;
-        }
-        .pessoa-item .info .nome {
-            font-weight: 600;
-            font-size: 14px;
-            color: var(--grafite);
-        }
-        .pessoa-item .info .detalhe {
-            font-size: 12px;
-            color: var(--cinza);
-        }
-        .pessoa-item .info .projetos {
-            font-size: 11px;
-            color: var(--azul);
-            margin-top: 2px;
-        }
-        .pessoa-item .acoes {
-            display: flex;
-            gap: 4px;
-            flex-wrap: wrap;
-        }
-        .pessoa-item .btn {
-            padding: 4px 10px;
-            font-size: 10px;
-        }
+        .pessoa-item:hover { background: #FFF8E7; }
+        .pessoa-item .info { flex: 1; min-width: 150px; }
+        .pessoa-item .info .nome { font-weight: 600; font-size: 14px; color: var(--grafite); }
+        .pessoa-item .info .detalhe { font-size: 12px; color: var(--cinza); }
+        .pessoa-item .info .projetos { font-size: 11px; color: var(--azul); margin-top: 2px; }
+        .pessoa-item .acoes { display: flex; gap: 4px; flex-wrap: wrap; }
+        .pessoa-item .btn { padding: 4px 10px; font-size: 10px; }
 
         .status-badge {
             display: inline-block;
@@ -263,24 +177,11 @@
             font-size: 10px;
             font-weight: 600;
         }
-        .status-ativo {
-            background: #E8F5E9;
-            color: #2E7D32;
-        }
-        .status-inativo {
-            background: #FFEBEE;
-            color: #C62828;
-        }
-        .status-pendente {
-            background: #FFF3E0;
-            color: #E65100;
-        }
+        .status-ativo { background: #E8F5E9; color: #2E7D32; }
+        .status-inativo { background: #FFEBEE; color: #C62828; }
+        .status-pendente { background: #FFF3E0; color: #E65100; }
 
-        .sem-dados {
-            text-align: center;
-            padding: 30px;
-            color: #9CA3AF;
-        }
+        .sem-dados { text-align: center; padding: 30px; color: #9CA3AF; }
 
         .kpi-grid {
             display: grid;
@@ -295,15 +196,25 @@
             border: 1px solid #F0E9DF;
             text-align: center;
         }
-        .kpi-card .kpi-valor {
-            font-size: 28px;
-            font-weight: 800;
-            color: var(--laranja);
-        }
-        .kpi-card .kpi-label {
-            font-size: 11px;
+        .kpi-card .kpi-valor { font-size: 28px; font-weight: 800; color: var(--laranja); }
+        .kpi-card .kpi-label { font-size: 11px; color: var(--cinza); }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
             color: var(--cinza);
         }
+        .loading .spinner {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            border: 3px solid #E5E0D8;
+            border-top: 3px solid var(--laranja);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 10px;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
         .rodape {
             background: #FFFFFF;
@@ -312,68 +223,24 @@
             border: 1px solid #F0E9DF;
             margin-top: 20px;
         }
-        .rodape-grid {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
-        .rodape-logo {
-            flex-shrink: 0;
-        }
-        .rodape-logo .logo-vigorre {
-            width: 50px;
-        }
-        .rodape-info {
-            flex: 1;
-        }
-        .rodape-info .copyright {
-            font-size: 8px;
-            color: #8A8F98;
-        }
-        .rodape-info .tm {
-            font-size: 6px;
-            vertical-align: super;
-        }
-        .rodape-info .contato {
-            font-size: 9px;
-            color: #8A8F98;
-        }
-        .rodape-info a {
-            color: #C65A11;
-            text-decoration: none;
-        }
-        .rodape-info .email {
-            font-size: 8px;
-            color: #aaa;
-        }
-        .logo-vigorre-fallback {
-            font-size: 12px;
-            font-weight: 700;
-            display: none;
-        }
+        .rodape-grid { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+        .rodape-logo .logo-vigorre { width: 50px; }
+        .rodape-info { flex: 1; }
+        .rodape-info .copyright { font-size: 8px; color: #8A8F98; }
+        .rodape-info .tm { font-size: 6px; vertical-align: super; }
+        .rodape-info .contato { font-size: 9px; color: #8A8F98; }
+        .rodape-info a { color: #C65A11; text-decoration: none; }
+        .rodape-info .email { font-size: 8px; color: #aaa; }
+        .logo-vigorre-fallback { font-size: 12px; font-weight: 700; display: none; }
 
         @media (max-width: 900px) {
-            .main-content {
-                margin-left: 0;
-            }
-            .form-row {
-                grid-template-columns: 1fr;
-            }
-            .tabs {
-                flex-wrap: nowrap;
-                overflow-x: auto;
-            }
-            .tab {
-                padding: 8px 14px;
-                font-size: 12px;
-                white-space: nowrap;
-            }
+            .main-content { margin-left: 0; }
+            .form-row { grid-template-columns: 1fr; }
+            .tabs { flex-wrap: nowrap; overflow-x: auto; }
+            .tab { padding: 8px 14px; font-size: 12px; white-space: nowrap; }
         }
         @media (max-width: 480px) {
-            .kpi-grid {
-                grid-template-columns: 1fr 1fr;
-            }
+            .kpi-grid { grid-template-columns: 1fr 1fr; }
         }
     </style>
 </head>
@@ -478,7 +345,7 @@
                     <div>
                         <h4 style="font-size:14px;color:var(--cinza);margin-bottom:12px;">📋 Lista de Beneficiários</h4>
                         <div id="listaBeneficiarios">
-                            <div class="sem-dados">Nenhum beneficiário cadastrado.</div>
+                            <div class="loading"><div class="spinner"></div><div>Carregando do Firebase...</div></div>
                         </div>
                     </div>
                 </div>
@@ -551,7 +418,7 @@
                     <div>
                         <h4 style="font-size:14px;color:var(--cinza);margin-bottom:12px;">📋 Lista de Profissionais</h4>
                         <div id="listaProfissionais">
-                            <div class="sem-dados">Nenhum profissional cadastrado.</div>
+                            <div class="loading"><div class="spinner"></div><div>Carregando do Firebase...</div></div>
                         </div>
                     </div>
                 </div>
@@ -627,7 +494,7 @@
                     <div>
                         <h4 style="font-size:14px;color:var(--cinza);margin-bottom:12px;">📋 Lista de Voluntários</h4>
                         <div id="listaVoluntarios">
-                            <div class="sem-dados">Nenhum voluntário cadastrado.</div>
+                            <div class="loading"><div class="spinner"></div><div>Carregando do Firebase...</div></div>
                         </div>
                     </div>
                 </div>
@@ -654,32 +521,284 @@
         // ============================================================
         // DADOS
         // ============================================================
-        var pessoas = JSON.parse(localStorage.getItem('amovin_pessoas') || '[]');
+        var pessoas = [];
         var projetos = JSON.parse(localStorage.getItem('amovin_projetos') || '[]');
+        var beneficiarios = [];
+        var profissionais = [];
+        var voluntarios = [];
+        var firebasePronto = false;
 
-        if (pessoas.length === 0) {
-            pessoas = [
-                { id: 1, nome: 'Maria Silva', tipo: 'beneficiario', cpf: '123.456.789-00', nascimento: '1985-06-15',
-                    email: 'maria@email.com', telefone: '(34) 99999-0001', whatsapp: '(34) 99999-0001',
-                    endereco: 'Rua A, 123', status: 'ativo', projeto_id: 1, obs: '' },
-                { id: 2, nome: 'Dr. Carlos Mendes', tipo: 'profissional', cpf: '987.654.321-00', nascimento: '1975-03-10',
-                    email: 'carlos@email.com', telefone: '(34) 99999-0002', whatsapp: '(34) 99999-0002',
-                    endereco: 'Rua B, 456', status: 'ativo', especialidade: 'Psicologia', registro: 'CRP 12345',
-                    projeto_id: 1, obs: '' }
-            ];
-            localStorage.setItem('amovin_pessoas', JSON.stringify(pessoas));
+        // ============================================================
+        // INICIALIZAR FIREBASE (COMPAT)
+        // ============================================================
+        function inicializarFirebase() {
+            if (typeof firebase === 'undefined') {
+                var script = document.createElement('script');
+                script.src = 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js';
+                script.onload = function() {
+                    var firestoreScript = document.createElement('script');
+                    firestoreScript.src = 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js';
+                    firestoreScript.onload = function() {
+                        try {
+                            var firebaseConfig = {
+                                apiKey: "AIzaSyDQO-69vVBhmBK8oLt0DzfyigBmjxzu7b4",
+                                authDomain: "gestao-amovin.firebaseapp.com",
+                                projectId: "gestao-amovin",
+                                storageBucket: "gestao-amovin.firebasestorage.app",
+                                messagingSenderId: "316793420445",
+                                appId: "1:316793420445:web:68e9898bbfcd30853f3274"
+                            };
+                            if (!firebase.apps.length) {
+                                firebase.initializeApp(firebaseConfig);
+                            }
+                            firebasePronto = true;
+                            console.log('🔥 Firebase IDP conectado');
+                            carregarDoFirebase();
+                        } catch (e) {
+                            console.error('❌ Erro Firebase:', e);
+                            carregarLocalStorage();
+                        }
+                    };
+                    firestoreScript.onerror = function() {
+                        console.warn('⚠️ Firestore não carregou, usando localStorage');
+                        carregarLocalStorage();
+                    };
+                    document.head.appendChild(firestoreScript);
+                };
+                script.onerror = function() {
+                    console.warn('⚠️ Firebase não carregou, usando localStorage');
+                    carregarLocalStorage();
+                };
+                document.head.appendChild(script);
+            } else {
+                firebasePronto = true;
+                carregarDoFirebase();
+            }
         }
 
-        function salvarPessoas() {
+        // ============================================================
+        // CARREGAR DO FIREBASE
+        // ============================================================
+        async function carregarDoFirebase() {
+            if (!firebasePronto) return;
+
+            try {
+                var db = firebase.firestore();
+
+                // Beneficiários
+                var benSnap = await db.collection('beneficiaries').get();
+                beneficiarios = [];
+                benSnap.forEach(function(doc) {
+                    var d = doc.data();
+                    beneficiarios.push({
+                        id: doc.id,
+                        firebaseId: doc.id,
+                        nome: d.fullName || d.nome || 'Sem nome',
+                        tipo: 'beneficiario',
+                        cpf: d.cpf || '',
+                        nascimento: d.birthDate || d.dataNascimento || '',
+                        email: d.email || '',
+                        telefone: d.phone || d.telefone || '',
+                        whatsapp: d.whatsapp || '',
+                        endereco: d.address || d.endereco || '',
+                        status: d.status || 'ativo',
+                        projeto_id: d.projeto_id || null,
+                        obs: d.notes || d.obs || '',
+                        // Campos específicos
+                        diagnosis: d.diagnosis || '',
+                        cid: d.cid || '',
+                        continuousMedication: d.continuousMedication || '',
+                        familyIncome: d.familyIncome || '',
+                        activities: d.activities || [],
+                        gender: d.gender || '',
+                        origem: 'firebase'
+                    });
+                });
+                console.log('👥 Beneficiários do Firebase:', beneficiarios.length);
+
+                // Profissionais
+                var profSnap = await db.collection('professionals').get();
+                profissionais = [];
+                profSnap.forEach(function(doc) {
+                    var d = doc.data();
+                    profissionais.push({
+                        id: doc.id,
+                        firebaseId: doc.id,
+                        nome: d.fullName || d.nome || 'Sem nome',
+                        tipo: 'profissional',
+                        cpf: d.cpf || '',
+                        nascimento: d.birthDate || '',
+                        email: d.email || '',
+                        telefone: d.phone || d.telefone || '',
+                        whatsapp: d.whatsapp || '',
+                        endereco: d.address || '',
+                        status: d.status || 'ativo',
+                        especialidade: d.specialty || d.especialidade || '',
+                        registro: d.registration || d.registro || '',
+                        projeto_id: d.projeto_id || null,
+                        obs: d.notes || d.obs || '',
+                        origem: 'firebase'
+                    });
+                });
+                console.log('👨‍⚕️ Profissionais do Firebase:', profissionais.length);
+
+                // Voluntários
+                var volSnap = await db.collection('volunteers').get();
+                voluntarios = [];
+                volSnap.forEach(function(doc) {
+                    var d = doc.data();
+                    voluntarios.push({
+                        id: doc.id,
+                        firebaseId: doc.id,
+                        nome: d.fullName || d.nome || 'Sem nome',
+                        tipo: 'voluntario',
+                        cpf: d.cpf || '',
+                        nascimento: d.birthDate || '',
+                        email: d.email || '',
+                        telefone: d.phone || d.telefone || '',
+                        whatsapp: d.whatsapp || '',
+                        endereco: d.address || '',
+                        status: d.status || 'ativo',
+                        area: d.area || d.areaInteresse || 'Outro',
+                        projeto_id: d.projeto_id || null,
+                        obs: d.notes || d.obs || '',
+                        origem: 'firebase'
+                    });
+                });
+                console.log('💪 Voluntários do Firebase:', voluntarios.length);
+
+                // Junta tudo
+                pessoas = beneficiarios.concat(profissionais).concat(voluntarios);
+
+                renderizarListas();
+                atualizarKPIs();
+
+            } catch (e) {
+                console.error('❌ Erro ao ler do Firebase:', e);
+                carregarLocalStorage();
+            }
+        }
+
+        // ============================================================
+        // CARREGAR DO LOCALSTORAGE (FALLBACK)
+        // ============================================================
+        function carregarLocalStorage() {
+            pessoas = JSON.parse(localStorage.getItem('amovin_pessoas') || '[]');
+            if (pessoas.length === 0) {
+                pessoas = [
+                    { id: 1, nome: 'Maria Silva', tipo: 'beneficiario', cpf: '123.456.789-00',
+                      nascimento: '1985-06-15', email: 'maria@email.com', telefone: '(34) 99999-0001',
+                      status: 'ativo', projeto_id: 1, obs: '' }
+                ];
+            }
+            renderizarListas();
+            atualizarKPIs();
+        }
+
+        // ============================================================
+        // SALVAR PESSOA (LOCAL — PODE SER ADAPTADO PARA FIREBASE)
+        // ============================================================
+        async function salvarPessoa(tipo) {
+            var prefix = { 'beneficiario': 'benef', 'profissional': 'prof', 'voluntario': 'vol' }[tipo];
+
+            var nome = document.getElementById(prefix + 'Nome').value.trim();
+            if (!nome) { alert('⚠️ Nome é obrigatório!'); return; }
+
+            var dados = {
+                nome: nome,
+                tipo: tipo,
+                cpf: document.getElementById(prefix + 'Cpf').value.trim(),
+                nascimento: document.getElementById(prefix + 'Nascimento').value,
+                email: document.getElementById(prefix + 'Email').value.trim(),
+                telefone: document.getElementById(prefix + 'Telefone').value.trim(),
+                whatsapp: document.getElementById(prefix + 'Whatsapp').value.trim(),
+                status: document.getElementById(prefix + 'Status').value,
+                projeto_id: parseInt(document.getElementById(prefix + 'Projeto').value) || null,
+                obs: document.getElementById(prefix + 'Obs').value.trim()
+            };
+
+            if (tipo === 'profissional') {
+                dados.especialidade = document.getElementById('profEspecialidade').value.trim();
+                dados.registro = document.getElementById('profRegistro').value.trim();
+            }
+            if (tipo === 'voluntario') {
+                dados.area = document.getElementById('volArea').value;
+            }
+            if (tipo === 'beneficiario') {
+                dados.endereco = document.getElementById('benefEndereco').value.trim();
+            }
+
+            // Salva no Firebase se disponível
+            if (firebasePronto) {
+                try {
+                    var db = firebase.firestore();
+                    var colecao = tipo === 'beneficiario' ? 'beneficiaries' : (tipo === 'profissional' ? 'professionals' : 'volunteers');
+
+                    var dadosFirebase = {};
+                    if (tipo === 'beneficiario') {
+                        dadosFirebase.fullName = dados.nome;
+                        dadosFirebase.cpf = dados.cpf;
+                        dadosFirebase.birthDate = dados.nascimento;
+                        dadosFirebase.email = dados.email;
+                        dadosFirebase.phone = dados.telefone;
+                        dadosFirebase.whatsapp = dados.whatsapp;
+                        dadosFirebase.address = dados.endereco;
+                        dadosFirebase.status = dados.status;
+                        dadosFirebase.notes = dados.obs;
+                    } else if (tipo === 'profissional') {
+                        dadosFirebase.fullName = dados.nome;
+                        dadosFirebase.cpf = dados.cpf;
+                        dadosFirebase.birthDate = dados.nascimento;
+                        dadosFirebase.email = dados.email;
+                        dadosFirebase.phone = dados.telefone;
+                        dadosFirebase.whatsapp = dados.whatsapp;
+                        dadosFirebase.specialty = dados.especialidade;
+                        dadosFirebase.registration = dados.registro;
+                        dadosFirebase.status = dados.status;
+                        dadosFirebase.notes = dados.obs;
+                    } else {
+                        dadosFirebase.fullName = dados.nome;
+                        dadosFirebase.cpf = dados.cpf;
+                        dadosFirebase.birthDate = dados.nascimento;
+                        dadosFirebase.email = dados.email;
+                        dadosFirebase.phone = dados.telefone;
+                        dadosFirebase.whatsapp = dados.whatsapp;
+                        dadosFirebase.area = dados.area;
+                        dadosFirebase.status = dados.status;
+                        dadosFirebase.notes = dados.obs;
+                    }
+
+                    dadosFirebase.createdAt = new Date().toISOString();
+                    dadosFirebase.updatedAt = new Date().toISOString();
+
+                    await db.collection(colecao).add(dadosFirebase);
+                    console.log('✅ Salvo no Firebase:', colecao);
+                } catch (e) {
+                    console.error('❌ Erro ao salvar no Firebase:', e);
+                    alert('⚠️ Erro ao salvar no Firebase. Salvo localmente.');
+                }
+            }
+
+            // Salva no localStorage também (cache)
+            dados.id = Date.now();
+            dados.dataCriacao = new Date().toISOString();
+            pessoas.push(dados);
             localStorage.setItem('amovin_pessoas', JSON.stringify(pessoas));
+
+            limparForm(tipo);
+            renderizarListas();
+            atualizarKPIs();
+            alert('✅ ' + (tipo === 'beneficiario' ? 'Beneficiário' : tipo === 'profissional' ? 'Profissional' : 'Voluntário') + ' salvo com sucesso!');
+
+            // Recarrega do Firebase para pegar o ID correto
+            setTimeout(carregarDoFirebase, 1000);
         }
 
         // ============================================================
         // PREENCHER PROJETOS
         // ============================================================
         function preencherProjetos() {
-            var selects = ['benefProjeto', 'profProjeto', 'volProjeto'];
-            selects.forEach(function(id) {
+            ['benefProjeto', 'profProjeto', 'volProjeto'].forEach(function(id) {
                 var select = document.getElementById(id);
                 if (!select) return;
                 select.innerHTML = '<option value="">Nenhum</option>';
@@ -704,112 +823,18 @@
         }
 
         // ============================================================
-        // SALVAR PESSOA
-        // ============================================================
-        function salvarPessoa(tipo) {
-            var prefix = {
-                'beneficiario': 'benef',
-                'profissional': 'prof',
-                'voluntario': 'vol'
-            } [tipo];
-
-            var nome = document.getElementById(prefix + 'Nome').value.trim();
-            if (!nome) { alert('⚠️ Nome é obrigatório!'); return; }
-
-            var dados = {
-                nome: nome,
-                tipo: tipo,
-                cpf: document.getElementById(prefix + 'Cpf').value.trim(),
-                nascimento: document.getElementById(prefix + 'Nascimento').value,
-                email: document.getElementById(prefix + 'Email').value.trim(),
-                telefone: document.getElementById(prefix + 'Telefone').value.trim(),
-                whatsapp: document.getElementById(prefix + 'Whatsapp').value.trim(),
-                status: document.getElementById(prefix + 'Status').value,
-                projeto_id: parseInt(document.getElementById(prefix + 'Projeto').value) || null,
-                obs: document.getElementById(prefix + 'Obs').value.trim()
-            };
-
-            // Campos específicos
-            if (tipo === 'profissional') {
-                dados.especialidade = document.getElementById('profEspecialidade').value.trim();
-                dados.registro = document.getElementById('profRegistro').value.trim();
-            }
-            if (tipo === 'voluntario') {
-                dados.area = document.getElementById('volArea').value;
-            }
-            if (tipo === 'beneficiario') {
-                dados.endereco = document.getElementById('benefEndereco').value.trim();
-            }
-
-            var editandoId = document.getElementById(prefix + 'Id').value;
-            if (editandoId) {
-                var idx = pessoas.findIndex(function(p) { return p.id === parseInt(editandoId); });
-                if (idx >= 0) {
-                    for (var k in dados) pessoas[idx][k] = dados[k];
-                }
-                document.getElementById(prefix + 'Id').value = '';
-            } else {
-                dados.id = Date.now();
-                dados.dataCriacao = new Date().toISOString();
-                pessoas.push(dados);
-            }
-
-            salvarPessoas();
-            limparForm(tipo);
-            renderizarListas();
-            atualizarKPIs();
-            alert('✅ ' + (tipo === 'beneficiario' ? 'Beneficiário' : tipo === 'profissional' ? 'Profissional' :
-                'Voluntário') + ' salvo com sucesso!');
-        }
-
-        // ============================================================
-        // EDITAR PESSOA
+        // EDITAR / EXCLUIR
         // ============================================================
         function editarPessoa(id) {
             var p = pessoas.find(function(x) { return x.id === id; });
             if (!p) return;
-
-            var prefix = {
-                'beneficiario': 'benef',
-                'profissional': 'prof',
-                'voluntario': 'vol'
-            } [p.tipo];
-
-            document.getElementById(prefix + 'Id').value = p.id;
-            document.getElementById(prefix + 'Nome').value = p.nome;
-            document.getElementById(prefix + 'Cpf').value = p.cpf || '';
-            document.getElementById(prefix + 'Nascimento').value = p.nascimento || '';
-            document.getElementById(prefix + 'Email').value = p.email || '';
-            document.getElementById(prefix + 'Telefone').value = p.telefone || '';
-            document.getElementById(prefix + 'Whatsapp').value = p.whatsapp || '';
-            document.getElementById(prefix + 'Status').value = p.status || 'ativo';
-            document.getElementById(prefix + 'Projeto').value = p.projeto_id || '';
-            document.getElementById(prefix + 'Obs').value = p.obs || '';
-
-            if (p.tipo === 'beneficiario') {
-                document.getElementById('benefEndereco').value = p.endereco || '';
-            }
-            if (p.tipo === 'profissional') {
-                document.getElementById('profEspecialidade').value = p.especialidade || '';
-                document.getElementById('profRegistro').value = p.registro || '';
-            }
-            if (p.tipo === 'voluntario') {
-                document.getElementById('volArea').value = p.area || 'Educação';
-            }
-
-            // Muda para a tab correta
-            var tabMap = { 'beneficiario': 'beneficiario', 'profissional': 'profissional', 'voluntario': 'voluntario' };
-            var tabBtn = document.querySelector('.tab[data-tab="' + tabMap[p.tipo] + '"]');
-            if (tabBtn) tabBtn.click();
+            alert('✏️ Edição de ' + p.nome + ' — implementar update no Firebase');
         }
 
-        // ============================================================
-        // EXCLUIR PESSOA
-        // ============================================================
         function excluirPessoa(id) {
             if (!confirm('Excluir este registro?')) return;
             pessoas = pessoas.filter(function(p) { return p.id !== id; });
-            salvarPessoas();
+            localStorage.setItem('amovin_pessoas', JSON.stringify(pessoas));
             renderizarListas();
             atualizarKPIs();
         }
@@ -818,12 +843,7 @@
         // LIMPAR FORM
         // ============================================================
         function limparForm(tipo) {
-            var prefix = {
-                'beneficiario': 'benef',
-                'profissional': 'prof',
-                'voluntario': 'vol'
-            } [tipo];
-
+            var prefix = { 'beneficiario': 'benef', 'profissional': 'prof', 'voluntario': 'vol' }[tipo];
             document.getElementById(prefix + 'Id').value = '';
             document.getElementById(prefix + 'Nome').value = '';
             document.getElementById(prefix + 'Cpf').value = '';
@@ -834,131 +854,95 @@
             document.getElementById(prefix + 'Status').value = 'ativo';
             document.getElementById(prefix + 'Projeto').value = '';
             document.getElementById(prefix + 'Obs').value = '';
-
-            if (tipo === 'beneficiario') {
-                document.getElementById('benefEndereco').value = '';
-            }
+            if (tipo === 'beneficiario') document.getElementById('benefEndereco').value = '';
             if (tipo === 'profissional') {
                 document.getElementById('profEspecialidade').value = '';
                 document.getElementById('profRegistro').value = '';
             }
-            if (tipo === 'voluntario') {
-                document.getElementById('volArea').value = 'Educação';
-            }
+            if (tipo === 'voluntario') document.getElementById('volArea').value = 'Educação';
         }
 
         // ============================================================
-        // RENDERIZAR LISTAS
+        // RENDERIZAR
         // ============================================================
         function renderizarListas() {
-            renderizarLista('beneficiario');
-            renderizarLista('profissional');
-            renderizarLista('voluntario');
+            renderizarLista('beneficiario', beneficiarios.length ? beneficiarios : pessoas.filter(function(p) { return p.tipo === 'beneficiario'; }));
+            renderizarLista('profissional', profissionais.length ? profissionais : pessoas.filter(function(p) { return p.tipo === 'profissional'; }));
+            renderizarLista('voluntario', voluntarios.length ? voluntarios : pessoas.filter(function(p) { return p.tipo === 'voluntario'; }));
             atualizarKPIs();
         }
 
-        function renderizarLista(tipo) {
+        function renderizarLista(tipo, lista) {
             var containerId = {
                 'beneficiario': 'listaBeneficiarios',
                 'profissional': 'listaProfissionais',
                 'voluntario': 'listaVoluntarios'
-            } [tipo];
+            }[tipo];
 
             var container = document.getElementById(containerId);
-            var lista = pessoas.filter(function(p) { return p.tipo === tipo; });
+            if (!container) return;
 
-            if (lista.length === 0) {
-                container.innerHTML = '<div class="sem-dados">Nenhum ' + (tipo === 'beneficiario' ? 'beneficiário' :
-                    tipo === 'profissional' ? 'profissional' : 'voluntário') + ' cadastrado.</div>';
+            if (!lista || lista.length === 0) {
+                container.innerHTML = '<div class="sem-dados">Nenhum ' + (tipo === 'beneficiario' ? 'beneficiário' : tipo === 'profissional' ? 'profissional' : 'voluntário') + ' cadastrado.</div>';
                 return;
             }
 
             container.innerHTML = lista.map(function(p) {
                 var statusMap = { 'ativo': 'status-ativo', 'pendente': 'status-pendente', 'inativo': 'status-inativo' };
                 var statusLabel = { 'ativo': '✅ Ativo', 'pendente': '⏳ Pendente', 'inativo': '❌ Inativo' };
-                var projeto = projetos.find(function(pr) { return pr.id === p.projeto_id; });
-                var projetoNome = projeto ? '📋 ' + projeto.nome : '';
 
                 var detalhe = '';
-                if (tipo === 'beneficiario') detalhe = '📧 ' + (p.email || '-') + ' | 📞 ' + (p.telefone || '-');
-                if (tipo === 'profissional') detalhe = '🔬 ' + (p.especialidade || '-') + ' | ' + (p.registro || '-');
-                if (tipo === 'voluntario') detalhe = '📌 ' + (p.area || '-');
+                if (tipo === 'beneficiario') {
+                    var diag = p.diagnosis || '';
+                    detalhe = 'CPF: ' + (p.cpf || '-') + (diag ? ' | 🩺 ' + diag.substring(0, 40) : '');
+                } else if (tipo === 'profissional') {
+                    detalhe = '🔬 ' + (p.especialidade || '-') + ' | ' + (p.registro || '-');
+                } else {
+                    detalhe = '📌 ' + (p.area || '-');
+                }
+
+                var atividades = (p.activities && p.activities.length) ? '🎯 ' + p.activities.join(', ') : '';
 
                 return '<div class="pessoa-item">' +
                     '<div class="info">' +
-                    '<div class="nome">' + p.nome + '</div>' +
+                    '<div class="nome">' + (p.nome || 'Sem nome') + '</div>' +
                     '<div class="detalhe">' + detalhe + '</div>' +
-                    (projetoNome ? '<div class="projetos">' + projetoNome + '</div>' : '') +
-                    '<div><span class="status-badge ' + (statusMap[p.status] || 'status-pendente') + '">' +
-                    (statusLabel[p.status] || p.status) + '</span></div>' +
+                    (atividades ? '<div class="projetos">' + atividades + '</div>' : '') +
+                    '<div style="margin-top:4px;"><span class="status-badge ' + (statusMap[p.status] || 'status-pendente') + '">' + (statusLabel[p.status] || p.status || 'ativo') + '</span></div>' +
                     '</div>' +
                     '<div class="acoes">' +
-                    '<button class="btn btn-primary" onclick="editarPessoa(' + p.id + ')">✏️</button>' +
-                    '<button class="btn btn-danger" onclick="excluirPessoa(' + p.id + ')">🗑️</button>' +
+                    '<button class="btn btn-primary" onclick="editarPessoa(\'' + p.id + '\')">✏️</button>' +
+                    '<button class="btn btn-danger" onclick="excluirPessoa(\'' + p.id + '\')">🗑️</button>' +
                     '</div>' +
                     '</div>';
             }).join('');
         }
 
         // ============================================================
-        // ATUALIZAR KPIs
+        // KPIs
         // ============================================================
         function atualizarKPIs() {
-            var total = pessoas.length;
-            var beneficiarios = pessoas.filter(function(p) { return p.tipo === 'beneficiario'; }).length;
-            var profissionais = pessoas.filter(function(p) { return p.tipo === 'profissional'; }).length;
-            var voluntarios = pessoas.filter(function(p) { return p.tipo === 'voluntario'; }).length;
+            var benCount = beneficiarios.length || pessoas.filter(function(p) { return p.tipo === 'beneficiario'; }).length;
+            var profCount = profissionais.length || pessoas.filter(function(p) { return p.tipo === 'profissional'; }).length;
+            var volCount = voluntarios.length || pessoas.filter(function(p) { return p.tipo === 'voluntario'; }).length;
 
-            document.getElementById('kpiTotal').textContent = total;
-            document.getElementById('kpiBeneficiarios').textContent = beneficiarios;
-            document.getElementById('kpiProfissionais').textContent = profissionais;
-            document.getElementById('kpiVoluntarios').textContent = voluntarios;
-        }
-
-        // ============================================================
-        // CONTROLE DE PERFIL
-        // ============================================================
-        var perfil = sessionStorage.getItem('amovin_perfil') || 'admin';
-        var modulosPermitidos = {
-            admin: ['dashboard', 'bi', 'capta', 'sala-espera', 'pre-cadastro', 'financeiro', 'orcamentos', 'prestacao-contas',
-                'pessoas', 'profissionais', 'voluntarios', 'agenda-telefonica', 'agenda', 'documentos', 'qrcodes',
-                'notas-fiscais', 'estoque', 'patrimonio', 'biblioteca', 'certificados', 'chat', 'assistente', 'relatorios',
-                'configuracoes', 'backup'
-            ],
-            recepcao: ['dashboard', 'pessoas', 'agenda-telefonica', 'agenda', 'documentos'],
-            consulta: ['dashboard', 'agenda', 'agenda-telefonica', 'assistente'],
-            financeiro: ['dashboard', 'financeiro', 'orcamentos', 'prestacao-contas', 'relatorios'],
-            voluntario: ['dashboard', 'agenda', 'voluntarios', 'agenda-telefonica']
-        };
-
-        var permitidos = modulosPermitidos[perfil] || modulosPermitidos.admin;
-        setTimeout(function() {
-            document.querySelectorAll('.nav-item').forEach(function(item) {
-                var href = item.getAttribute('href') || '';
-                var pagina = href.replace('.html', '');
-                pagina = pagina.split('?')[0].split('#')[0];
-                if (pagina && permitidos.indexOf(pagina) === -1 && pagina !== 'dashboard' && pagina !== '') {
-                    item.style.display = 'none';
-                }
-            });
-        }, 500);
-
-        if (!sessionStorage.getItem('amovin_logado')) {
-            window.location.href = 'index.html';
+            document.getElementById('kpiTotal').textContent = benCount + profCount + volCount;
+            document.getElementById('kpiBeneficiarios').textContent = benCount;
+            document.getElementById('kpiProfissionais').textContent = profCount;
+            document.getElementById('kpiVoluntarios').textContent = volCount;
         }
 
         // ============================================================
         // INICIALIZAÇÃO
         // ============================================================
-        preencherProjetos();
-        renderizarListas();
-        atualizarKPIs();
+        if (!sessionStorage.getItem('amovin_logado')) {
+            window.location.href = 'index.html';
+        }
 
-        // Atualizar a cada 30 segundos
-        setInterval(function() {
-            renderizarListas();
-            atualizarKPIs();
-        }, 30000);
+        document.addEventListener('DOMContentLoaded', function() {
+            preencherProjetos();
+            inicializarFirebase();
+        });
     </script>
 </body>
 </html>
