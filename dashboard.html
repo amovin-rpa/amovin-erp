@@ -26,11 +26,7 @@
             min-height: 100vh;
         }
 
-        .main-content {
-            flex: 1;
-            margin-left: 270px;
-            padding: 24px 30px;
-        }
+        .main-content { flex: 1; margin-left: 270px; padding: 24px 30px; }
         .topo-bar {
             display: flex;
             justify-content: space-between;
@@ -53,9 +49,6 @@
             cursor: pointer;
         }
 
-        /* ============================================================
-           STATUS BAR - SAUDAÇÃO + FIREBASE
-           ============================================================ */
         .status-bar {
             display: flex;
             justify-content: space-between;
@@ -68,11 +61,7 @@
             flex-wrap: wrap;
             gap: 10px;
         }
-        .status-bar .saudacao {
-            font-size: 18px;
-            font-weight: 600;
-            color: var(--grafite);
-        }
+        .status-bar .saudacao { font-size: 18px; font-weight: 600; color: var(--grafite); }
         .status-bar .status-firebase {
             font-size: 13px;
             font-weight: 500;
@@ -84,9 +73,6 @@
         .status-bar .status-firebase .offline { color: var(--vermelho); }
         .status-bar .status-firebase .verificando { color: var(--cinza); }
 
-        /* ============================================================
-           BANNER DO LINK PÚBLICO
-           ============================================================ */
         .public-link-banner {
             background: linear-gradient(135deg, #FFF8E7, #FFF3E0);
             border: 2px dashed var(--laranja);
@@ -98,27 +84,11 @@
             justify-content: space-between;
             flex-wrap: wrap;
             gap: 12px;
-            transition: all 0.3s;
         }
-        .public-link-banner:hover {
-            border-color: var(--laranja-escuro);
-            box-shadow: 0 4px 20px rgba(198, 90, 17, 0.10);
-        }
-        .public-link-banner .info {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-        }
+        .public-link-banner .info { display: flex; align-items: center; gap: 14px; }
         .public-link-banner .info .icone { font-size: 32px; }
-        .public-link-banner .info .texto h4 {
-            font-size: 16px;
-            color: var(--grafite);
-            font-weight: 700;
-        }
-        .public-link-banner .info .texto p {
-            font-size: 12px;
-            color: var(--cinza);
-        }
+        .public-link-banner .info .texto h4 { font-size: 16px; color: var(--grafite); font-weight: 700; }
+        .public-link-banner .info .texto p { font-size: 12px; color: var(--cinza); }
         .public-link-banner .info .texto .url-amigavel {
             font-size: 13px;
             font-weight: 600;
@@ -143,10 +113,6 @@
             font-family: 'Inter', sans-serif;
             background: white;
             min-width: 280px;
-        }
-        .public-link-banner .link-actions input:focus {
-            outline: none;
-            border-color: var(--laranja);
         }
         .btn-copiar-link {
             padding: 10px 20px;
@@ -216,10 +182,7 @@
             text-align: center;
             transition: all 0.3s;
         }
-        .kpi-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
-        }
+        .kpi-card:hover { transform: translateY(-3px); box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06); }
         .kpi-card .kpi-icon { font-size: 28px; display: block; margin-bottom: 6px; }
         .kpi-card .kpi-valor { font-size: 28px; font-weight: 800; color: var(--grafite); }
         .kpi-card .kpi-label { font-size: 12px; color: var(--cinza); margin-top: 2px; }
@@ -307,12 +270,7 @@
             border: 1px solid #F0E9DF;
             margin-top: 20px;
         }
-        .rodape-grid {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
+        .rodape-grid { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
         .rodape-logo .logo-vigorre { width: 50px; }
         .rodape-info { flex: 1; }
         .rodape-info .copyright { font-size: 8px; color: #8A8F98; }
@@ -349,7 +307,6 @@
             <button class="btn-sair-topo" onclick="window.location.href='index.html'">🚪 Sair</button>
         </div>
 
-        <!-- STATUS BAR -->
         <div class="status-bar">
             <div class="saudacao">
                 <span id="mensagemSaudacao">🌅 Bom dia, Administrador!</span>
@@ -359,7 +316,6 @@
             </div>
         </div>
 
-        <!-- BANNER LINK PRÉ-CADASTRO -->
         <div class="public-link-banner">
             <div class="info">
                 <span class="icone">🌟</span>
@@ -376,12 +332,16 @@
             </div>
         </div>
 
-        <!-- KPIs -->
         <div class="kpi-grid" id="kpiContainer">
             <div class="kpi-card">
-                <span class="kpi-icon">📋</span>
-                <div class="kpi-valor laranja" id="kpiProjetos">0</div>
-                <div class="kpi-label">Projetos Ativos</div>
+                <span class="kpi-icon">👥</span>
+                <div class="kpi-valor laranja" id="kpiBeneficiarios">0</div>
+                <div class="kpi-label">Beneficiários</div>
+            </div>
+            <div class="kpi-card">
+                <span class="kpi-icon">👨‍⚕️</span>
+                <div class="kpi-valor azul" id="kpiProfissionais">0</div>
+                <div class="kpi-label">Profissionais</div>
             </div>
             <div class="kpi-card">
                 <span class="kpi-icon">💰</span>
@@ -394,14 +354,9 @@
                 <div class="kpi-label">Total Gasto</div>
             </div>
             <div class="kpi-card">
-                <span class="kpi-icon">📊</span>
-                <div class="kpi-valor verde" id="kpiSaldo">R$ 0</div>
-                <div class="kpi-label">Saldo Disponível</div>
-            </div>
-            <div class="kpi-card">
-                <span class="kpi-icon">⏳</span>
-                <div class="kpi-valor vermelho" id="kpiPendentes">0</div>
-                <div class="kpi-label">Notas Pendentes</div>
+                <span class="kpi-icon">📄</span>
+                <div class="kpi-valor vermelho" id="kpiNotas">0</div>
+                <div class="kpi-label">Notas Fiscais</div>
             </div>
             <div class="kpi-card">
                 <span class="kpi-icon">📦</span>
@@ -410,22 +365,27 @@
             </div>
         </div>
 
-        <!-- ALERTAS -->
         <div class="alertas-grid" id="alertasContainer"></div>
 
-        <!-- GRID 2 COLUNAS -->
         <div class="grid-2col">
             <div class="card">
-                <h3>📋 Projetos em Andamento <span class="badge" id="totalProjetosBadge">0</span></h3>
-                <div id="listaProjetos">
-                    <div style="text-align:center;padding:20px;color:#9CA3AF;font-size:13px;">Nenhum projeto ativo.</div>
+                <h3>👥 Beneficiários Cadastrados <span class="badge" id="totalBeneficiariosBadge">0</span></h3>
+                <div id="listaBeneficiarios">
+                    <div style="text-align:center;padding:20px;color:#9CA3AF;font-size:13px;">Nenhum beneficiário cadastrado.</div>
                 </div>
             </div>
             <div class="card">
-                <h3>📄 Últimas Notas Vinculadas <span class="badge" id="totalNotasBadge">0</span></h3>
-                <div id="listaNotas">
-                    <div style="text-align:center;padding:20px;color:#9CA3AF;font-size:13px;">Nenhuma nota vinculada.</div>
+                <h3>👨‍⚕️ Profissionais Cadastrados <span class="badge" id="totalProfissionaisBadge">0</span></h3>
+                <div id="listaProfissionais">
+                    <div style="text-align:center;padding:20px;color:#9CA3AF;font-size:13px;">Nenhum profissional cadastrado.</div>
                 </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>📄 Últimas Notas Fiscais <span class="badge" id="totalNotasBadge">0</span></h3>
+            <div id="listaNotas">
+                <div style="text-align:center;padding:20px;color:#9CA3AF;font-size:13px;">Nenhuma nota vinculada.</div>
             </div>
         </div>
 
@@ -481,53 +441,41 @@
         }
 
         // ============================================================
-        // SAUDAÇÃO PERSONALIZADA (COM FALLBACK ROBUSTO)
+        // SAUDAÇÃO PERSONALIZADA
         // ============================================================
         function atualizarSaudacao() {
-            // Tenta pegar o nome de várias fontes
             var nome = sessionStorage.getItem('amovin_nome')
                     || localStorage.getItem('amovin_usuario')
                     || 'Administrador';
 
-            // Se for 'admin' (usuário), mostra 'Administrador'
             if (nome === 'admin' || nome === 'Admin' || nome === 'ADMIN') {
                 nome = 'Administrador';
             }
 
-            var agora = new Date();
-            var hora = agora.getHours();
+            var hora = new Date().getHours();
             var saudacao = '';
 
-            if (hora >= 5 && hora < 12) {
-                saudacao = '🌅 Bom dia';
-            } else if (hora >= 12 && hora < 18) {
-                saudacao = '☀️ Boa tarde';
-            } else if (hora >= 18 && hora < 23) {
-                saudacao = '🌙 Boa noite';
-            } else {
-                saudacao = '🌙 Boa madrugada';
-            }
+            if (hora >= 5 && hora < 12) saudacao = '🌅 Bom dia';
+            else if (hora >= 12 && hora < 18) saudacao = '☀️ Boa tarde';
+            else if (hora >= 18 && hora < 23) saudacao = '🌙 Boa noite';
+            else saudacao = '🌙 Boa madrugada';
 
             var el = document.getElementById('mensagemSaudacao');
-            if (el) {
-                el.textContent = saudacao + ', ' + nome + '!';
-            }
+            if (el) el.textContent = saudacao + ', ' + nome + '!';
         }
 
         // ============================================================
-        // STATUS FIREBASE (PROJETO CORRETO: gestao-amovin)
+        // STATUS FIREBASE
         // ============================================================
         function verificarStatusFirebase() {
             var statusEl = document.getElementById('statusFirebase');
 
-            // Se o Firebase já está carregado
             if (typeof firebase !== 'undefined' && firebase.apps && firebase.apps.length > 0) {
                 statusEl.innerHTML = '🟢 Firebase Conectado';
                 statusEl.className = 'conectado';
                 return;
             }
 
-            // Carrega o Firebase dinamicamente
             if (typeof firebase === 'undefined') {
                 var script = document.createElement('script');
                 script.src = 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js';
@@ -549,15 +497,13 @@
                             statusEl.innerHTML = '🟢 Firebase Conectado';
                             statusEl.className = 'conectado';
                             console.log('🔥 Firebase conectado: gestao-amovin');
+                            // Recarrega os dados após conectar
+                            carregarDados();
                         } catch (e) {
                             console.error('❌ Erro ao conectar Firebase:', e);
                             statusEl.innerHTML = '🔴 Erro na conexão';
                             statusEl.className = 'offline';
                         }
-                    };
-                    authScript.onerror = function() {
-                        statusEl.innerHTML = '🟡 Firebase Offline (modo local)';
-                        statusEl.className = 'offline';
                     };
                     document.head.appendChild(authScript);
                 };
@@ -570,49 +516,118 @@
         }
 
         // ============================================================
-        // CARREGAR DADOS
+        // CARREGAR DADOS (FIREBASE + FALLBACK LOCALSTORAGE)
         // ============================================================
-        function carregarDados() {
-            var projetos = JSON.parse(localStorage.getItem('amovin_projetos') || '[]');
-            var orcamentos = JSON.parse(localStorage.getItem('amovin_orcamentos') || '[]');
-            var notas = JSON.parse(localStorage.getItem('amovin_notas_fiscais') || '[]');
-            var produtosEspera = JSON.parse(localStorage.getItem('amovin_produtos_espera') || '[]');
+        async function carregarDados() {
+            console.log('🔄 Carregando dados...');
 
+            var beneficiarios = [];
+            var profissionais = [];
+            var financas = [];
+            var notas = [];
+            var produtosEspera = [];
+
+            // Tenta ler do Firebase
+            if (typeof firebase !== 'undefined' && firebase.apps && firebase.apps.length > 0) {
+                try {
+                    var db = firebase.firestore();
+
+                    // Beneficiários
+                    var benSnap = await db.collection('beneficiaries').get();
+                    benSnap.forEach(function(doc) {
+                        beneficiarios.push({ id: doc.id, ...doc.data() });
+                    });
+                    console.log('👥 Beneficiários:', beneficiarios.length);
+
+                    // Profissionais
+                    var profSnap = await db.collection('professionals').get();
+                    profSnap.forEach(function(doc) {
+                        profissionais.push({ id: doc.id, ...doc.data() });
+                    });
+                    console.log('👨‍⚕️ Profissionais:', profissionais.length);
+
+                    // Finanças
+                    var finSnap = await db.collection('finances').get();
+                    finSnap.forEach(function(doc) {
+                        financas.push({ id: doc.id, ...doc.data() });
+                    });
+                    console.log('💰 Finanças:', financas.length);
+
+                    // Notas fiscais
+                    try {
+                        var notasSnap = await db.collection('notas_fiscais').get();
+                        notasSnap.forEach(function(doc) {
+                            notas.push({ id: doc.id, ...doc.data() });
+                        });
+                        console.log('📄 Notas:', notas.length);
+                    } catch (e) { console.warn('⚠️ Coleção notas_fiscais não existe'); }
+
+                    // Produtos em espera
+                    try {
+                        var prodSnap = await db.collection('produtos_espera').get();
+                        prodSnap.forEach(function(doc) {
+                            produtosEspera.push({ id: doc.id, ...doc.data() });
+                        });
+                        console.log('📦 Produtos em Espera:', produtosEspera.length);
+                    } catch (e) { console.warn('⚠️ Coleção produtos_espera não existe'); }
+
+                } catch (err) {
+                    console.warn('⚠️ Erro ao ler do Firebase, usando localStorage:', err);
+                }
+            }
+
+            // Fallback para localStorage se Firebase falhar
+            if (beneficiarios.length === 0 && profissionais.length === 0) {
+                beneficiarios = JSON.parse(localStorage.getItem('amovin_beneficiarios') || '[]');
+                profissionais = JSON.parse(localStorage.getItem('amovin_profissionais') || '[]');
+                financas = JSON.parse(localStorage.getItem('amovin_orcamentos') || '[]');
+                notas = JSON.parse(localStorage.getItem('amovin_notas_fiscais') || '[]');
+                produtosEspera = JSON.parse(localStorage.getItem('amovin_produtos_espera') || '[]');
+            }
+
+            // ============================================================
             // KPIs
-            var projetosAtivos = projetos.filter(function(p) { return p.status === 'ativo'; });
+            // ============================================================
             var totalPrevisto = 0, totalRealizado = 0;
-            orcamentos.forEach(function(o) {
-                totalPrevisto += o.previsto || 0;
-                totalRealizado += o.realizado || 0;
+            financas.forEach(function(f) {
+                totalPrevisto += f.valor_previsto || f.previsto || 0;
+                totalRealizado += f.valor_realizado || f.realizado || 0;
             });
 
-            var notasPendentes = notas.filter(function(n) {
-                return n.status === 'pendente' || n.status === 'pendente_vinculo';
-            }).length;
+            var emEspera = produtosEspera.filter(function(p) { return p.status === 'aguardando'; }).length;
 
-            var emEspera = produtosEspera.filter(function(p) {
-                return p.status === 'aguardando';
-            }).length;
-
-            document.getElementById('kpiProjetos').textContent = projetosAtivos.length;
+            document.getElementById('kpiBeneficiarios').textContent = beneficiarios.length;
+            document.getElementById('kpiProfissionais').textContent = profissionais.length;
             document.getElementById('kpiOrcamento').textContent = 'R$ ' + totalPrevisto.toFixed(2).replace('.', ',');
             document.getElementById('kpiGasto').textContent = 'R$ ' + totalRealizado.toFixed(2).replace('.', ',');
-            document.getElementById('kpiSaldo').textContent = 'R$ ' + (totalPrevisto - totalRealizado).toFixed(2).replace('.', ',');
-            document.getElementById('kpiPendentes').textContent = notasPendentes;
+            document.getElementById('kpiNotas').textContent = notas.length;
             document.getElementById('kpiEspera').textContent = emEspera;
 
+            // ============================================================
             // ALERTAS
+            // ============================================================
             var alertasContainer = document.getElementById('alertasContainer');
             var alertas = [];
 
-            if (notasPendentes > 0) {
+            if (beneficiarios.length > 0) {
                 alertas.push({
-                    tipo: 'urgente',
-                    icone: '⚠️',
-                    titulo: notasPendentes + ' nota(s) fiscal(is) pendente(s)',
-                    desc: 'Vincule as notas fiscais para atualizar o orçamento.',
-                    link: 'notas-fiscais.html',
-                    linkText: 'Ir para Notas'
+                    tipo: 'info',
+                    icone: '👥',
+                    titulo: beneficiarios.length + ' beneficiário(s) cadastrado(s)',
+                    desc: 'Total de beneficiários no Firebase.',
+                    link: 'idp.html',
+                    linkText: 'Ver Beneficiários'
+                });
+            }
+
+            if (profissionais.length > 0) {
+                alertas.push({
+                    tipo: 'info',
+                    icone: '👨‍⚕️',
+                    titulo: profissionais.length + ' profissional(is) cadastrado(s)',
+                    desc: 'Total de profissionais no Firebase.',
+                    link: 'idp.html',
+                    linkText: 'Ver Profissionais'
                 });
             }
 
@@ -627,24 +642,16 @@
                 });
             }
 
-            orcamentos.forEach(function(o) {
-                var previsto = o.previsto || 0;
-                var realizado = o.realizado || 0;
-                if (previsto > 0 && realizado > 0) {
-                    var percentual = (realizado / previsto) * 100;
-                    if (percentual > 85) {
-                        var projeto = projetos.find(function(p) { return p.id === o.projeto_id; });
-                        alertas.push({
-                            tipo: 'atencao',
-                            icone: '📊',
-                            titulo: 'Projeto "' + (projeto ? projeto.nome : '---') + '" - ' + percentual.toFixed(0) + '% do orçamento utilizado',
-                            desc: 'Categoria: ' + o.categoria + ' | Disponível: R$ ' + (previsto - realizado).toFixed(2).replace('.', ','),
-                            link: 'projetos-convenios.html',
-                            linkText: 'Ver Projeto'
-                        });
-                    }
-                }
-            });
+            if (notas.length > 0) {
+                alertas.push({
+                    tipo: 'info',
+                    icone: '📄',
+                    titulo: notas.length + ' nota(s) fiscal(is) cadastrada(s)',
+                    desc: 'Total de notas fiscais no sistema.',
+                    link: 'notas-fiscais.html',
+                    linkText: 'Ver Notas'
+                });
+            }
 
             if (alertas.length === 0) {
                 alertas.push({
@@ -657,7 +664,7 @@
                 });
             }
 
-            alertas = alertas.slice(0, 5);
+            alertas = alertas.slice(0, 4);
 
             alertasContainer.innerHTML = alertas.map(function(a) {
                 var classes = {
@@ -676,60 +683,79 @@
                     '</div>';
             }).join('');
 
-            // PROJETOS
-            var listaProjetos = document.getElementById('listaProjetos');
-            document.getElementById('totalProjetosBadge').textContent = projetosAtivos.length;
+            // ============================================================
+            // BENEFICIÁRIOS
+            // ============================================================
+            var listaBen = document.getElementById('listaBeneficiarios');
+            document.getElementById('totalBeneficiariosBadge').textContent = beneficiarios.length;
 
-            if (projetosAtivos.length === 0) {
-                listaProjetos.innerHTML = '<div style="text-align:center;padding:20px;color:#9CA3AF;font-size:13px;">Nenhum projeto ativo.</div>';
+            if (beneficiarios.length === 0) {
+                listaBen.innerHTML = '<div style="text-align:center;padding:20px;color:#9CA3AF;font-size:13px;">Nenhum beneficiário cadastrado.</div>';
             } else {
-                listaProjetos.innerHTML = projetosAtivos.slice(0, 5).map(function(p) {
-                    var orcProjeto = orcamentos.filter(function(o) { return o.projeto_id === p.id; });
-                    var totalPrev = orcProjeto.reduce(function(s, o) { return s + o.previsto; }, 0);
-                    var totalReal = orcProjeto.reduce(function(s, o) { return s + o.realizado; }, 0);
-                    var percentual = totalPrev > 0 ? Math.min((totalReal / totalPrev) * 100, 100) : 0;
-                    var cor = percentual < 70 ? 'fill-verde' : (percentual < 90 ? 'fill-laranja' : 'fill-vermelho');
+                listaBen.innerHTML = beneficiarios.slice(0, 8).map(function(b) {
+                    var nome = b.fullName || b.nome || 'Sem nome';
+                    var cpf = b.cpf || '—';
+                    var diag = b.diagnosis || b.diagnostico || '';
+                    var atividades = (b.activities || []).join(', ') || '';
 
                     return '<div class="projeto-item">' +
                         '<div class="header">' +
-                        '<span class="nome">' + p.nome + '</span>' +
-                        '<span class="valores">' +
-                        '<span class="realizado">R$ ' + totalReal.toFixed(2).replace('.', ',') + '</span>' +
-                        ' / R$ ' + totalPrev.toFixed(2).replace('.', ',') +
-                        ' (' + percentual.toFixed(0) + '%)' +
-                        '</span>' +
+                        '<span class="nome">👤 ' + nome + '</span>' +
+                        '<span class="valores">CPF: ' + cpf + '</span>' +
                         '</div>' +
-                        '<div class="barra"><div class="fill ' + cor + '" style="width:' + percentual + '%;"></div></div>' +
+                        (diag ? '<div style="font-size:12px;color:var(--cinza);margin-top:4px;">🩺 ' + diag + '</div>' : '') +
+                        (atividades ? '<div style="font-size:11px;color:var(--cinza);margin-top:2px;">🎯 ' + atividades + '</div>' : '') +
                         '</div>';
                 }).join('');
             }
 
-            // NOTAS
+            // ============================================================
+            // PROFISSIONAIS
+            // ============================================================
+            var listaProf = document.getElementById('listaProfissionais');
+            document.getElementById('totalProfissionaisBadge').textContent = profissionais.length;
+
+            if (profissionais.length === 0) {
+                listaProf.innerHTML = '<div style="text-align:center;padding:20px;color:#9CA3AF;font-size:13px;">Nenhum profissional cadastrado.</div>';
+            } else {
+                listaProf.innerHTML = profissionais.slice(0, 8).map(function(p) {
+                    var nome = p.fullName || p.nome || 'Sem nome';
+                    var especialidade = p.specialty || p.especialidade || '';
+                    var registro = p.registro || p.crm || '';
+
+                    return '<div class="nota-item">' +
+                        '<div class="info">' +
+                        '<span class="num">👨‍⚕️ ' + nome + '</span>' +
+                        (especialidade ? '<span class="projeto"> • ' + especialidade + '</span>' : '') +
+                        '</div>' +
+                        (registro ? '<span class="valor">' + registro + '</span>' : '') +
+                        '</div>';
+                }).join('');
+            }
+
+            // ============================================================
+            // NOTAS FISCAIS
+            // ============================================================
             var listaNotas = document.getElementById('listaNotas');
-            var notasVinculadas = notas.filter(function(n) {
-                return n.status === 'vinculado' || n.status === 'aprovado';
-            }).sort(function(a, b) {
-                return new Date(b.data_criacao) - new Date(a.data_criacao);
-            });
+            document.getElementById('totalNotasBadge').textContent = notas.length;
 
-            document.getElementById('totalNotasBadge').textContent = notasVinculadas.length;
-
-            if (notasVinculadas.length === 0) {
+            if (notas.length === 0) {
                 listaNotas.innerHTML = '<div style="text-align:center;padding:20px;color:#9CA3AF;font-size:13px;">Nenhuma nota vinculada.</div>';
             } else {
-                listaNotas.innerHTML = notasVinculadas.slice(0, 5).map(function(n) {
-                    var projeto = projetos.find(function(p) { return p.id === n.projeto_id; });
+                listaNotas.innerHTML = notas.slice(0, 5).map(function(n) {
                     return '<div class="nota-item">' +
                         '<div class="info">' +
                         '<span class="num">NF ' + (n.numero || '---') + '</span>' +
-                        '<span class="projeto"> • ' + (projeto ? projeto.nome : 'Projeto não identificado') + '</span>' +
+                        '<span class="projeto"> • ' + (n.emitente && n.emitente.razaoSocial ? n.emitente.razaoSocial : (n.emitente || 'Fornecedor')) + '</span>' +
                         '</div>' +
-                        '<span class="valor">R$ ' + (n.valor_total || 0).toFixed(2).replace('.', ',') + '</span>' +
+                        '<span class="valor">R$ ' + (n.valorTotal || n.valor_total || 0).toFixed(2).replace('.', ',') + '</span>' +
                         '</div>';
                 }).join('');
             }
 
+            // ============================================================
             // SALA DE ESPERA
+            // ============================================================
             var listaEspera = document.getElementById('listaEspera');
             var emEsperaLista = produtosEspera.filter(function(p) { return p.status === 'aguardando'; });
             document.getElementById('totalEsperaBadge').textContent = emEsperaLista.length;
@@ -740,9 +766,9 @@
                 listaEspera.innerHTML = emEsperaLista.slice(0, 5).map(function(p) {
                     var destinos = { 'estoque': '📦 Estoque', 'patrimonio': '🏢 Patrimônio', 'servico': '🛠️ Serviço' };
                     return '<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #F0E9DF;font-size:13px;">' +
-                        '<span><strong>' + p.descricao + '</strong> (' + p.quantidade + 'x) <span style="color:var(--cinza);font-size:12px;">Sugestão: ' +
+                        '<span><strong>' + p.descricao + '</strong> (' + (p.quantidade || 1) + 'x) <span style="color:var(--cinza);font-size:12px;">Sugestão: ' +
                         destinos[p.destino_sugerido] + '</span></span>' +
-                        '<span style="color:var(--laranja);font-weight:600;">R$ ' + p.valor_total.toFixed(2).replace('.', ',') + '</span>' +
+                        '<span style="color:var(--laranja);font-weight:600;">R$ ' + (p.valor_total || 0).toFixed(2).replace('.', ',') + '</span>' +
                         '</div>';
                 }).join('');
             }
@@ -764,8 +790,7 @@
             carregarDados();
 
             setInterval(atualizarSaudacao, 60000);
-            setInterval(verificarStatusFirebase, 30000);
-            setInterval(carregarDados, 30000);
+            setInterval(carregarDados, 60000);
         });
     </script>
 </body>
