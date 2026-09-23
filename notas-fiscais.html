@@ -36,8 +36,6 @@ body { font-family: 'Inter', system-ui, sans-serif; background: #F8F4ED; display
 .btn-outline { background: transparent; color: var(--cinza); border: 1px solid #E5E0D8; } .btn-outline:hover { background: #F8F4ED; }
 .btn-danger { background: var(--vermelho); color: white; }
 .btn-warning { background: var(--dourado); color: white; }
-.btn-teal { background: var(--teal); color: white; }
-.btn-azul { background: var(--azul); color: white; }
 .btn-full { width: 100%; padding: 14px; font-size: 15px; justify-content: center; }
 .dropzone { border: 2px dashed #E5E0D8; border-radius: 10px; padding: 16px; text-align: center; transition: all 0.3s; cursor: pointer; background: #FAFAFA; }
 .dropzone:hover, .dropzone.dragover { border-color: var(--roxo); background: #F5F0FF; }
@@ -92,10 +90,6 @@ body { font-family: 'Inter', system-ui, sans-serif; background: #F8F4ED; display
 .info-prestacao strong { color: var(--laranja); }
 .alerta-orcamento { background: #FEF3C7; border-left: 4px solid var(--dourado); padding: 14px; border-radius: 8px; margin: 12px 0; font-size: 13px; }
 .alerta-orcamento.ok { background: #E8F5E9; border-color: var(--verde); }
-.log-item { padding: 10px 12px; border-bottom: 1px solid #F0E9DF; font-size: 12px; }
-.log-item .quando { font-size: 10px; color: var(--cinza); }
-.log-item .quem { font-weight: 700; color: var(--laranja); }
-.log-item .just { font-size: 11px; color: #666; margin-top: 4px; padding: 6px 10px; background: #FFF8E7; border-radius: 6px; border-left: 3px solid var(--laranja); }
 .rodape { background: #FFFFFF; border-radius: 14px; padding: 12px 18px; border: 1px solid #F0E9DF; margin-top: 20px; }
 .rodape-grid { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
 .rodape-logo .logo-vigorre { width: 50px; }
@@ -125,19 +119,13 @@ body { font-family: 'Inter', system-ui, sans-serif; background: #F8F4ED; display
 
     <div class="card" style="background:linear-gradient(135deg, #F5F0FF, #F0F9FF);border-color:var(--roxo);">
         <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">
-            <div>
-                <span style="font-size:20px;">🤖</span>
-                <span style="font-weight:700;font-size:16px;color:var(--grafite);">Status da IA</span>
-            </div>
-            <div>
-                <span class="status-ia" id="statusIA">⏳ Verificando...</span>
-                <span style="font-size:12px;color:var(--cinza);margin-left:12px;" id="modeloIA">Gemini</span>
-            </div>
+            <div><span style="font-size:20px;">🤖</span> <span style="font-weight:700;font-size:16px;color:var(--grafite);">Status da IA</span></div>
+            <div><span class="status-ia" id="statusIA">⏳ Verificando...</span><span style="font-size:12px;color:var(--cinza);margin-left:12px;" id="modeloIA">Gemini</span></div>
         </div>
         <div style="font-size:12px;color:var(--cinza);margin-top:4px;">
             🔑 Chave: <span id="statusChave">Não configurada</span>
             <button class="btn btn-outline" onclick="configurarChave()" style="padding:4px 12px;font-size:11px;margin-left:8px;">🔑 Configurar</button>
-            <button class="btn btn-outline" onclick="testarConexao()" style="padding:4px 12px;font-size:11px;margin-left:4px;">🧪 Testar</button>
+            <button class="btn btn-outline" onclick="testarConexao(event)" style="padding:4px 12px;font-size:11px;margin-left:4px;">🧪 Testar</button>
         </div>
     </div>
 
@@ -186,25 +174,19 @@ body { font-family: 'Inter', system-ui, sans-serif; background: #F8F4ED; display
 
         <div class="form-group">
             <label>📋 Projeto / Emenda *</label>
-            <select id="projetoVinculo" onchange="verificarOrcamento()">
-                <option value="">Selecione um projeto...</option>
-            </select>
+            <select id="projetoVinculo" onchange="verificarOrcamento()"><option value="">Selecione um projeto...</option></select>
         </div>
 
         <div id="alertaOrcamento" style="display:none;"></div>
 
         <div class="form-group">
             <label>📊 Orçamento Fechado</label>
-            <select id="orcamentoVinculo" onchange="atualizarSaldo()">
-                <option value="">Selecione um orçamento...</option>
-            </select>
+            <select id="orcamentoVinculo" onchange="atualizarSaldo()"><option value="">Selecione um orçamento...</option></select>
         </div>
 
         <div class="form-group">
             <label>📦 Item do Orçamento</label>
-            <select id="orcamentoItemVinculo">
-                <option value="">— Nenhum —</option>
-            </select>
+            <select id="orcamentoItemVinculo"><option value="">— Nenhum —</option></select>
         </div>
 
         <div class="form-group">
@@ -300,7 +282,6 @@ body { font-family: 'Inter', system-ui, sans-serif; background: #F8F4ED; display
         </div>
     </div>
 </main>
-
 <script src="config.js"></script>
 <script src="menu.js?v=20260904"></script>
 <script>
@@ -472,11 +453,11 @@ function configurarChave() {
         mostrarToast('✅ Chave configurada!', 'success');
     }
 }
-async function testarConexao() {
+async function testarConexao(ev) {
     var key = AMOVIN_CONFIG.getGeminiKey();
     if (!key || key.length < 20) { mostrarToast('⚠️ Configure a chave primeiro!', 'warning'); return; }
-    var btn = event.target;
-    btn.disabled = true; btn.textContent = '⏳ Testando...';
+    var btn = ev && ev.target ? ev.target : document.querySelector('button[onclick*="testarConexao"]');
+    if (btn) { btn.disabled = true; btn.textContent = '⏳ Testando...'; }
     try {
         var resposta = await AMOVIN_CONFIG.callGeminiAPI('Responda apenas: OK', { json: false });
         if (resposta && resposta.includes('OK')) {
@@ -488,128 +469,149 @@ async function testarConexao() {
         document.getElementById('statusIA').textContent = '❌ Falha';
         document.getElementById('statusIA').className = 'status-ia erro';
         mostrarToast('❌ ' + e.message, 'error');
-    } finally { btn.disabled = false; btn.textContent = '🧪 Testar'; }
+    } finally { if (btn) { btn.disabled = false; btn.textContent = '🧪 Testar'; } }
 }
 
 // ============================================================
 // LEITURA DE XML (NFe, NFS-e, CT-e) — SEM IA
 // ============================================================
 function extrairDadosDoXML(xmlString) {
-    var parser = new DOMParser();
-    var xml = parser.parseFromString(xmlString, 'text/xml');
+    try {
+        var limpo = String(xmlString).replace(/^\uFEFF/, '').trim();
+        if (!limpo.startsWith('<')) return null;
 
-    // Verifica se houve erro no parse
-    var erroParse = xml.querySelector('parsererror');
-    if (erroParse) return null;
+        var parser = new DOMParser();
+        var xml = parser.parseFromString(limpo, 'text/xml');
 
-    // Remove namespaces para facilitar a busca
-    function getTag(tagName) {
-        // Busca a tag em qualquer namespace
-        var els = xml.getElementsByTagName('*');
-        for (var i = 0; i < els.length; i++) {
-            var nodeName = els[i].nodeName;
-            var localName = nodeName.split(':').pop();
-            if (localName === tagName) return els[i].textContent.trim();
+        if (xml.getElementsByTagName('parsererror').length > 0) {
+            console.error('❌ XML com erro de sintaxe');
+            return null;
         }
+
+        // Helpers que ignoram namespace
+        function tag(nome, escopo) {
+            var ctx = escopo || xml;
+            var els = ctx.getElementsByTagName('*');
+            for (var i = 0; i < els.length; i++) {
+                if (els[i].nodeName.split(':').pop() === nome) {
+                    return els[i].textContent.trim();
+                }
+            }
+            return null;
+        }
+        function tags(nome, escopo) {
+            var ctx = escopo || xml;
+            var els = ctx.getElementsByTagName('*');
+            var out = [];
+            for (var i = 0; i < els.length; i++) {
+                if (els[i].nodeName.split(':').pop() === nome) out.push(els[i]);
+            }
+            return out;
+        }
+
+        var raiz = xml.documentElement ? xml.documentElement.nodeName.split(':').pop() : '';
+        var temNFe = raiz === 'nfeProc' || raiz === 'NFe' || tags('infNFe').length > 0;
+        var temNFS = raiz === 'CompNfse' || tags('InfNfse').length > 0;
+        var temCTe = raiz === 'cteProc' || raiz === 'CTe' || tags('infCte').length > 0;
+
+        var dados = { manual: false, origem: 'xml' };
+
+        if (temNFe) {
+            dados.tipoDocumento = 'NF-e';
+            var infNFe = tags('infNFe')[0];
+            if (!infNFe) return null;
+
+            var idAttr = infNFe.getAttribute('Id') || infNFe.getAttribute('id') || '';
+            dados.chaveAcesso = idAttr.replace(/^NFe/i, '').replace(/\D/g, '') || null;
+
+            dados.numero = tag('nNF', infNFe);
+            dados.serie = tag('serie', infNFe);
+            dados.naturezaOperacao = tag('natOp', infNFe);
+            dados.dataEmissao = (tag('dhEmi', infNFe) || tag('dEmi', infNFe) || '').substring(0, 10);
+            dados.protocolo = tag('nProt', xml);
+
+            var emit = tags('emit', infNFe)[0];
+            if (emit) {
+                dados.emitente = tag('xNome', emit);
+                dados.cnpj = (tag('CNPJ', emit) || '').replace(/\D/g, '');
+                dados.telefone = tag('fone', emit);
+                dados.enderecoEmitente = {
+                    logradouro: tag('xLgr', emit),
+                    numero: tag('nro', emit),
+                    bairro: tag('xBairro', emit),
+                    municipio: tag('xMun', emit),
+                    uf: tag('UF', emit),
+                    cep: tag('CEP', emit)
+                };
+            }
+
+            var icmsTot = tags('ICMSTot', infNFe)[0];
+            var vNF = icmsTot ? tag('vNF', icmsTot) : null;
+            dados.valorTotal = parseFloat(vNF || tag('vNF', infNFe) || '0') || 0;
+
+            dados.itens = [];
+            var dets = tags('det', infNFe);
+            for (var d = 0; d < dets.length; d++) {
+                var det = dets[d];
+                var descricao = tag('xProd', det);
+                if (!descricao) continue;
+                var qtd = parseFloat(tag('qCom', det) || '1') || 1;
+                var vUnit = parseFloat(tag('vUnCom', det) || '0') || 0;
+                var vTot = parseFloat(tag('vProd', det) || '0') || 0;
+                dados.itens.push({
+                    descricao: descricao,
+                    quantidade: qtd,
+                    valor_unitario: vUnit,
+                    valor_total: vTot,
+                    tipo: classificarItem(descricao)
+                });
+            }
+            return dados;
+        }
+
+        if (temNFS) {
+            dados.tipoDocumento = 'NFS-e';
+            dados.numero = tag('Numero') || tag('nNF');
+            dados.dataEmissao = (tag('DataEmissao') || tag('dhEmi') || '').substring(0, 10);
+            dados.emitente = tag('RazaoSocial') || tag('xNome');
+            dados.cnpj = (tag('Cnpj') || tag('CNPJ') || '').replace(/\D/g, '');
+            dados.telefone = tag('Telefone') || tag('fone');
+            dados.valorTotal = parseFloat(tag('ValorServicos') || tag('vServ') || '0') || 0;
+            dados.naturezaOperacao = 'Prestação de Serviços';
+            dados.itens = [{
+                descricao: tag('Discriminacao') || 'Serviço prestado',
+                quantidade: 1,
+                valor_unitario: dados.valorTotal,
+                valor_total: dados.valorTotal,
+                tipo: 'servico'
+            }];
+            return dados;
+        }
+
+        if (temCTe) {
+            dados.tipoDocumento = 'CT-e';
+            dados.numero = tag('nCT');
+            dados.serie = tag('serie');
+            dados.dataEmissao = (tag('dhEmi') || '').substring(0, 10);
+            dados.emitente = tag('xNome');
+            dados.cnpj = (tag('CNPJ') || '').replace(/\D/g, '');
+            dados.valorTotal = parseFloat(tag('vTPrest') || tag('vRec') || '0') || 0;
+            dados.naturezaOperacao = 'Prestação de Serviço de Transporte';
+            dados.itens = [{
+                descricao: 'Serviço de Transporte',
+                quantidade: 1,
+                valor_unitario: dados.valorTotal,
+                valor_total: dados.valorTotal,
+                tipo: 'servico'
+            }];
+            return dados;
+        }
+
+        return null;
+    } catch (e) {
+        console.error('❌ Erro no parser XML:', e);
         return null;
     }
-    function getTagAll(tagName) {
-        var els = xml.getElementsByTagName('*');
-        var resultado = [];
-        for (var i = 0; i < els.length; i++) {
-            var localName = els[i].nodeName.split(':').pop();
-            if (localName === tagName) resultado.push(els[i]);
-        }
-        return resultado;
-    }
-
-    // Identifica o tipo de documento
-    var ehNFe = getTag('nfeProc') || getTag('NFe') || getTag('infNFe');
-    var ehNFS = getTag('CompNfse') || getTag('InfNfse') || getTag('NFSe');
-    var ehCTe = getTag('cteProc') || getTag('CTe') || getTag('infCte');
-
-    var dados = { manual: false, origem: 'xml' };
-
-    if (ehNFe) {
-        // NF-e (produtos)
-        dados.tipoDocumento = 'NF-e';
-        dados.chaveAcesso = getTag('chNFe') || getTag('Id');
-        if (dados.chaveAcesso && dados.chaveAcesso.startsWith('NFe')) dados.chaveAcesso = dados.chaveAcesso.substring(3);
-        dados.numero = getTag('nNF');
-        dados.serie = getTag('serie');
-        dados.naturezaOperacao = getTag('natOp');
-        dados.dataEmissao = (getTag('dhEmi') || getTag('dEmi') || '').substring(0, 10);
-        dados.emitente = getTag('xNome');
-        dados.cnpj = (getTag('CNPJ') || '').replace(/\D/g, '');
-        dados.telefone = getTag('fone');
-        dados.valorTotal = parseFloat(getTag('vNF') || getTag('vProd') || 0);
-        dados.protocolo = getTag('nProt');
-
-        // Endereço do emitente
-        dados.enderecoEmitente = {
-            logradouro: getTag('xLgr'),
-            numero: getTag('nro'),
-            bairro: getTag('xBairro'),
-            municipio: getTag('xMun'),
-            uf: getTag('UF'),
-            cep: getTag('CEP')
-        };
-
-        // Itens
-        dados.itens = [];
-        var dets = getTagAll('det');
-        dets.forEach(function(det) {
-            var prod = det.querySelector('*[nodeName$="prod"], prod');
-            // Busca por tags dentro do det
-            var descricao = null, quantidade = 1, valorUnit = 0, valorTotal = 0;
-            var childs = det.getElementsByTagName('*');
-            for (var i = 0; i < childs.length; i++) {
-                var ln = childs[i].nodeName.split(':').pop();
-                if (ln === 'xProd') descricao = childs[i].textContent.trim();
-                if (ln === 'qCom') quantidade = parseFloat(childs[i].textContent) || 1;
-                if (ln === 'vUnCom') valorUnit = parseFloat(childs[i].textContent) || 0;
-                if (ln === 'vProd') valorTotal = parseFloat(childs[i].textContent) || 0;
-            }
-            if (descricao) {
-                var tipo = classificarItem(descricao);
-                dados.itens.push({ descricao: descricao, quantidade: quantidade, valor_unitario: valorUnit, valor_total: valorTotal, tipo: tipo });
-            }
-        });
-        return dados;
-    }
-
-    if (ehNFS) {
-        // NFS-e (serviços)
-        dados.tipoDocumento = 'NFS-e';
-        dados.numero = getTag('Numero') || getTag('nNF');
-        dados.dataEmissao = (getTag('DataEmissao') || getTag('dhEmi') || '').substring(0, 10);
-        dados.emitente = getTag('RazaoSocial') || getTag('xNome');
-        dados.cnpj = (getTag('Cnpj') || getTag('CNPJ') || '').replace(/\D/g, '');
-        dados.telefone = getTag('Telefone') || getTag('fone');
-        dados.valorTotal = parseFloat(getTag('ValorServicos') || getTag('vServ') || 0);
-        dados.naturezaOperacao = 'Prestação de Serviços';
-        dados.itens = [{
-            descricao: getTag('Discriminacao') || 'Serviço prestado',
-            quantidade: 1, valor_unitario: dados.valorTotal, valor_total: dados.valorTotal, tipo: 'servico'
-        }];
-        return dados;
-    }
-
-    if (ehCTe) {
-        // CT-e (transporte)
-        dados.tipoDocumento = 'CT-e';
-        dados.numero = getTag('nCT');
-        dados.serie = getTag('serie');
-        dados.dataEmissao = (getTag('dhEmi') || '').substring(0, 10);
-        dados.emitente = getTag('xNome');
-        dados.cnpj = (getTag('CNPJ') || '').replace(/\D/g, '');
-        dados.valorTotal = parseFloat(getTag('vTPrest') || getTag('vRec') || 0);
-        dados.naturezaOperacao = 'Prestação de Serviço de Transporte';
-        dados.itens = [{ descricao: 'Serviço de Transporte', quantidade: 1, valor_unitario: dados.valorTotal, valor_total: dados.valorTotal, tipo: 'servico' }];
-        return dados;
-    }
-
-    return null;
 }
 
 // ============================================================
@@ -619,7 +621,6 @@ function classificarItem(descricao) {
     if (!descricao) return 'bp';
     var d = descricao.toLowerCase();
 
-    // Palavras-chave para ESTOQUE (material de consumo)
     var estoqueKws = ['papel', 'caneta', 'grampo', 'clips', 'lápis', 'borracha', 'fita', 'cola',
         'café', 'açúcar', 'leite', 'bispo', 'água', 'suco', 'bolacha', 'biscoito', 'arroz', 'feijão',
         'detergente', 'sabão', 'desinfetante', 'água sanitária', 'esponja', 'papel higiênico',
@@ -629,14 +630,12 @@ function classificarItem(descricao) {
         if (d.indexOf(estoqueKws[i]) >= 0) return 'estoque';
     }
 
-    // Palavras-chave para SERVIÇO
     var servicoKws = ['serviço', 'consultoria', 'manutenção', 'instalação', 'treinamento',
         'assessoria', 'auditoria', 'desenvolvimento', 'frete', 'transporte'];
     for (var j = 0; j < servicoKws.length; j++) {
         if (d.indexOf(servicoKws[j]) >= 0) return 'servico';
     }
 
-    // Resto é BP (bem permanente)
     return 'bp';
 }
 
@@ -646,7 +645,6 @@ function classificarItem(descricao) {
 async function extrairTextoDoArquivo(file) {
     var nome = file.name.toLowerCase();
 
-    // 1. XML
     if (nome.endsWith('.xml')) {
         return new Promise(function(resolve, reject) {
             var reader = new FileReader();
@@ -656,7 +654,6 @@ async function extrairTextoDoArquivo(file) {
         });
     }
 
-    // 2. PDF
     if (file.type === 'application/pdf' || nome.endsWith('.pdf')) {
         var arrayBuffer = await file.arrayBuffer();
         var pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
@@ -666,7 +663,6 @@ async function extrairTextoDoArquivo(file) {
             var textContent = await page.getTextContent();
             textoCompleto += textContent.items.map(function(item) { return item.str; }).join(' ') + '\n';
         }
-        // Se PDF sem texto → OCR
         if (textoCompleto.trim().length < 50) {
             var resultado = await Tesseract.recognize(file, 'por+eng');
             return resultado.data.text;
@@ -674,13 +670,11 @@ async function extrairTextoDoArquivo(file) {
         return textoCompleto;
     }
 
-    // 3. Imagem
     if (file.type.startsWith('image/')) {
-        var resultado = await Tesseract.recognize(file, 'por+eng');
-        return resultado.data.text;
+        var resultado2 = await Tesseract.recognize(file, 'por+eng');
+        return resultado2.data.text;
     }
 
-    // 4. Outros
     return new Promise(function(resolve, reject) {
         var reader = new FileReader();
         reader.onload = function(e) { resolve(e.target.result); };
@@ -706,7 +700,6 @@ async function processarNota(event) {
     try {
         var nome = file.name.toLowerCase();
 
-        // 🎯 XML: leitura direta, sem IA
         if (nome.endsWith('.xml')) {
             var textoXml = await extrairTextoDoArquivo(file);
             var dadosXml = extrairDadosDoXML(textoXml);
@@ -725,7 +718,6 @@ async function processarNota(event) {
             }
         }
 
-        // PDF / Imagem: usa IA
         var texto = await extrairTextoDoArquivo(file);
         if (!texto || texto.trim().length < 10) throw new Error('Arquivo ilegível.');
         info.innerHTML = '📎 ' + file.name + ' (' + texto.length + ' caracteres)';
