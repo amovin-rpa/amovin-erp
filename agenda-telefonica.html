@@ -1,195 +1,653 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Amovin ERP Social • CRM Social</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
-<style>
-:root {
-  --laranja: #C65A11;
-  --amarelo: #F5C518;
-  --verde: #57C220;
-  --azul: #1E88E5;
-  --grafite: #1A1A1A;
-  --cinza: #6B7280;
-  --cinza-claro: #F8F4ED;
-  --branco: #FFFFFF;
-  --vermelho: #E53935;
-}
-* { margin:0; padding:0; box-sizing:border-box; }
-body { font-family: 'Inter', system-ui, sans-serif; background: #F8F4ED; display: flex; min-height: 100vh; }
-
-.main-content { flex: 1; margin-left: 270px; padding: 24px 30px; }
-.topo-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 10px; }
-.topo-bar h1 { font-size: 24px; font-weight: 700; color: var(--grafite); }
-.btn-sair-topo { background: #F8F4ED; color: #1A1A1A; border: 1px solid #F0E9DF; padding: 8px 16px; border-radius: 10px; font-size: 12px; font-weight: 600; cursor: pointer; }
-
-.kpi-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 22px; }
-.kpi-card { background: #FFFFFF; padding: 16px; border-radius: 14px; border: 1px solid #F0E9DF; text-align: center; }
-.kpi-card .kpi-valor { font-size: 24px; font-weight: 800; color: var(--laranja); }
-.kpi-card .kpi-label { font-size: 11px; color: var(--cinza); }
-
-.grid-crm { display: grid; grid-template-columns: 280px 1fr; gap: 20px; }
-.sidebar-categorias { background: #FFFFFF; border-radius: 14px; border: 1px solid #F0E9DF; padding: 20px; max-height: 600px; overflow-y: auto; }
-.sidebar-categorias h3 { font-size: 15px; font-weight: 700; color: var(--grafite); margin-bottom: 14px; }
-.cat-item { display: block; width: 100%; padding: 9px 14px; margin-bottom: 3px; border: none; border-radius: 8px; cursor: pointer; text-align: left; font-size: 12px; background: transparent; transition: all 0.2s; color: var(--cinza); font-family: 'Inter', sans-serif; }
-.cat-item:hover { background: #F8F4ED; }
-.cat-item.ativo { background: var(--laranja); color: white; font-weight: 600; }
-.cat-item .count { float: right; opacity: 0.7; font-size: 10px; }
-
-.busca-bar { background: #FFFFFF; padding: 14px 18px; border-radius: 14px; border: 1px solid #F0E9DF; margin-bottom: 15px; display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
-.busca-bar input { flex: 1; padding: 10px 14px; border: 1px solid #E5E0D8; border-radius: 8px; font-size: 13px; font-family: 'Inter', sans-serif; min-width: 200px; }
-.busca-bar select { padding: 10px; border: 1px solid #E5E0D8; border-radius: 8px; font-family: 'Inter', sans-serif; background: white; }
-.btn-novo { padding: 10px 20px; background: var(--laranja); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 13px; }
-
-.contato-card { background: #FFFFFF; padding: 14px 18px; border-radius: 12px; border: 1px solid #F0E9DF; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; cursor: pointer; transition: all 0.2s; }
-.contato-card:hover { transform: translateX(3px); border-left: 4px solid var(--laranja); }
-.contato-card.favorito { border-left: 4px solid var(--amarelo); }
-.contato-info h4 { font-size: 14px; color: var(--grafite); margin-bottom: 2px; }
-.contato-info p { font-size: 11px; color: var(--cinza); }
-.contato-info .tag { font-size: 9px; padding: 2px 10px; border-radius: 12px; margin-left: 6px; }
-.tag-crm { background: #F3E5F5; color: #7B1FA2; }
-.tag-beneficiario { background: #E3F2FD; color: #1565C0; }
-.tag-profissional { background: #E8F5E9; color: #2E7D32; }
-.tag-voluntario { background: #FFF3E0; color: #E65100; }
-.btn-acao { padding: 6px 10px; border-radius: 6px; border: none; cursor: pointer; font-size: 10px; font-weight: 600; }
-.btn-wpp { background: #25D366; color: white; }
-.btn-ligar { background: var(--verde); color: white; }
-.btn-email { background: var(--azul); color: white; }
-.btn-fav { background: var(--amarelo); color: #1A1A1A; }
-.btn-editar { background: #F5A623; color: white; }
-.sem-dados { text-align: center; padding: 40px; color: #9CA3AF; }
-
-.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 20px; }
-.modal { background: white; border-radius: 16px; width: 100%; max-width: 650px; max-height: 85vh; overflow-y: auto; }
-.modal-header { padding: 18px 22px; border-bottom: 1px solid #F0E9DF; display: flex; justify-content: space-between; align-items: center; }
-.modal-body { padding: 22px; }
-.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-.form-full { grid-column: 1 / -1; }
-.form-group { margin-bottom: 14px; }
-.form-group label { display: block; font-size: 11px; font-weight: 600; color: var(--cinza); margin-bottom: 4px; text-transform: uppercase; }
-.form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px 12px; border: 1px solid #E5E0D8; border-radius: 8px; font-size: 13px; font-family: 'Inter', sans-serif; }
-.btn-salvar { width: 100%; padding: 14px; background: var(--laranja); color: white; border: none; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; margin-top: 10px; }
-.btn-salvar:hover { background: #A04A0E; }
-.btn-fechar { background: none; border: none; font-size: 22px; cursor: pointer; color: var(--cinza); }
-.section-title { font-size: 14px; font-weight: 700; color: var(--grafite); border-bottom: 1px solid #F0E9DF; padding-bottom: 8px; grid-column: 1 / -1; }
-
-.rodape { background: #FFFFFF; border-radius: 14px; padding: 12px 18px; border: 1px solid #F0E9DF; margin-top: 20px; }
-.rodape-grid { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
-.rodape-logo { flex-shrink: 0; } .rodape-logo .logo-vigorre { width: 50px; }
-.rodape-info { flex: 1; } .rodape-info .copyright { font-size: 8px; color: #8A8F98; } .rodape-info .tm { font-size: 6px; vertical-align: super; }
-.rodape-info .contato { font-size: 9px; color: #8A8F98; } .rodape-info a { color: #C65A11; text-decoration: none; } .rodape-info .email { font-size: 8px; color: #aaa; }
-.logo-vigorre-fallback { font-size: 12px; font-weight: 700; display: none; }
-
-@media (max-width: 768px) { .main-content { margin-left: 0; } .grid-crm { grid-template-columns: 1fr; } }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amovin ERP • CRM Social</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --laranja: #C65A11; --laranja-escuro: #A04A0E; --amarelo: #F5C518; --verde: #57C220;
+            --azul: #1E88E5; --grafite: #1A1A1A; --cinza: #6B7280; --branco: #FFFFFF;
+            --vermelho: #E53935; --roxo: #7C3AED; --teal: #00897B;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', system-ui, sans-serif; background: #F8F4ED; display: flex; min-height: 100vh; }
+        .main-content { flex: 1; margin-left: 270px; padding: 24px 30px; }
+        .topo-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 10px; }
+        .topo-bar h1 { font-size: 24px; font-weight: 700; color: var(--grafite); }
+        .topo-bar h1 span { color: var(--laranja); }
+        .btn-sair-topo { background: #F8F4ED; color: #1A1A1A; border: 1px solid #F0E9DF; padding: 8px 16px; border-radius: 10px; font-size: 12px; font-weight: 600; cursor: pointer; }
+        .status-firebase { display: flex; align-items: center; gap: 8px; padding: 6px 14px; border-radius: 20px; background: #F8F4ED; font-size: 12px; font-weight: 600; border: 1px solid #F0E9DF; }
+        .status-firebase.conectado { background: #E8F5E9; color: #2E7D32; border-color: #A5D6A7; }
+        .status-firebase.offline { background: #FFF3E0; color: #E65100; border-color: #FFCC80; }
+        .status-firebase .dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; animation: pulse 2s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+        .kpi-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 15px; margin-bottom: 22px; }
+        .kpi-card { background: #FFFFFF; padding: 16px; border-radius: 14px; border: 1px solid #F0E9DF; text-align: center; }
+        .kpi-card .kpi-valor { font-size: 22px; font-weight: 800; color: var(--laranja); }
+        .kpi-card .kpi-label { font-size: 11px; color: var(--cinza); }
+        .card { background: #FFFFFF; padding: 24px; border-radius: 14px; border: 1px solid #F0E9DF; margin-bottom: 20px; }
+        .card h3 { font-size: 16px; font-weight: 700; color: var(--grafite); margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid #F0E9DF; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
+        .card h3 .badge { font-size: 10px; font-weight: 600; padding: 3px 12px; border-radius: 20px; background: #FFF3E0; color: var(--laranja); }
+        .btn { padding: 10px 24px; border-radius: 8px; border: none; cursor: pointer; font-weight: 600; font-size: 13px; font-family: 'Inter', sans-serif; transition: all 0.2s; display: inline-flex; align-items: center; gap: 8px; }
+        .btn-primary { background: var(--laranja); color: white; } .btn-primary:hover { background: var(--laranja-escuro); }
+        .btn-success { background: var(--verde); color: white; } .btn-outline { background: transparent; color: var(--cinza); border: 1px solid #E5E0D8; }
+        .btn-outline:hover { background: #F8F4ED; }
+        .btn-danger { background: var(--vermelho); color: white; }
+        .btn-sm { padding: 5px 12px; font-size: 11px; }
+        .btn-azul { background: var(--azul); color: white; } .btn-roxo { background: var(--roxo); color: white; }
+        .btn-teal { background: var(--teal); color: white; } .btn-amarelo { background: var(--amarelo); color: #1A1A1A; }
+        .btn-wpp { background: #25D366; color: white; }
+        .form-group { margin-bottom: 14px; }
+        .form-group label { display: block; font-size: 11px; font-weight: 600; color: var(--cinza); margin-bottom: 4px; text-transform: uppercase; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px 12px; border: 1px solid #E5E0D8; border-radius: 8px; font-size: 13px; font-family: 'Inter', sans-serif; background: #FAFAFA; }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: var(--laranja); background: white; box-shadow: 0 0 0 3px rgba(198, 90, 17, 0.08); }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .form-full { grid-column: 1 / -1; }
+        .grid-crm { display: grid; grid-template-columns: 240px 1fr; gap: 20px; }
+        .sidebar-categorias { background: #FFFFFF; border-radius: 14px; border: 1px solid #F0E9DF; padding: 20px; max-height: 600px; overflow-y: auto; }
+        .sidebar-categorias h3 { font-size: 15px; font-weight: 700; color: var(--grafite); margin-bottom: 14px; }
+        .cat-item { display: block; width: 100%; padding: 9px 14px; margin-bottom: 3px; border: none; border-radius: 8px; cursor: pointer; text-align: left; font-size: 12px; background: transparent; transition: all 0.2s; color: var(--cinza); font-family: 'Inter', sans-serif; }
+        .cat-item:hover { background: #F8F4ED; }
+        .cat-item.ativo { background: var(--laranja); color: white; font-weight: 600; }
+        .cat-item .count { float: right; opacity: 0.7; font-size: 10px; }
+        .busca-bar { background: #FFFFFF; padding: 14px 18px; border-radius: 14px; border: 1px solid #F0E9DF; margin-bottom: 15px; display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+        .busca-bar input { flex: 1; padding: 10px 14px; border: 1px solid #E5E0D8; border-radius: 8px; font-size: 13px; font-family: 'Inter', sans-serif; min-width: 200px; }
+        .contato-card { background: #FFFFFF; padding: 14px 18px; border-radius: 12px; border: 1px solid #F0E9DF; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; transition: all 0.2s; }
+        .contato-card:hover { transform: translateX(3px); border-left: 4px solid var(--laranja); }
+        .contato-card.favorito { border-left: 4px solid var(--amarelo); }
+        .contato-info h4 { font-size: 14px; color: var(--grafite); margin-bottom: 2px; }
+        .contato-info p { font-size: 11px; color: var(--cinza); }
+        .contato-info .codigo { font-size: 10px; color: var(--laranja); font-weight: 700; letter-spacing: 0.5px; }
+        .contato-info .tag { font-size: 9px; padding: 2px 10px; border-radius: 12px; margin-left: 6px; }
+        .tag-crm { background: #F3E5F5; color: #7B1FA2; }
+        .tag-beneficiario { background: #E3F2FD; color: #1565C0; }
+        .tag-profissional { background: #E8F5E9; color: #2E7D32; }
+        .tag-voluntario { background: #FFF3E0; color: #E65100; }
+        .tag-fornecedor { background: #FFF8E7; color: var(--laranja); }
+        .contato-acoes { display: flex; gap: 4px; flex-wrap: wrap; align-items: center; }
+        .btn-acao { padding: 6px 10px; border-radius: 6px; border: none; cursor: pointer; font-size: 10px; font-weight: 600; }
+        .btn-fav { background: var(--amarelo); color: #1A1A1A; }
+        .btn-editar { background: var(--laranja); color: white; }
+        .sem-dados { text-align: center; padding: 40px; color: #9CA3AF; }
+        .loading { text-align: center; padding: 40px; color: var(--cinza); }
+        .loading .spinner { display: inline-block; width: 30px; height: 30px; border: 3px solid #E5E0D8; border-top: 3px solid var(--laranja); border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 10px; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 9999; justify-content: center; align-items: center; padding: 20px; overflow-y: auto; }
+        .modal-overlay.ativo { display: flex; }
+        .modal { background: white; border-radius: 16px; padding: 30px; max-width: 700px; width: 100%; max-height: 95vh; overflow-y: auto; margin: auto; }
+        .modal.modal-pequeno { max-width: 500px; }
+        .modal h2 { font-size: 20px; color: var(--grafite); margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; }
+        .modal .btn-group { display: flex; gap: 12px; margin-top: 16px; justify-content: flex-end; flex-wrap: wrap; }
+        .modal .fechar { background: none; border: none; font-size: 22px; cursor: pointer; color: var(--cinza); }
+        .secao-titulo { font-size: 13px; font-weight: 700; color: var(--laranja); text-transform: uppercase; margin: 20px 0 10px; padding-bottom: 6px; border-bottom: 2px solid var(--laranja); }
+        .log-item { padding: 10px 12px; border-bottom: 1px solid #F0E9DF; font-size: 12px; }
+        .log-item .quando { font-size: 10px; color: var(--cinza); }
+        .log-item .quem { font-weight: 700; color: var(--laranja); }
+        .log-item .acao { color: var(--grafite); font-weight: 600; }
+        .log-item .just { font-size: 11px; color: #666; margin-top: 4px; padding: 6px 10px; background: #FFF8E7; border-radius: 6px; border-left: 3px solid var(--laranja); }
+        .toast { position: fixed; top: 20px; right: 20px; padding: 16px 24px; border-radius: 12px; color: white; font-weight: 600; font-size: 14px; z-index: 10000; box-shadow: 0 8px 32px rgba(0,0,0,0.15); animation: slideInRight 0.4s ease; max-width: 400px; }
+        .toast-success { background: var(--verde); } .toast-error { background: var(--vermelho); } .toast-warning { background: #E65100; }
+        @keyframes slideInRight { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        .rodape { background: #FFFFFF; border-radius: 14px; padding: 12px 18px; border: 1px solid #F0E9DF; margin-top: 20px; }
+        .rodape-grid { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+        .rodape-logo .logo-vigorre { width: 50px; }
+        .rodape-info { flex: 1; }
+        .rodape-info .copyright { font-size: 8px; color: #8A8F98; }
+        .rodape-info .contato { font-size: 9px; color: #8A8F98; }
+        .rodape-info a { color: #C65A11; text-decoration: none; }
+        @media (max-width: 900px) { .main-content { margin-left: 0; } .grid-crm { grid-template-columns: 1fr; } .form-row { grid-template-columns: 1fr; } }
+    </style>
 </head>
 <body>
 
 <div id="menu-container"></div>
 
 <main class="main-content">
-  <div class="topo-bar"><h1>☎️ CRM Social</h1><button class="btn-sair-topo" onclick="window.location.href='dashboard.html'">🏠 Dashboard</button></div>
-
-  <div class="kpi-row">
-    <div class="kpi-card"><div class="kpi-valor" id="kpiTotal">0</div><div class="kpi-label">Total</div></div>
-    <div class="kpi-card"><div class="kpi-valor" id="kpiBeneficiarios">0</div><div class="kpi-label">👥 Beneficiários</div></div>
-    <div class="kpi-card"><div class="kpi-valor" id="kpiProfissionais">0</div><div class="kpi-label">👨‍⚕️ Profissionais</div></div>
-    <div class="kpi-card"><div class="kpi-valor" id="kpiVoluntarios">0</div><div class="kpi-label">💪 Voluntários</div></div>
-  </div>
-
-  <div class="grid-crm">
-    <div class="sidebar-categorias">
-      <h3>📂 Categorias</h3>
-      <div id="menuCategorias"></div>
+    <div class="topo-bar">
+        <h1>☎️ CRM Social <span>AMOVIN</span></h1>
+        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+            <div class="status-firebase" id="statusFirebase"><span class="dot"></span><span>⏳ Conectando...</span></div>
+            <button class="btn btn-outline" onclick="exportarCSV()">📥 CSV</button>
+            <button class="btn btn-primary" onclick="pedirAutenticacao('criar')">➕ Novo Contato</button>
+            <button class="btn-sair-topo" onclick="window.location.href='dashboard.html'">🏠 Dashboard</button>
+        </div>
     </div>
-    <div>
-      <div class="busca-bar">
-        <input type="text" id="buscaContato" placeholder="Buscar por nome, empresa..." oninput="filtrar()">
-        <button class="btn-novo" onclick="abrirForm()">+ Novo</button>
-      </div>
-      <div id="listaContatos"><div class="sem-dados">Nenhum contato.</div></div>
-    </div>
-  </div>
 
-  <div class="rodape"><div class="rodape-grid"><div class="rodape-logo"><img src="images/logo-vigorre.png" alt="Vigorre" class="logo-vigorre" onerror="this.style.display='none';this.nextElementSibling.style.display='block';"><span class="logo-vigorre-fallback">Vigorre</span></div><div class="rodape-info"><div class="copyright">© 2026 VIGORRE DESIGNER<span class="tm">™</span></div><div class="contato"><a href="https://www.vigorre.com.br">www.vigorre.com.br</a> | <a href="https://wa.me/5534991850735">(34) 99185-0735</a></div><div class="email">contato@vigorre.com.br</div></div></div></div>
+    <div class="kpi-row">
+        <div class="kpi-card"><div class="kpi-valor" id="kpiTotal">0</div><div class="kpi-label">👥 Total</div></div>
+        <div class="kpi-card"><div class="kpi-valor" style="color:#7B1FA2;" id="kpiCRM">0</div><div class="kpi-label">📝 CRM</div></div>
+        <div class="kpi-card"><div class="kpi-valor" style="color:#1565C0;" id="kpiBeneficiarios">0</div><div class="kpi-label">👥 Beneficiários</div></div>
+        <div class="kpi-card"><div class="kpi-valor" style="color:#2E7D32;" id="kpiProfissionais">0</div><div class="kpi-label">👨‍⚕️ Profissionais</div></div>
+        <div class="kpi-card"><div class="kpi-valor" style="color:#E65100;" id="kpiVoluntarios">0</div><div class="kpi-label">💪 Voluntários</div></div>
+        <div class="kpi-card"><div class="kpi-valor" style="color:var(--laranja);" id="kpiFornecedores">0</div><div class="kpi-label">🏢 Fornecedores</div></div>
+    </div>
+
+    <div class="grid-crm">
+        <div class="sidebar-categorias">
+            <h3>📂 Categorias</h3>
+            <div id="menuCategorias"></div>
+        </div>
+        <div>
+            <div class="busca-bar">
+                <input type="text" id="buscaContato" placeholder="🔍 Buscar por nome, empresa, código..." oninput="filtrar()">
+            </div>
+            <div id="listaContatos"><div class="loading"><div class="spinner"></div><div>Carregando...</div></div></div>
+        </div>
+    </div>
+
+    <div class="rodape">
+        <div class="rodape-grid">
+            <div class="rodape-logo"><img src="images/logo-vigorre.png" alt="Vigorre" class="logo-vigorre" onerror="this.style.display='none';"></div>
+            <div class="rodape-info">
+                <div class="copyright">© 2026 VIGORRE DESIGNER™</div>
+                <div class="contato"><a href="https://www.vigorre.com.br">www.vigorre.com.br</a> | <a href="https://wa.me/5534991850735">(34) 99185-0735</a></div>
+            </div>
+        </div>
+    </div>
 </main>
 
-<div class="modal-overlay" id="modalForm" style="display:none;"><div class="modal"><div class="modal-header"><h3 id="tituloModal">Novo Contato</h3><button class="btn-fechar" onclick="fecharForm()">✕</button></div><div class="modal-body"><input type="hidden" id="contatoId"><div class="form-grid">
-  <div class="section-title">Dados Básicos</div>
-  <div class="form-group"><label>Nome *</label><input type="text" id="nomeContato"></div>
-  <div class="form-group"><label>Cargo</label><input type="text" id="cargoContato"></div>
-  <div class="form-group"><label>Instituição</label><input type="text" id="instituicaoContato"></div>
-  <div class="form-group"><label>Categoria</label><select id="categoriaContato"><option value="">Selecione...</option><option>Prefeitura</option><option>Empresa</option><option>Patrocinador</option><option>Doador</option><option>Fundação</option><option>Fornecedor</option><option>Profissional</option><option>Voluntário</option><option>Beneficiário</option><option>Outros</option></select></div>
-  <div class="section-title">Contatos</div>
-  <div class="form-group"><label>Telefone</label><input type="text" id="tel1Contato"></div>
-  <div class="form-group"><label>WhatsApp</label><input type="text" id="whatsappContato"></div>
-  <div class="form-group"><label>Email</label><input type="email" id="emailContato"></div>
-  <div class="section-title">Informações</div>
-  <div class="form-full"><label>Observações</label><textarea id="obsContato" rows="2"></textarea></div>
-</div><button class="btn-salvar" onclick="salvarContato()">💾 Salvar</button></div></div></div>
+<div class="modal-overlay" id="modalForm">
+    <div class="modal">
+        <h2 id="tituloModal">Novo Contato <button class="fechar" onclick="fecharForm()">×</button></h2>
+        <input type="hidden" id="contatoId">
+        <div class="form-row">
+            <div class="form-group"><label>Código CRM</label><input type="text" id="codigoContato" readonly style="background:#F0E9DF;font-weight:700;color:var(--laranja);"></div>
+            <div class="form-group"><label>Nome *</label><input type="text" id="nomeContato"></div>
+        </div>
+        <div class="form-row">
+            <div class="form-group"><label>Cargo</label><input type="text" id="cargoContato"></div>
+            <div class="form-group"><label>Instituição</label><input type="text" id="instituicaoContato"></div>
+        </div>
+        <div class="form-group"><label>Categoria</label>
+            <select id="categoriaContato">
+                <option value="Prefeitura">🏛️ Prefeitura</option>
+                <option value="Empresa">🏢 Empresa</option>
+                <option value="Patrocinador">💼 Patrocinador</option>
+                <option value="Doador">🎁 Doador</option>
+                <option value="Fundação">🏛️ Fundação</option>
+                <option value="Fornecedor">📦 Fornecedor</option>
+                <option value="Profissional">👨‍⚕️ Profissional</option>
+                <option value="Voluntário">💪 Voluntário</option>
+                <option value="Beneficiário">👤 Beneficiário</option>
+                <option value="Outros">📌 Outros</option>
+            </select>
+        </div>
+        <div class="secao-titulo">📞 Contatos</div>
+        <div class="form-row">
+            <div class="form-group"><label>Telefone</label><input type="text" id="tel1Contato" placeholder="(34) 99999-9999"></div>
+            <div class="form-group"><label>WhatsApp</label><input type="text" id="whatsappContato" placeholder="(34) 99999-9999"></div>
+        </div>
+        <div class="form-group"><label>Email</label><input type="email" id="emailContato"></div>
+        <div class="form-group"><label>CNPJ / CPF</label><input type="text" id="cnpjCpfContato"></div>
+        <div class="secao-titulo">🔗 Vínculos</div>
+        <div class="form-row">
+            <div class="form-group"><label>Beneficiário Vinculado</label><select id="beneficiarioVinculo"><option value="">— Nenhum —</option></select></div>
+            <div class="form-group"><label>Profissional Vinculado</label><select id="profissionalVinculo"><option value="">— Nenhum —</option></select></div>
+        </div>
+        <div class="form-group"><label>Voluntário Vinculado</label><select id="voluntarioVinculo"><option value="">— Nenhum —</option></select></div>
+        <div class="secao-titulo">📝 Observações</div>
+        <div class="form-full form-group"><textarea id="obsContato" rows="2"></textarea></div>
+        <div class="btn-group">
+            <button class="btn btn-outline" onclick="fecharForm()">Cancelar</button>
+            <button class="btn btn-success" onclick="confirmarSalvar()">💾 Salvar</button>
+        </div>
+    </div>
+</div>
 
-<script src="config.js"></script>
+<div class="modal-overlay" id="modalLog">
+    <div class="modal modal-pequeno"><h2>📜 Histórico <button class="fechar" onclick="fecharLog()">×</button></h2>
+    <div id="conteudoLog" style="max-height:400px;overflow-y:auto;"></div>
+    <div class="btn-group"><button class="btn btn-outline" onclick="fecharLog()">Fechar</button></div></div>
+</div>
+
+<div class="modal-overlay" id="modalAuth">
+    <div class="modal modal-pequeno">
+        <h2>🔐 Autenticação Master <button class="fechar" onclick="fecharAuth()">×</button></h2>
+        <div id="authMsg" style="font-size:13px;color:var(--cinza);margin-bottom:16px;"></div>
+        <div class="form-group"><label>Usuário Master</label><input type="text" id="authUsuario" placeholder="Ex: raul"></div>
+        <div class="form-group"><label>Senha Master</label><input type="password" id="authSenha" placeholder="••••••••"></div>
+        <div class="form-group"><label>Justificativa (mín 50 caracteres)</label>
+            <textarea id="authJust" rows="3" placeholder="Explique o motivo da alteração..."></textarea>
+            <div style="font-size:10px;color:var(--cinza);margin-top:4px;" id="contadorJust">0/50 caracteres</div>
+        </div>
+        <div class="btn-group">
+            <button class="btn btn-outline" onclick="fecharAuth()">Cancelar</button>
+            <button class="btn btn-success" onclick="confirmarAuth()">✅ Confirmar</button>
+        </div>
+    </div>
+</div>
+
 <script src="menu.js?v=20260904"></script>
 <script>
 // ============================================================
-// TODAS AS FUNÇÕES ORIGINAIS MANTIDAS
+// CRM SOCIAL - AMOVIN ERP (Firebase + Auth Master + Log)
+// Código: A-CRM-YYYY-NNNN
 // ============================================================
-var contatos = JSON.parse(localStorage.getItem('amovin_contatos') || '[]');
-var categoriaAtual = 'todos', editandoId = null;
 
-function importarPessoasParaCRM() {
-    var pessoas = JSON.parse(localStorage.getItem('amovin_pessoas') || '[]');
-    var contatosExistentes = JSON.parse(localStorage.getItem('amovin_contatos') || '[]');
-    
-    pessoas.forEach(function(p) {
-        var existe = contatosExistentes.some(function(c) {
-            return c.nome === p.nome && c.tipo === p.tipo && c.origem === 'pessoas';
-        });
-        if (!existe && p.nome) {
-            var tag = p.tipo === 'beneficiario' ? 'Beneficiário' : p.tipo === 'profissional' ? 'Profissional' : 'Voluntário';
-            contatosExistentes.push({
-                id: Date.now() + Math.random() * 1000,
-                nome: p.nome || '',
-                cargo: tag,
-                instituicao: '',
-                categoria: tag,
-                tel1: p.telefone || '',
-                whatsapp: p.whatsapp || p.telefone || '',
-                email: p.email || '',
-                obs: p.obs || '',
-                favorito: false,
-                origem: 'pessoas',
-                tipo: p.tipo || 'crm'
-            });
-        }
+var contatos = [];
+var beneficiarios = [];
+var profissionais = [];
+var voluntarios = [];
+var firebasePronto = false;
+var db = null;
+var acaoPendente = null;
+var dadosPendentes = null;
+var adminAutenticado = null;
+var categoriaAtual = 'todos';
+
+function usuarioLogado() {
+    return sessionStorage.getItem('amovin_usuario') || localStorage.getItem('amovin_usuario') || 'sistema';
+}
+
+// ============================================================
+// FIREBASE
+// ============================================================
+function inicializarFirebase() {
+    if (typeof firebase === 'undefined') {
+        var s = document.createElement('script');
+        s.src = 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js';
+        s.onload = function() {
+            var fs = document.createElement('script');
+            fs.src = 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js';
+            fs.onload = function() {
+                try {
+                    var cfg = {
+                        apiKey: "AIzaSyDQO-69vVBhmBK8oLt0DzfyigBmjxzu7b4",
+                        authDomain: "gestao-amovin.firebaseapp.com",
+                        projectId: "gestao-amovin",
+                        storageBucket: "gestao-amovin.firebasestorage.app",
+                        messagingSenderId: "316793420445",
+                        appId: "1:316793420445:web:68e9898bbfcd30853f3274"
+                    };
+                    if (!firebase.apps.length) firebase.initializeApp(cfg);
+                    db = firebase.firestore();
+                    firebasePronto = true;
+                    atualizarStatusFirebase('conectado');
+                    escutarTudo();
+                } catch (e) { atualizarStatusFirebase('offline'); carregarLocalStorage(); }
+            };
+            document.head.appendChild(fs);
+        };
+        document.head.appendChild(s);
+    } else {
+        try {
+            db = firebase.firestore();
+            firebasePronto = true;
+            atualizarStatusFirebase('conectado');
+            escutarTudo();
+        } catch (e) { atualizarStatusFirebase('offline'); carregarLocalStorage(); }
+    }
+}
+function atualizarStatusFirebase(s) {
+    var el = document.getElementById('statusFirebase');
+    if (s === 'conectado') { el.className = 'status-firebase conectado'; el.innerHTML = '<span class="dot"></span><span>🟢 Firebase (Tempo Real)</span>'; }
+    else { el.className = 'status-firebase offline'; el.innerHTML = '<span class="dot"></span><span>🟡 Modo Local</span>'; }
+}
+function escutarTudo() {
+    if (!firebasePronto || !db) { carregarLocalStorage(); return; }
+    db.collection('contatos').onSnapshot(function(snap) {
+        contatos = [];
+        snap.forEach(function(doc) { contatos.push({ _fbId: doc.id, ...doc.data() }); });
+        renderizarMenu(); filtrar();
     });
-    localStorage.setItem('amovin_contatos', JSON.stringify(contatosExistentes));
-    return contatosExistentes;
+    db.collection('beneficiaries').onSnapshot(function(snap) {
+        beneficiarios = [];
+        snap.forEach(function(doc) { beneficiarios.push({ _fbId: doc.id, ...doc.data() }); });
+        preencherVinculos();
+    });
+    db.collection('professionals').onSnapshot(function(snap) {
+        profissionais = [];
+        snap.forEach(function(doc) { profissionais.push({ _fbId: doc.id, ...doc.data() }); });
+        preencherVinculos();
+    });
+    db.collection('volunteers').onSnapshot(function(snap) {
+        voluntarios = [];
+        snap.forEach(function(doc) { voluntarios.push({ _fbId: doc.id, ...doc.data() }); });
+        preencherVinculos();
+    });
+}
+function carregarLocalStorage() {
+    contatos = JSON.parse(localStorage.getItem('amovin_contatos') || '[]');
+    beneficiarios = JSON.parse(localStorage.getItem('amovin_beneficiarios') || '[]');
+    profissionais = JSON.parse(localStorage.getItem('amovin_profissionais') || '[]');
+    voluntarios = JSON.parse(localStorage.getItem('amovin_voluntarios') || '[]');
+    preencherVinculos();
+    renderizarMenu(); filtrar();
 }
 
-function carregarContatos() {
-    var dados = JSON.parse(localStorage.getItem('amovin_contatos') || '[]');
-    if (dados.length === 0) {
-        dados = importarPessoasParaCRM();
+function preencherVinculos() {
+    var selB = document.getElementById('beneficiarioVinculo');
+    if (selB) {
+        var at = selB.value;
+        selB.innerHTML = '<option value="">— Nenhum —</option>';
+        beneficiarios.forEach(function(b) {
+            var opt = document.createElement('option');
+            opt.value = b._fbId;
+            opt.textContent = (b.fullName || b.nome || '') + ' (' + (b.cpf || '') + ')';
+            selB.appendChild(opt);
+        });
+        if (at) selB.value = at;
     }
-    if (dados.length === 0) {
-        dados = [
-            {id:1,nome:'Prefeito Municipal',cargo:'Prefeito',instituicao:'Prefeitura',categoria:'Prefeitura',tel1:'(34) 99999-0001',whatsapp:'(34) 99999-0001',email:'prefeito@rioparanaiba.mg.gov.br',favorito:true,origem:'crm',tipo:'crm'},
-            {id:2,nome:'Empresa ABC',cargo:'Diretor',instituicao:'ABC Ltda',categoria:'Empresa',tel1:'(34) 99999-0003',email:'contato@abc.com.br',origem:'crm',tipo:'crm'}
+    var selP = document.getElementById('profissionalVinculo');
+    if (selP) {
+        var atP = selP.value;
+        selP.innerHTML = '<option value="">— Nenhum —</option>';
+        profissionais.forEach(function(p) {
+            var opt = document.createElement('option');
+            opt.value = p._fbId;
+            opt.textContent = (p.name || p.fullName || '') + ' (' + (p.specialty || '') + ')';
+            selP.appendChild(opt);
+        });
+        if (atP) selP.value = atP;
+    }
+    var selV = document.getElementById('voluntarioVinculo');
+    if (selV) {
+        var atV = selV.value;
+        selV.innerHTML = '<option value="">— Nenhum —</option>';
+        voluntarios.forEach(function(v) {
+            var opt = document.createElement('option');
+            opt.value = v._fbId;
+            opt.textContent = (v.name || v.fullName || '');
+            selV.appendChild(opt);
+        });
+        if (atV) selV.value = atV;
+    }
+}
+
+// ============================================================
+// CÓDIGO A-CRM-YYYY-NNNN
+// ============================================================
+async function gerarProximoCodigo() {
+    var ano = new Date().getFullYear();
+    var prefixo = 'A-CRM-' + ano + '-';
+    var max = 0;
+    if (firebasePronto && db) {
+        try {
+            var snap = await db.collection('contatos').get();
+            snap.forEach(function(doc) {
+                var c = doc.data().codigo || '';
+                if (c.startsWith(prefixo)) { var n = parseInt(c.replace(prefixo, '')); if (n > max) max = n; }
+            });
+        } catch (e) {}
+    } else {
+        contatos.forEach(function(c) {
+            if (c.codigo && c.codigo.startsWith(prefixo)) { var n = parseInt(c.codigo.replace(prefixo, '')); if (n > max) max = n; }
+        });
+    }
+    return prefixo + String(max + 1).padStart(4, '0');
+}
+
+// ============================================================
+// AUTH
+// ============================================================
+function pedirAutenticacao(acao, dados) {
+    acaoPendente = acao;
+    dadosPendentes = dados || null;
+    var msgs = { 'criar': 'Criar novo contato', 'editar': 'Editar contato', 'excluir': 'Excluir contato' };
+    document.getElementById('authMsg').textContent = '🔐 ' + (msgs[acao] || acao);
+    document.getElementById('authUsuario').value = '';
+    document.getElementById('authSenha').value = '';
+    document.getElementById('authJust').value = '';
+    document.getElementById('contadorJust').textContent = '0/50 caracteres';
+    document.getElementById('modalAuth').classList.add('ativo');
+    setTimeout(function() { document.getElementById('authUsuario').focus(); }, 200);
+}
+async function validarAdminMaster(usuario, senha) {
+    if (!firebasePronto || !db) {
+        var locais = [
+            { usuario: 'raul', senha: 'raul8954', nome: 'Raul Ramalho Costa' },
+            { usuario: 'daniele', senha: 'daniele2026', nome: 'Daniele Ramalho' },
+            { usuario: 'master', senha: 'amovin2026', nome: 'Adm Master Principal' }
         ];
-        localStorage.setItem('amovin_contatos', JSON.stringify(dados));
+        return locais.find(function(a) { return a.usuario === usuario && a.senha === senha; });
     }
-    return dados;
+    try {
+        var snap = await db.collection('admins_master').where('usuario', '==', usuario).where('ativo', '==', true).get();
+        if (snap.empty) return null;
+        var admin = null;
+        snap.forEach(function(doc) { admin = { _fbId: doc.id, ...doc.data() }; });
+        if (admin.senha !== senha) return null;
+        return admin;
+    } catch (e) { return null; }
+}
+async function confirmarAuth() {
+    var usuario = document.getElementById('authUsuario').value.trim().toLowerCase();
+    var senha = document.getElementById('authSenha').value;
+    var just = document.getElementById('authJust').value.trim();
+    if (!usuario || !senha) { mostrarToast('⚠️ Preencha usuário e senha!', 'warning'); return; }
+    if (just.length < 50) { mostrarToast('⚠️ Justificativa mín 50 caracteres!', 'warning'); return; }
+    var admin = await validarAdminMaster(usuario, senha);
+    if (!admin) { mostrarToast('❌ Usuário ou senha incorretos!', 'error'); return; }
+    adminAutenticado = { ...admin, justificativa: just };
+    fecharAuth();
+    if (acaoPendente === 'criar' || acaoPendente === 'editar') abrirForm(dadosPendentes);
+    else if (acaoPendente === 'excluir') executarExclusao(dadosPendentes);
+    else if (acaoPendente === 'salvar') salvarContatoFinal();
+    else if (acaoPendente === 'favorito') executarFavorito(dadosPendentes);
+    acaoPendente = null;
+}
+function fecharAuth() { document.getElementById('modalAuth').classList.remove('ativo'); }
+document.getElementById('authJust').addEventListener('input', function() {
+    document.getElementById('contadorJust').textContent = this.value.length + '/50 caracteres';
+});
+
+// ============================================================
+// FORM
+// ============================================================
+async function abrirForm(contatoId) {
+    document.getElementById('contatoId').value = contatoId || '';
+    if (contatoId) {
+        var c = contatos.find(function(x) { return x._fbId === contatoId; });
+        if (c) {
+            document.getElementById('tituloModal').innerHTML = '✏️ Editar: ' + c.nome + ' <button class="fechar" onclick="fecharForm()">×</button>';
+            document.getElementById('codigoContato').value = c.codigo || '';
+            document.getElementById('nomeContato').value = c.nome || '';
+            document.getElementById('cargoContato').value = c.cargo || '';
+            document.getElementById('instituicaoContato').value = c.instituicao || '';
+            document.getElementById('categoriaContato').value = c.categoria || 'Outros';
+            document.getElementById('tel1Contato').value = c.tel1 || '';
+            document.getElementById('whatsappContato').value = c.whatsapp || '';
+            document.getElementById('emailContato').value = c.email || '';
+            document.getElementById('cnpjCpfContato').value = c.cnpjCpf || '';
+            document.getElementById('obsContato').value = c.obs || '';
+            document.getElementById('beneficiarioVinculo').value = c.beneficiarioId || '';
+            document.getElementById('profissionalVinculo').value = c.profissionalId || '';
+            document.getElementById('voluntarioVinculo').value = c.voluntarioId || '';
+        }
+    } else {
+        document.getElementById('tituloModal').innerHTML = 'Novo Contato <button class="fechar" onclick="fecharForm()">×</button>';
+        document.getElementById('nomeContato').value = '';
+        document.getElementById('cargoContato').value = '';
+        document.getElementById('instituicaoContato').value = '';
+        document.getElementById('categoriaContato').value = 'Outros';
+        document.getElementById('tel1Contato').value = '';
+        document.getElementById('whatsappContato').value = '';
+        document.getElementById('emailContato').value = '';
+        document.getElementById('cnpjCpfContato').value = '';
+        document.getElementById('obsContato').value = '';
+        document.getElementById('beneficiarioVinculo').value = '';
+        document.getElementById('profissionalVinculo').value = '';
+        document.getElementById('voluntarioVinculo').value = '';
+        var cod = await gerarProximoCodigo();
+        document.getElementById('codigoContato').value = cod;
+    }
+    document.getElementById('modalForm').classList.add('ativo');
+}
+function fecharForm() { document.getElementById('modalForm').classList.remove('ativo'); }
+
+// ============================================================
+// SALVAR
+// ============================================================
+function confirmarSalvar() {
+    var nome = document.getElementById('nomeContato').value.trim();
+    if (!nome) { mostrarToast('⚠️ Nome é obrigatório!', 'warning'); return; }
+    var idEdit = document.getElementById('contatoId').value;
+    pedirAutenticacao(idEdit ? 'editar' : 'criar', idEdit || null);
+}
+async function salvarContatoFinal() {
+    var idEdit = document.getElementById('contatoId').value;
+    var dados = {
+        codigo: document.getElementById('codigoContato').value,
+        nome: document.getElementById('nomeContato').value.trim(),
+        cargo: document.getElementById('cargoContato').value.trim(),
+        instituicao: document.getElementById('instituicaoContato').value.trim(),
+        categoria: document.getElementById('categoriaContato').value,
+        tel1: document.getElementById('tel1Contato').value.trim(),
+        whatsapp: document.getElementById('whatsappContato').value.trim(),
+        email: document.getElementById('emailContato').value.trim(),
+        cnpjCpf: document.getElementById('cnpjCpfContato').value.trim(),
+        obs: document.getElementById('obsContato').value.trim(),
+        beneficiarioId: document.getElementById('beneficiarioVinculo').value || null,
+        profissionalId: document.getElementById('profissionalVinculo').value || null,
+        voluntarioId: document.getElementById('voluntarioVinculo').value || null,
+        atualizadoEm: new Date().toISOString()
+    };
+    var logEntry = {
+        data: new Date().toISOString(),
+        usuario: adminAutenticado.usuario,
+        nomeUsuario: adminAutenticado.nome,
+        acao: idEdit ? 'editado' : 'criado',
+        justificativa: adminAutenticado.justificativa,
+        detalhes: 'Nome: ' + dados.nome + ' | Categoria: ' + dados.categoria
+    };
+    if (firebasePronto && db) {
+        try {
+            if (idEdit) {
+                var c = contatos.find(function(x) { return x._fbId === idEdit; });
+                var hist = (c && c.historico) ? c.historico : [];
+                hist.push(logEntry);
+                dados.historico = hist;
+                await db.collection('contatos').doc(idEdit).update(dados);
+                mostrarToast('✅ Contato atualizado!', 'success');
+            } else {
+                dados.criadoEm = new Date().toISOString();
+                dados.historico = [logEntry];
+                dados.favorito = false;
+                await db.collection('contatos').add(dados);
+                mostrarToast('✅ Contato ' + dados.codigo + ' criado!', 'success');
+            }
+            fecharForm();
+            adminAutenticado = null;
+        } catch (e) { mostrarToast('❌ Erro: ' + e.message, 'error'); }
+    } else {
+        if (idEdit) {
+            var idx = contatos.findIndex(function(x) { return x._fbId === idEdit; });
+            if (idx >= 0) {
+                var hist = contatos[idx].historico || [];
+                hist.push(logEntry);
+                dados.historico = hist;
+                Object.assign(contatos[idx], dados);
+            }
+        } else {
+            dados._fbId = Date.now().toString();
+            dados.historico = [logEntry];
+            dados.favorito = false;
+            contatos.push(dados);
+        }
+        localStorage.setItem('amovin_contatos', JSON.stringify(contatos));
+        fecharForm(); renderizarMenu(); filtrar();
+        adminAutenticado = null;
+    }
 }
 
-contatos = carregarContatos();
+// ============================================================
+// FAVORITO
+// ============================================================
+function toggleFav(fbId) { pedirAutenticacao('favorito', fbId); }
+async function executarFavorito(fbId) {
+    var c = contatos.find(function(x) { return x._fbId === fbId; });
+    if (!c) { adminAutenticado = null; return; }
+    var novo = !c.favorito;
+    var logEntry = {
+        data: new Date().toISOString(),
+        usuario: adminAutenticado.usuario,
+        nomeUsuario: adminAutenticado.nome,
+        acao: novo ? 'adicionado aos favoritos' : 'removido dos favoritos',
+        justificativa: adminAutenticado.justificativa
+    };
+    if (firebasePronto && db) {
+        try {
+            var hist = c.historico || [];
+            hist.push(logEntry);
+            await db.collection('contatos').doc(fbId).update({ favorito: novo, historico: hist });
+            mostrarToast(novo ? '⭐ Adicionado aos favoritos' : 'Removido dos favoritos', 'success');
+        } catch (e) { mostrarToast('❌ ' + e.message, 'error'); }
+    } else {
+        c.favorito = novo;
+        if (!c.historico) c.historico = [];
+        c.historico.push(logEntry);
+        localStorage.setItem('amovin_contatos', JSON.stringify(contatos));
+        filtrar(); renderizarMenu();
+    }
+    adminAutenticado = null;
+}
 
-function salvar() { localStorage.setItem('amovin_contatos', JSON.stringify(contatos)); }
+// ============================================================
+// EXCLUIR
+// ============================================================
+function excluirContato(fbId) {
+    var c = contatos.find(function(x) { return x._fbId === fbId; });
+    if (!c) return;
+    if (!confirm('Excluir "' + c.nome + '" (' + c.codigo + ')?\n\n⚠️ Esta ação é irreversível.')) return;
+    pedirAutenticacao('excluir', fbId);
+}
+async function executarExclusao(fbId) {
+    var c = contatos.find(function(x) { return x._fbId === fbId; });
+    if (!c) { adminAutenticado = null; return; }
+    var logEntry = {
+        data: new Date().toISOString(),
+        usuario: adminAutenticado.usuario,
+        nomeUsuario: adminAutenticado.nome,
+        acao: 'EXCLUÍDO',
+        justificativa: adminAutenticado.justificativa,
+        detalhes: c.nome + ' (' + c.codigo + ')'
+    };
+    if (firebasePronto && db) {
+        try {
+            await db.collection('logs_exclusao').add({ modulo: 'crm', itemCodigo: c.codigo, itemNome: c.nome, ...logEntry });
+            await db.collection('contatos').doc(fbId).delete();
+            mostrarToast('🗑️ Contato excluído!', 'info');
+        } catch (e) { mostrarToast('❌ ' + e.message, 'error'); }
+    } else {
+        contatos = contatos.filter(function(x) { return x._fbId !== fbId; });
+        localStorage.setItem('amovin_contatos', JSON.stringify(contatos));
+        renderizarMenu(); filtrar();
+    }
+    adminAutenticado = null;
+}
 
+// ============================================================
+// LOG
+// ============================================================
+function verLog(fbId) {
+    var c = contatos.find(function(x) { return x._fbId === fbId; });
+    if (!c) return;
+    var hist = c.historico || [];
+    var container = document.getElementById('conteudoLog');
+    if (hist.length === 0) { container.innerHTML = '<div class="sem-dados">Nenhuma alteração.</div>'; }
+    else {
+        container.innerHTML = hist.slice().reverse().map(function(h) {
+            var dt = new Date(h.data).toLocaleString('pt-BR');
+            return '<div class="log-item"><div class="quando">' + dt + '</div>' +
+                '<div class="quem">👤 ' + (h.nomeUsuario || h.usuario) + ' (@' + h.usuario + ')</div>' +
+                '<div class="acao">📌 ' + h.acao + '</div>' +
+                (h.detalhes ? '<div style="font-size:11px;color:var(--cinza);">' + h.detalhes + '</div>' : '') +
+                (h.justificativa ? '<div class="just"><strong>Justificativa:</strong> ' + h.justificativa + '</div>' : '') +
+                '</div>';
+        }).join('');
+    }
+    document.getElementById('modalLog').classList.add('ativo');
+}
+function fecharLog() { document.getElementById('modalLog').classList.remove('ativo'); }
+
+// ============================================================
+// RENDERIZAR
+// ============================================================
 function renderizarMenu() {
-    var cats = {}; contatos.forEach(function(c){ cats[c.categoria] = (cats[c.categoria]||0)+1; });
+    var cats = {};
+    contatos.forEach(function(c) { cats[c.categoria] = (cats[c.categoria]||0)+1; });
     var h = '<button class="cat-item '+(categoriaAtual==='todos'?'ativo':'')+'" onclick="filtrarPorCat(\'todos\')">📋 Todos <span class="count">'+contatos.length+'</span></button>';
     h += '<button class="cat-item '+(categoriaAtual==='favoritos'?'ativo':'')+'" onclick="filtrarPorCat(\'favoritos\')">⭐ Favoritos <span class="count">'+contatos.filter(function(c){return c.favorito;}).length+'</span></button>';
     Object.keys(cats).sort().forEach(function(c){ h += '<button class="cat-item '+(categoriaAtual===c?'ativo':'')+'" onclick="filtrarPorCat(\''+c+'\')">'+c+' <span class="count">'+cats[c]+'</span></button>'; });
@@ -197,64 +655,101 @@ function renderizarMenu() {
 }
 window.filtrarPorCat = function(c) { categoriaAtual = c; renderizarMenu(); filtrar(); };
 
-function getTagClass(tipo) {
-    if (tipo === 'beneficiario') return 'tag-beneficiario';
-    if (tipo === 'profissional') return 'tag-profissional';
-    if (tipo === 'voluntario') return 'tag-voluntario';
+function getTagClass(cat) {
+    if (cat === 'Beneficiário') return 'tag-beneficiario';
+    if (cat === 'Profissional') return 'tag-profissional';
+    if (cat === 'Voluntário') return 'tag-voluntario';
+    if (cat === 'Fornecedor') return 'tag-fornecedor';
     return 'tag-crm';
-}
-function getTagLabel(tipo) {
-    if (tipo === 'beneficiario') return '👥 Beneficiário';
-    if (tipo === 'profissional') return '👨‍⚕️ Profissional';
-    if (tipo === 'voluntario') return '💪 Voluntário';
-    return '📝 CRM';
 }
 
 function filtrar() {
-    var l = contatos.slice(); if (categoriaAtual==='favoritos') l = l.filter(function(c){return c.favorito;}); else if (categoriaAtual!=='todos') l = l.filter(function(c){return c.categoria===categoriaAtual;});
-    var b = document.getElementById('buscaContato').value.toLowerCase(); if (b) l = l.filter(function(c){return (c.nome||'').toLowerCase().indexOf(b)>=0||(c.instituicao||'').toLowerCase().indexOf(b)>=0;});
-    l.sort(function(a,b){return (a.nome||'').localeCompare(b.nome||'');});
+    var l = contatos.slice();
+    if (categoriaAtual === 'favoritos') l = l.filter(function(c) { return c.favorito; });
+    else if (categoriaAtual !== 'todos') l = l.filter(function(c) { return c.categoria === categoriaAtual; });
+    var b = document.getElementById('buscaContato').value.toLowerCase();
+    if (b) l = l.filter(function(c) {
+        return (c.nome || '').toLowerCase().indexOf(b) >= 0 ||
+               (c.instituicao || '').toLowerCase().indexOf(b) >= 0 ||
+               (c.codigo || '').toLowerCase().indexOf(b) >= 0;
+    });
+    l.sort(function(a, b) { return (a.nome || '').localeCompare(b.nome || ''); });
     var c = document.getElementById('listaContatos');
-    if (l.length===0) { c.innerHTML = '<div class="sem-dados">Nenhum contato.</div>'; return; }
-    c.innerHTML = l.map(function(x){
-        var tagClass = getTagClass(x.tipo || x.origem || 'crm');
-        var tagLabel = getTagLabel(x.tipo || x.origem || 'crm');
-        var origemLabel = x.origem === 'pessoas' ? ' 🔗 Importado' : '';
-        return '<div class="contato-card'+(x.favorito?' favorito':'')+'"><div class="contato-info"><h4>'+(x.favorito?'⭐ ':'')+x.nome+' <span class="tag '+tagClass+'">'+tagLabel+'</span>'+origemLabel+'</h4><p>'+(x.cargo||'')+' '+(x.instituicao?'| '+x.instituicao:'')+'</p><p>📞 '+(x.tel1||x.whatsapp||'-')+' | 📧 '+(x.email||'-')+'</p></div><div class="contato-acoes">'+(x.whatsapp?'<button class="btn-acao btn-wpp" onclick="event.stopPropagation();window.open(\'https://wa.me/55\'+x.whatsapp.replace(/\\D/g,\'\'))">💬</button>':'')+(x.tel1?'<button class="btn-acao btn-ligar" onclick="event.stopPropagation();window.open(\'tel:\'+x.tel1)">📞</button>':'')+(x.email?'<button class="btn-acao btn-email" onclick="event.stopPropagation();window.open(\'mailto:\'+x.email)">📧</button>':'')+'<button class="btn-acao btn-fav" onclick="event.stopPropagation();toggleFav('+x.id+')">'+(x.favorito?'★':'☆')+'</button><button class="btn-acao btn-editar" onclick="event.stopPropagation();abrirForm('+x.id+')">✏️</button></div></div>';
-    }).join('');
+    if (l.length === 0) { c.innerHTML = '<div class="sem-dados">Nenhum contato.</div>'; }
+    else {
+        c.innerHTML = l.map(function(x) {
+            var tagClass = getTagClass(x.categoria);
+            var numLogs = (x.historico || []).length;
+            var vinculos = '';
+            if (x.beneficiarioId) vinculos += ' 🔗👤';
+            if (x.profissionalId) vinculos += ' 🔗👨‍⚕️';
+            if (x.voluntarioId) vinculos += ' 🔗💪';
+            return '<div class="contato-card' + (x.favorito ? ' favorito' : '') + '">' +
+                '<div class="contato-info">' +
+                '<div class="codigo">' + (x.codigo || '---') + '</div>' +
+                '<h4>' + (x.favorito ? '⭐ ' : '') + (x.nome || '') + ' <span class="tag ' + tagClass + '">' + (x.categoria || '') + '</span>' + vinculos + '</h4>' +
+                '<p>' + (x.cargo || '') + ' ' + (x.instituicao ? '| ' + x.instituicao : '') + '</p>' +
+                '<p>📞 ' + (x.tel1 || x.whatsapp || '-') + ' | 📧 ' + (x.email || '-') + '</p>' +
+                '</div>' +
+                '<div class="contato-acoes">' +
+                (x.whatsapp ? '<button class="btn-acao btn-wpp" onclick="event.stopPropagation();window.open(\'https://wa.me/55\'+x.whatsapp.replace(/\\D/g,\'\'))">💬</button>' : '') +
+                (x.tel1 ? '<button class="btn-acao btn-teal" onclick="event.stopPropagation();window.open(\'tel:\'+x.tel1)">📞</button>' : '') +
+                (x.email ? '<button class="btn-acao btn-azul" onclick="event.stopPropagation();window.open(\'mailto:\'+x.email)">📧</button>' : '') +
+                '<button class="btn-acao btn-fav" onclick="event.stopPropagation();toggleFav(\'' + x._fbId + '\')">' + (x.favorito ? '★' : '☆') + '</button>' +
+                '<button class="btn-acao btn-editar" onclick="event.stopPropagation();editarContato(\'' + x._fbId + '\')">✏️</button>' +
+                '<button class="btn-acao btn-teal" onclick="event.stopPropagation();verLog(\'' + x._fbId + '\')">📜' + (numLogs ? ' (' + numLogs + ')' : '') + '</button>' +
+                '<button class="btn-acao btn-danger" onclick="event.stopPropagation();excluirContato(\'' + x._fbId + '\')">🗑️</button>' +
+                '</div></div>';
+        }).join('');
+    }
     atualizarKPIs();
 }
 
+function editarContato(fbId) { pedirAutenticacao('editar', fbId); }
+
+// ============================================================
+// KPIs
+// ============================================================
 function atualizarKPIs() {
     document.getElementById('kpiTotal').textContent = contatos.length;
-    document.getElementById('kpiBeneficiarios').textContent = contatos.filter(function(c){return c.tipo==='beneficiario' || c.categoria==='Beneficiário';}).length;
-    document.getElementById('kpiProfissionais').textContent = contatos.filter(function(c){return c.tipo==='profissional' || c.categoria==='Profissional';}).length;
-    document.getElementById('kpiVoluntarios').textContent = contatos.filter(function(c){return c.tipo==='voluntario' || c.categoria==='Voluntário';}).length;
+    document.getElementById('kpiCRM').textContent = contatos.filter(function(c) { return !c.categoria || c.categoria === 'Outros' || c.categoria === 'Prefeitura' || c.categoria === 'Empresa' || c.categoria === 'Patrocinador' || c.categoria === 'Doador' || c.categoria === 'Fundação'; }).length;
+    document.getElementById('kpiBeneficiarios').textContent = contatos.filter(function(c) { return c.categoria === 'Beneficiário'; }).length;
+    document.getElementById('kpiProfissionais').textContent = contatos.filter(function(c) { return c.categoria === 'Profissional'; }).length;
+    document.getElementById('kpiVoluntarios').textContent = contatos.filter(function(c) { return c.categoria === 'Voluntário'; }).length;
+    document.getElementById('kpiFornecedores').textContent = contatos.filter(function(c) { return c.categoria === 'Fornecedor'; }).length;
 }
 
-window.abrirForm = function(id) {
-    editandoId = id || null; document.getElementById('modalForm').style.display = 'flex';
-    document.getElementById('tituloModal').textContent = id ? 'Editar' : 'Novo';
-    if (id) { var x = contatos.find(function(c){return c.id===id;}); if (!x) return;
-        document.getElementById('contatoId').value=x.id;document.getElementById('nomeContato').value=x.nome||'';document.getElementById('cargoContato').value=x.cargo||'';document.getElementById('instituicaoContato').value=x.instituicao||'';document.getElementById('categoriaContato').value=x.categoria||'';document.getElementById('tel1Contato').value=x.tel1||'';document.getElementById('whatsappContato').value=x.whatsapp||'';document.getElementById('emailContato').value=x.email||'';document.getElementById('obsContato').value=x.obs||'';
-    } else { document.getElementById('contatoId').value='';document.getElementById('nomeContato').value='';document.getElementById('cargoContato').value='';document.getElementById('instituicaoContato').value='';document.getElementById('categoriaContato').value='';document.getElementById('tel1Contato').value='';document.getElementById('whatsappContato').value='';document.getElementById('emailContato').value='';document.getElementById('obsContato').value=''; }
-};
-window.fecharForm = function() { document.getElementById('modalForm').style.display = 'none'; };
-window.salvarContato = function() {
-    var n = document.getElementById('nomeContato').value.trim(); if (!n) { alert('Nome obrigatório!'); return; }
-    var d = { nome:n, cargo:document.getElementById('cargoContato').value.trim(), instituicao:document.getElementById('instituicaoContato').value.trim(), categoria:document.getElementById('categoriaContato').value, tel1:document.getElementById('tel1Contato').value.trim(), whatsapp:document.getElementById('whatsappContato').value.trim(), email:document.getElementById('emailContato').value.trim(), obs:document.getElementById('obsContato').value.trim(), origem:'crm', tipo:'crm' };
-    if (editandoId) { var i = contatos.findIndex(function(x){return x.id===editandoId;}); if (i>=0) for (var k in d) contatos[i][k]=d[k]; }
-    else { d.id = Date.now(); d.favorito = false; contatos.push(d); }
-    salvar(); fecharForm(); renderizarMenu(); filtrar();
-};
-window.toggleFav = function(id) { var x = contatos.find(function(c){return c.id===id;}); if (x) { x.favorito = !x.favorito; salvar(); filtrar(); renderizarMenu(); } };
-
 // ============================================================
-// VERIFICAÇÃO DE SESSÃO
+// CSV
 // ============================================================
-if (!sessionStorage.getItem('amovin_logado')) { window.location.href = 'index.html'; }
+function exportarCSV() {
+    var linhas = [['Código', 'Nome', 'Categoria', 'Cargo', 'Instituição', 'Telefone', 'WhatsApp', 'Email', 'CNPJ/CPF', 'Favorito']];
+    contatos.forEach(function(c) {
+        linhas.push([c.codigo || '', c.nome || '', c.categoria || '', c.cargo || '', c.instituicao || '',
+            c.tel1 || '', c.whatsapp || '', c.email || '', c.cnpjCpf || '', c.favorito ? 'Sim' : 'Não']);
+    });
+    var csv = linhas.map(function(l) { return l.map(function(c) { return '"' + c + '"'; }).join(';'); }).join('\n');
+    var blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url; a.download = 'crm-amovin-' + new Date().toISOString().split('T')[0] + '.csv';
+    a.click(); URL.revokeObjectURL(url);
+    mostrarToast('📥 CSV exportado!', 'success');
+}
 
-renderizarMenu(); filtrar();
+function mostrarToast(msg, tipo) {
+    var t = document.createElement('div');
+    t.className = 'toast toast-' + (tipo || 'success');
+    t.textContent = msg;
+    document.body.appendChild(t);
+    setTimeout(function() { t.remove(); }, 4000);
+}
+
+if (!sessionStorage.getItem('amovin_logado') && !localStorage.getItem('amovin_logado')) {
+    console.log('⚠️ Sessão não encontrada, mas permitindo acesso.');
+}
+
+document.addEventListener('DOMContentLoaded', function() { inicializarFirebase(); });
 </script>
 </body>
 </html>
