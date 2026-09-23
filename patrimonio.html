@@ -9,69 +9,55 @@
         :root {
             --laranja: #C65A11; --laranja-escuro: #A04A0E; --amarelo: #F5C518; --verde: #57C220;
             --azul: #1E88E5; --grafite: #1A1A1A; --cinza: #6B7280; --branco: #FFFFFF;
-            --vermelho: #E53935; --roxo: #7C3AED;
+            --vermelho: #E53935; --roxo: #7C3AED; --teal: #00897B;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Inter', system-ui, sans-serif; background: #F8F4ED; display: flex; min-height: 100vh; }
-
         .main-content { flex: 1; margin-left: 270px; padding: 24px 30px; }
         .topo-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 10px; }
         .topo-bar h1 { font-size: 24px; font-weight: 700; color: var(--grafite); }
         .topo-bar h1 span { color: var(--laranja); }
         .btn-sair-topo { background: #F8F4ED; color: #1A1A1A; border: 1px solid #F0E9DF; padding: 8px 16px; border-radius: 10px; font-size: 12px; font-weight: 600; cursor: pointer; }
-
         .status-firebase { display: flex; align-items: center; gap: 8px; padding: 6px 14px; border-radius: 20px; background: #F8F4ED; font-size: 12px; font-weight: 600; border: 1px solid #F0E9DF; }
         .status-firebase.conectado { background: #E8F5E9; color: #2E7D32; border-color: #A5D6A7; }
         .status-firebase.offline { background: #FFF3E0; color: #E65100; border-color: #FFCC80; }
         .status-firebase .dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; animation: pulse 2s infinite; }
         @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
-
         .kpi-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 15px; margin-bottom: 22px; }
         .kpi-card { background: #FFFFFF; padding: 16px; border-radius: 14px; border: 1px solid #F0E9DF; text-align: center; }
         .kpi-card .kpi-valor { font-size: 22px; font-weight: 800; color: var(--laranja); word-break: break-word; }
         .kpi-card .kpi-label { font-size: 11px; color: var(--cinza); }
-
         .card { background: #FFFFFF; padding: 24px; border-radius: 14px; border: 1px solid #F0E9DF; margin-bottom: 20px; }
         .card h3 { font-size: 16px; font-weight: 700; color: var(--grafite); margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid #F0E9DF; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
         .card h3 .badge { font-size: 10px; font-weight: 600; padding: 3px 12px; border-radius: 20px; background: #FFF3E0; color: var(--laranja); }
-
         .btn { padding: 10px 24px; border-radius: 8px; border: none; cursor: pointer; font-weight: 600; font-size: 13px; font-family: 'Inter', sans-serif; transition: all 0.2s; display: inline-flex; align-items: center; gap: 8px; }
-        .btn-primary { background: var(--laranja); color: white; }
-        .btn-primary:hover { background: var(--laranja-escuro); }
-        .btn-success { background: var(--verde); color: white; }
-        .btn-outline { background: transparent; color: var(--cinza); border: 1px solid #E5E0D8; }
+        .btn-primary { background: var(--laranja); color: white; } .btn-primary:hover { background: var(--laranja-escuro); }
+        .btn-success { background: var(--verde); color: white; } .btn-outline { background: transparent; color: var(--cinza); border: 1px solid #E5E0D8; }
         .btn-outline:hover { background: #F8F4ED; }
         .btn-danger { background: var(--vermelho); color: white; }
         .btn-sm { padding: 5px 12px; font-size: 11px; }
-        .btn-azul { background: var(--azul); color: white; }
-        .btn-roxo { background: var(--roxo); color: white; }
-
+        .btn-azul { background: var(--azul); color: white; } .btn-roxo { background: var(--roxo); color: white; }
+        .btn-teal { background: var(--teal); color: white; } .btn-amarelo { background: var(--amarelo); color: #1A1A1A; }
         .form-group { margin-bottom: 14px; }
         .form-group label { display: block; font-size: 11px; font-weight: 600; color: var(--cinza); margin-bottom: 4px; text-transform: uppercase; }
         .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px 12px; border: 1px solid #E5E0D8; border-radius: 8px; font-size: 13px; font-family: 'Inter', sans-serif; background: #FAFAFA; }
         .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: var(--laranja); background: white; box-shadow: 0 0 0 3px rgba(198, 90, 17, 0.08); }
         .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
         .form-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
-
         .campo-moeda { position: relative; }
         .campo-moeda::before { content: 'R$'; position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--cinza); font-weight: 600; font-size: 13px; pointer-events: none; }
-        .campo-moeda input { padding-left: 40px !important; font-weight: 600; font-size: 14px !important; text-align: right; letter-spacing: 0.3px; }
+        .campo-moeda input { padding-left: 40px !important; font-weight: 600; font-size: 14px !important; text-align: right; }
         .campo-moeda .preview-valor { font-size: 10px; color: var(--cinza); text-align: right; margin-top: 2px; min-height: 12px; }
-
         .filtros-bar { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-bottom: 16px; padding: 12px; background: #F8F4ED; border-radius: 10px; }
         .filtros-bar select, .filtros-bar input { padding: 8px 12px; border: 1px solid #E5E0D8; border-radius: 8px; font-size: 12px; font-family: 'Inter', sans-serif; background: white; }
         .filtros-bar .info { font-size: 12px; color: var(--cinza); margin-left: auto; }
-
-        .grupo-categoria { margin-bottom: 24px; }
-        .grupo-categoria-titulo { font-size: 14px; font-weight: 700; color: var(--grafite); padding: 10px 16px; background: #F8F4ED; border-radius: 10px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; }
-
         .patrimonio-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; }
         .patrimonio-card { background: #FFFFFF; border-radius: 14px; border: 1px solid #F0E9DF; padding: 18px; transition: all 0.3s; }
         .patrimonio-card:hover { transform: translateY(-3px); box-shadow: 0 6px 24px rgba(0,0,0,0.08); }
         .patrimonio-card .foto { width: 100%; height: 140px; background: #F8F4ED; border-radius: 8px; margin-bottom: 10px; display: flex; align-items: center; justify-content: center; font-size: 50px; overflow: hidden; }
         .patrimonio-card .foto img { width: 100%; height: 100%; object-fit: cover; }
         .patrimonio-card .cabecalho { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; gap: 8px; }
-        .patrimonio-card .codigo { font-size: 10px; color: var(--laranja); font-weight: 700; letter-spacing: 0.5px; background: #FFF3E0; padding: 3px 10px; border-radius: 12px; display: inline-block; }
+        .patrimonio-card .codigo { font-size: 10px; color: var(--laranja); font-weight: 700; background: #FFF3E0; padding: 3px 10px; border-radius: 12px; }
         .patrimonio-card .nome { font-size: 15px; font-weight: 700; color: var(--grafite); margin: 6px 0 4px; }
         .patrimonio-card .status { font-size: 10px; padding: 3px 10px; border-radius: 12px; font-weight: 600; white-space: nowrap; }
         .status-operacao { background: #E8F5E9; color: #2E7D32; }
@@ -79,31 +65,31 @@
         .status-baixado { background: #FFEBEE; color: #C62828; }
         .patrimonio-card .detalhes { font-size: 11px; color: var(--cinza); margin: 6px 0; }
         .patrimonio-card .valor { font-size: 18px; font-weight: 800; color: var(--verde); margin: 8px 0; }
-        .patrimonio-card .vinculo { font-size: 10px; padding: 3px 8px; border-radius: 8px; background: #E3F2FD; color: #1565C0; display: inline-block; margin-top: 4px; }
+        .patrimonio-card .vinculo { font-size: 10px; padding: 3px 8px; border-radius: 8px; background: #E3F2FD; color: #1565C0; display: inline-block; margin-top: 4px; margin-right: 4px; }
         .patrimonio-card .vinculo.financeiro { background: #FFF3E0; color: var(--laranja); }
         .patrimonio-card .vinculo.projeto { background: #E8F5E9; color: #2E7D32; }
+        .patrimonio-card .vinculo.orcamento { background: #F3E5F5; color: #7B1FA2; }
         .patrimonio-card .acoes { display: flex; gap: 6px; margin-top: 12px; flex-wrap: wrap; }
-
         .sem-dados { text-align: center; padding: 40px; color: #9CA3AF; }
         .loading { text-align: center; padding: 40px; color: var(--cinza); }
         .loading .spinner { display: inline-block; width: 30px; height: 30px; border: 3px solid #E5E0D8; border-top: 3px solid var(--laranja); border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 10px; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 9999; justify-content: center; align-items: center; padding: 20px; }
+        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 9999; justify-content: center; align-items: center; padding: 20px; overflow-y: auto; }
         .modal-overlay.ativo { display: flex; }
-        .modal { background: white; border-radius: 16px; padding: 30px; max-width: 850px; width: 100%; max-height: 90vh; overflow-y: auto; }
+        .modal { background: white; border-radius: 16px; padding: 30px; max-width: 850px; width: 100%; max-height: 95vh; overflow-y: auto; margin: auto; }
+        .modal.modal-pequeno { max-width: 500px; }
         .modal h2 { font-size: 20px; color: var(--grafite); margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; }
         .modal .btn-group { display: flex; gap: 12px; margin-top: 16px; justify-content: flex-end; flex-wrap: wrap; }
         .modal .fechar { background: none; border: none; font-size: 22px; cursor: pointer; color: var(--cinza); }
-
         .secao-titulo { font-size: 13px; font-weight: 700; color: var(--laranja); text-transform: uppercase; margin: 20px 0 10px; padding-bottom: 6px; border-bottom: 2px solid var(--laranja); }
-
+        .log-item { padding: 10px 12px; border-bottom: 1px solid #F0E9DF; font-size: 12px; }
+        .log-item .quando { font-size: 10px; color: var(--cinza); }
+        .log-item .quem { font-weight: 700; color: var(--laranja); }
+        .log-item .acao { color: var(--grafite); font-weight: 600; }
+        .log-item .just { font-size: 11px; color: #666; margin-top: 4px; padding: 6px 10px; background: #FFF8E7; border-radius: 6px; border-left: 3px solid var(--laranja); }
         .toast { position: fixed; top: 20px; right: 20px; padding: 16px 24px; border-radius: 12px; color: white; font-weight: 600; font-size: 14px; z-index: 10000; box-shadow: 0 8px 32px rgba(0,0,0,0.15); animation: slideInRight 0.4s ease; max-width: 400px; }
-        .toast-success { background: var(--verde); }
-        .toast-error { background: var(--vermelho); }
-        .toast-warning { background: #E65100; }
+        .toast-success { background: var(--verde); } .toast-error { background: var(--vermelho); } .toast-warning { background: #E65100; }
         @keyframes slideInRight { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-
         .rodape { background: #FFFFFF; border-radius: 14px; padding: 12px 18px; border: 1px solid #F0E9DF; margin-top: 20px; }
         .rodape-grid { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
         .rodape-logo .logo-vigorre { width: 50px; }
@@ -111,7 +97,6 @@
         .rodape-info .copyright { font-size: 8px; color: #8A8F98; }
         .rodape-info .contato { font-size: 9px; color: #8A8F98; }
         .rodape-info a { color: #C65A11; text-decoration: none; }
-
         @media (max-width: 900px) { .main-content { margin-left: 0; } .form-row, .form-row-3 { grid-template-columns: 1fr; } .patrimonio-grid { grid-template-columns: 1fr; } }
     </style>
 </head>
@@ -121,33 +106,25 @@
 
 <main class="main-content">
     <div class="topo-bar">
-        <div>
-            <h1>🏢 Patrimônio <span>AMOVIN</span></h1>
-        </div>
+        <div><h1>🏢 Patrimônio <span>AMOVIN</span></h1></div>
         <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
-            <div class="status-firebase" id="statusFirebase">
-                <span class="dot"></span>
-                <span>⏳ Conectando...</span>
-            </div>
-            <button class="btn btn-outline" onclick="exportarCSV()">📥 Exportar CSV</button>
-            <button class="btn btn-primary" onclick="abrirFormNovo()">➕ Novo Bem</button>
+            <div class="status-firebase" id="statusFirebase"><span class="dot"></span><span>⏳ Conectando...</span></div>
+            <button class="btn btn-outline" onclick="exportarCSV()">📥 CSV</button>
+            <button class="btn btn-primary" onclick="pedirAutenticacao('criar')">➕ Novo Bem</button>
             <button class="btn-sair-topo" onclick="window.location.href='dashboard.html'">🏠 Dashboard</button>
         </div>
     </div>
 
-    <!-- KPIs -->
     <div class="kpi-row">
-        <div class="kpi-card"><div class="kpi-valor" id="kpiTotal">0</div><div class="kpi-label">🏢 Total de Bens</div></div>
+        <div class="kpi-card"><div class="kpi-valor" id="kpiTotal">0</div><div class="kpi-label">🏢 Total</div></div>
         <div class="kpi-card"><div class="kpi-valor" style="color:var(--verde);" id="kpiOperacao">0</div><div class="kpi-label">✅ Em Operação</div></div>
-        <div class="kpi-card"><div class="kpi-valor" style="color:#E65100;" id="kpiManutencao">0</div><div class="kpi-label">🔧 Em Manutenção</div></div>
+        <div class="kpi-card"><div class="kpi-valor" style="color:#E65100;" id="kpiManutencao">0</div><div class="kpi-label">🔧 Manutenção</div></div>
         <div class="kpi-card"><div class="kpi-valor" style="color:var(--vermelho);" id="kpiBaixado">0</div><div class="kpi-label">❌ Baixados</div></div>
         <div class="kpi-card"><div class="kpi-valor" style="color:var(--azul);" id="kpiValorTotal">R$ 0,00</div><div class="kpi-label">💰 Valor Total</div></div>
     </div>
 
-    <!-- Lista -->
     <div class="card">
         <h3>📋 Bens Cadastrados <span class="badge" id="contadorBens">0 bens</span></h3>
-
         <div class="filtros-bar">
             <select id="filtroCategoria" onchange="renderizarBens()">
                 <option value="">Todas as categorias</option>
@@ -161,24 +138,14 @@
             <select id="filtroStatus" onchange="renderizarBens()">
                 <option value="">Todos os status</option>
                 <option value="Em Operação">✅ Em Operação</option>
-                <option value="Em Manutenção">🔧 Em Manutenção</option>
+                <option value="Em Manutenção">🔧 Manutenção</option>
                 <option value="Baixado">❌ Baixado</option>
             </select>
-            <select id="filtroProjeto" onchange="renderizarBens()">
-                <option value="">Todos os projetos</option>
-            </select>
             <input type="text" id="filtroBusca" placeholder="🔍 Buscar nome, código..." oninput="renderizarBens()" style="min-width:180px;">
-            <label style="font-size:11px;display:flex;align-items:center;gap:6px;cursor:pointer;">
-                <input type="checkbox" id="agruparCategoria" onchange="renderizarBens()"> Agrupar por categoria
-            </label>
             <span class="info" id="contadorFiltro"></span>
         </div>
-
-        <div id="patrimonioLista">
-            <div class="loading">
-                <div class="spinner"></div>
-                <div>Carregando patrimônio do Firebase...</div>
-            </div>
+        <div id="patrimonioLista" class="patrimonio-grid">
+            <div class="loading" style="grid-column:1/-1;"><div class="spinner"></div><div>Carregando patrimônio do Firebase...</div></div>
         </div>
     </div>
 
@@ -193,20 +160,14 @@
     </div>
 </main>
 
-<!-- MODAL NOVO/EDITAR BEM -->
 <div class="modal-overlay" id="modalForm">
     <div class="modal">
         <h2 id="modalTitulo">➕ Novo Bem <button class="fechar" onclick="fecharForm()">×</button></h2>
         <input type="hidden" id="bemId">
-
         <div class="secao-titulo">📋 Identificação</div>
-        <div class="form-group">
-            <label>Nome do Bem *</label>
-            <input type="text" id="formNome" placeholder="Ex: Notebook Dell Inspiron">
-        </div>
+        <div class="form-group"><label>Nome do Bem *</label><input type="text" id="formNome" placeholder="Ex: Notebook Dell Inspiron 15"></div>
         <div class="form-row">
-            <div class="form-group">
-                <label>Categoria *</label>
+            <div class="form-group"><label>Categoria *</label>
                 <select id="formCategoria">
                     <option value="Informática">💻 Informática</option>
                     <option value="Mobiliário">🪑 Mobiliário</option>
@@ -216,19 +177,15 @@
                     <option value="Outros">📌 Outros</option>
                 </select>
             </div>
-            <div class="form-group">
-                <label>Código Patrimonial</label>
-                <input type="text" id="formCodigo" readonly style="background:#F0E9DF;font-weight:700;color:var(--laranja);">
-            </div>
+            <div class="form-group"><label>Código Patrimonial</label><input type="text" id="formCodigo" readonly style="background:#F0E9DF;font-weight:700;color:var(--laranja);"></div>
         </div>
         <div class="form-row">
-            <div class="form-group"><label>Marca</label><input type="text" id="formMarca" placeholder="Ex: Dell, Samsung"></div>
+            <div class="form-group"><label>Marca</label><input type="text" id="formMarca" placeholder="Ex: Dell"></div>
             <div class="form-group"><label>Modelo</label><input type="text" id="formModelo" placeholder="Ex: Inspiron 15 3520"></div>
         </div>
         <div class="form-row">
             <div class="form-group"><label>Nº de Série</label><input type="text" id="formSerie" placeholder="Ex: 8HJ9KLM123"></div>
-            <div class="form-group">
-                <label>Estado de Conservação</label>
+            <div class="form-group"><label>Estado de Conservação</label>
                 <select id="formConservacao">
                     <option value="Novo">✨ Novo</option>
                     <option value="Bom" selected>👍 Bom</option>
@@ -237,35 +194,23 @@
                 </select>
             </div>
         </div>
-        <div class="form-group">
-            <label>Foto do Bem (URL da imagem)</label>
-            <input type="text" id="formFoto" placeholder="https://exemplo.com/foto.jpg">
-        </div>
-
-        <div class="secao-titulo">🔗 Vínculo Financeiro (opcional)</div>
-        <div class="form-group">
-            <label>Nota Fiscal / Lançamento Financeiro</label>
-            <select id="formNotaFiscal" onchange="preencherPorNotaFiscal()">
-                <option value="">— Nenhum —</option>
-            </select>
+        <div class="form-group"><label>Foto do Bem (URL)</label><input type="text" id="formFoto" placeholder="https://exemplo.com/foto.jpg"></div>
+        <div class="secao-titulo">🔗 Vínculos (opcionais)</div>
+        <div class="form-group"><label>Nota Fiscal / Financeiro</label>
+            <select id="formNotaFiscal"><option value="">— Nenhum —</option></select>
         </div>
         <div class="form-row">
-            <div class="form-group">
-                <label>Projeto Vinculado</label>
-                <select id="formProjeto">
-                    <option value="">— Nenhum —</option>
-                </select>
+            <div class="form-group"><label>Projeto Vinculado</label>
+                <select id="formProjeto"><option value="">— Nenhum —</option></select>
             </div>
-            <div class="form-group">
-                <label>Fornecedor / Empresa</label>
-                <input type="text" id="formFornecedor" placeholder="Ex: Dell Brasil Ltda">
+            <div class="form-group"><label>Orçamento de Origem</label>
+                <select id="formOrcamento"><option value="">— Nenhum —</option></select>
             </div>
         </div>
-
+        <div class="form-group"><label>Fornecedor</label><input type="text" id="formFornecedor" placeholder="Ex: Dell Brasil Ltda"></div>
         <div class="secao-titulo">💰 Aquisição</div>
         <div class="form-row">
-            <div class="form-group">
-                <label>Valor (R$) *</label>
+            <div class="form-group"><label>Valor (R$) *</label>
                 <div class="campo-moeda">
                     <input type="text" id="formValor" placeholder="0,00" inputmode="numeric" oninput="mascaraMoeda(this)" onblur="formatarMoedaBlur(this)">
                     <div class="preview-valor" id="previewValor"></div>
@@ -273,11 +218,9 @@
             </div>
             <div class="form-group"><label>Data de Aquisição</label><input type="date" id="formDataAquisicao"></div>
         </div>
-
-        <div class="secao-titulo">📍 Localização e Responsável</div>
+        <div class="secao-titulo">📍 Localização</div>
         <div class="form-row">
-            <div class="form-group">
-                <label>Localização Física</label>
+            <div class="form-group"><label>Localização Física</label>
                 <select id="formLocal">
                     <option value="Sede AMOVIN">🏢 Sede AMOVIN</option>
                     <option value="Sala Administrativa">📋 Sala Administrativa</option>
@@ -287,45 +230,33 @@
                     <option value="Outro">📌 Outro</option>
                 </select>
             </div>
-            <div class="form-group"><label>Responsável</label><input type="text" id="formResponsavel" placeholder="Nome do responsável"></div>
+            <div class="form-group"><label>Responsável</label><input type="text" id="formResponsavel" placeholder="Nome"></div>
         </div>
-        <div class="form-group">
-            <label>Status do Bem</label>
+        <div class="form-group"><label>Status do Bem</label>
             <select id="formStatus">
                 <option value="Em Operação">✅ Em Operação</option>
                 <option value="Em Manutenção">🔧 Em Manutenção</option>
                 <option value="Baixado">❌ Baixado</option>
             </select>
         </div>
-
-        <div class="secao-titulo">📝 Observações</div>
-        <div class="form-group">
-            <textarea id="formObs" rows="2" placeholder="Informações adicionais..."></textarea>
-        </div>
-
+        <div class="form-group"><label>Observações</label><textarea id="formObs" rows="2"></textarea></div>
         <div class="btn-group">
             <button class="btn btn-outline" onclick="fecharForm()">Cancelar</button>
-            <button class="btn btn-success" onclick="salvarBem()">💾 Salvar Bem</button>
+            <button class="btn btn-success" onclick="confirmarSalvar()">💾 Salvar</button>
         </div>
     </div>
 </div>
 
-<!-- MODAL DETALHES -->
 <div class="modal-overlay" id="modalDetalhes">
-    <div class="modal">
-        <h2>📋 Detalhes do Bem <button class="fechar" onclick="fecharDetalhes()">×</button></h2>
-        <div id="conteudoDetalhes"></div>
-        <div class="btn-group">
-            <button class="btn btn-roxo" onclick="imprimirEtiquetaAtual()">🖨️ Imprimir Etiqueta</button>
-            <button class="btn btn-outline" onclick="fecharDetalhes()">Fechar</button>
-        </div>
-    </div>
+    <div class="modal"><h2>📋 Detalhes <button class="fechar" onclick="fecharDetalhes()">×</button></h2><div id="conteudoDetalhes"></div>
+    <div class="btn-group">
+        <button class="btn btn-roxo" onclick="imprimirEtiquetaAtual()">🖨️ Etiqueta</button>
+        <button class="btn btn-outline" onclick="fecharDetalhes()">Fechar</button>
+    </div></div>
 </div>
 
-<!-- MODAL ETIQUETA -->
 <div class="modal-overlay" id="modalEtiqueta">
-    <div class="modal" style="max-width:500px;">
-        <h2>🖨️ Etiqueta Patrimonial <button class="fechar" onclick="fecharEtiqueta()">×</button></h2>
+    <div class="modal modal-pequeno"><h2>🖨️ Etiqueta Patrimonial <button class="fechar" onclick="fecharEtiqueta()">×</button></h2>
         <div id="previewEtiqueta" style="text-align:center;padding:20px;background:#F8F4ED;border-radius:10px;"></div>
         <div class="btn-group">
             <button class="btn btn-outline" onclick="fecharEtiqueta()">Cancelar</button>
@@ -334,28 +265,51 @@
     </div>
 </div>
 
+<div class="modal-overlay" id="modalLog">
+    <div class="modal modal-pequeno"><h2>📜 Histórico <button class="fechar" onclick="fecharLog()">×</button></h2>
+        <div id="conteudoLog" style="max-height:400px;overflow-y:auto;"></div>
+        <div class="btn-group"><button class="btn btn-outline" onclick="fecharLog()">Fechar</button></div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="modalAuth">
+    <div class="modal modal-pequeno">
+        <h2>🔐 Autenticação Master <button class="fechar" onclick="fecharAuth()">×</button></h2>
+        <div id="authMsg" style="font-size:13px;color:var(--cinza);margin-bottom:16px;"></div>
+        <div class="form-group"><label>Usuário Master</label><input type="text" id="authUsuario" placeholder="Ex: raul"></div>
+        <div class="form-group"><label>Senha Master</label><input type="password" id="authSenha" placeholder="••••••••"></div>
+        <div class="form-group"><label>Justificativa (mín 50 caracteres)</label>
+            <textarea id="authJust" rows="3" placeholder="Explique o motivo da alteração..."></textarea>
+            <div style="font-size:10px;color:var(--cinza);margin-top:4px;" id="contadorJust">0/50 caracteres</div>
+        </div>
+        <div class="btn-group">
+            <button class="btn btn-outline" onclick="fecharAuth()">Cancelar</button>
+            <button class="btn btn-success" onclick="confirmarAuth()">✅ Confirmar</button>
+        </div>
+    </div>
+</div>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script src="menu.js?v=20260904"></script>
 <script>
 // ============================================================
-// PATRIMÔNIO - AMOVIN ERP (Firebase Tempo Real + Vínculos)
+// PATRIMÔNIO - AMOVIN ERP (Firebase + Auth Master + Log)
 // Código: A-PAT-YYYY-NNNN
 // ============================================================
 
 var bens = [];
 var projetos = [];
-var notasFiscais = [];
+var orcamentos = [];
+var financeiro = [];
+var adminsMaster = [];
 var firebasePronto = false;
 var db = null;
-var unsubBens = null;
-var unsubProjetos = null;
-var unsubNotas = null;
+var acaoPendente = null;
+var dadosPendentes = null;
+var adminAutenticado = null;
 var bemAtualDetalhes = null;
 var bemAtualEtiqueta = null;
 
-// ============================================================
-// FORMATAÇÃO MONETÁRIA
-// ============================================================
 function formatarMoeda(valor) {
     if (valor === null || valor === undefined || isNaN(valor)) return 'R$ 0,00';
     var n = Math.round((parseFloat(valor) + Number.EPSILON) * 100) / 100;
@@ -369,28 +323,26 @@ function formatarNumero(valor) {
 function parseMoeda(str) {
     if (!str) return 0;
     if (typeof str === 'number') return str;
-    var limpo = String(str).replace(/[^\d,.-]/g, '');
-    limpo = limpo.replace(/\./g, '').replace(',', '.');
+    var limpo = String(str).replace(/[^\d,.-]/g, '').replace(/\./g, '').replace(',', '.');
     var n = parseFloat(limpo);
     return isNaN(n) ? 0 : n;
 }
 function mascaraMoeda(input) {
-    var digitos = input.value.replace(/\D/g, '');
-    if (!digitos) { input.value = ''; atualizarPreviewValor(0); return; }
-    if (digitos.length > 15) digitos = digitos.substring(0, 15);
-    var numero = parseInt(digitos, 10) / 100;
-    input.value = formatarNumero(numero);
-    atualizarPreviewValor(numero);
+    var d = input.value.replace(/\D/g, '');
+    if (!d) { input.value = ''; atualizarPreviewValor(0); return; }
+    if (d.length > 15) d = d.substring(0, 15);
+    var n = parseInt(d, 10) / 100;
+    input.value = formatarNumero(n);
+    atualizarPreviewValor(n);
 }
 function formatarMoedaBlur(input) {
     var n = parseMoeda(input.value);
     input.value = formatarNumero(n);
     atualizarPreviewValor(n);
 }
-function atualizarPreviewValor(numero) {
-    var preview = document.getElementById('previewValor');
-    if (!preview) return;
-    preview.textContent = numero > 0 ? '= ' + formatarMoeda(numero) : '';
+function atualizarPreviewValor(n) {
+    var p = document.getElementById('previewValor');
+    if (p) p.textContent = n > 0 ? '= ' + formatarMoeda(n) : '';
 }
 
 // ============================================================
@@ -398,9 +350,9 @@ function atualizarPreviewValor(numero) {
 // ============================================================
 function inicializarFirebase() {
     if (typeof firebase === 'undefined') {
-        var script = document.createElement('script');
-        script.src = 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js';
-        script.onload = function() {
+        var s = document.createElement('script');
+        s.src = 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js';
+        s.onload = function() {
             var fs = document.createElement('script');
             fs.src = 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js';
             fs.onload = function() {
@@ -416,236 +368,261 @@ function inicializarFirebase() {
                     if (!firebase.apps.length) firebase.initializeApp(cfg);
                     db = firebase.firestore();
                     firebasePronto = true;
-                    console.log('🔥 Firebase conectado');
                     atualizarStatusFirebase('conectado');
                     escutarTudo();
-                } catch (e) {
-                    console.error('❌ Erro:', e);
-                    atualizarStatusFirebase('offline');
-                    carregarLocalStorage();
-                }
+                } catch (e) { atualizarStatusFirebase('offline'); carregarLocalStorage(); }
             };
-            fs.onerror = function() { atualizarStatusFirebase('offline'); carregarLocalStorage(); };
             document.head.appendChild(fs);
         };
-        script.onerror = function() { atualizarStatusFirebase('offline'); carregarLocalStorage(); };
-        document.head.appendChild(script);
+        document.head.appendChild(s);
     } else {
         try {
             db = firebase.firestore();
             firebasePronto = true;
             atualizarStatusFirebase('conectado');
             escutarTudo();
-        } catch (e) {
-            atualizarStatusFirebase('offline');
-            carregarLocalStorage();
-        }
+        } catch (e) { atualizarStatusFirebase('offline'); carregarLocalStorage(); }
     }
 }
-
-function atualizarStatusFirebase(status) {
+function atualizarStatusFirebase(s) {
     var el = document.getElementById('statusFirebase');
-    if (status === 'conectado') {
-        el.className = 'status-firebase conectado';
-        el.innerHTML = '<span class="dot"></span><span>🟢 Firebase (Tempo Real)</span>';
-    } else {
-        el.className = 'status-firebase offline';
-        el.innerHTML = '<span class="dot"></span><span>🟡 Modo Local</span>';
-    }
+    if (s === 'conectado') { el.className = 'status-firebase conectado'; el.innerHTML = '<span class="dot"></span><span>🟢 Firebase (Tempo Real)</span>'; }
+    else { el.className = 'status-firebase offline'; el.innerHTML = '<span class="dot"></span><span>🟡 Modo Local</span>'; }
 }
-
 function escutarTudo() {
     if (!firebasePronto || !db) { carregarLocalStorage(); return; }
-
-    // BENS
-    unsubBens = db.collection('patrimonio').onSnapshot(function(snap) {
+    db.collection('patrimonio').onSnapshot(function(snap) {
         bens = [];
-        snap.forEach(function(doc) {
-            bens.push({ _fbId: doc.id, ...doc.data() });
-        });
+        snap.forEach(function(doc) { bens.push({ _fbId: doc.id, ...doc.data() }); });
         bens.sort(function(a, b) { return (a.codigo || '').localeCompare(b.codigo || ''); });
-        renderizarBens();
-        atualizarKPIs();
-    }, function(err) { console.error('❌ Bens:', err); carregarLocalStorage(); });
-
-    // PROJETOS (para dropdown)
-    unsubProjetos = db.collection('projetos').onSnapshot(function(snap) {
+        renderizarBens(); atualizarKPIs();
+    });
+    db.collection('projetos').onSnapshot(function(snap) {
         projetos = [];
-        snap.forEach(function(doc) {
-            projetos.push({ _fbId: doc.id, ...doc.data() });
-        });
-        preencherDropdownProjetos();
-        preencherFiltroProjetos();
-    }, function(err) { console.log('ℹ️ projetos:', err.message); });
-
-    // NOTAS FISCAIS (para dropdown)
-    unsubNotas = db.collection('finances').onSnapshot(function(snap) {
-        notasFiscais = [];
-        snap.forEach(function(doc) {
-            notasFiscais.push({ _fbId: doc.id, ...doc.data() });
-        });
-        preencherDropdownNotas();
-    }, function(err) { console.log('ℹ️ finances:', err.message); });
+        snap.forEach(function(doc) { projetos.push({ _fbId: doc.id, ...doc.data() }); });
+        preencherDropdowns();
+    });
+    db.collection('orcamentos').onSnapshot(function(snap) {
+        orcamentos = [];
+        snap.forEach(function(doc) { orcamentos.push({ _fbId: doc.id, ...doc.data() }); });
+        preencherDropdowns();
+    });
+    db.collection('finances').onSnapshot(function(snap) {
+        financeiro = [];
+        snap.forEach(function(doc) { financeiro.push({ _fbId: doc.id, ...doc.data() }); });
+        preencherDropdowns();
+    });
+    db.collection('admins_master').onSnapshot(function(snap) {
+        adminsMaster = [];
+        snap.forEach(function(doc) { adminsMaster.push({ _fbId: doc.id, ...doc.data() }); });
+    });
 }
-
 function carregarLocalStorage() {
     bens = JSON.parse(localStorage.getItem('amovin_bens') || '[]');
     projetos = JSON.parse(localStorage.getItem('amovin_projetos') || '[]');
-    notasFiscais = JSON.parse(localStorage.getItem('amovin_financeiro') || '[]');
-    preencherDropdownProjetos();
-    preencherFiltroProjetos();
-    preencherDropdownNotas();
-    renderizarBens();
-    atualizarKPIs();
+    orcamentos = JSON.parse(localStorage.getItem('amovin_orcamentos_v2') || '[]');
+    financeiro = JSON.parse(localStorage.getItem('amovin_financeiro') || '[]');
+    preencherDropdowns();
+    renderizarBens(); atualizarKPIs();
 }
 
-// ============================================================
-// DROPDOWNS
-// ============================================================
-function preencherDropdownProjetos() {
-    var sel = document.getElementById('formProjeto');
-    if (!sel) return;
-    var valorAtual = sel.value;
-    sel.innerHTML = '<option value="">— Nenhum —</option>';
-    projetos.forEach(function(p) {
-        var opt = document.createElement('option');
-        opt.value = p.codigo || p._fbId;
-        opt.textContent = (p.codigo || '') + ' - ' + (p.nome || '');
-        sel.appendChild(opt);
-    });
-    if (valorAtual) sel.value = valorAtual;
-}
-
-function preencherFiltroProjetos() {
-    var sel = document.getElementById('filtroProjeto');
-    if (!sel) return;
-    sel.innerHTML = '<option value="">Todos os projetos</option>';
-    projetos.forEach(function(p) {
-        var opt = document.createElement('option');
-        opt.value = p.codigo || p._fbId;
-        opt.textContent = (p.codigo || '') + ' - ' + (p.nome || '');
-        sel.appendChild(opt);
-    });
-}
-
-function preencherDropdownNotas() {
-    var sel = document.getElementById('formNotaFiscal');
-    if (!sel) return;
-    var valorAtual = sel.value;
-    sel.innerHTML = '<option value="">— Nenhum —</option>';
-    notasFiscais.sort(function(a, b) {
-        return (b.date || '').localeCompare(a.date || '');
-    });
-    notasFiscais.forEach(function(n) {
-        var opt = document.createElement('option');
-        opt.value = n._fbId;
-        var cod = n.codigo || n.id || '';
-        var desc = (n.description || '').substring(0, 40);
-        var val = n.value ? formatarMoeda(n.value) : '';
-        opt.textContent = cod + ' - ' + desc + ' (' + val + ')';
-        opt.dataset.codigo = cod;
-        opt.dataset.fornecedor = n.empresaPessoaFisica || '';
-        opt.dataset.valor = n.value || 0;
-        opt.dataset.projeto = n.projetoVinculado || '';
-        opt.dataset.categoria = n.category || '';
-        sel.appendChild(opt);
-    });
-    if (valorAtual) sel.value = valorAtual;
-}
-
-// ============================================================
-// AUTO-PREENCHER POR NOTA FISCAL
-// ============================================================
-function preencherPorNotaFiscal() {
-    var sel = document.getElementById('formNotaFiscal');
-    var opt = sel.options[sel.selectedIndex];
-    if (!opt || !opt.value) return;
-
-    // Preenche fornecedor
-    if (opt.dataset.fornecedor) {
-        document.getElementById('formFornecedor').value = opt.dataset.fornecedor;
+function preencherDropdowns() {
+    var selNF = document.getElementById('formNotaFiscal');
+    if (selNF) {
+        selNF.innerHTML = '<option value="">— Nenhum —</option>';
+        financeiro.slice().sort(function(a, b) { return (b.date || '').localeCompare(a.date || ''); }).forEach(function(f) {
+            var opt = document.createElement('option');
+            opt.value = f.codigo || f._fbId;
+            opt.textContent = (f.codigo || '') + ' - ' + (f.description || '').substring(0, 40);
+            opt.dataset.fornecedor = f.empresaPessoaFisica || '';
+            opt.dataset.valor = f.value || 0;
+            opt.dataset.data = f.date || '';
+            opt.dataset.projeto = f.projeto_id || '';
+            selNF.appendChild(opt);
+        });
     }
-    // Preenche valor
-    if (opt.dataset.valor && parseFloat(opt.dataset.valor) > 0) {
-        var val = parseFloat(opt.dataset.valor);
-        document.getElementById('formValor').value = formatarNumero(val);
-        atualizarPreviewValor(val);
+    var selProj = document.getElementById('formProjeto');
+    if (selProj) {
+        selProj.innerHTML = '<option value="">— Nenhum —</option>';
+        projetos.forEach(function(p) {
+            var opt = document.createElement('option');
+            opt.value = p.codigo || p._fbId;
+            opt.textContent = (p.codigo || '') + ' - ' + (p.nome || '');
+            selProj.appendChild(opt);
+        });
     }
-    // Preenche projeto (se houver)
-    if (opt.dataset.projeto) {
-        var projSel = document.getElementById('formProjeto');
-        for (var i = 0; i < projSel.options.length; i++) {
-            if (projSel.options[i].value === opt.dataset.projeto) {
-                projSel.selectedIndex = i;
-                break;
+    var selOrc = document.getElementById('formOrcamento');
+    if (selOrc) {
+        selOrc.innerHTML = '<option value="">— Nenhum —</option>';
+        orcamentos.forEach(function(o) {
+            var opt = document.createElement('option');
+            opt.value = o.codigo || o._fbId;
+            opt.textContent = (o.codigo || '') + ' - ' + (o.titulo || '');
+            selOrc.appendChild(opt);
+        });
+    }
+}
+
+// Auto-preenchimento ao selecionar nota
+document.addEventListener('change', function(e) {
+    if (e.target && e.target.id === 'formNotaFiscal') {
+        var opt = e.target.options[e.target.selectedIndex];
+        if (opt && opt.value) {
+            if (opt.dataset.fornecedor) document.getElementById('formFornecedor').value = opt.dataset.fornecedor;
+            if (opt.dataset.valor && parseFloat(opt.dataset.valor) > 0) {
+                var val = parseFloat(opt.dataset.valor);
+                document.getElementById('formValor').value = formatarNumero(val);
+                atualizarPreviewValor(val);
             }
+            if (opt.dataset.data) document.getElementById('formDataAquisicao').value = opt.dataset.data;
+            if (opt.dataset.projeto) {
+                var selP = document.getElementById('formProjeto');
+                for (var i = 0; i < selP.options.length; i++) {
+                    if (selP.options[i].value === opt.dataset.projeto) { selP.selectedIndex = i; break; }
+                }
+            }
+            mostrarToast('✅ Campos preenchidos pela nota fiscal!', 'success');
         }
     }
-    // Data de aquisição = data da nota
-    var nota = notasFiscais.find(function(n) { return n._fbId === opt.value; });
-    if (nota && nota.date) {
-        document.getElementById('formDataAquisicao').value = nota.date;
-    }
-    mostrarToast('✅ Campos preenchidos automaticamente!', 'success');
-}
+});
 
 // ============================================================
-// GERAR CÓDIGO A-PAT-YYYY-NNNN
+// CÓDIGO A-PAT-YYYY-NNNN
 // ============================================================
 async function gerarProximoCodigo() {
     var ano = new Date().getFullYear();
     var prefixo = 'A-PAT-' + ano + '-';
     var max = 0;
-
     if (firebasePronto && db) {
         try {
             var snap = await db.collection('patrimonio').get();
             snap.forEach(function(doc) {
                 var c = doc.data().codigo || '';
-                if (c.startsWith(prefixo)) {
-                    var n = parseInt(c.replace(prefixo, ''));
-                    if (n > max) max = n;
-                }
+                if (c.startsWith(prefixo)) { var n = parseInt(c.replace(prefixo, '')); if (n > max) max = n; }
             });
-        } catch (e) { console.log('Erro:', e.message); }
+        } catch (e) {}
     } else {
         bens.forEach(function(b) {
-            if (b.codigo && b.codigo.startsWith(prefixo)) {
-                var n = parseInt(b.codigo.replace(prefixo, ''));
-                if (n > max) max = n;
-            }
+            if (b.codigo && b.codigo.startsWith(prefixo)) { var n = parseInt(b.codigo.replace(prefixo, '')); if (n > max) max = n; }
         });
     }
     return prefixo + String(max + 1).padStart(4, '0');
 }
 
 // ============================================================
+// AUTH
+// ============================================================
+function pedirAutenticacao(acao, dados) {
+    acaoPendente = acao;
+    dadosPendentes = dados || null;
+    var msgs = { 'criar': 'Criar novo bem', 'editar': 'Editar bem', 'excluir': 'Excluir bem', 'status': 'Alterar status' };
+    document.getElementById('authMsg').textContent = '🔐 ' + (msgs[acao] || acao);
+    document.getElementById('authUsuario').value = '';
+    document.getElementById('authSenha').value = '';
+    document.getElementById('authJust').value = '';
+    document.getElementById('contadorJust').textContent = '0/50 caracteres';
+    document.getElementById('modalAuth').classList.add('ativo');
+    setTimeout(function() { document.getElementById('authUsuario').focus(); }, 200);
+}
+
+async function validarAdminMaster(usuario, senha) {
+    if (!firebasePronto || !db) {
+        var locais = [
+            { usuario: 'raul', senha: 'raul8954', nome: 'Raul Ramalho Costa' },
+            { usuario: 'daniele', senha: 'daniele2026', nome: 'Daniele Ramalho' },
+            { usuario: 'master', senha: 'amovin2026', nome: 'Adm Master Principal' }
+        ];
+        return locais.find(function(a) { return a.usuario === usuario && a.senha === senha; });
+    }
+    try {
+        var snap = await db.collection('admins_master').where('usuario', '==', usuario).where('ativo', '==', true).get();
+        if (snap.empty) return null;
+        var admin = null;
+        snap.forEach(function(doc) { admin = { _fbId: doc.id, ...doc.data() }; });
+        if (admin.senha !== senha) return null;
+        return admin;
+    } catch (e) { return null; }
+}
+
+async function confirmarAuth() {
+    var usuario = document.getElementById('authUsuario').value.trim().toLowerCase();
+    var senha = document.getElementById('authSenha').value;
+    var just = document.getElementById('authJust').value.trim();
+
+    if (!usuario || !senha) { mostrarToast('⚠️ Preencha usuário e senha!', 'warning'); return; }
+    if (just.length < 50) { mostrarToast('⚠️ Justificativa mín 50 caracteres!', 'warning'); return; }
+
+    var admin = await validarAdminMaster(usuario, senha);
+    if (!admin) { mostrarToast('❌ Usuário ou senha incorretos!', 'error'); return; }
+
+    adminAutenticado = { ...admin, justificativa: just };
+    fecharAuth();
+
+    if (acaoPendente === 'criar' || acaoPendente === 'editar') abrirForm(dadosPendentes);
+    else if (acaoPendente === 'excluir') executarExclusao(dadosPendentes);
+    else if (acaoPendente === 'status') executarMudancaStatus(dadosPendentes);
+    else if (acaoPendente === 'salvar') salvarBemFinal();
+
+    acaoPendente = null;
+}
+function fecharAuth() { document.getElementById('modalAuth').classList.remove('ativo'); }
+
+document.getElementById('authJust').addEventListener('input', function() {
+    document.getElementById('contadorJust').textContent = this.value.length + '/50 caracteres';
+});
+
+// ============================================================
 // FORM
 // ============================================================
-async function abrirFormNovo() {
-    document.getElementById('modalTitulo').innerHTML = '➕ Novo Bem <button class="fechar" onclick="fecharForm()">×</button>';
-    document.getElementById('bemId').value = '';
-    document.getElementById('formNome').value = '';
-    document.getElementById('formCategoria').value = 'Informática';
-    document.getElementById('formMarca').value = '';
-    document.getElementById('formModelo').value = '';
-    document.getElementById('formSerie').value = '';
-    document.getElementById('formConservacao').value = 'Bom';
-    document.getElementById('formFoto').value = '';
-    document.getElementById('formNotaFiscal').value = '';
-    document.getElementById('formProjeto').value = '';
-    document.getElementById('formFornecedor').value = '';
-    document.getElementById('formValor').value = '';
-    document.getElementById('formDataAquisicao').value = new Date().toISOString().split('T')[0];
-    document.getElementById('formLocal').value = 'Sede AMOVIN';
-    document.getElementById('formResponsavel').value = '';
-    document.getElementById('formStatus').value = 'Em Operação';
-    document.getElementById('formObs').value = '';
-    document.getElementById('previewValor').textContent = '';
-
-    var codigo = await gerarProximoCodigo();
-    document.getElementById('formCodigo').value = codigo;
-
+async function abrirForm(bemId) {
+    document.getElementById('bemId').value = bemId || '';
+    if (bemId) {
+        var b = bens.find(function(x) { return x._fbId === bemId; });
+        if (b) {
+            document.getElementById('modalTitulo').innerHTML = '✏️ Editar: ' + b.nome + ' <button class="fechar" onclick="fecharForm()">×</button>';
+            document.getElementById('formCodigo').value = b.codigo || '';
+            document.getElementById('formNome').value = b.nome || '';
+            document.getElementById('formCategoria').value = b.categoria || 'Informática';
+            document.getElementById('formMarca').value = b.marca || '';
+            document.getElementById('formModelo').value = b.modelo || '';
+            document.getElementById('formSerie').value = b.numeroSerie || '';
+            document.getElementById('formConservacao').value = b.estadoConservacao || 'Bom';
+            document.getElementById('formFoto').value = b.foto || '';
+            document.getElementById('formNotaFiscal').value = b.notaFiscalOrigem || '';
+            document.getElementById('formProjeto').value = b.projetoVinculado || '';
+            document.getElementById('formOrcamento').value = b.orcamentoOrigem || '';
+            document.getElementById('formFornecedor').value = b.fornecedor || '';
+            document.getElementById('formValor').value = formatarNumero(b.valor || 0);
+            document.getElementById('formDataAquisicao').value = b.dataAquisicao || '';
+            document.getElementById('formLocal').value = b.local || 'Sede AMOVIN';
+            document.getElementById('formResponsavel').value = b.responsavel || '';
+            document.getElementById('formStatus').value = b.status || 'Em Operação';
+            document.getElementById('formObs').value = b.obs || '';
+            atualizarPreviewValor(b.valor || 0);
+        }
+    } else {
+        document.getElementById('modalTitulo').innerHTML = '➕ Novo Bem <button class="fechar" onclick="fecharForm()">×</button>';
+        document.getElementById('formNome').value = '';
+        document.getElementById('formCategoria').value = 'Informática';
+        document.getElementById('formMarca').value = '';
+        document.getElementById('formModelo').value = '';
+        document.getElementById('formSerie').value = '';
+        document.getElementById('formConservacao').value = 'Bom';
+        document.getElementById('formFoto').value = '';
+        document.getElementById('formNotaFiscal').value = '';
+        document.getElementById('formProjeto').value = '';
+        document.getElementById('formOrcamento').value = '';
+        document.getElementById('formFornecedor').value = '';
+        document.getElementById('formValor').value = '';
+        document.getElementById('formDataAquisicao').value = new Date().toISOString().split('T')[0];
+        document.getElementById('formLocal').value = 'Sede AMOVIN';
+        document.getElementById('formResponsavel').value = '';
+        document.getElementById('formStatus').value = 'Em Operação';
+        document.getElementById('formObs').value = '';
+        document.getElementById('previewValor').textContent = '';
+        var cod = await gerarProximoCodigo();
+        document.getElementById('formCodigo').value = cod;
+    }
     document.getElementById('modalForm').classList.add('ativo');
 }
 function fecharForm() { document.getElementById('modalForm').classList.remove('ativo'); }
@@ -653,18 +630,19 @@ function fecharForm() { document.getElementById('modalForm').classList.remove('a
 // ============================================================
 // SALVAR
 // ============================================================
-async function salvarBem() {
+function confirmarSalvar() {
     var nome = document.getElementById('formNome').value.trim();
     var valor = parseMoeda(document.getElementById('formValor').value);
     if (!nome) { mostrarToast('⚠️ Nome é obrigatório!', 'warning'); return; }
-    if (valor <= 0) { mostrarToast('⚠️ Informe um valor válido!', 'warning'); return; }
+    if (valor <= 0) { mostrarToast('⚠️ Valor deve ser maior que zero!', 'warning'); return; }
+    var idEdit = document.getElementById('bemId').value;
+    pedirAutenticacao(idEdit ? 'editar' : 'criar', idEdit || null);
+}
 
-    var notaFbId = document.getElementById('formNotaFiscal').value;
-    var notaCodigo = '';
-    if (notaFbId) {
-        var nota = notasFiscais.find(function(n) { return n._fbId === notaFbId; });
-        if (nota) notaCodigo = nota.codigo || nota.id || '';
-    }
+async function salvarBemFinal() {
+    var nome = document.getElementById('formNome').value.trim();
+    var valor = parseMoeda(document.getElementById('formValor').value);
+    var idEdit = document.getElementById('bemId').value;
 
     var dados = {
         codigo: document.getElementById('formCodigo').value,
@@ -677,10 +655,10 @@ async function salvarBem() {
         foto: document.getElementById('formFoto').value.trim(),
         valor: valor,
         dataAquisicao: document.getElementById('formDataAquisicao').value,
-        notaFiscalFbId: notaFbId,
-        notaFiscalOrigem: notaCodigo,
-        fornecedor: document.getElementById('formFornecedor').value.trim(),
+        notaFiscalOrigem: document.getElementById('formNotaFiscal').value,
         projetoVinculado: document.getElementById('formProjeto').value,
+        orcamentoOrigem: document.getElementById('formOrcamento').value,
+        fornecedor: document.getElementById('formFornecedor').value.trim(),
         local: document.getElementById('formLocal').value,
         responsavel: document.getElementById('formResponsavel').value.trim(),
         status: document.getElementById('formStatus').value,
@@ -688,71 +666,58 @@ async function salvarBem() {
         atualizadoEm: new Date().toISOString()
     };
 
-    var idEdit = document.getElementById('bemId').value;
+    var logEntry = {
+        data: new Date().toISOString(),
+        usuario: adminAutenticado.usuario,
+        nomeUsuario: adminAutenticado.nome,
+        acao: idEdit ? 'editado' : 'criado',
+        justificativa: adminAutenticado.justificativa,
+        detalhes: 'Valor: ' + formatarMoeda(valor) + ' | Status: ' + dados.status
+    };
 
     if (firebasePronto && db) {
         try {
             if (idEdit) {
+                var b = bens.find(function(x) { return x._fbId === idEdit; });
+                var hist = (b && b.historico) ? b.historico : [];
+                hist.push(logEntry);
+                dados.historico = hist;
                 await db.collection('patrimonio').doc(idEdit).update(dados);
                 mostrarToast('✅ Bem atualizado!', 'success');
             } else {
                 dados.criadoEm = new Date().toISOString();
+                dados.historico = [logEntry];
                 await db.collection('patrimonio').add(dados);
                 mostrarToast('✅ Bem ' + dados.codigo + ' cadastrado!', 'success');
             }
             fecharForm();
-        } catch (e) {
-            mostrarToast('❌ Erro: ' + e.message, 'error');
-        }
+            adminAutenticado = null;
+        } catch (e) { mostrarToast('❌ Erro: ' + e.message, 'error'); }
     } else {
         if (idEdit) {
-            var idx = bens.findIndex(function(b) { return b._fbId === idEdit; });
-            if (idx >= 0) Object.assign(bens[idx], dados);
+            var idx = bens.findIndex(function(x) { return x._fbId === idEdit; });
+            if (idx >= 0) {
+                var hist = bens[idx].historico || [];
+                hist.push(logEntry);
+                dados.historico = hist;
+                Object.assign(bens[idx], dados);
+            }
         } else {
             dados._fbId = Date.now().toString();
-            dados.id = dados._fbId;
+            dados.historico = [logEntry];
             bens.push(dados);
         }
         localStorage.setItem('amovin_bens', JSON.stringify(bens));
-        fecharForm();
-        renderizarBens();
-        atualizarKPIs();
-        mostrarToast('✅ Salvo localmente!', 'success');
+        fecharForm(); renderizarBens(); atualizarKPIs();
+        adminAutenticado = null;
     }
 }
 
 // ============================================================
-// EDITAR
+// EDITAR / DETALHES / STATUS / EXCLUIR / LOG
 // ============================================================
-function editarBem(fbId) {
-    var b = bens.find(function(x) { return x._fbId === fbId; });
-    if (!b) return;
-    document.getElementById('modalTitulo').innerHTML = '✏️ Editar: ' + b.nome + ' <button class="fechar" onclick="fecharForm()">×</button>';
-    document.getElementById('bemId').value = fbId;
-    document.getElementById('formCodigo').value = b.codigo || '';
-    document.getElementById('formNome').value = b.nome || '';
-    document.getElementById('formCategoria').value = b.categoria || 'Informática';
-    document.getElementById('formMarca').value = b.marca || '';
-    document.getElementById('formModelo').value = b.modelo || '';
-    document.getElementById('formSerie').value = b.numeroSerie || '';
-    document.getElementById('formConservacao').value = b.estadoConservacao || 'Bom';
-    document.getElementById('formFoto').value = b.foto || '';
-    document.getElementById('formNotaFiscal').value = b.notaFiscalFbId || '';
-    document.getElementById('formProjeto').value = b.projetoVinculado || '';
-    document.getElementById('formFornecedor').value = b.fornecedor || '';
-    document.getElementById('formValor').value = formatarNumero(b.valor || 0);
-    document.getElementById('formDataAquisicao').value = b.dataAquisicao || '';
-    document.getElementById('formLocal').value = b.local || 'Sede AMOVIN';
-    document.getElementById('formResponsavel').value = b.responsavel || '';
-    document.getElementById('formStatus').value = b.status || 'Em Operação';
-    document.getElementById('formObs').value = b.obs || '';
-    atualizarPreviewValor(b.valor || 0);
-    document.getElementById('modalForm').classList.add('ativo');
-}
+function editarBem(fbId) { pedirAutenticacao('editar', fbId); }
 
-// ============================================================
-// DETALHES
-// ============================================================
 function verDetalhes(fbId) {
     var b = bens.find(function(x) { return x._fbId === fbId; });
     if (!b) return;
@@ -773,8 +738,9 @@ function verDetalhes(fbId) {
     html += dado('Valor', formatarMoeda(b.valor || 0), false, 'destaque');
     html += dado('Data Aquisição', b.dataAquisicao);
     html += dado('Nota Fiscal', b.notaFiscalOrigem);
-    html += dado('Fornecedor', b.fornecedor);
+    html += dado('Orçamento', b.orcamentoOrigem);
     html += dado('Projeto', b.projetoVinculado);
+    html += dado('Fornecedor', b.fornecedor);
     html += dado('Localização', b.local);
     html += dado('Responsável', b.responsavel);
     html += dado('Status', b.status);
@@ -789,6 +755,76 @@ function dado(l, v, full, classe) {
         '<div style="font-size:13px;font-weight:600;margin-top:2px;' + (classe === 'destaque' ? 'color:var(--laranja);font-size:16px;' : '') + '">' + (v || '—') + '</div></div>';
 }
 function fecharDetalhes() { document.getElementById('modalDetalhes').classList.remove('ativo'); bemAtualDetalhes = null; }
+
+function alterarStatus(fbId) { pedirAutenticacao('status', fbId); }
+async function executarMudancaStatus(fbId) {
+    var b = bens.find(function(x) { return x._fbId === fbId; });
+    if (!b) { adminAutenticado = null; return; }
+    var novo = prompt('Status (Em Operação / Em Manutenção / Baixado):', b.status);
+    if (!novo) { adminAutenticado = null; return; }
+    if (['Em Operação', 'Em Manutenção', 'Baixado'].indexOf(novo) === -1) { mostrarToast('⚠️ Inválido!', 'warning'); adminAutenticado = null; return; }
+    var logEntry = { data: new Date().toISOString(), usuario: adminAutenticado.usuario, nomeUsuario: adminAutenticado.nome, acao: 'status: ' + b.status + ' → ' + novo, justificativa: adminAutenticado.justificativa };
+    if (firebasePronto && db) {
+        try {
+            var hist = b.historico || [];
+            hist.push(logEntry);
+            await db.collection('patrimonio').doc(fbId).update({ status: novo, historico: hist, atualizadoEm: new Date().toISOString() });
+            mostrarToast('✅ Status atualizado!', 'success');
+        } catch (e) { mostrarToast('❌ ' + e.message, 'error'); }
+    } else {
+        b.status = novo;
+        if (!b.historico) b.historico = [];
+        b.historico.push(logEntry);
+        localStorage.setItem('amovin_bens', JSON.stringify(bens));
+        renderizarBens();
+    }
+    adminAutenticado = null;
+}
+
+function excluirBem(fbId) {
+    var b = bens.find(function(x) { return x._fbId === fbId; });
+    if (!b) return;
+    if (!confirm('Excluir o bem "' + b.nome + '" (' + b.codigo + ')?\n\n⚠️ Esta ação é irreversível.')) return;
+    pedirAutenticacao('excluir', fbId);
+}
+async function executarExclusao(fbId) {
+    var b = bens.find(function(x) { return x._fbId === fbId; });
+    if (!b) { adminAutenticado = null; return; }
+    var logEntry = { data: new Date().toISOString(), usuario: adminAutenticado.usuario, nomeUsuario: adminAutenticado.nome, acao: 'EXCLUÍDO', justificativa: adminAutenticado.justificativa, detalhes: 'Bem: ' + b.nome + ' (' + b.codigo + ')' };
+    if (firebasePronto && db) {
+        try {
+            await db.collection('logs_exclusao').add({ modulo: 'patrimonio', itemCodigo: b.codigo, itemNome: b.nome, ...logEntry });
+            await db.collection('patrimonio').doc(fbId).delete();
+            mostrarToast('🗑️ Bem excluído!', 'info');
+        } catch (e) { mostrarToast('❌ ' + e.message, 'error'); }
+    } else {
+        bens = bens.filter(function(x) { return x._fbId !== fbId; });
+        localStorage.setItem('amovin_bens', JSON.stringify(bens));
+        renderizarBens(); atualizarKPIs();
+    }
+    adminAutenticado = null;
+}
+
+function verLog(fbId) {
+    var b = bens.find(function(x) { return x._fbId === fbId; });
+    if (!b) return;
+    var hist = b.historico || [];
+    var container = document.getElementById('conteudoLog');
+    if (hist.length === 0) { container.innerHTML = '<div class="sem-dados">Nenhuma alteração.</div>'; }
+    else {
+        container.innerHTML = hist.slice().reverse().map(function(h) {
+            var dt = new Date(h.data).toLocaleString('pt-BR');
+            return '<div class="log-item"><div class="quando">' + dt + '</div>' +
+                '<div class="quem">👤 ' + (h.nomeUsuario || h.usuario) + ' (@' + h.usuario + ')</div>' +
+                '<div class="acao">📌 ' + h.acao + '</div>' +
+                (h.detalhes ? '<div style="font-size:11px;color:var(--cinza);">' + h.detalhes + '</div>' : '') +
+                (h.justificativa ? '<div class="just"><strong>Justificativa:</strong> ' + h.justificativa + '</div>' : '') +
+                '</div>';
+        }).join('');
+    }
+    document.getElementById('modalLog').classList.add('ativo');
+}
+function fecharLog() { document.getElementById('modalLog').classList.remove('ativo'); }
 
 // ============================================================
 // ETIQUETA
@@ -806,33 +842,24 @@ function imprimirEtiquetaAtual() {
     document.getElementById('modalEtiqueta').classList.add('ativo');
 }
 function fecharEtiqueta() { document.getElementById('modalEtiqueta').classList.remove('ativo'); bemAtualEtiqueta = null; }
-
 function imprimirEtiqueta() {
     if (!bemAtualEtiqueta) return;
     var b = bemAtualEtiqueta;
     var canvas = document.querySelector('#qrPreview canvas');
     var qrImg = canvas ? canvas.toDataURL('image/png') : '';
-
     var html = '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Etiqueta ' + b.codigo + '</title>';
-    html += '<style>';
-    html += '@page { size: 80mm 50mm; margin: 0; }';
-    html += 'body { font-family: Arial, sans-serif; margin: 0; padding: 4mm; }';
-    html += '.etiqueta { display: flex; gap: 4mm; align-items: center; height: 40mm; }';
-    html += '.logo { font-size: 8pt; font-weight: bold; color: #C65A11; margin-bottom: 1mm; }';
-    html += '.codigo { font-size: 14pt; font-weight: bold; color: #1A1A1A; letter-spacing: 1px; margin: 1mm 0; }';
-    html += '.nome { font-size: 8pt; color: #1A1A1A; font-weight: 600; }';
-    html += '.detalhe { font-size: 6pt; color: #666; }';
-    html += '</style></head><body>';
-    html += '<div class="etiqueta">';
-    html += '<div><img src="' + qrImg + '" width="90" height="90"></div>';
-    html += '<div style="flex:1;">';
-    html += '<div class="logo">🌻 AMOVIN</div>';
+    html += '<style>@page{size:80mm 50mm;margin:0;}body{font-family:Arial,sans-serif;margin:0;padding:4mm;}';
+    html += '.etiqueta{display:flex;gap:4mm;align-items:center;height:40mm;}';
+    html += '.logo{font-size:8pt;font-weight:bold;color:#C65A11;margin-bottom:1mm;}';
+    html += '.codigo{font-size:14pt;font-weight:bold;color:#1A1A1A;letter-spacing:1px;margin:1mm 0;}';
+    html += '.nome{font-size:8pt;color:#1A1A1A;font-weight:600;}.detalhe{font-size:6pt;color:#666;}</style></head><body>';
+    html += '<div class="etiqueta"><div><img src="' + qrImg + '" width="90" height="90"></div>';
+    html += '<div style="flex:1;"><div class="logo">🌻 AMOVIN</div>';
     html += '<div class="codigo">' + (b.codigo || '---') + '</div>';
     html += '<div class="nome">' + (b.nome || '').substring(0, 40) + '</div>';
     html += '<div class="detalhe">' + (b.categoria || '') + ' • ' + (b.local || '') + '</div>';
     html += '<div class="detalhe">Adq: ' + (b.dataAquisicao ? new Date(b.dataAquisicao + 'T00:00:00').toLocaleDateString('pt-BR') : '-') + '</div>';
     html += '</div></div></body></html>';
-
     var win = window.open('', '_blank');
     win.document.write(html);
     win.document.close();
@@ -846,94 +873,45 @@ function imprimirEtiqueta() {
 function renderizarBens() {
     var cat = document.getElementById('filtroCategoria').value;
     var st = document.getElementById('filtroStatus').value;
-    var proj = document.getElementById('filtroProjeto').value;
     var busca = document.getElementById('filtroBusca').value.toLowerCase();
-    var agrupar = document.getElementById('agruparCategoria').checked;
-
     var filtrados = bens.filter(function(b) {
         if (cat && b.categoria !== cat) return false;
         if (st && b.status !== st) return false;
-        if (proj && b.projetoVinculado !== proj) return false;
         if (busca && (b.nome || '').toLowerCase().indexOf(busca) === -1 &&
                      (b.codigo || '').toLowerCase().indexOf(busca) === -1) return false;
         return true;
     });
-
-    document.getElementById('contadorFiltro').textContent = filtrados.length + ' de ' + bens.length + ' bens';
+    document.getElementById('contadorFiltro').textContent = filtrados.length + ' de ' + bens.length;
     document.getElementById('contadorBens').textContent = bens.length + ' bem' + (bens.length !== 1 ? 's' : '');
-
     var container = document.getElementById('patrimonioLista');
     if (filtrados.length === 0) {
-        container.innerHTML = '<div class="sem-dados"><p style="font-size:48px;">🏢</p><p style="margin-top:12px;">Nenhum bem cadastrado.</p><button class="btn btn-primary" onclick="abrirFormNovo()" style="margin-top:16px;">➕ Cadastrar Primeiro Bem</button></div>';
+        container.innerHTML = '<div class="sem-dados" style="grid-column:1/-1;"><p style="font-size:48px;">🏢</p><p style="margin-top:12px;">Nenhum bem.</p></div>';
         return;
     }
-
-    if (agrupar) {
-        var grupos = {};
-        filtrados.forEach(function(b) {
-            var c = b.categoria || 'Outros';
-            if (!grupos[c]) grupos[c] = [];
-            grupos[c].push(b);
-        });
-        var html = '';
-        Object.keys(grupos).sort().forEach(function(cat) {
-            var totalGrupo = grupos[cat].reduce(function(s, b) { return s + (b.valor || 0); }, 0);
-            html += '<div class="grupo-categoria">';
-            html += '<div class="grupo-categoria-titulo"><span>' + cat + ' (' + grupos[cat].length + ')</span><span>' + formatarMoeda(totalGrupo) + '</span></div>';
-            html += '<div class="patrimonio-grid">' + grupos[cat].map(renderCard).join('') + '</div>';
-            html += '</div>';
-        });
-        container.innerHTML = html;
-    } else {
-        container.innerHTML = '<div class="patrimonio-grid">' + filtrados.map(renderCard).join('') + '</div>';
-    }
-}
-
-function renderCard(b) {
-    var stClass = b.status === 'Em Manutenção' ? 'status-manutencao' : (b.status === 'Baixado' ? 'status-baixado' : 'status-operacao');
-    var catIcon = { 'Informática': '💻', 'Mobiliário': '🪑', 'Veículo': '🚗', 'Equipamento': '🔧', 'Eletrodoméstico': '📺', 'Outros': '📌' }[b.categoria] || '📦';
-    var fotoHtml = b.foto
-        ? '<div class="foto"><img src="' + b.foto + '" onerror="this.parentElement.innerHTML=\'' + catIcon + '\'"></div>'
-        : '<div class="foto">' + catIcon + '</div>';
-
-    var vinculos = '';
-    if (b.projetoVinculado) vinculos += '<span class="vinculo projeto">📋 ' + b.projetoVinculado + '</span> ';
-    if (b.notaFiscalOrigem) vinculos += '<span class="vinculo financeiro">💰 ' + b.notaFiscalOrigem + '</span>';
-
-    return '<div class="patrimonio-card">' +
-        fotoHtml +
-        '<div class="cabecalho"><span class="codigo">' + (b.codigo || '---') + '</span><span class="status ' + stClass + '">' + (b.status || 'Em Operação') + '</span></div>' +
-        '<div class="nome">' + (b.nome || 'Sem nome') + '</div>' +
-        '<div class="detalhes">🏷️ ' + (b.marca || '---') + ' ' + (b.modelo || '') + '</div>' +
-        '<div class="detalhes">📍 ' + (b.local || '---') + ' • ' + (b.estadoConservacao || 'Bom') + '</div>' +
-        '<div class="valor">' + formatarMoeda(b.valor || 0) + '</div>' +
-        (vinculos ? '<div style="margin-top:6px;">' + vinculos + '</div>' : '') +
-        '<div class="acoes">' +
-        '<button class="btn btn-outline btn-sm" onclick="verDetalhes(\'' + b._fbId + '\')">👁️ Ver</button>' +
-        '<button class="btn btn-outline btn-sm" onclick="editarBem(\'' + b._fbId + '\')">✏️ Editar</button>' +
-        '<button class="btn btn-roxo btn-sm" onclick="verDetalhes(\'' + b._fbId + '\');setTimeout(imprimirEtiquetaAtual,100)">🖨️ Etiqueta</button>' +
-        '<button class="btn btn-danger btn-sm" onclick="excluirBem(\'' + b._fbId + '\')">🗑️</button>' +
-        '</div></div>';
-}
-
-// ============================================================
-// EXCLUIR
-// ============================================================
-async function excluirBem(fbId) {
-    var b = bens.find(function(x) { return x._fbId === fbId; });
-    if (!b) return;
-    if (!confirm('Excluir o bem "' + b.nome + '" (' + b.codigo + ')?\n\nEsta ação não pode ser desfeita.')) return;
-    if (firebasePronto && db) {
-        try {
-            await db.collection('patrimonio').doc(fbId).delete();
-            mostrarToast('🗑️ Bem excluído!', 'info');
-        } catch (e) { mostrarToast('❌ ' + e.message, 'error'); }
-    } else {
-        bens = bens.filter(function(x) { return x._fbId !== fbId; });
-        localStorage.setItem('amovin_bens', JSON.stringify(bens));
-        renderizarBens();
-        atualizarKPIs();
-    }
+    container.innerHTML = filtrados.map(function(b) {
+        var stClass = b.status === 'Em Manutenção' ? 'status-manutencao' : (b.status === 'Baixado' ? 'status-baixado' : 'status-operacao');
+        var catIcon = { 'Informática': '💻', 'Mobiliário': '🪑', 'Veículo': '🚗', 'Equipamento': '🔧', 'Eletrodoméstico': '📺', 'Outros': '📌' }[b.categoria] || '📦';
+        var fotoHtml = b.foto ? '<div class="foto"><img src="' + b.foto + '" onerror="this.parentElement.innerHTML=\'' + catIcon + '\'"></div>' : '<div class="foto">' + catIcon + '</div>';
+        var vinculos = '';
+        if (b.projetoVinculado) vinculos += '<span class="vinculo projeto">📋 ' + b.projetoVinculado + '</span>';
+        if (b.notaFiscalOrigem) vinculos += '<span class="vinculo financeiro">💰 ' + b.notaFiscalOrigem + '</span>';
+        if (b.orcamentoOrigem) vinculos += '<span class="vinculo orcamento">📊 ' + b.orcamentoOrigem + '</span>';
+        var numLogs = (b.historico || []).length;
+        return '<div class="patrimonio-card">' + fotoHtml +
+            '<div class="cabecalho"><span class="codigo">' + (b.codigo || '---') + '</span><span class="status ' + stClass + '">' + (b.status || 'Em Operação') + '</span></div>' +
+            '<div class="nome">' + (b.nome || 'Sem nome') + '</div>' +
+            '<div class="detalhes">🏷️ ' + (b.marca || '---') + ' ' + (b.modelo || '') + '</div>' +
+            '<div class="detalhes">📍 ' + (b.local || '---') + ' • ' + (b.estadoConservacao || 'Bom') + '</div>' +
+            '<div class="valor">' + formatarMoeda(b.valor || 0) + '</div>' +
+            (vinculos ? '<div style="margin-top:6px;">' + vinculos + '</div>' : '') +
+            '<div class="acoes">' +
+            '<button class="btn btn-outline btn-sm" onclick="verDetalhes(\'' + b._fbId + '\')">👁️ Ver</button>' +
+            '<button class="btn btn-outline btn-sm" onclick="editarBem(\'' + b._fbId + '\')">✏️ Editar</button>' +
+            '<button class="btn btn-roxo btn-sm" onclick="verDetalhes(\'' + b._fbId + '\');setTimeout(imprimirEtiquetaAtual,100)">🖨️</button>' +
+            '<button class="btn btn-teal btn-sm" onclick="verLog(\'' + b._fbId + '\')">📜 (' + numLogs + ')</button>' +
+            '<button class="btn btn-danger btn-sm" onclick="excluirBem(\'' + b._fbId + '\')">🗑️</button>' +
+            '</div></div>';
+    }).join('');
 }
 
 // ============================================================
@@ -949,32 +927,24 @@ function atualizarKPIs() {
 }
 
 // ============================================================
-// EXPORTAR CSV
+// CSV
 // ============================================================
 function exportarCSV() {
-    var linhas = [['Código', 'Nome', 'Categoria', 'Marca', 'Modelo', 'Série', 'Estado', 'Valor', 'Data Aquisição', 'Nota Fiscal', 'Fornecedor', 'Projeto', 'Local', 'Responsável', 'Status']];
+    var linhas = [['Código', 'Nome', 'Categoria', 'Marca', 'Modelo', 'Série', 'Estado', 'Valor', 'Data', 'Nota Fiscal', 'Orçamento', 'Projeto', 'Local', 'Responsável', 'Status']];
     bens.forEach(function(b) {
-        linhas.push([
-            b.codigo || '', b.nome || '', b.categoria || '', b.marca || '', b.modelo || '',
-            b.numeroSerie || '', b.estadoConservacao || '', (b.valor || 0).toFixed(2).replace('.', ','),
-            b.dataAquisicao || '', b.notaFiscalOrigem || '', b.fornecedor || '', b.projetoVinculado || '',
-            b.local || '', b.responsavel || '', b.status || ''
-        ]);
+        linhas.push([b.codigo || '', b.nome || '', b.categoria || '', b.marca || '', b.modelo || '', b.numeroSerie || '',
+            b.estadoConservacao || '', (b.valor || 0).toFixed(2), b.dataAquisicao || '', b.notaFiscalOrigem || '',
+            b.orcamentoOrigem || '', b.projetoVinculado || '', b.local || '', b.responsavel || '', b.status || '']);
     });
     var csv = linhas.map(function(l) { return l.map(function(c) { return '"' + c + '"'; }).join(';'); }).join('\n');
     var blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
     var url = URL.createObjectURL(blob);
     var a = document.createElement('a');
-    a.href = url;
-    a.download = 'patrimonio-amovin-' + new Date().toISOString().split('T')[0] + '.csv';
-    a.click();
-    URL.revokeObjectURL(url);
+    a.href = url; a.download = 'patrimonio-amovin-' + new Date().toISOString().split('T')[0] + '.csv';
+    a.click(); URL.revokeObjectURL(url);
     mostrarToast('📥 CSV exportado!', 'success');
 }
 
-// ============================================================
-// TOAST
-// ============================================================
 function mostrarToast(msg, tipo) {
     var t = document.createElement('div');
     t.className = 'toast toast-' + (tipo || 'success');
@@ -983,16 +953,11 @@ function mostrarToast(msg, tipo) {
     setTimeout(function() { t.remove(); }, 4000);
 }
 
-// ============================================================
-// SESSÃO + INIT
-// ============================================================
 if (!sessionStorage.getItem('amovin_logado') && !localStorage.getItem('amovin_logado')) {
     console.log('⚠️ Sessão não encontrada, mas permitindo acesso.');
 }
 
-document.addEventListener('DOMContentLoaded', function() {
-    inicializarFirebase();
-});
+document.addEventListener('DOMContentLoaded', function() { inicializarFirebase(); });
 </script>
 </body>
 </html>
