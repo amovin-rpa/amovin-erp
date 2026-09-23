@@ -1,236 +1,884 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Amovin ERP Social • Estoque</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
-<style>
-:root {
-  --laranja: #C65A11;
-  --amarelo: #F5C518;
-  --verde: #57C220;
-  --azul: #1E88E5;
-  --grafite: #1A1A1A;
-  --cinza: #6B7280;
-  --cinza-claro: #F8F4ED;
-  --branco: #FFFFFF;
-  --vermelho: #E53935;
-}
-* { margin:0; padding:0; box-sizing:border-box; }
-body { font-family: 'Inter', system-ui, sans-serif; background: #F8F4ED; display: flex; min-height: 100vh; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amovin ERP • Estoque</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --laranja: #C65A11; --laranja-escuro: #A04A0E; --amarelo: #F5C518; --verde: #57C220;
+            --azul: #1E88E5; --grafite: #1A1A1A; --cinza: #6B7280; --branco: #FFFFFF;
+            --vermelho: #E53935; --roxo: #7C3AED;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', system-ui, sans-serif; background: #F8F4ED; display: flex; min-height: 100vh; }
 
-.main-content { flex: 1; margin-left: 270px; padding: 24px 30px; }
-.topo-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 10px; }
-.topo-bar h1 { font-size: 24px; font-weight: 700; color: var(--grafite); }
-.btn-sair-topo { background: #F8F4ED; color: #1A1A1A; border: 1px solid #F0E9DF; padding: 8px 16px; border-radius: 10px; font-size: 12px; font-weight: 600; cursor: pointer; }
+        .main-content { flex: 1; margin-left: 270px; padding: 24px 30px; }
+        .topo-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 10px; }
+        .topo-bar h1 { font-size: 24px; font-weight: 700; color: var(--grafite); }
+        .topo-bar h1 span { color: var(--laranja); }
+        .btn-sair-topo { background: #F8F4ED; color: #1A1A1A; border: 1px solid #F0E9DF; padding: 8px 16px; border-radius: 10px; font-size: 12px; font-weight: 600; cursor: pointer; }
 
-.kpi-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 22px; }
-.kpi-card { background: #FFFFFF; padding: 18px; border-radius: 14px; border: 1px solid #F0E9DF; text-align: center; }
-.kpi-card .kpi-valor { font-size: 24px; font-weight: 800; }
-.kpi-card .kpi-label { font-size: 11px; color: var(--cinza); }
-.kpi-card .kpi-valor.critico { color: var(--vermelho); }
-.kpi-card .kpi-valor.alerta { color: #E65100; }
-.kpi-card .kpi-valor.ok { color: var(--verde); }
-.kpi-card .kpi-valor.azul { color: var(--azul); }
+        .status-firebase { display: flex; align-items: center; gap: 8px; padding: 6px 14px; border-radius: 20px; background: #F8F4ED; font-size: 12px; font-weight: 600; border: 1px solid #F0E9DF; }
+        .status-firebase.conectado { background: #E8F5E9; color: #2E7D32; border-color: #A5D6A7; }
+        .status-firebase.offline { background: #FFF3E0; color: #E65100; border-color: #FFCC80; }
+        .status-firebase .dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; animation: pulse 2s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
 
-.grid-estoque { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-.card { background: #FFFFFF; padding: 24px; border-radius: 14px; border: 1px solid #F0E9DF; }
-.card h3 { font-size: 16px; font-weight: 700; color: var(--grafite); margin-bottom: 18px; padding-bottom: 12px; border-bottom: 1px solid #F0E9DF; display: flex; justify-content: space-between; align-items: center; }
+        .kpi-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 15px; margin-bottom: 22px; }
+        .kpi-card { background: #FFFFFF; padding: 16px; border-radius: 14px; border: 1px solid #F0E9DF; text-align: center; }
+        .kpi-card .kpi-valor { font-size: 22px; font-weight: 800; color: var(--laranja); word-break: break-word; }
+        .kpi-card .kpi-label { font-size: 11px; color: var(--cinza); }
 
-.form-group { margin-bottom: 14px; }
-.form-group label { display: block; font-size: 11px; font-weight: 600; color: var(--cinza); margin-bottom: 4px; text-transform: uppercase; }
-.form-group input, .form-group select { width: 100%; padding: 10px 12px; border: 1px solid #E5E0D8; border-radius: 8px; font-size: 13px; font-family: 'Inter', sans-serif; }
-.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .card { background: #FFFFFF; padding: 24px; border-radius: 14px; border: 1px solid #F0E9DF; margin-bottom: 20px; }
+        .card h3 { font-size: 16px; font-weight: 700; color: var(--grafite); margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid #F0E9DF; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
+        .card h3 .badge { font-size: 10px; font-weight: 600; padding: 3px 12px; border-radius: 20px; background: #FFF3E0; color: var(--laranja); }
 
-.btn { padding: 10px 18px; border-radius: 8px; border: none; cursor: pointer; font-weight: 600; font-size: 12px; }
-.btn-salvar { background: var(--laranja); color: white; }
-.btn-editar { background: var(--amarelo); color: #1A1A1A; }
-.btn-excluir { background: var(--vermelho); color: white; }
+        .btn { padding: 10px 24px; border-radius: 8px; border: none; cursor: pointer; font-weight: 600; font-size: 13px; font-family: 'Inter', sans-serif; transition: all 0.2s; display: inline-flex; align-items: center; gap: 8px; }
+        .btn-primary { background: var(--laranja); color: white; }
+        .btn-primary:hover { background: var(--laranja-escuro); }
+        .btn-success { background: var(--verde); color: white; }
+        .btn-outline { background: transparent; color: var(--cinza); border: 1px solid #E5E0D8; }
+        .btn-outline:hover { background: #F8F4ED; }
+        .btn-danger { background: var(--vermelho); color: white; }
+        .btn-sm { padding: 5px 12px; font-size: 11px; }
+        .btn-azul { background: var(--azul); color: white; }
+        .btn-roxo { background: var(--roxo); color: white; }
+        .btn-verde { background: var(--verde); color: white; }
 
-.estoque-item { padding: 12px 16px; border-bottom: 1px solid #F0E9DF; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px; }
-.estoque-item .nome { font-weight: 600; color: var(--grafite); font-size: 13px; }
-.estoque-item .qtd { font-weight: 700; }
-.estoque-item .qtd.critico { color: var(--vermelho); }
-.estoque-item .qtd.alerta { color: #E65100; }
-.estoque-item .qtd.ok { color: var(--verde); }
-.estoque-item .categoria { font-size: 10px; background: #F8F4ED; padding: 2px 10px; border-radius: 12px; color: var(--cinza); }
-.estoque-item .status { font-size: 10px; padding: 2px 10px; border-radius: 12px; font-weight: 600; }
-.status-ok { background: #E8F5E9; color: #2E7D32; }
-.status-alerta { background: #FFF3E0; color: #E65100; }
-.status-critico { background: #FFEBEE; color: #C62828; }
-.sem-dados { text-align: center; padding: 30px; color: #9CA3AF; }
+        .form-group { margin-bottom: 14px; }
+        .form-group label { display: block; font-size: 11px; font-weight: 600; color: var(--cinza); margin-bottom: 4px; text-transform: uppercase; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px 12px; border: 1px solid #E5E0D8; border-radius: 8px; font-size: 13px; font-family: 'Inter', sans-serif; background: #FAFAFA; }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: var(--laranja); background: white; box-shadow: 0 0 0 3px rgba(198, 90, 17, 0.08); }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .form-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
 
-.rodape { background: #FFFFFF; border-radius: 14px; padding: 12px 18px; border: 1px solid #F0E9DF; margin-top: 20px; }
-.rodape-grid { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
-.rodape-logo { flex-shrink: 0; } .rodape-logo .logo-vigorre { width: 50px; }
-.rodape-info { flex: 1; } .rodape-info .copyright { font-size: 8px; color: #8A8F98; } .rodape-info .tm { font-size: 6px; vertical-align: super; }
-.rodape-info .contato { font-size: 9px; color: #8A8F98; } .rodape-info a { color: #C65A11; text-decoration: none; } .rodape-info .email { font-size: 8px; color: #aaa; }
-.logo-vigorre-fallback { font-size: 12px; font-weight: 700; display: none; }
+        .filtros-bar { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-bottom: 16px; padding: 12px; background: #F8F4ED; border-radius: 10px; }
+        .filtros-bar select, .filtros-bar input { padding: 8px 12px; border: 1px solid #E5E0D8; border-radius: 8px; font-size: 12px; font-family: 'Inter', sans-serif; background: white; }
+        .filtros-bar .info { font-size: 12px; color: var(--cinza); margin-left: auto; }
 
-@media (max-width: 900px) { .main-content { margin-left: 0; } .grid-estoque { grid-template-columns: 1fr; } }
-</style>
+        .estoque-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
+        .estoque-card { background: #FFFFFF; border-radius: 14px; border: 1px solid #F0E9DF; padding: 18px; transition: all 0.3s; }
+        .estoque-card:hover { transform: translateY(-3px); box-shadow: 0 6px 24px rgba(0,0,0,0.08); }
+        .estoque-card .cabecalho { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; gap: 8px; }
+        .estoque-card .codigo { font-size: 10px; color: var(--laranja); font-weight: 700; background: #FFF3E0; padding: 3px 10px; border-radius: 12px; }
+        .estoque-card .nome { font-size: 15px; font-weight: 700; color: var(--grafite); margin: 6px 0 4px; }
+        .estoque-card .status { font-size: 10px; padding: 3px 10px; border-radius: 12px; font-weight: 600; white-space: nowrap; }
+        .status-ok { background: #E8F5E9; color: #2E7D32; }
+        .status-alerta { background: #FFF3E0; color: #E65100; }
+        .status-critico { background: #FFEBEE; color: #C62828; }
+        .estoque-card .detalhes { font-size: 11px; color: var(--cinza); margin: 6px 0; }
+        .estoque-card .qtd-box { display: flex; align-items: center; gap: 12px; margin: 10px 0; }
+        .estoque-card .qtd-box .qtd { font-size: 28px; font-weight: 800; color: var(--azul); }
+        .estoque-card .qtd-box .qtd.critico { color: var(--vermelho); }
+        .estoque-card .qtd-box .qtd.alerta { color: #E65100; }
+        .estoque-card .qtd-box .info { font-size: 11px; color: var(--cinza); }
+        .estoque-card .vinculo { font-size: 10px; padding: 3px 8px; border-radius: 8px; background: #E3F2FD; color: #1565C0; display: inline-block; margin-top: 4px; }
+        .estoque-card .vinculo.financeiro { background: #FFF3E0; color: var(--laranja); }
+        .estoque-card .vinculo.projeto { background: #E8F5E9; color: #2E7D32; }
+        .estoque-card .acoes { display: flex; gap: 6px; margin-top: 12px; flex-wrap: wrap; }
+        .estoque-card .acoes .btn { padding: 4px 10px; font-size: 10px; }
+
+        .qtd-input-group { display: flex; align-items: center; gap: 6px; margin-top: 8px; }
+        .qtd-input-group input { width: 60px; padding: 5px 8px; text-align: center; font-weight: 600; }
+        .qtd-input-group button { padding: 5px 10px; font-size: 14px; font-weight: 700; border: none; border-radius: 6px; cursor: pointer; }
+        .btn-mais { background: var(--verde); color: white; }
+        .btn-menos { background: var(--vermelho); color: white; }
+
+        .sem-dados { text-align: center; padding: 40px; color: #9CA3AF; }
+        .loading { text-align: center; padding: 40px; color: var(--cinza); }
+        .loading .spinner { display: inline-block; width: 30px; height: 30px; border: 3px solid #E5E0D8; border-top: 3px solid var(--laranja); border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 10px; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 9999; justify-content: center; align-items: center; padding: 20px; }
+        .modal-overlay.ativo { display: flex; }
+        .modal { background: white; border-radius: 16px; padding: 30px; max-width: 800px; width: 100%; max-height: 90vh; overflow-y: auto; }
+        .modal h2 { font-size: 20px; color: var(--grafite); margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; }
+        .modal .btn-group { display: flex; gap: 12px; margin-top: 16px; justify-content: flex-end; flex-wrap: wrap; }
+        .modal .fechar { background: none; border: none; font-size: 22px; cursor: pointer; color: var(--cinza); }
+
+        .secao-titulo { font-size: 13px; font-weight: 700; color: var(--laranja); text-transform: uppercase; margin: 20px 0 10px; padding-bottom: 6px; border-bottom: 2px solid var(--laranja); }
+
+        .toast { position: fixed; top: 20px; right: 20px; padding: 16px 24px; border-radius: 12px; color: white; font-weight: 600; font-size: 14px; z-index: 10000; box-shadow: 0 8px 32px rgba(0,0,0,0.15); animation: slideInRight 0.4s ease; max-width: 400px; }
+        .toast-success { background: var(--verde); }
+        .toast-error { background: var(--vermelho); }
+        .toast-warning { background: #E65100; }
+        @keyframes slideInRight { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+        .rodape { background: #FFFFFF; border-radius: 14px; padding: 12px 18px; border: 1px solid #F0E9DF; margin-top: 20px; }
+        .rodape-grid { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+        .rodape-logo .logo-vigorre { width: 50px; }
+        .rodape-info { flex: 1; }
+        .rodape-info .copyright { font-size: 8px; color: #8A8F98; }
+        .rodape-info .contato { font-size: 9px; color: #8A8F98; }
+        .rodape-info a { color: #C65A11; text-decoration: none; }
+
+        @media (max-width: 900px) { .main-content { margin-left: 0; } .form-row, .form-row-3 { grid-template-columns: 1fr; } .estoque-grid { grid-template-columns: 1fr; } }
+    </style>
 </head>
 <body>
 
 <div id="menu-container"></div>
 
 <main class="main-content">
-  <div class="topo-bar"><h1>📦 Estoque</h1><button class="btn-sair-topo" onclick="window.location.href='dashboard.html'">🏠 Dashboard</button></div>
-
-  <div class="kpi-row">
-    <div class="kpi-card"><div class="kpi-valor azul" id="kpiTotal">0</div><div class="kpi-label">📦 Itens</div></div>
-    <div class="kpi-card"><div class="kpi-valor ok" id="kpiOk">0</div><div class="kpi-label">✅ Estoque OK</div></div>
-    <div class="kpi-card"><div class="kpi-valor alerta" id="kpiAlerta">0</div><div class="kpi-label">⚠️ Em Alerta</div></div>
-    <div class="kpi-card"><div class="kpi-valor critico" id="kpiCritico">0</div><div class="kpi-label">🔴 Crítico</div></div>
-  </div>
-
-  <div class="grid-estoque">
-    <div class="card">
-      <h3>📝 Novo Item</h3>
-      <input type="hidden" id="itemId">
-      <div class="form-group"><label>Nome do Item *</label><input type="text" id="nomeItem" placeholder="Ex: Cesta Básica"></div>
-      <div class="form-row"><div class="form-group"><label>Categoria</label><select id="categoriaItem"><option>Alimento</option><option>Higiene</option><option>Material Esportivo</option><option>Material Escolar</option><option>Equipamento</option><option>Mobiliário</option><option>Outros</option></select></div><div class="form-group"><label>Unidade</label><select id="unidadeItem"><option>Unidade</option><option>Kg</option><option>Litro</option><option>Pacote</option><option>Caixa</option></select></div></div>
-      <div class="form-row"><div class="form-group"><label>Quantidade *</label><input type="number" id="qtdItem" value="0" min="0"></div><div class="form-group"><label>Qtd Mínima *</label><input type="number" id="qtdMinima" value="5" min="0"></div></div>
-      <div class="form-group"><label>Localização</label><input type="text" id="localItem" value="Almoxarifado"></div>
-      <div class="form-group"><label>Observações</label><input type="text" id="obsItem"></div>
-      <button class="btn btn-salvar" onclick="salvarItem()" style="width:100%;padding:12px;font-size:14px;">💾 Salvar Item</button>
+    <div class="topo-bar">
+        <div>
+            <h1>📦 Estoque <span>AMOVIN</span></h1>
+        </div>
+        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+            <div class="status-firebase" id="statusFirebase">
+                <span class="dot"></span>
+                <span>⏳ Conectando...</span>
+            </div>
+            <button class="btn btn-outline" onclick="exportarCSV()">📥 Exportar CSV</button>
+            <button class="btn btn-primary" onclick="abrirFormNovo()">➕ Novo Item</button>
+            <button class="btn-sair-topo" onclick="window.location.href='dashboard.html'">🏠 Dashboard</button>
+        </div>
     </div>
-    <div class="card">
-      <h3>📋 Itens em Estoque</h3>
-      <div id="listaItens"><div class="sem-dados">Nenhum item.</div></div>
-    </div>
-  </div>
 
-  <div class="rodape"><div class="rodape-grid"><div class="rodape-logo"><img src="images/logo-vigorre.png" alt="Vigorre" class="logo-vigorre" onerror="this.style.display='none';this.nextElementSibling.style.display='block';"><span class="logo-vigorre-fallback">Vigorre</span></div><div class="rodape-info"><div class="copyright">© 2026 VIGORRE DESIGNER<span class="tm">™</span></div><div class="contato"><a href="https://www.vigorre.com.br">www.vigorre.com.br</a> | <a href="https://wa.me/5534991850735">(34) 99185-0735</a></div><div class="email">contato@vigorre.com.br</div></div></div></div>
+    <div class="kpi-row">
+        <div class="kpi-card"><div class="kpi-valor" id="kpiTotal">0</div><div class="kpi-label">📦 Total de Itens</div></div>
+        <div class="kpi-card"><div class="kpi-valor" style="color:var(--verde);" id="kpiOk">0</div><div class="kpi-label">✅ Estoque OK</div></div>
+        <div class="kpi-card"><div class="kpi-valor" style="color:#E65100;" id="kpiAlerta">0</div><div class="kpi-label">⚠️ Em Alerta</div></div>
+        <div class="kpi-card"><div class="kpi-valor" style="color:var(--vermelho);" id="kpiCritico">0</div><div class="kpi-label">🔴 Crítico</div></div>
+        <div class="kpi-card"><div class="kpi-valor" style="color:var(--azul);" id="kpiValorTotal">R$ 0,00</div><div class="kpi-label">💰 Valor em Estoque</div></div>
+    </div>
+
+    <div class="card">
+        <h3>📋 Itens em Estoque <span class="badge" id="contadorItens">0 itens</span></h3>
+
+        <div class="filtros-bar">
+            <select id="filtroCategoria" onchange="renderizarItens()">
+                <option value="">Todas as categorias</option>
+                <option value="Alimento">🍽️ Alimento</option>
+                <option value="Higiene">🧼 Higiene</option>
+                <option value="Limpeza">🧹 Limpeza</option>
+                <option value="Escritório">📄 Escritório</option>
+                <option value="Material Escolar">✏️ Material Escolar</option>
+                <option value="Material Esportivo">⚽ Material Esportivo</option>
+                <option value="Medicamento">💊 Medicamento</option>
+                <option value="Outros">📌 Outros</option>
+            </select>
+            <select id="filtroStatus" onchange="renderizarItens()">
+                <option value="">Todos os status</option>
+                <option value="ok">✅ OK</option>
+                <option value="alerta">⚠️ Alerta</option>
+                <option value="critico">🔴 Crítico</option>
+            </select>
+            <input type="text" id="filtroBusca" placeholder="🔍 Buscar nome, código..." oninput="renderizarItens()" style="min-width:180px;">
+            <span class="info" id="contadorFiltro"></span>
+        </div>
+
+        <div id="estoqueLista" class="estoque-grid">
+            <div class="loading" style="grid-column:1/-1;">
+                <div class="spinner"></div>
+                <div>Carregando estoque do Firebase...</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="rodape">
+        <div class="rodape-grid">
+            <div class="rodape-logo"><img src="images/logo-vigorre.png" alt="Vigorre" class="logo-vigorre" onerror="this.style.display='none';"></div>
+            <div class="rodape-info">
+                <div class="copyright">© 2026 VIGORRE DESIGNER™</div>
+                <div class="contato"><a href="https://www.vigorre.com.br">www.vigorre.com.br</a> | <a href="https://wa.me/5534991850735">(34) 99185-0735</a></div>
+            </div>
+        </div>
+    </div>
 </main>
 
-<script src="config.js"></script>
+<!-- MODAL NOVO/EDITAR ITEM -->
+<div class="modal-overlay" id="modalForm">
+    <div class="modal">
+        <h2 id="modalTitulo">➕ Novo Item <button class="fechar" onclick="fecharForm()">×</button></h2>
+        <input type="hidden" id="itemId">
+
+        <div class="secao-titulo">📋 Identificação</div>
+        <div class="form-group">
+            <label>Nome do Item *</label>
+            <input type="text" id="formNome" placeholder="Ex: Papel A4, Café, Grampo">
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label>Categoria *</label>
+                <select id="formCategoria">
+                    <option value="Alimento">🍽️ Alimento</option>
+                    <option value="Higiene">🧼 Higiene</option>
+                    <option value="Limpeza">🧹 Limpeza</option>
+                    <option value="Escritório">📄 Escritório</option>
+                    <option value="Material Escolar">✏️ Material Escolar</option>
+                    <option value="Material Esportivo">⚽ Material Esportivo</option>
+                    <option value="Medicamento">💊 Medicamento</option>
+                    <option value="Outros">📌 Outros</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Código Estoque</label>
+                <input type="text" id="formCodigo" readonly style="background:#F0E9DF;font-weight:700;color:var(--laranja);">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group"><label>Unidade</label>
+                <select id="formUnidade">
+                    <option value="Unidade">Unidade</option>
+                    <option value="Pacote">Pacote</option>
+                    <option value="Caixa">Caixa</option>
+                    <option value="Kg">Kg</option>
+                    <option value="Litro">Litro</option>
+                    <option value="Resma">Resma</option>
+                    <option value="Fardo">Fardo</option>
+                </select>
+            </div>
+            <div class="form-group"><label>Localização</label>
+                <select id="formLocal">
+                    <option value="Almoxarifado">📦 Almoxarifado</option>
+                    <option value="Cozinha">🍳 Cozinha</option>
+                    <option value="Sala Administrativa">📋 Sala Administrativa</option>
+                    <option value="Depósito">🏢 Depósito</option>
+                    <option value="Outro">📌 Outro</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="secao-titulo">📊 Quantidades</div>
+        <div class="form-row-3">
+            <div class="form-group">
+                <label>Quantidade Atual *</label>
+                <input type="number" id="formQtd" value="0" min="0">
+            </div>
+            <div class="form-group">
+                <label>Qtd Mínima (alerta) *</label>
+                <input type="number" id="formQtdMinima" value="5" min="0">
+            </div>
+            <div class="form-group">
+                <label>Qtd Ideal (reposição)</label>
+                <input type="number" id="formQtdIdeal" value="20" min="0">
+            </div>
+        </div>
+
+        <div class="secao-titulo">💰 Valores</div>
+        <div class="form-row">
+            <div class="form-group"><label>Valor Unitário (R$)</label><input type="number" id="formValorUnitario" step="0.01" placeholder="0,00"></div>
+            <div class="form-group"><label>Valor Total (R$)</label><input type="number" id="formValorTotal" step="0.01" placeholder="0,00" readonly style="background:#F0E9DF;"></div>
+        </div>
+
+        <div class="secao-titulo">🔗 Vínculo Financeiro (opcional)</div>
+        <div class="form-group">
+            <label>Nota Fiscal / Lançamento Financeiro</label>
+            <select id="formNotaFiscal">
+                <option value="">— Nenhum —</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Projeto Vinculado</label>
+            <select id="formProjeto">
+                <option value="">— Nenhum —</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Fornecedor</label>
+            <input type="text" id="formFornecedor" placeholder="Ex: Distribuidora ABC">
+        </div>
+
+        <div class="secao-titulo">📝 Observações</div>
+        <div class="form-group">
+            <textarea id="formObs" rows="2" placeholder="Informações adicionais..."></textarea>
+        </div>
+
+        <div class="btn-group">
+            <button class="btn btn-outline" onclick="fecharForm()">Cancelar</button>
+            <button class="btn btn-success" onclick="salvarItem()">💾 Salvar Item</button>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL DETALHES -->
+<div class="modal-overlay" id="modalDetalhes">
+    <div class="modal">
+        <h2>📋 Detalhes do Item <button class="fechar" onclick="fecharDetalhes()">×</button></h2>
+        <div id="conteudoDetalhes"></div>
+        <div class="btn-group">
+            <button class="btn btn-outline" onclick="fecharDetalhes()">Fechar</button>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL MOVIMENTAÇÃO -->
+<div class="modal-overlay" id="modalMovimentacao">
+    <div class="modal" style="max-width:500px;">
+        <h2 id="tituloMov">📥 Movimentação <button class="fechar" onclick="fecharMovimentacao()">×</button></h2>
+        <div id="conteudoMov"></div>
+    </div>
+</div>
+
 <script src="menu.js?v=20260904"></script>
 <script>
-var estoque = JSON.parse(localStorage.getItem('amovin_estoque') || '[]');
-var editandoId = null;
+// ============================================================
+// ESTOQUE - AMOVIN ERP (Firebase Tempo Real + Vínculos)
+// Código: A-EST-YYYY-NNNN
+// ============================================================
 
-if (estoque.length === 0) {
-    estoque = [
-        { id: 1, nome: 'Cesta Básica', categoria: 'Alimento', unidade: 'Unidade', qtd: 15, qtdMinima: 20, local: 'Almoxarifado', obs: '' },
-        { id: 2, nome: 'Cadeira de Rodas', categoria: 'Equipamento', unidade: 'Unidade', qtd: 3, qtdMinima: 2, local: 'Sala Equipamentos', obs: '' },
-        { id: 3, nome: 'Kit Escolar', categoria: 'Material Escolar', unidade: 'Pacote', qtd: 45, qtdMinima: 10, local: 'Almoxarifado', obs: '' }
-    ];
-    salvar();
+var estoque = [];
+var projetos = [];
+var notasFiscais = [];
+var movimentacoes = [];
+var firebasePronto = false;
+var db = null;
+var itemAtualDetalhes = null;
+
+// ============================================================
+// FIREBASE
+// ============================================================
+function inicializarFirebase() {
+    if (typeof firebase === 'undefined') {
+        var script = document.createElement('script');
+        script.src = 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js';
+        script.onload = function() {
+            var fs = document.createElement('script');
+            fs.src = 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js';
+            fs.onload = function() {
+                try {
+                    var cfg = {
+                        apiKey: "AIzaSyDQO-69vVBhmBK8oLt0DzfyigBmjxzu7b4",
+                        authDomain: "gestao-amovin.firebaseapp.com",
+                        projectId: "gestao-amovin",
+                        storageBucket: "gestao-amovin.firebasestorage.app",
+                        messagingSenderId: "316793420445",
+                        appId: "1:316793420445:web:68e9898bbfcd30853f3274"
+                    };
+                    if (!firebase.apps.length) firebase.initializeApp(cfg);
+                    db = firebase.firestore();
+                    firebasePronto = true;
+                    console.log('🔥 Firebase conectado');
+                    atualizarStatusFirebase('conectado');
+                    escutarTudo();
+                } catch (e) {
+                    console.error('❌ Erro:', e);
+                    atualizarStatusFirebase('offline');
+                    carregarLocalStorage();
+                }
+            };
+            document.head.appendChild(fs);
+        };
+        document.head.appendChild(script);
+    } else {
+        try {
+            db = firebase.firestore();
+            firebasePronto = true;
+            atualizarStatusFirebase('conectado');
+            escutarTudo();
+        } catch (e) {
+            atualizarStatusFirebase('offline');
+            carregarLocalStorage();
+        }
+    }
 }
-function salvar() { localStorage.setItem('amovin_estoque', JSON.stringify(estoque)); }
 
+function atualizarStatusFirebase(status) {
+    var el = document.getElementById('statusFirebase');
+    if (status === 'conectado') {
+        el.className = 'status-firebase conectado';
+        el.innerHTML = '<span class="dot"></span><span>🟢 Firebase (Tempo Real)</span>';
+    } else {
+        el.className = 'status-firebase offline';
+        el.innerHTML = '<span class="dot"></span><span>🟡 Modo Local</span>';
+    }
+}
+
+function escutarTudo() {
+    if (!firebasePronto || !db) { carregarLocalStorage(); return; }
+
+    db.collection('estoque').onSnapshot(function(snap) {
+        estoque = [];
+        snap.forEach(function(doc) { estoque.push({ _fbId: doc.id, ...doc.data() }); });
+        estoque.sort(function(a, b) { return (a.codigo || '').localeCompare(b.codigo || ''); });
+        renderizarItens();
+        atualizarKPIs();
+    });
+
+    db.collection('projetos').onSnapshot(function(snap) {
+        projetos = [];
+        snap.forEach(function(doc) { projetos.push({ _fbId: doc.id, ...doc.data() }); });
+        preencherDropdownProjetos();
+    });
+
+    db.collection('finances').onSnapshot(function(snap) {
+        notasFiscais = [];
+        snap.forEach(function(doc) { notasFiscais.push({ _fbId: doc.id, ...doc.data() }); });
+        preencherDropdownNotas();
+    });
+
+    db.collection('movimentacoes_estoque').onSnapshot(function(snap) {
+        movimentacoes = [];
+        snap.forEach(function(doc) { movimentacoes.push({ _fbId: doc.id, ...doc.data() }); });
+    });
+}
+
+function carregarLocalStorage() {
+    estoque = JSON.parse(localStorage.getItem('amovin_estoque') || '[]');
+    projetos = JSON.parse(localStorage.getItem('amovin_projetos') || '[]');
+    notasFiscais = JSON.parse(localStorage.getItem('amovin_financeiro') || '[]');
+    preencherDropdownProjetos();
+    preencherDropdownNotas();
+    renderizarItens();
+    atualizarKPIs();
+}
+
+// ============================================================
+// DROPDOWNS
+// ============================================================
+function preencherDropdownProjetos() {
+    var sel = document.getElementById('formProjeto');
+    if (!sel) return;
+    var atual = sel.value;
+    sel.innerHTML = '<option value="">— Nenhum —</option>';
+    projetos.forEach(function(p) {
+        var opt = document.createElement('option');
+        opt.value = p.codigo || p._fbId;
+        opt.textContent = (p.codigo || '') + ' - ' + (p.nome || '');
+        sel.appendChild(opt);
+    });
+    if (atual) sel.value = atual;
+}
+
+function preencherDropdownNotas() {
+    var sel = document.getElementById('formNotaFiscal');
+    if (!sel) return;
+    var atual = sel.value;
+    sel.innerHTML = '<option value="">— Nenhum —</option>';
+    notasFiscais.sort(function(a, b) { return (b.date || '').localeCompare(a.date || ''); });
+    notasFiscais.forEach(function(n) {
+        var opt = document.createElement('option');
+        opt.value = n._fbId;
+        var cod = n.codigo || n.id || '';
+        opt.textContent = cod + ' - ' + (n.description || '').substring(0, 40);
+        opt.dataset.codigo = cod;
+        opt.dataset.fornecedor = n.empresaPessoaFisica || '';
+        opt.dataset.valor = n.value || 0;
+        opt.dataset.projeto = n.projetoVinculado || '';
+        sel.appendChild(opt);
+    });
+    if (atual) sel.value = atual;
+
+    sel.onchange = function() {
+        var opt = sel.options[sel.selectedIndex];
+        if (opt && opt.value) {
+            if (opt.dataset.fornecedor) document.getElementById('formFornecedor').value = opt.dataset.fornecedor;
+            if (opt.dataset.valor && parseFloat(opt.dataset.valor) > 0) {
+                document.getElementById('formValorUnitario').value = parseFloat(opt.dataset.valor).toFixed(2);
+                calcularValorTotal();
+            }
+            if (opt.dataset.projeto) {
+                var p = document.getElementById('formProjeto');
+                for (var i = 0; i < p.options.length; i++) {
+                    if (p.options[i].value === opt.dataset.projeto) { p.selectedIndex = i; break; }
+                }
+            }
+        }
+    };
+}
+
+// ============================================================
+// CALCULAR VALOR TOTAL
+// ============================================================
+function calcularValorTotal() {
+    var qtd = parseFloat(document.getElementById('formQtd').value) || 0;
+    var unit = parseFloat(document.getElementById('formValorUnitario').value) || 0;
+    document.getElementById('formValorTotal').value = (qtd * unit).toFixed(2);
+}
+
+// ============================================================
+// GERAR CÓDIGO A-EST-YYYY-NNNN
+// ============================================================
+async function gerarProximoCodigo() {
+    var ano = new Date().getFullYear();
+    var prefixo = 'A-EST-' + ano + '-';
+    var max = 0;
+
+    if (firebasePronto && db) {
+        try {
+            var snap = await db.collection('estoque').get();
+            snap.forEach(function(doc) {
+                var c = doc.data().codigo || '';
+                if (c.startsWith(prefixo)) {
+                    var n = parseInt(c.replace(prefixo, ''));
+                    if (n > max) max = n;
+                }
+            });
+        } catch (e) {}
+    } else {
+        estoque.forEach(function(i) {
+            if (i.codigo && i.codigo.startsWith(prefixo)) {
+                var n = parseInt(i.codigo.replace(prefixo, ''));
+                if (n > max) max = n;
+            }
+        });
+    }
+    return prefixo + String(max + 1).padStart(4, '0');
+}
+
+// ============================================================
+// ABRIR FORM
+// ============================================================
+async function abrirFormNovo() {
+    document.getElementById('modalTitulo').innerHTML = '➕ Novo Item <button class="fechar" onclick="fecharForm()">×</button>';
+    document.getElementById('itemId').value = '';
+    document.getElementById('formNome').value = '';
+    document.getElementById('formCategoria').value = 'Alimento';
+    document.getElementById('formUnidade').value = 'Unidade';
+    document.getElementById('formLocal').value = 'Almoxarifado';
+    document.getElementById('formQtd').value = '0';
+    document.getElementById('formQtdMinima').value = '5';
+    document.getElementById('formQtdIdeal').value = '20';
+    document.getElementById('formValorUnitario').value = '';
+    document.getElementById('formValorTotal').value = '';
+    document.getElementById('formNotaFiscal').value = '';
+    document.getElementById('formProjeto').value = '';
+    document.getElementById('formFornecedor').value = '';
+    document.getElementById('formObs').value = '';
+
+    var codigo = await gerarProximoCodigo();
+    document.getElementById('formCodigo').value = codigo;
+
+    document.getElementById('modalForm').classList.add('ativo');
+}
+function fecharForm() { document.getElementById('modalForm').classList.remove('ativo'); }
+
+// ============================================================
+// SALVAR
+// ============================================================
+async function salvarItem() {
+    var nome = document.getElementById('formNome').value.trim();
+    if (!nome) { mostrarToast('⚠️ Nome é obrigatório!', 'warning'); return; }
+
+    var notaFbId = document.getElementById('formNotaFiscal').value;
+    var notaCodigo = '';
+    if (notaFbId) {
+        var nota = notasFiscais.find(function(n) { return n._fbId === notaFbId; });
+        if (nota) notaCodigo = nota.codigo || nota.id || '';
+    }
+
+    var dados = {
+        codigo: document.getElementById('formCodigo').value,
+        nome: nome,
+        categoria: document.getElementById('formCategoria').value,
+        unidade: document.getElementById('formUnidade').value,
+        local: document.getElementById('formLocal').value,
+        qtd: parseFloat(document.getElementById('formQtd').value) || 0,
+        qtdMinima: parseFloat(document.getElementById('formQtdMinima').value) || 5,
+        qtdIdeal: parseFloat(document.getElementById('formQtdIdeal').value) || 20,
+        valorUnitario: parseFloat(document.getElementById('formValorUnitario').value) || 0,
+        valorTotal: parseFloat(document.getElementById('formValorTotal').value) || 0,
+        notaFiscalFbId: notaFbId,
+        notaFiscalOrigem: notaCodigo,
+        projetoVinculado: document.getElementById('formProjeto').value,
+        fornecedor: document.getElementById('formFornecedor').value.trim(),
+        obs: document.getElementById('formObs').value.trim(),
+        atualizadoEm: new Date().toISOString()
+    };
+
+    var idEdit = document.getElementById('itemId').value;
+
+    if (firebasePronto && db) {
+        try {
+            if (idEdit) {
+                await db.collection('estoque').doc(idEdit).update(dados);
+                mostrarToast('✅ Item atualizado!', 'success');
+            } else {
+                dados.criadoEm = new Date().toISOString();
+                await db.collection('estoque').add(dados);
+                mostrarToast('✅ Item ' + dados.codigo + ' cadastrado!', 'success');
+            }
+            fecharForm();
+        } catch (e) {
+            mostrarToast('❌ Erro: ' + e.message, 'error');
+        }
+    } else {
+        if (idEdit) {
+            var idx = estoque.findIndex(function(i) { return i._fbId === idEdit; });
+            if (idx >= 0) Object.assign(estoque[idx], dados);
+        } else {
+            dados._fbId = Date.now().toString();
+            dados.id = dados._fbId;
+            estoque.push(dados);
+        }
+        localStorage.setItem('amovin_estoque', JSON.stringify(estoque));
+        fecharForm();
+        renderizarItens();
+        atualizarKPIs();
+        mostrarToast('✅ Salvo localmente!', 'success');
+    }
+}
+
+// ============================================================
+// EDITAR
+// ============================================================
+function editarItem(fbId) {
+    var i = estoque.find(function(x) { return x._fbId === fbId; });
+    if (!i) return;
+    document.getElementById('modalTitulo').innerHTML = '✏️ Editar: ' + i.nome + ' <button class="fechar" onclick="fecharForm()">×</button>';
+    document.getElementById('itemId').value = fbId;
+    document.getElementById('formCodigo').value = i.codigo || '';
+    document.getElementById('formNome').value = i.nome || '';
+    document.getElementById('formCategoria').value = i.categoria || 'Alimento';
+    document.getElementById('formUnidade').value = i.unidade || 'Unidade';
+    document.getElementById('formLocal').value = i.local || 'Almoxarifado';
+    document.getElementById('formQtd').value = i.qtd || 0;
+    document.getElementById('formQtdMinima').value = i.qtdMinima || 5;
+    document.getElementById('formQtdIdeal').value = i.qtdIdeal || 20;
+    document.getElementById('formValorUnitario').value = i.valorUnitario || '';
+    document.getElementById('formValorTotal').value = i.valorTotal || '';
+    document.getElementById('formNotaFiscal').value = i.notaFiscalFbId || '';
+    document.getElementById('formProjeto').value = i.projetoVinculado || '';
+    document.getElementById('formFornecedor').value = i.fornecedor || '';
+    document.getElementById('formObs').value = i.obs || '';
+    document.getElementById('modalForm').classList.add('ativo');
+}
+
+// ============================================================
+// AJUSTE RÁPIDO DE QTD
+// ============================================================
+async function ajustarQtd(fbId, delta) {
+    var i = estoque.find(function(x) { return x._fbId === fbId; });
+    if (!i) return;
+    var novaQtd = Math.max(0, (i.qtd || 0) + delta);
+    if (firebasePronto && db) {
+        try {
+            await db.collection('estoque').doc(fbId).update({
+                qtd: novaQtd,
+                atualizadoEm: new Date().toISOString()
+            });
+            // Registra movimentação
+            await db.collection('movimentacoes_estoque').add({
+                itemId: fbId,
+                itemCodigo: i.codigo,
+                itemNome: i.nome,
+                tipo: delta > 0 ? 'entrada' : 'saida',
+                quantidade: Math.abs(delta),
+                qtdAnterior: i.qtd,
+                qtdNova: novaQtd,
+                data: new Date().toISOString()
+            });
+            mostrarToast((delta > 0 ? '📥 +' : '📤 ') + delta + ' ' + i.unidade, 'success');
+        } catch (e) { mostrarToast('❌ ' + e.message, 'error'); }
+    } else {
+        i.qtd = novaQtd;
+        localStorage.setItem('amovin_estoque', JSON.stringify(estoque));
+        renderizarItens();
+        atualizarKPIs();
+    }
+}
+
+// ============================================================
+// DETALHES
+// ============================================================
+function verDetalhes(fbId) {
+    var i = estoque.find(function(x) { return x._fbId === fbId; });
+    if (!i) return;
+    itemAtualDetalhes = i;
+    var status = getStatus(i);
+    var html = '<div style="background:#F8F4ED;padding:14px;border-radius:10px;margin-bottom:16px;text-align:center;">' +
+        '<div style="font-size:11px;color:var(--cinza);">CÓDIGO ESTOQUE</div>' +
+        '<div style="font-size:22px;font-weight:800;color:var(--laranja);letter-spacing:1px;">' + (i.codigo || '---') + '</div>' +
+        '</div>';
+    html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">';
+    html += dado('Nome', i.nome);
+    html += dado('Categoria', i.categoria);
+    html += dado('Unidade', i.unidade);
+    html += dado('Localização', i.local);
+    html += dado('Quantidade', i.qtd + ' ' + i.unidade, false, status.classe);
+    html += dado('Qtd Mínima', i.qtdMinima);
+    html += dado('Qtd Ideal', i.qtdIdeal);
+    html += dado('Valor Unitário', 'R$ ' + (i.valorUnitario || 0).toFixed(2).replace('.', ','));
+    html += dado('Valor Total', 'R$ ' + (i.valorTotal || 0).toFixed(2).replace('.', ','), false, 'destaque');
+    html += dado('Nota Fiscal', i.notaFiscalOrigem);
+    html += dado('Fornecedor', i.fornecedor);
+    html += dado('Projeto', i.projetoVinculado);
+    html += '</div>';
+
+    // Histórico de movimentações
+    var movsItem = movimentacoes.filter(function(m) { return m.itemId === fbId; });
+    if (movsItem.length > 0) {
+        html += '<div style="margin-top:16px;"><div style="font-size:13px;font-weight:700;color:var(--laranja);margin-bottom:8px;">📊 Últimas Movimentações</div>';
+        html += '<div style="max-height:200px;overflow-y:auto;background:#FAFAFA;border-radius:8px;padding:10px;">';
+        movsItem.slice(-10).reverse().forEach(function(m) {
+            var dt = new Date(m.data).toLocaleString('pt-BR');
+            var sinal = m.tipo === 'entrada' ? '+' : '-';
+            var cor = m.tipo === 'entrada' ? 'var(--verde)' : 'var(--vermelho)';
+            html += '<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #F0E9DF;font-size:12px;">' +
+                '<span>' + dt + '</span>' +
+                '<span style="color:' + cor + ';font-weight:700;">' + sinal + m.quantidade + '</span>' +
+                '</div>';
+        });
+        html += '</div></div>';
+    }
+
+    if (i.obs) html += '<div style="margin-top:12px;padding:12px;background:#F8F4ED;border-radius:8px;font-size:13px;"><strong>📝 Obs:</strong> ' + i.obs + '</div>';
+    document.getElementById('conteudoDetalhes').innerHTML = html;
+    document.getElementById('modalDetalhes').classList.add('ativo');
+}
+function dado(l, v, full, classe) {
+    var corExtra = '';
+    if (classe === 'destaque') corExtra = 'color:var(--laranja);font-size:16px;';
+    if (classe === 'status-critico') corExtra = 'color:var(--vermelho);font-size:16px;font-weight:800;';
+    if (classe === 'status-alerta') corExtra = 'color:#E65100;font-size:16px;font-weight:800;';
+    if (classe === 'status-ok') corExtra = 'color:var(--verde);font-size:16px;font-weight:800;';
+    return '<div style="' + (full ? 'grid-column:1/-1;' : '') + 'padding:8px;background:#FAFAFA;border-radius:6px;">' +
+        '<div style="font-size:10px;color:var(--cinza);text-transform:uppercase;font-weight:600;">' + l + '</div>' +
+        '<div style="font-size:13px;font-weight:600;margin-top:2px;' + corExtra + '">' + (v || '—') + '</div></div>';
+}
+function fecharDetalhes() { document.getElementById('modalDetalhes').classList.remove('ativo'); itemAtualDetalhes = null; }
+
+// ============================================================
+// STATUS DO ITEM
+// ============================================================
 function getStatus(item) {
-    if (item.qtd <= 0) return { label: '🔴 Esgotado', cls: 'status-critico', qtdCls: 'critico' };
-    if (item.qtd <= item.qtdMinima) return { label: '⚠️ Baixo', cls: 'status-alerta', qtdCls: 'alerta' };
-    return { label: '✅ OK', cls: 'status-ok', qtdCls: 'ok' };
+    if (item.qtd <= 0) return { label: '🔴 Esgotado', classe: 'status-critico', tipo: 'critico' };
+    if (item.qtd <= item.qtdMinima) return { label: '⚠️ Baixo', classe: 'status-alerta', tipo: 'alerta' };
+    return { label: '✅ OK', classe: 'status-ok', tipo: 'ok' };
 }
 
-function atualizarKPIs() {
-    var total = estoque.length;
-    var alerta = estoque.filter(function(i) { return i.qtd <= i.qtdMinima && i.qtd > 0; }).length;
-    var critico = estoque.filter(function(i) { return i.qtd === 0; }).length;
-    var ok = total - alerta - critico;
-
-    document.getElementById('kpiTotal').textContent = total;
-    document.getElementById('kpiOk').textContent = ok;
-    document.getElementById('kpiAlerta').textContent = alerta;
-    document.getElementById('kpiCritico').textContent = critico;
-}
-
+// ============================================================
+// RENDERIZAR
+// ============================================================
 function renderizarItens() {
-    var lista = estoque.slice().sort(function(a, b) { return a.nome.localeCompare(b.nome); });
-    var container = document.getElementById('listaItens');
-    if (lista.length === 0) {
-        container.innerHTML = '<div class="sem-dados">Nenhum item.</div>';
+    var cat = document.getElementById('filtroCategoria').value;
+    var st = document.getElementById('filtroStatus').value;
+    var busca = document.getElementById('filtroBusca').value.toLowerCase();
+
+    var filtrados = estoque.filter(function(i) {
+        if (cat && i.categoria !== cat) return false;
+        var status = getStatus(i);
+        if (st && status.tipo !== st) return false;
+        if (busca && (i.nome || '').toLowerCase().indexOf(busca) === -1 &&
+                     (i.codigo || '').toLowerCase().indexOf(busca) === -1) return false;
+        return true;
+    });
+
+    document.getElementById('contadorFiltro').textContent = filtrados.length + ' de ' + estoque.length + ' itens';
+    document.getElementById('contadorItens').textContent = estoque.length + ' item' + (estoque.length !== 1 ? 's' : '');
+
+    var container = document.getElementById('estoqueLista');
+    if (filtrados.length === 0) {
+        container.innerHTML = '<div class="sem-dados" style="grid-column:1/-1;"><p style="font-size:48px;">📦</p><p style="margin-top:12px;">Nenhum item cadastrado.</p><button class="btn btn-primary" onclick="abrirFormNovo()" style="margin-top:16px;">➕ Cadastrar Primeiro Item</button></div>';
         return;
     }
-    container.innerHTML = lista.map(function(i) {
+
+    container.innerHTML = filtrados.map(function(i) {
         var status = getStatus(i);
-        return '<div class="estoque-item">' +
-            '<div><span class="nome">' + i.nome + '</span> <span class="categoria">' + i.categoria + '</span><br><span style="font-size:11px;color:var(--cinza);">📍 ' + i.local + ' | ' + i.unidade + '</span></div>' +
-            '<div><span class="qtd ' + status.qtdCls + '">' + i.qtd + '</span> <span class="status ' + status.cls + '">' + status.label + '</span>' +
-            '<button class="btn btn-editar" onclick="editarItem(' + i.id + ')" style="padding:4px 8px;font-size:10px;">✏️</button>' +
-            '<button class="btn btn-excluir" onclick="excluirItem(' + i.id + ')" style="padding:4px 8px;font-size:10px;">🗑️</button></div></div>';
+        var qtdCls = i.qtd <= 0 ? 'critico' : (i.qtd <= i.qtdMinima ? 'alerta' : '');
+
+        var vinculos = '';
+        if (i.projetoVinculado) vinculos += '<span class="vinculo projeto">📋 ' + i.projetoVinculado + '</span> ';
+        if (i.notaFiscalOrigem) vinculos += '<span class="vinculo financeiro">💰 ' + i.notaFiscalOrigem + '</span>';
+
+        return '<div class="estoque-card">' +
+            '<div class="cabecalho"><span class="codigo">' + (i.codigo || '---') + '</span><span class="status ' + status.classe + '">' + status.label + '</span></div>' +
+            '<div class="nome">📦 ' + (i.nome || 'Sem nome') + '</div>' +
+            '<div class="detalhes">🏷️ ' + (i.categoria || '---') + ' • ' + (i.unidade || 'Unidade') + '</div>' +
+            '<div class="detalhes">📍 ' + (i.local || 'Almoxarifado') + '</div>' +
+            '<div class="qtd-box">' +
+            '<div class="qtd ' + qtdCls + '">' + i.qtd + '</div>' +
+            '<div class="info">Min: ' + i.qtdMinima + '<br>Ideal: ' + i.qtdIdeal + '</div>' +
+            '</div>' +
+            '<div class="qtd-input-group">' +
+            '<button class="btn-menos" onclick="ajustarQtd(\'' + i._fbId + '\', -1)">−</button>' +
+            '<button class="btn-mais" onclick="ajustarQtd(\'' + i._fbId + '\', +1)">+</button>' +
+            '<span style="font-size:11px;color:var(--cinza);margin-left:6px;">ajuste rápido</span>' +
+            '</div>' +
+            '<div style="font-size:14px;font-weight:700;color:var(--verde);margin-top:8px;">R$ ' + (i.valorTotal || 0).toFixed(2).replace('.', ',') + '</div>' +
+            (vinculos ? '<div style="margin-top:6px;">' + vinculos + '</div>' : '') +
+            '<div class="acoes">' +
+            '<button class="btn btn-outline btn-sm" onclick="verDetalhes(\'' + i._fbId + '\')">👁️ Ver</button>' +
+            '<button class="btn btn-outline btn-sm" onclick="editarItem(\'' + i._fbId + '\')">✏️ Editar</button>' +
+            '<button class="btn btn-danger btn-sm" onclick="excluirItem(\'' + i._fbId + '\')">🗑️</button>' +
+            '</div></div>';
     }).join('');
 }
 
-window.salvarItem = function() {
-    var nome = document.getElementById('nomeItem').value.trim();
-    var qtd = parseInt(document.getElementById('qtdItem').value) || 0;
-    var qtdMinima = parseInt(document.getElementById('qtdMinima').value) || 0;
-
-    if (!nome) { alert('Preencha o nome!'); return; }
-
-    var dados = {
-        nome: nome,
-        categoria: document.getElementById('categoriaItem').value,
-        unidade: document.getElementById('unidadeItem').value,
-        qtd: qtd,
-        qtdMinima: qtdMinima,
-        local: document.getElementById('localItem').value.trim() || 'Almoxarifado',
-        obs: document.getElementById('obsItem').value.trim()
-    };
-
-    if (editandoId) {
-        var idx = estoque.findIndex(function(i) { return i.id === editandoId; });
-        if (idx >= 0) {
-            for (var k in dados) estoque[idx][k] = dados[k];
-        }
-        editandoId = null;
-    } else {
-        dados.id = Date.now();
-        estoque.push(dados);
-    }
-
-    salvar();
-    limparForm();
-    atualizarKPIs();
-    renderizarItens();
-    alert('✅ Item salvo com sucesso!');
-};
-
-window.editarItem = function(id) {
-    var i = estoque.find(function(x) { return x.id === id; });
+// ============================================================
+// EXCLUIR
+// ============================================================
+async function excluirItem(fbId) {
+    var i = estoque.find(function(x) { return x._fbId === fbId; });
     if (!i) return;
-    editandoId = id;
-    document.getElementById('itemId').value = id;
-    document.getElementById('nomeItem').value = i.nome;
-    document.getElementById('categoriaItem').value = i.categoria;
-    document.getElementById('unidadeItem').value = i.unidade;
-    document.getElementById('qtdItem').value = i.qtd;
-    document.getElementById('qtdMinima').value = i.qtdMinima;
-    document.getElementById('localItem').value = i.local || 'Almoxarifado';
-    document.getElementById('obsItem').value = i.obs || '';
-    document.querySelector('.card h3').textContent = '✏️ Editando: ' + i.nome;
-};
-
-window.excluirItem = function(id) {
-    if (!confirm('Excluir este item?')) return;
-    estoque = estoque.filter(function(i) { return i.id !== id; });
-    salvar();
-    atualizarKPIs();
-    renderizarItens();
-};
-
-function limparForm() {
-    editandoId = null;
-    document.getElementById('itemId').value = '';
-    document.getElementById('nomeItem').value = '';
-    document.getElementById('categoriaItem').value = 'Alimento';
-    document.getElementById('unidadeItem').value = 'Unidade';
-    document.getElementById('qtdItem').value = '0';
-    document.getElementById('qtdMinima').value = '5';
-    document.getElementById('localItem').value = 'Almoxarifado';
-    document.getElementById('obsItem').value = '';
-    document.querySelector('.card h3').textContent = '📝 Novo Item';
+    if (!confirm('Excluir o item "' + i.nome + '" (' + i.codigo + ')?\n\nEsta ação não pode ser desfeita.')) return;
+    if (firebasePronto && db) {
+        try {
+            await db.collection('estoque').doc(fbId).delete();
+            mostrarToast('🗑️ Item excluído!', 'info');
+        } catch (e) { mostrarToast('❌ ' + e.message, 'error'); }
+    } else {
+        estoque = estoque.filter(function(x) { return x._fbId !== fbId; });
+        localStorage.setItem('amovin_estoque', JSON.stringify(estoque));
+        renderizarItens();
+        atualizarKPIs();
+    }
 }
 
-if (!sessionStorage.getItem('amovin_logado')) { window.location.href = 'index.html'; }
+// ============================================================
+// KPIs
+// ============================================================
+function atualizarKPIs() {
+    document.getElementById('kpiTotal').textContent = estoque.length;
+    document.getElementById('kpiOk').textContent = estoque.filter(function(i) { return i.qtd > i.qtdMinima; }).length;
+    document.getElementById('kpiAlerta').textContent = estoque.filter(function(i) { return i.qtd > 0 && i.qtd <= i.qtdMinima; }).length;
+    document.getElementById('kpiCritico').textContent = estoque.filter(function(i) { return i.qtd <= 0; }).length;
+    var total = estoque.reduce(function(s, i) { return s + (i.valorTotal || 0); }, 0);
+    document.getElementById('kpiValorTotal').textContent = 'R$ ' + total.toFixed(2).replace('.', ',');
+}
 
-atualizarKPIs();
-renderizarItens();
+// ============================================================
+// EXPORTAR CSV
+// ============================================================
+function exportarCSV() {
+    var linhas = [['Código', 'Nome', 'Categoria', 'Unidade', 'Local', 'Qtd', 'Qtd Mínima', 'Valor Unit.', 'Valor Total', 'Nota Fiscal', 'Projeto', 'Fornecedor']];
+    estoque.forEach(function(i) {
+        linhas.push([i.codigo || '', i.nome || '', i.categoria || '', i.unidade || '', i.local || '',
+            i.qtd || 0, i.qtdMinima || 0, (i.valorUnitario || 0).toFixed(2), (i.valorTotal || 0).toFixed(2),
+            i.notaFiscalOrigem || '', i.projetoVinculado || '', i.fornecedor || '']);
+    });
+    var csv = linhas.map(function(l) { return l.map(function(c) { return '"' + c + '"'; }).join(';'); }).join('\n');
+    var blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = 'estoque-amovin-' + new Date().toISOString().split('T')[0] + '.csv';
+    a.click();
+    URL.revokeObjectURL(url);
+    mostrarToast('📥 CSV exportado!', 'success');
+}
+
+// ============================================================
+// TOAST
+// ============================================================
+function mostrarToast(msg, tipo) {
+    var t = document.createElement('div');
+    t.className = 'toast toast-' + (tipo || 'success');
+    t.textContent = msg;
+    document.body.appendChild(t);
+    setTimeout(function() { t.remove(); }, 4000);
+}
+
+// Auto-calcular valor total ao digitar
+document.addEventListener('input', function(e) {
+    if (e.target.id === 'formQtd' || e.target.id === 'formValorUnitario') {
+        calcularValorTotal();
+    }
+});
+
+// ============================================================
+// INIT
+// ============================================================
+if (!sessionStorage.getItem('amovin_logado') && !localStorage.getItem('amovin_logado')) {
+    console.log('⚠️ Sessão não encontrada, mas permitindo acesso.');
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    inicializarFirebase();
+});
 </script>
 </body>
 </html>
