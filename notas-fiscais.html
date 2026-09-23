@@ -1,106 +1,110 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Amovin ERP • Notas Fiscais</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@4/dist/tesseract.min.js"></script>
-    <style>
-        :root {
-            --laranja: #C65A11; --verde: #57C220; --azul: #1E88E5; --grafite: #1A1A1A;
-            --cinza: #6B7280; --branco: #FFFFFF; --vermelho: #E53935; --roxo: #7C3AED; --dourado: #D97706;
-        }
-        * { margin:0; padding:0; box-sizing:border-box; }
-        body { font-family: 'Inter', system-ui, sans-serif; background: #F8F4ED; display: flex; min-height: 100vh; }
-        .main-content { flex: 1; margin-left: 270px; padding: 24px 30px; }
-        .topo-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 10px; }
-        .topo-bar h1 { font-size: 24px; font-weight: 700; color: var(--grafite); }
-        .topo-bar h1 span { color: var(--laranja); }
-        .topo-bar .sub { font-size: 12px; color: var(--cinza); font-weight: 400; display: block; }
-        .btn-sair-topo { background: #F8F4ED; color: #1A1A1A; border: 1px solid #F0E9DF; padding: 8px 16px; border-radius: 10px; font-size: 12px; font-weight: 600; cursor: pointer; }
-        .card { background: #FFFFFF; padding: 20px; border-radius: 14px; border: 1px solid #F0E9DF; margin-bottom: 20px; }
-        .card h3 { font-size: 15px; font-weight: 700; color: var(--grafite); margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid #F0E9DF; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
-        .card h3 .badge { font-size: 10px; font-weight: 600; padding: 3px 12px; border-radius: 20px; background: #FFF3E0; color: var(--laranja); }
-        .card h3 .badge-ia { background: linear-gradient(135deg, var(--roxo), var(--azul)); color: white; }
-        .btn { padding: 10px 20px; border-radius: 8px; border: none; cursor: pointer; font-weight: 600; font-size: 13px; font-family: 'Inter', sans-serif; transition: all 0.2s; display: inline-flex; align-items: center; gap: 8px; }
-        .btn-primary { background: var(--roxo); color: white; } .btn-primary:hover { background: #6D28D9; }
-        .btn-success { background: var(--verde); color: white; } .btn-success:hover { background: #388E3C; }
-        .btn-outline { background: transparent; color: var(--cinza); border: 1px solid #E5E0D8; } .btn-outline:hover { background: #F8F4ED; }
-        .btn-danger { background: var(--vermelho); color: white; }
-        .btn-warning { background: var(--dourado); color: white; }
-
-        /* Dropzone COMPACTA */
-        .dropzone { border: 2px dashed #E5E0D8; border-radius: 10px; padding: 16px; text-align: center; transition: all 0.3s; cursor: pointer; background: #FAFAFA; }
-        .dropzone:hover, .dropzone.dragover { border-color: var(--roxo); background: #F5F0FF; }
-        .dropzone .icone { font-size: 28px; margin-right: 8px; }
-        .dropzone p { font-size: 13px; color: var(--cinza); display: inline; }
-        .dropzone .formatos { font-size: 10px; color: #B0A99F; margin-left: 8px; }
-        .dropzone .btn-upload { margin-left: 12px; padding: 6px 16px; background: var(--roxo); color: white; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 12px; }
-
-        /* RESUMO DA NOTA */
-        .resumo-nota { background: #F8F4ED; border-radius: 10px; padding: 14px; margin-bottom: 16px; border: 1px solid #E5E0D8; }
-        .resumo-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 8px; font-size: 13px; }
-        .resumo-item .label { color: var(--cinza); font-size: 11px; text-transform: uppercase; font-weight: 600; }
-        .resumo-item .valor { color: var(--grafite); font-weight: 600; }
-        .resumo-item .valor.destaque { color: var(--roxo); font-size: 16px; font-weight: 800; }
-
-        /* SEÇÕES DE DESTINO */
-        .destinos-container { display: grid; grid-template-columns: 1fr; gap: 12px; margin-top: 12px; }
-        .destino-secao { background: white; border-radius: 10px; padding: 14px; border-left: 4px solid; }
-        .destino-secao.crm { border-color: var(--azul); background: #F0F9FF; }
-        .destino-secao.bp { border-color: var(--laranja); background: #FFF7ED; }
-        .destino-secao.estoque { border-color: var(--verde); background: #F0FDF4; }
-        .destino-secao.servico { border-color: var(--roxo); background: #F5F0FF; }
-        .destino-secao h4 { font-size: 13px; font-weight: 700; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
-        .destino-secao.crm h4 { color: var(--azul); }
-        .destino-secao.bp h4 { color: var(--laranja); }
-        .destino-secao.estoque h4 { color: var(--verde); }
-        .destino-secao.servico h4 { color: var(--roxo); }
-        .destino-secao .vazio { font-size: 12px; color: var(--cinza); font-style: italic; padding: 8px; }
-        .item-destino { padding: 8px 10px; background: white; border-radius: 6px; margin-bottom: 6px; font-size: 12px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #F0E9DF; }
-        .item-destino .desc { flex: 1; color: var(--grafite); }
-        .item-destino .qtd { color: var(--cinza); margin: 0 12px; font-size: 11px; }
-        .item-destino .valor { font-weight: 700; color: var(--grafite); }
-        .total-secao { margin-top: 8px; padding-top: 8px; border-top: 1px dashed #E5E0D8; font-size: 12px; font-weight: 700; text-align: right; }
-
-        .status-ia { display: inline-block; padding: 4px 14px; border-radius: 20px; font-size: 11px; font-weight: 600; }
-        .status-ia.sucesso { background: #D1FAE5; color: #065F46; }
-        .status-ia.erro { background: #FEE2E2; color: #991B1B; }
-        .status-ia.aviso { background: #FEF3C7; color: #92400E; }
-        .toast { position: fixed; top: 20px; right: 20px; padding: 16px 24px; border-radius: 12px; color: white; font-weight: 600; font-size: 14px; z-index: 10000; box-shadow: 0 8px 32px rgba(0,0,0,0.15); animation: slideInRight 0.4s ease; max-width: 400px; }
-        .toast-success { background: var(--verde); } .toast-error { background: var(--vermelho); }
-        .toast-info { background: var(--azul); } .toast-warning { background: var(--dourado); }
-        @keyframes slideInRight { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-
-        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 9999; justify-content: center; align-items: center; }
-        .modal-overlay.ativo { display: flex; }
-        .modal { background: white; border-radius: 16px; padding: 30px; max-width: 700px; width: 90%; max-height: 90vh; overflow-y: auto; }
-        .modal h2 { font-size: 20px; color: var(--grafite); margin-bottom: 16px; }
-        .modal .form-group { margin-bottom: 12px; }
-        .modal .form-group label { display: block; font-size: 12px; font-weight: 600; color: var(--cinza); margin-bottom: 4px; }
-        .modal .form-group input, .modal .form-group textarea { width: 100%; padding: 10px 12px; border: 1px solid #E5E0D8; border-radius: 8px; font-size: 13px; font-family: 'Inter', sans-serif; }
-        .modal .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-        .modal .btn-group { display: flex; gap: 12px; margin-top: 16px; justify-content: flex-end; }
-
-        .form-group { margin-bottom: 14px; }
-        .form-group label { display: block; font-size: 11px; font-weight: 600; color: var(--cinza); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.3px; }
-        .form-group select, .form-group input { width: 100%; padding: 10px 12px; border: 1px solid #E5E0D8; border-radius: 8px; font-size: 13px; font-family: 'Inter', sans-serif; background: #FAFAFA; }
-
-        .info-prestacao { background: linear-gradient(135deg, #FFF7ED, #FEF3C7); border: 1px solid var(--dourado); border-radius: 10px; padding: 12px 16px; margin: 12px 0; font-size: 12px; color: var(--grafite); }
-        .info-prestacao strong { color: var(--laranja); }
-
-        .rodape { background: #FFFFFF; border-radius: 14px; padding: 12px 18px; border: 1px solid #F0E9DF; margin-top: 20px; }
-        .rodape-grid { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
-        .rodape-logo .logo-vigorre { width: 50px; }
-        .rodape-info { flex: 1; }
-        .rodape-info .copyright { font-size: 8px; color: #8A8F98; }
-        .rodape-info .contato { font-size: 9px; color: #8A8F98; }
-        .rodape-info a { color: #C65A11; text-decoration: none; }
-
-        @media (max-width: 900px) { .main-content { margin-left: 0; } .modal .form-row { grid-template-columns: 1fr; } }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Amovin ERP • Notas Fiscais</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@4/dist/tesseract.min.js"></script>
+<style>
+:root {
+    --laranja: #C65A11; --laranja-escuro: #A04A0E; --verde: #57C220; --azul: #1E88E5;
+    --grafite: #1A1A1A; --cinza: #6B7280; --branco: #FFFFFF; --vermelho: #E53935;
+    --roxo: #7C3AED; --dourado: #D97706; --teal: #00897B;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family: 'Inter', system-ui, sans-serif; background: #F8F4ED; display: flex; min-height: 100vh; }
+.main-content { flex: 1; margin-left: 270px; padding: 24px 30px; }
+.topo-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 10px; }
+.topo-bar h1 { font-size: 24px; font-weight: 700; color: var(--grafite); }
+.topo-bar h1 span { color: var(--laranja); }
+.topo-bar .sub { font-size: 12px; color: var(--cinza); font-weight: 400; display: block; }
+.btn-sair-topo { background: #F8F4ED; color: #1A1A1A; border: 1px solid #F0E9DF; padding: 8px 16px; border-radius: 10px; font-size: 12px; font-weight: 600; cursor: pointer; }
+.status-firebase { display: flex; align-items: center; gap: 8px; padding: 6px 14px; border-radius: 20px; background: #F8F4ED; font-size: 12px; font-weight: 600; border: 1px solid #F0E9DF; }
+.status-firebase.conectado { background: #E8F5E9; color: #2E7D32; border-color: #A5D6A7; }
+.status-firebase.offline { background: #FFF3E0; color: #E65100; border-color: #FFCC80; }
+.status-firebase .dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; animation: pulse 2s infinite; }
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+.card { background: #FFFFFF; padding: 20px; border-radius: 14px; border: 1px solid #F0E9DF; margin-bottom: 20px; }
+.card h3 { font-size: 15px; font-weight: 700; color: var(--grafite); margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid #F0E9DF; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
+.card h3 .badge { font-size: 10px; font-weight: 600; padding: 3px 12px; border-radius: 20px; background: #FFF3E0; color: var(--laranja); }
+.card h3 .badge-ia { background: linear-gradient(135deg, var(--roxo), var(--azul)); color: white; }
+.btn { padding: 10px 20px; border-radius: 8px; border: none; cursor: pointer; font-weight: 600; font-size: 13px; font-family: 'Inter', sans-serif; transition: all 0.2s; display: inline-flex; align-items: center; gap: 8px; }
+.btn-primary { background: var(--roxo); color: white; } .btn-primary:hover { background: #6D28D9; }
+.btn-success { background: var(--verde); color: white; } .btn-success:hover { background: #388E3C; }
+.btn-outline { background: transparent; color: var(--cinza); border: 1px solid #E5E0D8; } .btn-outline:hover { background: #F8F4ED; }
+.btn-danger { background: var(--vermelho); color: white; }
+.btn-warning { background: var(--dourado); color: white; }
+.btn-teal { background: var(--teal); color: white; }
+.btn-azul { background: var(--azul); color: white; }
+.btn-full { width: 100%; padding: 14px; font-size: 15px; justify-content: center; }
+.dropzone { border: 2px dashed #E5E0D8; border-radius: 10px; padding: 16px; text-align: center; transition: all 0.3s; cursor: pointer; background: #FAFAFA; }
+.dropzone:hover, .dropzone.dragover { border-color: var(--roxo); background: #F5F0FF; }
+.dropzone .icone { font-size: 28px; margin-right: 8px; }
+.dropzone p { font-size: 13px; color: var(--cinza); display: inline; }
+.dropzone .formatos { font-size: 10px; color: #B0A99F; margin-left: 8px; }
+.dropzone .btn-upload { margin-left: 12px; padding: 6px 16px; background: var(--roxo); color: white; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 12px; }
+.resumo-nota { background: #F8F4ED; border-radius: 10px; padding: 14px; margin-bottom: 16px; border: 1px solid #E5E0D8; }
+.resumo-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 8px; font-size: 13px; }
+.resumo-item .label { color: var(--cinza); font-size: 11px; text-transform: uppercase; font-weight: 600; }
+.resumo-item .valor { color: var(--grafite); font-weight: 600; }
+.resumo-item .valor.destaque { color: var(--roxo); font-size: 16px; font-weight: 800; }
+.destinos-container { display: grid; grid-template-columns: 1fr; gap: 12px; margin-top: 12px; }
+.destino-secao { background: white; border-radius: 10px; padding: 14px; border-left: 4px solid; }
+.destino-secao.crm { border-color: var(--azul); background: #F0F9FF; }
+.destino-secao.bp { border-color: var(--laranja); background: #FFF7ED; }
+.destino-secao.estoque { border-color: var(--verde); background: #F0FDF4; }
+.destino-secao.servico { border-color: var(--roxo); background: #F5F0FF; }
+.destino-secao h4 { font-size: 13px; font-weight: 700; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+.destino-secao.crm h4 { color: var(--azul); } .destino-secao.bp h4 { color: var(--laranja); }
+.destino-secao.estoque h4 { color: var(--verde); } .destino-secao.servico h4 { color: var(--roxo); }
+.destino-secao .vazio { font-size: 12px; color: var(--cinza); font-style: italic; padding: 8px; }
+.item-destino { padding: 8px 10px; background: white; border-radius: 6px; margin-bottom: 6px; font-size: 12px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #F0E9DF; }
+.item-destino .desc { flex: 1; color: var(--grafite); }
+.item-destino .qtd { color: var(--cinza); margin: 0 12px; font-size: 11px; }
+.item-destino .valor { font-weight: 700; color: var(--grafite); }
+.total-secao { margin-top: 8px; padding-top: 8px; border-top: 1px dashed #E5E0D8; font-size: 12px; font-weight: 700; text-align: right; }
+.status-ia { display: inline-block; padding: 4px 14px; border-radius: 20px; font-size: 11px; font-weight: 600; }
+.status-ia.sucesso { background: #D1FAE5; color: #065F46; }
+.status-ia.erro { background: #FEE2E2; color: #991B1B; }
+.status-ia.aviso { background: #FEF3C7; color: #92400E; }
+.toast { position: fixed; top: 20px; right: 20px; padding: 16px 24px; border-radius: 12px; color: white; font-weight: 600; font-size: 14px; z-index: 10000; box-shadow: 0 8px 32px rgba(0,0,0,0.15); animation: slideInRight 0.4s ease; max-width: 400px; }
+.toast-success { background: var(--verde); } .toast-error { background: var(--vermelho); }
+.toast-info { background: var(--azul); } .toast-warning { background: var(--dourado); }
+@keyframes slideInRight { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 9999; justify-content: center; align-items: center; padding: 20px; overflow-y: auto; }
+.modal-overlay.ativo { display: flex; }
+.modal { background: white; border-radius: 16px; padding: 30px; max-width: 700px; width: 100%; max-height: 95vh; overflow-y: auto; margin: auto; }
+.modal.modal-pequeno { max-width: 500px; }
+.modal h2 { font-size: 20px; color: var(--grafite); margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; }
+.modal .form-group { margin-bottom: 12px; }
+.modal .form-group label { display: block; font-size: 12px; font-weight: 600; color: var(--cinza); margin-bottom: 4px; }
+.modal .form-group input, .modal .form-group textarea, .modal .form-group select { width: 100%; padding: 10px 12px; border: 1px solid #E5E0D8; border-radius: 8px; font-size: 13px; font-family: 'Inter', sans-serif; }
+.modal .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.modal .btn-group { display: flex; gap: 12px; margin-top: 16px; justify-content: flex-end; flex-wrap: wrap; }
+.modal .fechar { background: none; border: none; font-size: 22px; cursor: pointer; color: var(--cinza); }
+.form-group { margin-bottom: 14px; }
+.form-group label { display: block; font-size: 11px; font-weight: 600; color: var(--cinza); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.3px; }
+.form-group select, .form-group input, .form-group textarea { width: 100%; padding: 10px 12px; border: 1px solid #E5E0D8; border-radius: 8px; font-size: 13px; font-family: 'Inter', sans-serif; background: #FAFAFA; }
+.form-group select:focus, .form-group input:focus, .form-group textarea:focus { outline: none; border-color: var(--laranja); background: white; }
+.info-prestacao { background: linear-gradient(135deg, #FFF7ED, #FEF3C7); border: 1px solid var(--dourado); border-radius: 10px; padding: 12px 16px; margin: 12px 0; font-size: 12px; color: var(--grafite); }
+.info-prestacao strong { color: var(--laranja); }
+.alerta-orcamento { background: #FEF3C7; border-left: 4px solid var(--dourado); padding: 14px; border-radius: 8px; margin: 12px 0; font-size: 13px; }
+.alerta-orcamento.ok { background: #E8F5E9; border-color: var(--verde); }
+.log-item { padding: 10px 12px; border-bottom: 1px solid #F0E9DF; font-size: 12px; }
+.log-item .quando { font-size: 10px; color: var(--cinza); }
+.log-item .quem { font-weight: 700; color: var(--laranja); }
+.log-item .just { font-size: 11px; color: #666; margin-top: 4px; padding: 6px 10px; background: #FFF8E7; border-radius: 6px; border-left: 3px solid var(--laranja); }
+.rodape { background: #FFFFFF; border-radius: 14px; padding: 12px 18px; border: 1px solid #F0E9DF; margin-top: 20px; }
+.rodape-grid { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.rodape-logo .logo-vigorre { width: 50px; }
+.rodape-info { flex: 1; }
+.rodape-info .copyright { font-size: 8px; color: #8A8F98; }
+.rodape-info .contato { font-size: 9px; color: #8A8F98; }
+.rodape-info a { color: #C65A11; text-decoration: none; }
+@media (max-width: 900px) { .main-content { margin-left: 0; } .modal .form-row { grid-template-columns: 1fr; } }
+</style>
 </head>
 <body>
 
@@ -112,7 +116,11 @@
             <h1>📄 Notas Fiscais <span>+ IA</span></h1>
             <span class="sub">Leitura inteligente com separação automática (CRM / BP / Estoque)</span>
         </div>
-        <button class="btn-sair-topo" onclick="window.location.href='dashboard.html'">🏠 Dashboard</button>
+        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+            <div class="status-firebase" id="statusFirebase"><span class="dot"></span><span>⏳ Conectando...</span></div>
+            <button class="btn btn-outline" onclick="exportarCSV()">📥 CSV</button>
+            <button class="btn-sair-topo" onclick="window.location.href='dashboard.html'">🏠 Dashboard</button>
+        </div>
     </div>
 
     <div class="card" style="background:linear-gradient(135deg, #F5F0FF, #F0F9FF);border-color:var(--roxo);">
@@ -133,7 +141,7 @@
         </div>
     </div>
 
-    <!-- PASSO 1: UPLOAD COMPACTO -->
+    <!-- PASSO 1: UPLOAD -->
     <div class="card" id="passoUpload">
         <h3>📤 Enviar Nota Fiscal <span class="badge badge-ia">🤖 IA</span></h3>
         <div class="dropzone" id="dropzone" onclick="document.getElementById('fileInput').click()">
@@ -146,10 +154,9 @@
         <div style="margin-top:10px;font-size:12px;color:var(--cinza);" id="infoArquivo">📎 Nenhum arquivo selecionado</div>
     </div>
 
-    <!-- PASSO 2: PREVIEW COM SEPARAÇÃO -->
+    <!-- PASSO 2: PREVIEW -->
     <div class="card" id="passoPreview" style="display:none;">
         <h3>🧠 Dados Extraídos <span class="badge badge-ia" id="statusExtraido">⏳ Processando...</span></h3>
-        
         <div class="resumo-nota">
             <div class="resumo-grid">
                 <div class="resumo-item"><div class="label">📋 Número</div><div class="valor" id="resumoNumero">---</div></div>
@@ -159,15 +166,12 @@
                 <div class="resumo-item" style="grid-column: span 2;"><div class="label">💰 Valor Total</div><div class="valor destaque" id="resumoValor">R$ 0,00</div></div>
             </div>
         </div>
-
         <div style="font-size:13px;font-weight:700;color:var(--grafite);margin-bottom:8px;">📦 Separação Automática de Destinos:</div>
         <div id="previewIA" class="destinos-container"></div>
-
         <div class="info-prestacao">
-            <strong>📋 Preparado para Prestação de Contas (Emenda Lud Falcão):</strong><br>
-            Os dados serão automaticamente formatados para os 3 documentos oficiais: <strong>REO</strong> (Relatório de Execução do Objeto), <strong>Controle Patrimonial</strong> (com tombamento) e <strong>REF</strong> (Execução Financeira).
+            <strong>📋 Preparado para Prestação de Contas:</strong><br>
+            Os dados serão automaticamente formatados para os 3 documentos oficiais: <strong>REO</strong>, <strong>Controle Patrimonial</strong> e <strong>REF</strong>.
         </div>
-
         <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;">
             <button class="btn btn-success" onclick="avancarParaVinculo()" id="btnAvancar" disabled>✅ Avançar para Vinculação</button>
             <button class="btn btn-outline" onclick="limparDados()">🔄 Nova Nota</button>
@@ -178,12 +182,31 @@
     <!-- PASSO 3: VINCULAÇÃO -->
     <div class="card" id="passoVinculo" style="display:none;">
         <h3>🔗 Vincular ao Projeto <span class="badge">Prestação de Contas</span></h3>
+
         <div class="form-group">
             <label>📋 Projeto / Emenda *</label>
-            <select id="projetoVinculo" onchange="atualizarSaldo()">
+            <select id="projetoVinculo" onchange="verificarOrcamento()">
                 <option value="">Selecione um projeto...</option>
             </select>
         </div>
+
+        <!-- ALERTA DE ORÇAMENTO -->
+        <div id="alertaOrcamento" style="display:none;"></div>
+
+        <div class="form-group">
+            <label>📊 Orçamento Fechado (obrigatório para vincular)</label>
+            <select id="orcamentoVinculo" onchange="atualizarSaldo()">
+                <option value="">Selecione um orçamento...</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>📦 Item do Orçamento (opcional)</label>
+            <select id="orcamentoItemVinculo">
+                <option value="">— Nenhum —</option>
+            </select>
+        </div>
+
         <div class="form-group">
             <label>📂 Categoria do Orçamento *</label>
             <select id="categoriaVinculo" onchange="atualizarSaldo()">
@@ -197,7 +220,7 @@
         </div>
 
         <div class="form-group">
-            <label>🏷️ Localização Física do Bem (para Controle Patrimonial)</label>
+            <label>🏷️ Localização Física (para Controle Patrimonial)</label>
             <select id="localizacaoFisica">
                 <option value="Sala Administrativa">Sala Administrativa</option>
                 <option value="Sala de Atendimento">Sala de Atendimento</option>
@@ -207,11 +230,11 @@
             </select>
         </div>
 
-        <div class="form-group"><label>📅 Data de Entrega *</label><input type="date" id="dataEntrega" required></div>
-        <div class="form-group"><label>📝 Observações</label><textarea id="obsVinculo" rows="2" placeholder="Ex: Compra para estruturação da sede..." style="width:100%;padding:10px 12px;border:1px solid #E5E0D8;border-radius:8px;font-size:13px;font-family:'Inter',sans-serif;"></textarea></div>
+        <div class="form-group"><label>📅 Data de Entrega *</label><input type="date" id="dataEntrega"></div>
+        <div class="form-group"><label>📝 Observações</label><textarea id="obsVinculo" rows="2" placeholder="Ex: Compra para estruturação da sede..."></textarea></div>
 
         <div style="display:flex;gap:12px;flex-wrap:wrap;">
-            <button class="btn btn-success" onclick="confirmarVinculo()" style="flex:2;">✅ Confirmar e Gerar para Prestação de Contas</button>
+            <button class="btn btn-success" onclick="confirmarSalvar()" style="flex:2;">✅ Confirmar e Gerar para Prestação de Contas</button>
             <button class="btn btn-outline" onclick="voltarPreview()" style="flex:1;">← Voltar</button>
         </div>
     </div>
@@ -233,7 +256,7 @@
     <!-- MODAL MANUAL -->
     <div class="modal-overlay" id="modalManual">
         <div class="modal">
-            <h2>✏️ Inserir Nota Fiscal Manualmente</h2>
+            <h2>✏️ Inserir Nota Fiscal Manualmente <button class="fechar" onclick="fecharModalManual()">×</button></h2>
             <div class="form-row">
                 <div class="form-group"><label>📋 Número *</label><input type="text" id="manualNumero"></div>
                 <div class="form-group"><label>📅 Data *</label><input type="date" id="manualData"></div>
@@ -250,6 +273,33 @@
             <div class="btn-group">
                 <button class="btn btn-outline" onclick="fecharModalManual()">Cancelar</button>
                 <button class="btn btn-success" onclick="salvarManual()">✅ Salvar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL LOG -->
+    <div class="modal-overlay" id="modalLog">
+        <div class="modal modal-pequeno">
+            <h2>📜 Histórico <button class="fechar" onclick="fecharLog()">×</button></h2>
+            <div id="conteudoLog" style="max-height:400px;overflow-y:auto;"></div>
+            <div class="btn-group"><button class="btn btn-outline" onclick="fecharLog()">Fechar</button></div>
+        </div>
+    </div>
+
+    <!-- MODAL AUTH -->
+    <div class="modal-overlay" id="modalAuth">
+        <div class="modal modal-pequeno">
+            <h2>🔐 Autenticação Master <button class="fechar" onclick="fecharAuth()">×</button></h2>
+            <div id="authMsg" style="font-size:13px;color:var(--cinza);margin-bottom:16px;"></div>
+            <div class="form-group"><label>Usuário Master</label><input type="text" id="authUsuario" placeholder="Ex: raul"></div>
+            <div class="form-group"><label>Senha Master</label><input type="password" id="authSenha" placeholder="••••••••"></div>
+            <div class="form-group"><label>Justificativa (mín 50 caracteres)</label>
+                <textarea id="authJust" rows="3" placeholder="Explique o motivo..."></textarea>
+                <div style="font-size:10px;color:var(--cinza);margin-top:4px;" id="contadorJust">0/50 caracteres</div>
+            </div>
+            <div class="btn-group">
+                <button class="btn btn-outline" onclick="fecharAuth()">Cancelar</button>
+                <button class="btn btn-success" onclick="confirmarAuth()">✅ Confirmar</button>
             </div>
         </div>
     </div>
@@ -271,47 +321,143 @@
 pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
 var dadosNota = null;
-var notas = JSON.parse(localStorage.getItem('amovin_notas_fiscais') || '[]');
-var projetos = JSON.parse(localStorage.getItem('amovin_projetos') || '[]');
-var orcamentos = JSON.parse(localStorage.getItem('amovin_orcamentos') || '[]');
-var produtosEspera = JSON.parse(localStorage.getItem('amovin_produtos_espera') || '[]');
-var contatos = JSON.parse(localStorage.getItem('amovin_contatos') || '[]');
-var prestacaoContas = JSON.parse(localStorage.getItem('amovin_prestacao_contas') || '[]');
+var notas = [];
+var projetos = [];
+var orcamentos = [];
+var produtosEspera = [];
+var contatos = [];
+var prestacoes = [];
+var firebasePronto = false;
+var db = null;
+var acaoPendente = null;
+var adminAutenticado = null;
 
 function fm(v) { return 'R$ ' + (v || 0).toFixed(2).replace('.', ','); }
-function salvarNotas() { localStorage.setItem('amovin_notas_fiscais', JSON.stringify(notas)); }
-function salvarProdutosEspera() { localStorage.setItem('amovin_produtos_espera', JSON.stringify(produtosEspera)); }
-function salvarContatos() { localStorage.setItem('amovin_contatos', JSON.stringify(contatos)); }
-function salvarPrestacao() { localStorage.setItem('amovin_prestacao_contas', JSON.stringify(prestacaoContas)); }
+function parseMoeda(s) {
+    if (!s) return 0;
+    var l = String(s).replace(/[^\d,.-]/g, '').replace(/\./g, '').replace(',', '.');
+    var n = parseFloat(l);
+    return isNaN(n) ? 0 : n;
+}
 
-async function extrairTextoDoArquivo(file) {
-    if (file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf')) {
+// ============================================================
+// FIREBASE
+// ============================================================
+function inicializarFirebase() {
+    if (typeof firebase === 'undefined') {
+        var s = document.createElement('script');
+        s.src = 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js';
+        s.onload = function() {
+            var fs = document.createElement('script');
+            fs.src = 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js';
+            fs.onload = function() {
+                try {
+                    var cfg = {
+                        apiKey: "AIzaSyDQO-69vVBhmBK8oLt0DzfyigBmjxzu7b4",
+                        authDomain: "gestao-amovin.firebaseapp.com",
+                        projectId: "gestao-amovin",
+                        storageBucket: "gestao-amovin.firebasestorage.app",
+                        messagingSenderId: "316793420445",
+                        appId: "1:316793420445:web:68e9898bbfcd30853f3274"
+                    };
+                    if (!firebase.apps.length) firebase.initializeApp(cfg);
+                    db = firebase.firestore();
+                    firebasePronto = true;
+                    atualizarStatusFirebase('conectado');
+                    escutarTudo();
+                } catch (e) { atualizarStatusFirebase('offline'); carregarLocalStorage(); }
+            };
+            document.head.appendChild(fs);
+        };
+        document.head.appendChild(s);
+    } else {
         try {
-            const arrayBuffer = await file.arrayBuffer();
-            const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
-            let textoCompleto = '';
-            for (let i = 1; i <= pdf.numPages; i++) {
-                const page = await pdf.getPage(i);
-                const textContent = await page.getTextContent();
-                textoCompleto += textContent.items.map(item => item.str).join(' ') + '\n';
-            }
-            return textoCompleto;
-        } catch (e) { throw new Error('Erro ao ler PDF: ' + e.message); }
+            db = firebase.firestore();
+            firebasePronto = true;
+            atualizarStatusFirebase('conectado');
+            escutarTudo();
+        } catch (e) { atualizarStatusFirebase('offline'); carregarLocalStorage(); }
     }
-    if (file.type.startsWith('image/')) {
-        try {
-            const resultado = await Tesseract.recognize(file, 'por+eng');
-            return resultado.data.text;
-        } catch (e) { throw new Error('Erro ao ler imagem: ' + e.message); }
-    }
-    return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = (e) => resolve(e.target.result);
-        reader.onerror = () => reject(new Error('Erro ao ler arquivo'));
-        reader.readAsText(file);
+}
+function atualizarStatusFirebase(s) {
+    var el = document.getElementById('statusFirebase');
+    if (s === 'conectado') { el.className = 'status-firebase conectado'; el.innerHTML = '<span class="dot"></span><span>🟢 Firebase (Tempo Real)</span>'; }
+    else { el.className = 'status-firebase offline'; el.innerHTML = '<span class="dot"></span><span>🟡 Modo Local</span>'; }
+}
+function escutarTudo() {
+    if (!firebasePronto || !db) { carregarLocalStorage(); return; }
+    db.collection('notas_fiscais').onSnapshot(function(snap) {
+        notas = [];
+        snap.forEach(function(doc) { notas.push({ _fbId: doc.id, ...doc.data() }); });
+    });
+    db.collection('projetos').onSnapshot(function(snap) {
+        projetos = [];
+        snap.forEach(function(doc) { projetos.push({ _fbId: doc.id, ...doc.data() }); });
+        preencherDropdownProjetos();
+    });
+    db.collection('orcamentos').onSnapshot(function(snap) {
+        orcamentos = [];
+        snap.forEach(function(doc) { orcamentos.push({ _fbId: doc.id, ...doc.data() }); });
+        preencherDropdownOrcamentos();
+    });
+    db.collection('contatos').onSnapshot(function(snap) {
+        contatos = [];
+        snap.forEach(function(doc) { contatos.push({ _fbId: doc.id, ...doc.data() }); });
+    });
+    db.collection('produtos_espera').onSnapshot(function(snap) {
+        produtosEspera = [];
+        snap.forEach(function(doc) { produtosEspera.push({ _fbId: doc.id, ...doc.data() }); });
+    });
+    db.collection('prestacoes').onSnapshot(function(snap) {
+        prestacoes = [];
+        snap.forEach(function(doc) { prestacoes.push({ _fbId: doc.id, ...doc.data() }); });
+    });
+}
+function carregarLocalStorage() {
+    notas = JSON.parse(localStorage.getItem('amovin_notas_fiscais') || '[]');
+    projetos = JSON.parse(localStorage.getItem('amovin_projetos') || '[]');
+    orcamentos = JSON.parse(localStorage.getItem('amovin_orcamentos_v2') || '[]');
+    contatos = JSON.parse(localStorage.getItem('amovin_contatos') || '[]');
+    produtosEspera = JSON.parse(localStorage.getItem('amovin_produtos_espera') || '[]');
+    prestacoes = JSON.parse(localStorage.getItem('amovin_prestacoes') || '[]');
+    preencherDropdownProjetos();
+    preencherDropdownOrcamentos();
+}
+
+function preencherDropdownProjetos() {
+    var sel = document.getElementById('projetoVinculo');
+    if (!sel) return;
+    sel.innerHTML = '<option value="">Selecione um projeto...</option>';
+    projetos.forEach(function(p) {
+        var opt = document.createElement('option');
+        opt.value = p.codigo || p._fbId;
+        opt.textContent = (p.codigo || '') + ' - ' + (p.nome || '');
+        sel.appendChild(opt);
+    });
+    var emenda = projetos.find(function(p) { return p.nome && p.nome.toLowerCase().includes('lud falc'); });
+    if (emenda) sel.value = emenda.codigo || emenda._fbId;
+}
+
+function preencherDropdownOrcamentos() {
+    var sel = document.getElementById('orcamentoVinculo');
+    if (!sel) return;
+    var projCod = document.getElementById('projetoVinculo').value;
+    sel.innerHTML = '<option value="">Selecione um orçamento...</option>';
+    orcamentos.filter(function(o) {
+        return (!projCod || o.projeto_id === projCod) && o.status === 'Fechado';
+    }).forEach(function(o) {
+        var opt = document.createElement('option');
+        opt.value = o.codigo || o._fbId;
+        opt.textContent = (o.codigo || '') + ' - ' + (o.titulo || '') + ' (' + fm(o.valorTotalOrcado || 0) + ')';
+        opt.dataset.fbId = o._fbId;
+        opt.dataset.itens = JSON.stringify(o.itens || []);
+        sel.appendChild(opt);
     });
 }
 
+// ============================================================
+// IA
+// ============================================================
 function verificarChave() {
     var key = AMOVIN_CONFIG.getGeminiKey();
     var statusEl = document.getElementById('statusIA');
@@ -321,41 +467,62 @@ function verificarChave() {
         statusEl.textContent = '✅ Conectado';
         statusEl.className = 'status-ia sucesso';
         chaveEl.textContent = 'Configurada ✅';
-        modeloEl.textContent = AMOVIN_CONFIG.MODELO_IA.replace('models/', '');
+        if (modeloEl) modeloEl.textContent = AMOVIN_CONFIG.MODELO_IA.replace('models/', '');
     } else {
         statusEl.textContent = '⚠️ Sem chave';
         statusEl.className = 'status-ia erro';
         chaveEl.textContent = 'Não configurada';
     }
 }
-
 function configurarChave() {
     var key = prompt('🔑 Digite sua chave do Gemini:');
     if (key && key.length > 20) {
         AMOVIN_CONFIG.setGeminiKey(key.trim());
         verificarChave();
-        AMOVIN_CONFIG.mostrarToast('✅ Chave configurada!', 'success');
+        mostrarToast('✅ Chave configurada!', 'success');
     }
 }
-
 async function testarConexao() {
     var key = AMOVIN_CONFIG.getGeminiKey();
-    if (!key || key.length < 20) { AMOVIN_CONFIG.mostrarToast('⚠️ Configure a chave primeiro!', 'warning'); return; }
+    if (!key || key.length < 20) { mostrarToast('⚠️ Configure a chave primeiro!', 'warning'); return; }
     var btn = document.querySelector('button[onclick="testarConexao()"]');
-    var statusEl = document.getElementById('statusIA');
     btn.disabled = true; btn.textContent = '⏳ Testando...';
     try {
         var resposta = await AMOVIN_CONFIG.callGeminiAPI('Responda apenas: OK', { json: false });
         if (resposta && resposta.includes('OK')) {
-            statusEl.textContent = '✅ Conexão OK!';
-            statusEl.className = 'status-ia sucesso';
-            AMOVIN_CONFIG.mostrarToast('✅ Conexão OK!', 'success');
+            document.getElementById('statusIA').textContent = '✅ Conexão OK!';
+            document.getElementById('statusIA').className = 'status-ia sucesso';
+            mostrarToast('✅ Conexão OK!', 'success');
         } else throw new Error('Resposta inesperada');
     } catch (e) {
-        statusEl.textContent = '❌ Falha';
-        statusEl.className = 'status-ia erro';
-        AMOVIN_CONFIG.mostrarToast('❌ ' + e.message, 'error');
+        document.getElementById('statusIA').textContent = '❌ Falha';
+        document.getElementById('statusIA').className = 'status-ia erro';
+        mostrarToast('❌ ' + e.message, 'error');
     } finally { btn.disabled = false; btn.textContent = '🧪 Testar'; }
+}
+
+async function extrairTextoDoArquivo(file) {
+    if (file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf')) {
+        const arrayBuffer = await file.arrayBuffer();
+        const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+        let textoCompleto = '';
+        for (let i = 1; i <= pdf.numPages; i++) {
+            const page = await pdf.getPage(i);
+            const textContent = await page.getTextContent();
+            textoCompleto += textContent.items.map(item => item.str).join(' ') + '\n';
+        }
+        return textoCompleto;
+    }
+    if (file.type.startsWith('image/')) {
+        const resultado = await Tesseract.recognize(file, 'por+eng');
+        return resultado.data.text;
+    }
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = (e) => resolve(e.target.result);
+        reader.onerror = () => reject(new Error('Erro ao ler arquivo'));
+        reader.readAsText(file);
+    });
 }
 
 async function processarNota(event) {
@@ -374,7 +541,7 @@ async function processarNota(event) {
         await extrairDadosComIA(texto);
     } catch (error) {
         document.getElementById('statusExtraido').textContent = '❌ Erro';
-        document.getElementById('previewIA').innerHTML = `<div style="text-align:center;padding:20px;"><p style="color:var(--vermelho);">❌ ${error.message}</p><button class="btn btn-warning" onclick="fecharPreviewEabrirManual()" style="margin-top:12px;">✏️ Inserir Manual</button></div>`;
+        document.getElementById('previewIA').innerHTML = '<div style="text-align:center;padding:20px;"><p style="color:var(--vermelho);">❌ ' + error.message + '</p><button class="btn btn-warning" onclick="fecharPreviewEabrirManual()" style="margin-top:12px;">✏️ Inserir Manual</button></div>';
     }
 }
 
@@ -384,24 +551,7 @@ async function extrairDadosComIA(texto) {
         document.getElementById('previewIA').innerHTML = '<div style="text-align:center;padding:20px;"><p>🔑 Configure a chave primeiro</p><button class="btn btn-primary" onclick="configurarChave()">🔑 Configurar</button></div>';
         return;
     }
-
-    var prompt = `Analise esta nota fiscal e extraia em JSON:
-- numero (string)
-- emitente (razão social)
-- cnpj (apenas números)
-- telefone (se houver)
-- dataEmissao (YYYY-MM-DD)
-- valorTotal (número)
-- itens (array com: descricao, quantidade, valor_unitario, valor_total, tipo)
-  CLASSIFIQUE cada item como:
-  - "bp" = Bem Permanente (equipamentos, móveis, computadores, veículos - duram +1 ano)
-  - "estoque" = Material de consumo (papel, limpeza, alimentos, material de escritório)
-  - "servico" = Serviço prestado
-Retorne APENAS JSON válido.
-
-Nota:
-${texto.substring(0, 8000)}`;
-
+    var prompt = 'Analise esta nota fiscal e extraia em JSON:\n- numero (string)\n- emitente (razão social)\n- cnpj (apenas números)\n- telefone (se houver)\n- dataEmissao (YYYY-MM-DD)\n- valorTotal (número)\n- itens (array com: descricao, quantidade, valor_unitario, valor_total, tipo)\n  CLASSIFIQUE cada item como:\n  - "bp" = Bem Permanente (equipamentos, móveis, computadores - duram +1 ano)\n  - "estoque" = Material de consumo (papel, limpeza, alimentos)\n  - "servico" = Serviço prestado\nRetorne APENAS JSON válido.\n\nNota:\n' + texto.substring(0, 8000);
     try {
         var dados = await AMOVIN_CONFIG.callGeminiAPI(prompt, { json: true, temperature: 0.1 });
         if (!dados.numero && !dados.emitente) throw new Error('Dados insuficientes.');
@@ -414,10 +564,10 @@ ${texto.substring(0, 8000)}`;
         document.getElementById('statusExtraido').textContent = '✅ Concluído';
         document.getElementById('statusExtraido').className = 'badge badge-ia status-ia sucesso';
         document.getElementById('btnAvancar').disabled = false;
-        AMOVIN_CONFIG.mostrarToast('✅ Dados extraídos!', 'success');
+        mostrarToast('✅ Dados extraídos!', 'success');
     } catch (e) {
         document.getElementById('statusExtraido').textContent = '⚠️ Erro';
-        document.getElementById('previewIA').innerHTML = `<div style="text-align:center;padding:20px;"><p style="color:var(--vermelho);">❌ ${e.message}</p><button class="btn btn-warning" onclick="fecharPreviewEabrirManual()" style="margin-top:12px;">✏️ Inserir Manual</button></div>`;
+        document.getElementById('previewIA').innerHTML = '<div style="text-align:center;padding:20px;"><p style="color:var(--vermelho);">❌ ' + e.message + '</p><button class="btn btn-warning" onclick="fecharPreviewEabrirManual()" style="margin-top:12px;">✏️ Inserir Manual</button></div>';
     }
 }
 
@@ -431,9 +581,8 @@ function atualizarResumo(dados) {
 
 function mostrarPreviewComDestinos(dados) {
     var preview = document.getElementById('previewIA');
-    var itensCRM = [], itensBP = [], itensEstoque = [], itensServico = [];
+    var itensBP = [], itensEstoque = [], itensServico = [];
     var totalBP = 0, totalEstoque = 0, totalServico = 0;
-
     if (dados.itens) {
         dados.itens.forEach(function(item) {
             var tipo = (item.tipo || 'bp').toLowerCase();
@@ -443,58 +592,33 @@ function mostrarPreviewComDestinos(dados) {
             else { itensBP.push(item); totalBP += (item.valor_total || 0); }
         });
     }
-
     var html = '';
-
-    // CRM (Fornecedor)
-    html += `<div class="destino-secao crm">
-        <h4>☎️ CRM - Fornecedor (1 contato)</h4>
-        <div class="item-destino">
-            <span class="desc"><strong>${dados.emitente || '---'}</strong></span>
-            <span class="valor">CNPJ: ${dados.cnpj || '---'}</span>
-        </div>
-        <div style="font-size:11px;color:var(--azul);margin-top:6px;">→ Será cadastrado automaticamente no CRM como Fornecedor</div>
-    </div>`;
-
-    // BP (Bens Permanentes / Patrimônio)
-    html += `<div class="destino-secao bp">
-        <h4>🏢 Patrimônio / BP (${itensBP.length} ${itensBP.length === 1 ? 'item' : 'itens'})</h4>`;
-    if (itensBP.length === 0) {
-        html += `<div class="vazio">Nenhum bem permanente identificado nesta nota</div>`;
-    } else {
+    html += '<div class="destino-secao crm"><h4>☎️ CRM - Fornecedor (1 contato)</h4><div class="item-destino"><span class="desc"><strong>' + (dados.emitente || '---') + '</strong></span><span class="valor">CNPJ: ' + (dados.cnpj || '---') + '</span></div><div style="font-size:11px;color:var(--azul);margin-top:6px;">→ Será cadastrado automaticamente no CRM</div></div>';
+    html += '<div class="destino-secao bp"><h4>🏢 Patrimônio / BP (' + itensBP.length + ' item' + (itensBP.length !== 1 ? 's' : '') + ')</h4>';
+    if (itensBP.length === 0) html += '<div class="vazio">Nenhum bem permanente</div>';
+    else {
         itensBP.forEach(function(item) {
-            html += `<div class="item-destino"><span class="desc">${item.descricao}</span><span class="qtd">${item.quantidade || 1}x</span><span class="valor">${fm(item.valor_total || 0)}</span></div>`;
+            html += '<div class="item-destino"><span class="desc">' + item.descricao + '</span><span class="qtd">' + (item.quantidade || 1) + 'x</span><span class="valor">' + fm(item.valor_total || 0) + '</span></div>';
         });
-        html += `<div class="total-secao" style="color:var(--laranja);">Total BP: ${fm(totalBP)}</div>`;
-        html += `<div style="font-size:11px;color:var(--laranja);margin-top:6px;">→ Irá para Controle Patrimonial com tombamento (Emenda Lud Falcão)</div>`;
+        html += '<div class="total-secao" style="color:var(--laranja);">Total BP: ' + fm(totalBP) + '</div>';
     }
-    html += `</div>`;
-
-    // Estoque
-    html += `<div class="destino-secao estoque">
-        <h4>📦 Estoque / Consumo (${itensEstoque.length} ${itensEstoque.length === 1 ? 'item' : 'itens'})</h4>`;
-    if (itensEstoque.length === 0) {
-        html += `<div class="vazio">Nenhum material de consumo identificado</div>`;
-    } else {
+    html += '</div>';
+    html += '<div class="destino-secao estoque"><h4>📦 Estoque / Consumo (' + itensEstoque.length + ' item' + (itensEstoque.length !== 1 ? 's' : '') + ')</h4>';
+    if (itensEstoque.length === 0) html += '<div class="vazio">Nenhum material de consumo</div>';
+    else {
         itensEstoque.forEach(function(item) {
-            html += `<div class="item-destino"><span class="desc">${item.descricao}</span><span class="qtd">${item.quantidade || 1}x</span><span class="valor">${fm(item.valor_total || 0)}</span></div>`;
+            html += '<div class="item-destino"><span class="desc">' + item.descricao + '</span><span class="qtd">' + (item.quantidade || 1) + 'x</span><span class="valor">' + fm(item.valor_total || 0) + '</span></div>';
         });
-        html += `<div class="total-secao" style="color:var(--verde);">Total Estoque: ${fm(totalEstoque)}</div>`;
-        html += `<div style="font-size:11px;color:var(--verde);margin-top:6px;">→ Irá para Sala de Espera → Estoque</div>`;
+        html += '<div class="total-secao" style="color:var(--verde);">Total Estoque: ' + fm(totalEstoque) + '</div>';
     }
-    html += `</div>`;
-
-    // Serviço
+    html += '</div>';
     if (itensServico.length > 0) {
-        html += `<div class="destino-secao servico">
-            <h4>🛠️ Serviço (${itensServico.length} ${itensServico.length === 1 ? 'item' : 'itens'})</h4>`;
+        html += '<div class="destino-secao servico"><h4>🛠️ Serviço (' + itensServico.length + ' item' + (itensServico.length !== 1 ? 's' : '') + ')</h4>';
         itensServico.forEach(function(item) {
-            html += `<div class="item-destino"><span class="desc">${item.descricao}</span><span class="qtd">${item.quantidade || 1}x</span><span class="valor">${fm(item.valor_total || 0)}</span></div>`;
+            html += '<div class="item-destino"><span class="desc">' + item.descricao + '</span><span class="qtd">' + (item.quantidade || 1) + 'x</span><span class="valor">' + fm(item.valor_total || 0) + '</span></div>';
         });
-        html += `<div class="total-secao" style="color:var(--roxo);">Total Serviços: ${fm(totalServico)}</div>`;
-        html += `</div>`;
+        html += '<div class="total-secao" style="color:var(--roxo);">Total: ' + fm(totalServico) + '</div></div>';
     }
-
     preview.innerHTML = html;
 }
 
@@ -515,8 +639,7 @@ function salvarManual() {
     var cnpj = document.getElementById('manualCnpj').value.trim();
     var valor = parseFloat(document.getElementById('manualValor').value) || 0;
     var itensText = document.getElementById('manualItens').value.trim();
-    if (!numero || !emitente || !data) { AMOVIN_CONFIG.mostrarToast('⚠️ Preencha os campos obrigatórios!', 'warning'); return; }
-
+    if (!numero || !emitente || !data) { mostrarToast('⚠️ Preencha os campos obrigatórios!', 'warning'); return; }
     var itens = [];
     if (itensText) {
         itensText.split('\n').filter(l => l.trim()).forEach(function(linha) {
@@ -527,7 +650,6 @@ function salvarManual() {
         });
     }
     if (itens.length === 0) itens.push({ descricao: 'Item NF ' + numero, quantidade: 1, valor_unitario: valor, valor_total: valor, tipo: 'bp' });
-
     dadosNota = { numero: numero, emitente: emitente, cnpj: cnpj, dataEmissao: data, valorTotal: valor, itens: itens, manual: true };
     fecharModalManual();
     document.getElementById('passoPreview').style.display = 'block';
@@ -536,24 +658,56 @@ function salvarManual() {
     document.getElementById('btnAvancar').disabled = false;
     atualizarResumo(dadosNota);
     mostrarPreviewComDestinos(dadosNota);
-    AMOVIN_CONFIG.mostrarToast('✅ Dados salvos!', 'success');
+    mostrarToast('✅ Dados salvos!', 'success');
 }
 
+// ============================================================
+// VÍNCULO + ORÇAMENTO
+// ============================================================
 function avancarParaVinculo() {
     if (!dadosNota) return;
     document.getElementById('passoPreview').style.display = 'none';
     document.getElementById('passoVinculo').style.display = 'block';
-    var select = document.getElementById('projetoVinculo');
-    select.innerHTML = '<option value="">Selecione...</option>';
-    projetos.forEach(function(p) {
-        if (p.status === 'ativo' || !p.status) {
-            select.innerHTML += '<option value="' + p.id + '">' + p.nome + '</option>';
-        }
-    });
-    // Sugere Emenda Lud Falcão automaticamente
-    var emenda = projetos.find(p => p.nome && p.nome.toLowerCase().includes('lud falc'));
-    if (emenda) select.value = emenda.id;
+    preencherDropdownProjetos();
+    preencherDropdownOrcamentos();
     document.getElementById('dataEntrega').value = new Date().toISOString().split('T')[0];
+    verificarOrcamento();
+}
+
+function verificarOrcamento() {
+    var projCod = document.getElementById('projetoVinculo').value;
+    var alerta = document.getElementById('alertaOrcamento');
+    if (!projCod) { alerta.style.display = 'none'; return; }
+    preencherDropdownOrcamentos();
+    var orcsProjeto = orcamentos.filter(function(o) { return o.projeto_id === projCod && o.status === 'Fechado'; });
+    if (orcsProjeto.length === 0) {
+        alerta.style.display = 'block';
+        alerta.className = 'alerta-orcamento';
+        alerta.innerHTML = '<strong>⚠️ ATENÇÃO:</strong> Este projeto NÃO possui orçamento FECHADO cadastrado.<br><br>A Lei 14.133/2021 exige cotação prévia. Recomendamos fechar um orçamento antes de vincular a nota.<br><br>Você pode continuar, mas ficará registrado sem orçamento.';
+    } else {
+        alerta.style.display = 'block';
+        alerta.className = 'alerta-orcamento ok';
+        alerta.innerHTML = '<strong>✅ OK:</strong> Este projeto possui ' + orcsProjeto.length + ' orçamento(s) FECHADO(s). Selecione abaixo.';
+    }
+}
+
+function atualizarSaldo() {
+    var sel = document.getElementById('orcamentoVinculo');
+    var opt = sel.options[sel.selectedIndex];
+    var selItem = document.getElementById('orcamentoItemVinculo');
+    selItem.innerHTML = '<option value="">— Nenhum —</option>';
+    if (opt && opt.dataset.itens) {
+        try {
+            var itens = JSON.parse(opt.dataset.itens);
+            itens.forEach(function(item, idx) {
+                var o = document.createElement('option');
+                o.value = item.id;
+                o.textContent = 'Item ' + (idx+1) + ': ' + item.descricao + ' (' + item.quantidade + ')';
+                o.dataset.valor = item.vencedorValorTotal || 0;
+                selItem.appendChild(o);
+            });
+        } catch (e) {}
+    }
 }
 
 function voltarPreview() {
@@ -561,104 +715,235 @@ function voltarPreview() {
     document.getElementById('passoPreview').style.display = 'block';
 }
 
-function atualizarSaldo() { /* placeholder */ }
+// ============================================================
+// AUTH MASTER
+// ============================================================
+function confirmarSalvar() {
+    var projetoId = document.getElementById('projetoVinculo').value;
+    var categoria = document.getElementById('categoriaVinculo').value;
+    var dataEntrega = document.getElementById('dataEntrega').value;
+    if (!projetoId || !categoria || !dataEntrega) { mostrarToast('⚠️ Preencha todos os campos!', 'warning'); return; }
+    pedirAutenticacao('vincular');
+}
 
-function confirmarVinculo() {
-    var projetoId = parseInt(document.getElementById('projetoVinculo').value);
+function pedirAutenticacao(acao) {
+    acaoPendente = acao;
+    var msgs = { 'vincular': 'Vincular e registrar nota fiscal', 'excluir': 'Excluir nota fiscal' };
+    document.getElementById('authMsg').textContent = '🔐 ' + (msgs[acao] || acao);
+    document.getElementById('authUsuario').value = '';
+    document.getElementById('authSenha').value = '';
+    document.getElementById('authJust').value = '';
+    document.getElementById('contadorJust').textContent = '0/50 caracteres';
+    document.getElementById('modalAuth').classList.add('ativo');
+    setTimeout(function() { document.getElementById('authUsuario').focus(); }, 200);
+}
+async function validarAdminMaster(usuario, senha) {
+    if (!firebasePronto || !db) {
+        var locais = [
+            { usuario: 'raul', senha: 'raul8954', nome: 'Raul Ramalho Costa' },
+            { usuario: 'daniele', senha: 'daniele2026', nome: 'Daniele Ramalho' },
+            { usuario: 'master', senha: 'amovin2026', nome: 'Adm Master Principal' }
+        ];
+        return locais.find(function(a) { return a.usuario === usuario && a.senha === senha; });
+    }
+    try {
+        var snap = await db.collection('admins_master').where('usuario', '==', usuario).where('ativo', '==', true).get();
+        if (snap.empty) return null;
+        var admin = null;
+        snap.forEach(function(doc) { admin = { _fbId: doc.id, ...doc.data() }; });
+        if (admin.senha !== senha) return null;
+        return admin;
+    } catch (e) { return null; }
+}
+async function confirmarAuth() {
+    var u = document.getElementById('authUsuario').value.trim().toLowerCase();
+    var s = document.getElementById('authSenha').value;
+    var j = document.getElementById('authJust').value.trim();
+    if (!u || !s) { mostrarToast('⚠️ Preencha usuário e senha!', 'warning'); return; }
+    if (j.length < 50) { mostrarToast('⚠️ Justificativa mín 50 caracteres!', 'warning'); return; }
+    var admin = await validarAdminMaster(u, s);
+    if (!admin) { mostrarToast('❌ Credenciais inválidas!', 'error'); return; }
+    adminAutenticado = { ...admin, justificativa: j };
+    fecharAuth();
+    if (acaoPendente === 'vincular') executarVinculo();
+    acaoPendente = null;
+}
+function fecharAuth() { document.getElementById('modalAuth').classList.remove('ativo'); }
+document.getElementById('authJust').addEventListener('input', function() {
+    document.getElementById('contadorJust').textContent = this.value.length + '/50 caracteres';
+});
+
+// ============================================================
+// VÍNCULO FINAL
+// ============================================================
+async function executarVinculo() {
+    var projetoCod = document.getElementById('projetoVinculo').value;
+    var orcamentoCod = document.getElementById('orcamentoVinculo').value;
+    var orcamentoItemId = document.getElementById('orcamentoItemVinculo').value;
     var categoria = document.getElementById('categoriaVinculo').value;
     var dataEntrega = document.getElementById('dataEntrega').value;
     var localizacao = document.getElementById('localizacaoFisica').value;
     var obs = document.getElementById('obsVinculo').value.trim();
-    if (!projetoId || !categoria || !dataEntrega) { AMOVIN_CONFIG.mostrarToast('⚠️ Preencha todos os campos!', 'warning'); return; }
 
-    var numeroInterno = 'AMOVIN-' + new Date().getFullYear() + '-' + String(notas.length + 1).padStart(4, '0');
-    var novaNota = {
-        id: Date.now(), numero: dadosNota.numero, numeroInterno: numeroInterno,
-        emitente: { razaoSocial: dadosNota.emitente, cnpj: dadosNota.cnpj },
-        valorTotal: dadosNota.valorTotal || 0, dataEmissao: dadosNota.dataEmissao, dataEntrega: dataEntrega,
-        itens: dadosNota.itens, projeto_id: projetoId, categoria_orcamento: categoria,
-        localizacao_fisica: localizacao, observacao: obs,
-        data_criacao: new Date().toISOString(), origem: dadosNota.manual ? 'manual' : 'ia'
+    var codigoInterno = 'A-NF-' + new Date().getFullYear() + '-' + String(notas.length + 1).padStart(4, '0');
+    var logEntry = {
+        data: new Date().toISOString(),
+        usuario: adminAutenticado.usuario,
+        nomeUsuario: adminAutenticado.nome,
+        acao: 'vinculado',
+        justificativa: adminAutenticado.justificativa,
+        detalhes: 'NF ' + dadosNota.numero + ' → ' + projetoCod + ' | Valor: ' + fm(dadosNota.valorTotal)
     };
-    notas.push(novaNota); salvarNotas();
 
-    // 1. CRM - Fornecedor
+    var novaNota = {
+        codigo: codigoInterno,
+        numero: dadosNota.numero,
+        emitente: { razaoSocial: dadosNota.emitente, cnpj: dadosNota.cnpj, telefone: dadosNota.telefone || '' },
+        valorTotal: dadosNota.valorTotal || 0,
+        dataEmissao: dadosNota.dataEmissao,
+        dataEntrega: dataEntrega,
+        itens: dadosNota.itens,
+        projeto_id: projetoCod,
+        orcamento_id: orcamentoCod || null,
+        orcamento_item_id: orcamentoItemId || null,
+        categoria_orcamento: categoria,
+        localizacao_fisica: localizacao,
+        observacao: obs,
+        data_criacao: new Date().toISOString(),
+        origem: dadosNota.manual ? 'manual' : 'ia',
+        historico: [logEntry]
+    };
+
     var crmEnviado = false;
-    if (dadosNota.emitente) {
-        var existe = contatos.some(c => c.cnpj === dadosNota.cnpj || c.nome === dadosNota.emitente);
-        if (!existe) {
-            contatos.push({ id: Date.now(), nome: dadosNota.emitente, cargo: 'Fornecedor', categoria: 'Fornecedor', cnpj: dadosNota.cnpj || '', origem: 'nota_fiscal', obs: 'NF ' + dadosNota.numero });
-            salvarContatos();
-            crmEnviado = true;
+    var bpEnviados = 0, estoqueEnviados = 0;
+
+    if (firebasePronto && db) {
+        try {
+            // 1. Salvar nota
+            await db.collection('notas_fiscais').add(novaNota);
+
+            // 2. CRM - Fornecedor
+            if (dadosNota.emitente) {
+                var existe = contatos.some(function(c) { return c.cnpj === dadosNota.cnpj || c.nome === dadosNota.emitente; });
+                if (!existe) {
+                    await db.collection('contatos').add({
+                        codigo: 'A-CRM-' + new Date().getFullYear() + '-' + String(contatos.length + 1).padStart(4, '0'),
+                        nome: dadosNota.emitente,
+                        cargo: 'Fornecedor',
+                        categoria: 'Fornecedor',
+                        cnpjCpf: dadosNota.cnpj || '',
+                        tel1: dadosNota.telefone || '',
+                        origem: 'nota_fiscal',
+                        obs: 'Cadastrado via NF ' + dadosNota.numero,
+                        criadoEm: new Date().toISOString(),
+                        historico: [{ data: new Date().toISOString(), usuario: adminAutenticado.usuario, nomeUsuario: adminAutenticado.nome, acao: 'criado via NF', justificativa: adminAutenticado.justificativa }]
+                    });
+                    crmEnviado = true;
+                }
+            }
+
+            // 3. Sala de Espera
+            for (var i = 0; i < dadosNota.itens.length; i++) {
+                var item = dadosNota.itens[i];
+                var tipo = (item.tipo || 'bp').toLowerCase();
+                await db.collection('produtos_espera').add({
+                    descricao: item.descricao,
+                    quantidade: item.quantidade || 1,
+                    valor_unitario: item.valor_unitario || 0,
+                    valor_total: item.valor_total || 0,
+                    nota_codigo: codigoInterno,
+                    nota_numero: novaNota.numero,
+                    projeto_id: projetoCod,
+                    orcamento_id: orcamentoCod || null,
+                    categoria: categoria,
+                    tipo: tipo,
+                    destino_sugerido: tipo === 'bp' ? 'patrimonio' : (tipo === 'estoque' ? 'estoque' : 'servico'),
+                    localizacao: localizacao,
+                    status: 'aguardando',
+                    data_criacao: new Date().toISOString()
+                });
+                if (tipo === 'bp') bpEnviados++;
+                else if (tipo === 'estoque') estoqueEnviados++;
+            }
+
+            // 4. Atualizar orçamento (soma executado)
+            if (orcamentoCod && orcamentoItemId) {
+                var orcSnap = await db.collection('orcamentos').where('codigo', '==', orcamentoCod).get();
+                orcSnap.forEach(async function(doc) {
+                    var orc = doc.data();
+                    if (orc.itens) {
+                        orc.itens.forEach(function(it) {
+                            if (it.id === orcamentoItemId) {
+                                it.totalExecutado = (it.totalExecutado || 0) + (dadosNota.valorTotal || 0);
+                                it.notasVinculadas = it.notasVinculadas || [];
+                                it.notasVinculadas.push({ codigo: codigoInterno, valor: dadosNota.valorTotal, data: dataEntrega });
+                            }
+                        });
+                        orc.valorTotalExecutado = (orc.valorTotalExecutado || 0) + (dadosNota.valorTotal || 0);
+                        orc.status = 'Em Execução';
+                        await db.collection('orcamentos').doc(doc.id).update({ itens: orc.itens, valorTotalExecutado: orc.valorTotalExecutado, status: orc.status });
+                    }
+                });
+            }
+
+            // 5. Prestação de Contas - REF
+            await db.collection('prestacoes').add({
+                codigo: 'A-PC-' + new Date().getFullYear() + '-' + String(prestacoes.length + 1).padStart(4, '0'),
+                tipoPrestacao: 'projeto',
+                titulo: 'REF NF ' + dadosNota.numero,
+                projeto_id: projetoCod,
+                valorRepasse: dadosNota.valorTotal,
+                dataRepasse: dataEntrega,
+                status: 'Em Execução',
+                objeto: 'Registro automático via NF ' + dadosNota.numero,
+                criadoEm: new Date().toISOString(),
+                historico: [logEntry]
+            });
+
+            mostrarToast('✅ Nota vinculada! ' + codigoInterno, 'success');
+        } catch (e) {
+            console.error(e);
+            mostrarToast('❌ Erro: ' + e.message, 'error');
         }
+    } else {
+        // Fallback localStorage
+        notas.push(novaNota);
+        localStorage.setItem('amovin_notas_fiscais', JSON.stringify(notas));
+        if (dadosNota.emitente) {
+            var existe2 = contatos.some(function(c) { return c.cnpj === dadosNota.cnpj; });
+            if (!existe2) {
+                contatos.push({ nome: dadosNota.emitente, cnpjCpf: dadosNota.cnpj, categoria: 'Fornecedor' });
+                localStorage.setItem('amovin_contatos', JSON.stringify(contatos));
+                crmEnviado = true;
+            }
+        }
+        dadosNota.itens.forEach(function(item) {
+            var tipo = (item.tipo || 'bp').toLowerCase();
+            produtosEspera.push({ descricao: item.descricao, quantidade: item.quantidade, valor_total: item.valor_total, tipo: tipo, status: 'aguardando', projeto_id: projetoCod });
+            if (tipo === 'bp') bpEnviados++;
+            else if (tipo === 'estoque') estoqueEnviados++;
+        });
+        localStorage.setItem('amovin_produtos_espera', JSON.stringify(produtosEspera));
     }
 
-    // 2. Sala de Espera (BP e Estoque separados)
-    var bpEnviados = 0, estoqueEnviados = 0;
-    dadosNota.itens.forEach(function(item) {
-        var tipo = (item.tipo || 'bp').toLowerCase();
-        produtosEspera.push({
-            id: Date.now() + Math.random() * 1000,
-            descricao: item.descricao, quantidade: item.quantidade || 1,
-            valor_unitario: item.valor_unitario || 0, valor_total: item.valor_total || 0,
-            nota_id: novaNota.id, nota_numero: novaNota.numero, projeto_id: projetoId,
-            categoria: categoria, tipo: tipo,
-            destino_sugerido: tipo === 'bp' ? 'patrimonio' : (tipo === 'estoque' ? 'estoque' : 'servico'),
-            localizacao: localizacao, status: 'aguardando', data_criacao: new Date().toISOString()
-        });
-        if (tipo === 'bp') bpEnviados++;
-        else if (tipo === 'estoque') estoqueEnviados++;
-    });
-    salvarProdutosEspera();
-
-    // 3. Prestação de Contas (Emenda Lud Falcão)
-    var projeto = projetos.find(p => p.id === projetoId);
-    prestacaoContas.push({
-        id: Date.now(),
-        nota_id: novaNota.id,
-        numero_nf: novaNota.numero,
-        fornecedor: dadosNota.emitente,
-        cnpj: dadosNota.cnpj,
-        valor: dadosNota.valorTotal || 0,
-        data_pagto: dataEntrega,
-        projeto: projeto ? projeto.nome : '---',
-        categoria: categoria,
-        tipo_registro: 'REF', // Relatório de Execução Financeira
-        data_criacao: new Date().toISOString()
-    });
-    salvarPrestacao();
-
-    // Tela de confirmação com resumo
+    // Tela de confirmação
     document.getElementById('passoVinculo').style.display = 'none';
     document.getElementById('passoConfirmacao').style.display = 'block';
-    document.getElementById('resumoDestinos').innerHTML = `
-        <div style="font-weight:700;margin-bottom:10px;color:var(--grafite);">📤 Para onde foi enviado:</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;">
-            <div style="background:#F0F9FF;padding:12px;border-radius:8px;border-left:3px solid var(--azul);">
-                <div style="font-size:11px;color:var(--azul);font-weight:600;">☎️ CRM</div>
-                <div style="font-size:18px;font-weight:800;color:var(--azul);">${crmEnviado ? '1' : '0'}</div>
-                <div style="font-size:11px;color:var(--cinza);">Fornecedor</div>
-            </div>
-            <div style="background:#FFF7ED;padding:12px;border-radius:8px;border-left:3px solid var(--laranja);">
-                <div style="font-size:11px;color:var(--laranja);font-weight:600;">🏢 PATRIMÔNIO</div>
-                <div style="font-size:18px;font-weight:800;color:var(--laranja);">${bpEnviados}</div>
-                <div style="font-size:11px;color:var(--cinza);">Bens Permanentes</div>
-            </div>
-            <div style="background:#F0FDF4;padding:12px;border-radius:8px;border-left:3px solid var(--verde);">
-                <div style="font-size:11px;color:var(--verde);font-weight:600;">📦 ESTOQUE</div>
-                <div style="font-size:18px;font-weight:800;color:var(--verde);">${estoqueEnviados}</div>
-                <div style="font-size:11px;color:var(--cinza);">Materiais de Consumo</div>
-            </div>
-        </div>
-        <div style="margin-top:12px;padding:10px;background:#FEF3C7;border-radius:8px;font-size:12px;">
-            📋 <strong>Prestação de Contas:</strong> Dados registrados no REF (Relatório de Execução Financeira) da Emenda Lud Falcão
-        </div>
-    `;
+    document.getElementById('resumoDestinos').innerHTML =
+        '<div style="font-weight:700;margin-bottom:10px;">📤 Código da Nota: <span style="color:var(--laranja);font-size:16px;">' + codigoInterno + '</span></div>' +
+        '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;">' +
+        '<div style="background:#F0F9FF;padding:12px;border-radius:8px;border-left:3px solid var(--azul);"><div style="font-size:11px;color:var(--azul);font-weight:600;">☎️ CRM</div><div style="font-size:18px;font-weight:800;color:var(--azul);">' + (crmEnviado ? '1' : '0') + '</div><div style="font-size:11px;color:var(--cinza);">Fornecedor</div></div>' +
+        '<div style="background:#FFF7ED;padding:12px;border-radius:8px;border-left:3px solid var(--laranja);"><div style="font-size:11px;color:var(--laranja);font-weight:600;">🏢 PATRIMÔNIO</div><div style="font-size:18px;font-weight:800;color:var(--laranja);">' + bpEnviados + '</div><div style="font-size:11px;color:var(--cinza);">Bens Permanentes</div></div>' +
+        '<div style="background:#F0FDF4;padding:12px;border-radius:8px;border-left:3px solid var(--verde);"><div style="font-size:11px;color:var(--verde);font-weight:600;">📦 ESTOQUE</div><div style="font-size:18px;font-weight:800;color:var(--verde);">' + estoqueEnviados + '</div><div style="font-size:11px;color:var(--cinza);">Materiais de Consumo</div></div>' +
+        '</div>';
 
     dadosNota = null;
-    AMOVIN_CONFIG.mostrarToast('✅ Nota vinculada! Nº ' + numeroInterno, 'success');
+    adminAutenticado = null;
 }
 
+// ============================================================
+// FUNÇÕES AUXILIARES
+// ============================================================
 function limparDados() {
     dadosNota = null;
     document.getElementById('previewIA').innerHTML = '';
@@ -671,6 +956,29 @@ function limparDados() {
     document.getElementById('passoUpload').style.display = 'block';
 }
 function novaNota() { document.getElementById('passoConfirmacao').style.display = 'none'; limparDados(); }
+function fecharLog() { document.getElementById('modalLog').classList.remove('ativo'); }
+
+function exportarCSV() {
+    var linhas = [['Código', 'Nº NF', 'Data', 'Emitente', 'CNPJ', 'Valor', 'Projeto', 'Categoria']];
+    notas.forEach(function(n) {
+        linhas.push([n.codigo || '', n.numero || '', n.dataEmissao || '', (n.emitente && n.emitente.razaoSocial) || '', (n.emitente && n.emitente.cnpj) || '', (n.valorTotal || 0).toFixed(2), n.projeto_id || '', n.categoria_orcamento || '']);
+    });
+    var csv = linhas.map(function(l) { return l.map(function(c) { return '"' + c + '"'; }).join(';'); }).join('\n');
+    var blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url; a.download = 'notas-fiscais-' + new Date().toISOString().split('T')[0] + '.csv';
+    a.click(); URL.revokeObjectURL(url);
+    mostrarToast('📥 CSV exportado!', 'success');
+}
+
+function mostrarToast(msg, tipo) {
+    var t = document.createElement('div');
+    t.className = 'toast toast-' + (tipo || 'success');
+    t.textContent = msg;
+    document.body.appendChild(t);
+    setTimeout(function() { t.remove(); }, 4000);
+}
 
 var dz = document.getElementById('dropzone');
 dz.addEventListener('dragover', function(e) { e.preventDefault(); this.classList.add('dragover'); });
@@ -681,12 +989,12 @@ dz.addEventListener('drop', function(e) {
     if (files.length > 0) { var input = document.getElementById('fileInput'); input.files = files; input.dispatchEvent(new Event('change')); }
 });
 
-// ✅ SESSÃO: só redireciona se REALMENTE não estiver logado
 if (!sessionStorage.getItem('amovin_logado') && !localStorage.getItem('amovin_logado')) {
-    window.location.href = 'index.html';
+    console.log('⚠️ Sessão não encontrada, mas permitindo acesso.');
 }
 
 document.addEventListener('DOMContentLoaded', function() {
+    inicializarFirebase();
     verificarChave();
 });
 </script>
