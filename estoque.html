@@ -9,55 +9,47 @@
         :root {
             --laranja: #C65A11; --laranja-escuro: #A04A0E; --amarelo: #F5C518; --verde: #57C220;
             --azul: #1E88E5; --grafite: #1A1A1A; --cinza: #6B7280; --branco: #FFFFFF;
-            --vermelho: #E53935; --roxo: #7C3AED;
+            --vermelho: #E53935; --roxo: #7C3AED; --teal: #00897B;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Inter', system-ui, sans-serif; background: #F8F4ED; display: flex; min-height: 100vh; }
-
         .main-content { flex: 1; margin-left: 270px; padding: 24px 30px; }
         .topo-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 10px; }
         .topo-bar h1 { font-size: 24px; font-weight: 700; color: var(--grafite); }
         .topo-bar h1 span { color: var(--laranja); }
         .btn-sair-topo { background: #F8F4ED; color: #1A1A1A; border: 1px solid #F0E9DF; padding: 8px 16px; border-radius: 10px; font-size: 12px; font-weight: 600; cursor: pointer; }
-
         .status-firebase { display: flex; align-items: center; gap: 8px; padding: 6px 14px; border-radius: 20px; background: #F8F4ED; font-size: 12px; font-weight: 600; border: 1px solid #F0E9DF; }
         .status-firebase.conectado { background: #E8F5E9; color: #2E7D32; border-color: #A5D6A7; }
         .status-firebase.offline { background: #FFF3E0; color: #E65100; border-color: #FFCC80; }
         .status-firebase .dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; animation: pulse 2s infinite; }
         @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
-
-        .kpi-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 15px; margin-bottom: 22px; }
+        .kpi-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 15px; margin-bottom: 22px; }
         .kpi-card { background: #FFFFFF; padding: 16px; border-radius: 14px; border: 1px solid #F0E9DF; text-align: center; }
         .kpi-card .kpi-valor { font-size: 22px; font-weight: 800; color: var(--laranja); word-break: break-word; }
         .kpi-card .kpi-label { font-size: 11px; color: var(--cinza); }
-
         .card { background: #FFFFFF; padding: 24px; border-radius: 14px; border: 1px solid #F0E9DF; margin-bottom: 20px; }
         .card h3 { font-size: 16px; font-weight: 700; color: var(--grafite); margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid #F0E9DF; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
         .card h3 .badge { font-size: 10px; font-weight: 600; padding: 3px 12px; border-radius: 20px; background: #FFF3E0; color: var(--laranja); }
-
         .btn { padding: 10px 24px; border-radius: 8px; border: none; cursor: pointer; font-weight: 600; font-size: 13px; font-family: 'Inter', sans-serif; transition: all 0.2s; display: inline-flex; align-items: center; gap: 8px; }
-        .btn-primary { background: var(--laranja); color: white; }
-        .btn-primary:hover { background: var(--laranja-escuro); }
-        .btn-success { background: var(--verde); color: white; }
-        .btn-outline { background: transparent; color: var(--cinza); border: 1px solid #E5E0D8; }
+        .btn-primary { background: var(--laranja); color: white; } .btn-primary:hover { background: var(--laranja-escuro); }
+        .btn-success { background: var(--verde); color: white; } .btn-outline { background: transparent; color: var(--cinza); border: 1px solid #E5E0D8; }
         .btn-outline:hover { background: #F8F4ED; }
         .btn-danger { background: var(--vermelho); color: white; }
         .btn-sm { padding: 5px 12px; font-size: 11px; }
-        .btn-azul { background: var(--azul); color: white; }
-        .btn-roxo { background: var(--roxo); color: white; }
-        .btn-verde { background: var(--verde); color: white; }
-
+        .btn-azul { background: var(--azul); color: white; } .btn-roxo { background: var(--roxo); color: white; }
+        .btn-teal { background: var(--teal); color: white; } .btn-amarelo { background: var(--amarelo); color: #1A1A1A; }
         .form-group { margin-bottom: 14px; }
         .form-group label { display: block; font-size: 11px; font-weight: 600; color: var(--cinza); margin-bottom: 4px; text-transform: uppercase; }
         .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px 12px; border: 1px solid #E5E0D8; border-radius: 8px; font-size: 13px; font-family: 'Inter', sans-serif; background: #FAFAFA; }
         .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: var(--laranja); background: white; box-shadow: 0 0 0 3px rgba(198, 90, 17, 0.08); }
         .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
         .form-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
-
+        .campo-moeda { position: relative; }
+        .campo-moeda::before { content: 'R$'; position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--cinza); font-weight: 600; font-size: 13px; pointer-events: none; }
+        .campo-moeda input { padding-left: 40px !important; font-weight: 600; font-size: 14px !important; text-align: right; }
         .filtros-bar { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-bottom: 16px; padding: 12px; background: #F8F4ED; border-radius: 10px; }
         .filtros-bar select, .filtros-bar input { padding: 8px 12px; border: 1px solid #E5E0D8; border-radius: 8px; font-size: 12px; font-family: 'Inter', sans-serif; background: white; }
         .filtros-bar .info { font-size: 12px; color: var(--cinza); margin-left: auto; }
-
         .estoque-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
         .estoque-card { background: #FFFFFF; border-radius: 14px; border: 1px solid #F0E9DF; padding: 18px; transition: all 0.3s; }
         .estoque-card:hover { transform: translateY(-3px); box-shadow: 0 6px 24px rgba(0,0,0,0.08); }
@@ -74,38 +66,37 @@
         .estoque-card .qtd-box .qtd.critico { color: var(--vermelho); }
         .estoque-card .qtd-box .qtd.alerta { color: #E65100; }
         .estoque-card .qtd-box .info { font-size: 11px; color: var(--cinza); }
-        .estoque-card .vinculo { font-size: 10px; padding: 3px 8px; border-radius: 8px; background: #E3F2FD; color: #1565C0; display: inline-block; margin-top: 4px; }
-        .estoque-card .vinculo.financeiro { background: #FFF3E0; color: var(--laranja); }
+        .estoque-card .vinculo { font-size: 10px; padding: 3px 8px; border-radius: 8px; display: inline-block; margin-top: 4px; margin-right: 4px; }
         .estoque-card .vinculo.projeto { background: #E8F5E9; color: #2E7D32; }
+        .estoque-card .vinculo.financeiro { background: #FFF3E0; color: var(--laranja); }
+        .estoque-card .vinculo.orcamento { background: #F3E5F5; color: #7B1FA2; }
         .estoque-card .acoes { display: flex; gap: 6px; margin-top: 12px; flex-wrap: wrap; }
         .estoque-card .acoes .btn { padding: 4px 10px; font-size: 10px; }
-
         .qtd-input-group { display: flex; align-items: center; gap: 6px; margin-top: 8px; }
-        .qtd-input-group input { width: 60px; padding: 5px 8px; text-align: center; font-weight: 600; }
         .qtd-input-group button { padding: 5px 10px; font-size: 14px; font-weight: 700; border: none; border-radius: 6px; cursor: pointer; }
         .btn-mais { background: var(--verde); color: white; }
         .btn-menos { background: var(--vermelho); color: white; }
-
         .sem-dados { text-align: center; padding: 40px; color: #9CA3AF; }
         .loading { text-align: center; padding: 40px; color: var(--cinza); }
         .loading .spinner { display: inline-block; width: 30px; height: 30px; border: 3px solid #E5E0D8; border-top: 3px solid var(--laranja); border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 10px; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 9999; justify-content: center; align-items: center; padding: 20px; }
+        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 9999; justify-content: center; align-items: center; padding: 20px; overflow-y: auto; }
         .modal-overlay.ativo { display: flex; }
-        .modal { background: white; border-radius: 16px; padding: 30px; max-width: 800px; width: 100%; max-height: 90vh; overflow-y: auto; }
+        .modal { background: white; border-radius: 16px; padding: 30px; max-width: 850px; width: 100%; max-height: 95vh; overflow-y: auto; margin: auto; }
+        .modal.modal-pequeno { max-width: 500px; }
         .modal h2 { font-size: 20px; color: var(--grafite); margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; }
         .modal .btn-group { display: flex; gap: 12px; margin-top: 16px; justify-content: flex-end; flex-wrap: wrap; }
         .modal .fechar { background: none; border: none; font-size: 22px; cursor: pointer; color: var(--cinza); }
-
         .secao-titulo { font-size: 13px; font-weight: 700; color: var(--laranja); text-transform: uppercase; margin: 20px 0 10px; padding-bottom: 6px; border-bottom: 2px solid var(--laranja); }
-
+        .log-item { padding: 10px 12px; border-bottom: 1px solid #F0E9DF; font-size: 12px; }
+        .log-item .quando { font-size: 10px; color: var(--cinza); }
+        .log-item .quem { font-weight: 700; color: var(--laranja); }
+        .log-item .acao { color: var(--grafite); font-weight: 600; }
+        .log-item .just { font-size: 11px; color: #666; margin-top: 4px; padding: 6px 10px; background: #FFF8E7; border-radius: 6px; border-left: 3px solid var(--laranja); }
+        .mov-item { padding: 6px 10px; border-bottom: 1px solid #F0E9DF; font-size: 12px; display: flex; justify-content: space-between; }
         .toast { position: fixed; top: 20px; right: 20px; padding: 16px 24px; border-radius: 12px; color: white; font-weight: 600; font-size: 14px; z-index: 10000; box-shadow: 0 8px 32px rgba(0,0,0,0.15); animation: slideInRight 0.4s ease; max-width: 400px; }
-        .toast-success { background: var(--verde); }
-        .toast-error { background: var(--vermelho); }
-        .toast-warning { background: #E65100; }
+        .toast-success { background: var(--verde); } .toast-error { background: var(--vermelho); } .toast-warning { background: #E65100; }
         @keyframes slideInRight { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-
         .rodape { background: #FFFFFF; border-radius: 14px; padding: 12px 18px; border: 1px solid #F0E9DF; margin-top: 20px; }
         .rodape-grid { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
         .rodape-logo .logo-vigorre { width: 50px; }
@@ -113,7 +104,6 @@
         .rodape-info .copyright { font-size: 8px; color: #8A8F98; }
         .rodape-info .contato { font-size: 9px; color: #8A8F98; }
         .rodape-info a { color: #C65A11; text-decoration: none; }
-
         @media (max-width: 900px) { .main-content { margin-left: 0; } .form-row, .form-row-3 { grid-template-columns: 1fr; } .estoque-grid { grid-template-columns: 1fr; } }
     </style>
 </head>
@@ -123,31 +113,25 @@
 
 <main class="main-content">
     <div class="topo-bar">
-        <div>
-            <h1>📦 Estoque <span>AMOVIN</span></h1>
-        </div>
+        <div><h1>📦 Estoque <span>AMOVIN</span></h1></div>
         <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
-            <div class="status-firebase" id="statusFirebase">
-                <span class="dot"></span>
-                <span>⏳ Conectando...</span>
-            </div>
-            <button class="btn btn-outline" onclick="exportarCSV()">📥 Exportar CSV</button>
-            <button class="btn btn-primary" onclick="abrirFormNovo()">➕ Novo Item</button>
+            <div class="status-firebase" id="statusFirebase"><span class="dot"></span><span>⏳ Conectando...</span></div>
+            <button class="btn btn-outline" onclick="exportarCSV()">📥 CSV</button>
+            <button class="btn btn-primary" onclick="pedirAutenticacao('criar')">➕ Novo Item</button>
             <button class="btn-sair-topo" onclick="window.location.href='dashboard.html'">🏠 Dashboard</button>
         </div>
     </div>
 
     <div class="kpi-row">
-        <div class="kpi-card"><div class="kpi-valor" id="kpiTotal">0</div><div class="kpi-label">📦 Total de Itens</div></div>
-        <div class="kpi-card"><div class="kpi-valor" style="color:var(--verde);" id="kpiOk">0</div><div class="kpi-label">✅ Estoque OK</div></div>
-        <div class="kpi-card"><div class="kpi-valor" style="color:#E65100;" id="kpiAlerta">0</div><div class="kpi-label">⚠️ Em Alerta</div></div>
+        <div class="kpi-card"><div class="kpi-valor" id="kpiTotal">0</div><div class="kpi-label">📦 Total</div></div>
+        <div class="kpi-card"><div class="kpi-valor" style="color:var(--verde);" id="kpiOk">0</div><div class="kpi-label">✅ OK</div></div>
+        <div class="kpi-card"><div class="kpi-valor" style="color:#E65100;" id="kpiAlerta">0</div><div class="kpi-label">⚠️ Alerta</div></div>
         <div class="kpi-card"><div class="kpi-valor" style="color:var(--vermelho);" id="kpiCritico">0</div><div class="kpi-label">🔴 Crítico</div></div>
-        <div class="kpi-card"><div class="kpi-valor" style="color:var(--azul);" id="kpiValorTotal">R$ 0,00</div><div class="kpi-label">💰 Valor em Estoque</div></div>
+        <div class="kpi-card"><div class="kpi-valor" style="color:var(--azul);" id="kpiValorTotal">R$ 0,00</div><div class="kpi-label">💰 Valor</div></div>
     </div>
 
     <div class="card">
         <h3>📋 Itens em Estoque <span class="badge" id="contadorItens">0 itens</span></h3>
-
         <div class="filtros-bar">
             <select id="filtroCategoria" onchange="renderizarItens()">
                 <option value="">Todas as categorias</option>
@@ -169,12 +153,8 @@
             <input type="text" id="filtroBusca" placeholder="🔍 Buscar nome, código..." oninput="renderizarItens()" style="min-width:180px;">
             <span class="info" id="contadorFiltro"></span>
         </div>
-
         <div id="estoqueLista" class="estoque-grid">
-            <div class="loading" style="grid-column:1/-1;">
-                <div class="spinner"></div>
-                <div>Carregando estoque do Firebase...</div>
-            </div>
+            <div class="loading" style="grid-column:1/-1;"><div class="spinner"></div><div>Carregando estoque do Firebase...</div></div>
         </div>
     </div>
 
@@ -189,20 +169,14 @@
     </div>
 </main>
 
-<!-- MODAL NOVO/EDITAR ITEM -->
 <div class="modal-overlay" id="modalForm">
     <div class="modal">
         <h2 id="modalTitulo">➕ Novo Item <button class="fechar" onclick="fecharForm()">×</button></h2>
         <input type="hidden" id="itemId">
-
         <div class="secao-titulo">📋 Identificação</div>
-        <div class="form-group">
-            <label>Nome do Item *</label>
-            <input type="text" id="formNome" placeholder="Ex: Papel A4, Café, Grampo">
-        </div>
+        <div class="form-group"><label>Nome do Item *</label><input type="text" id="formNome" placeholder="Ex: Papel A4, Café, Grampo"></div>
         <div class="form-row">
-            <div class="form-group">
-                <label>Categoria *</label>
+            <div class="form-group"><label>Categoria *</label>
                 <select id="formCategoria">
                     <option value="Alimento">🍽️ Alimento</option>
                     <option value="Higiene">🧼 Higiene</option>
@@ -214,10 +188,7 @@
                     <option value="Outros">📌 Outros</option>
                 </select>
             </div>
-            <div class="form-group">
-                <label>Código Estoque</label>
-                <input type="text" id="formCodigo" readonly style="background:#F0E9DF;font-weight:700;color:var(--laranja);">
-            </div>
+            <div class="form-group"><label>Código</label><input type="text" id="formCodigo" readonly style="background:#F0E9DF;font-weight:700;color:var(--laranja);"></div>
         </div>
         <div class="form-row">
             <div class="form-group"><label>Unidade</label>
@@ -241,101 +212,132 @@
                 </select>
             </div>
         </div>
-
         <div class="secao-titulo">📊 Quantidades</div>
         <div class="form-row-3">
-            <div class="form-group">
-                <label>Quantidade Atual *</label>
-                <input type="number" id="formQtd" value="0" min="0">
-            </div>
-            <div class="form-group">
-                <label>Qtd Mínima (alerta) *</label>
-                <input type="number" id="formQtdMinima" value="5" min="0">
-            </div>
-            <div class="form-group">
-                <label>Qtd Ideal (reposição)</label>
-                <input type="number" id="formQtdIdeal" value="20" min="0">
-            </div>
+            <div class="form-group"><label>Qtd Atual *</label><input type="number" id="formQtd" value="0" min="0"></div>
+            <div class="form-group"><label>Qtd Mínima *</label><input type="number" id="formQtdMinima" value="5" min="0"></div>
+            <div class="form-group"><label>Qtd Ideal</label><input type="number" id="formQtdIdeal" value="20" min="0"></div>
         </div>
-
         <div class="secao-titulo">💰 Valores</div>
         <div class="form-row">
-            <div class="form-group"><label>Valor Unitário (R$)</label><input type="number" id="formValorUnitario" step="0.01" placeholder="0,00"></div>
-            <div class="form-group"><label>Valor Total (R$)</label><input type="number" id="formValorTotal" step="0.01" placeholder="0,00" readonly style="background:#F0E9DF;"></div>
+            <div class="form-group"><label>Valor Unitário</label>
+                <div class="campo-moeda"><input type="text" id="formValorUnitario" placeholder="0,00" inputmode="numeric" oninput="mascaraMoedaUnitario(this)"></div>
+            </div>
+            <div class="form-group"><label>Valor Total</label><input type="number" id="formValorTotal" step="0.01" readonly style="background:#F0E9DF;"></div>
         </div>
-
-        <div class="secao-titulo">🔗 Vínculo Financeiro (opcional)</div>
-        <div class="form-group">
-            <label>Nota Fiscal / Lançamento Financeiro</label>
-            <select id="formNotaFiscal">
-                <option value="">— Nenhum —</option>
-            </select>
+        <div class="secao-titulo">🔗 Vínculos (opcionais)</div>
+        <div class="form-group"><label>Nota Fiscal / Financeiro</label>
+            <select id="formNotaFiscal"><option value="">— Nenhum —</option></select>
         </div>
-        <div class="form-group">
-            <label>Projeto Vinculado</label>
-            <select id="formProjeto">
-                <option value="">— Nenhum —</option>
-            </select>
+        <div class="form-row">
+            <div class="form-group"><label>Projeto</label>
+                <select id="formProjeto"><option value="">— Nenhum —</option></select>
+            </div>
+            <div class="form-group"><label>Orçamento</label>
+                <select id="formOrcamento"><option value="">— Nenhum —</option></select>
+            </div>
         </div>
-        <div class="form-group">
-            <label>Fornecedor</label>
-            <input type="text" id="formFornecedor" placeholder="Ex: Distribuidora ABC">
-        </div>
-
+        <div class="form-group"><label>Fornecedor</label><input type="text" id="formFornecedor" placeholder="Ex: Distribuidora ABC"></div>
         <div class="secao-titulo">📝 Observações</div>
-        <div class="form-group">
-            <textarea id="formObs" rows="2" placeholder="Informações adicionais..."></textarea>
-        </div>
-
+        <div class="form-group"><textarea id="formObs" rows="2"></textarea></div>
         <div class="btn-group">
             <button class="btn btn-outline" onclick="fecharForm()">Cancelar</button>
-            <button class="btn btn-success" onclick="salvarItem()">💾 Salvar Item</button>
+            <button class="btn btn-success" onclick="confirmarSalvar()">💾 Salvar</button>
         </div>
     </div>
 </div>
 
-<!-- MODAL DETALHES -->
 <div class="modal-overlay" id="modalDetalhes">
-    <div class="modal">
-        <h2>📋 Detalhes do Item <button class="fechar" onclick="fecharDetalhes()">×</button></h2>
-        <div id="conteudoDetalhes"></div>
-        <div class="btn-group">
-            <button class="btn btn-outline" onclick="fecharDetalhes()">Fechar</button>
-        </div>
-    </div>
+    <div class="modal"><h2>📋 Detalhes do Item <button class="fechar" onclick="fecharDetalhes()">×</button></h2><div id="conteudoDetalhes"></div>
+    <div class="btn-group"><button class="btn btn-outline" onclick="fecharDetalhes()">Fechar</button></div></div>
 </div>
 
-<!-- MODAL MOVIMENTAÇÃO -->
-<div class="modal-overlay" id="modalMovimentacao">
-    <div class="modal" style="max-width:500px;">
-        <h2 id="tituloMov">📥 Movimentação <button class="fechar" onclick="fecharMovimentacao()">×</button></h2>
-        <div id="conteudoMov"></div>
+<div class="modal-overlay" id="modalLog">
+    <div class="modal modal-pequeno"><h2>📜 Histórico <button class="fechar" onclick="fecharLog()">×</button></h2>
+    <div id="conteudoLog" style="max-height:400px;overflow-y:auto;"></div>
+    <div class="btn-group"><button class="btn btn-outline" onclick="fecharLog()">Fechar</button></div></div>
+</div>
+
+<div class="modal-overlay" id="modalAuth">
+    <div class="modal modal-pequeno">
+        <h2>🔐 Autenticação Master <button class="fechar" onclick="fecharAuth()">×</button></h2>
+        <div id="authMsg" style="font-size:13px;color:var(--cinza);margin-bottom:16px;"></div>
+        <div class="form-group"><label>Usuário Master</label><input type="text" id="authUsuario" placeholder="Ex: raul"></div>
+        <div class="form-group"><label>Senha Master</label><input type="password" id="authSenha" placeholder="••••••••"></div>
+        <div class="form-group"><label>Justificativa (mín 50 caracteres)</label>
+            <textarea id="authJust" rows="3" placeholder="Explique o motivo da alteração..."></textarea>
+            <div style="font-size:10px;color:var(--cinza);margin-top:4px;" id="contadorJust">0/50 caracteres</div>
+        </div>
+        <div class="btn-group">
+            <button class="btn btn-outline" onclick="fecharAuth()">Cancelar</button>
+            <button class="btn btn-success" onclick="confirmarAuth()">✅ Confirmar</button>
+        </div>
     </div>
 </div>
 
 <script src="menu.js?v=20260904"></script>
 <script>
 // ============================================================
-// ESTOQUE - AMOVIN ERP (Firebase Tempo Real + Vínculos)
+// ESTOQUE - AMOVIN ERP (Firebase + Auth Master + Log)
 // Código: A-EST-YYYY-NNNN
 // ============================================================
 
 var estoque = [];
 var projetos = [];
-var notasFiscais = [];
+var orcamentos = [];
+var financeiro = [];
 var movimentacoes = [];
 var firebasePronto = false;
 var db = null;
+var acaoPendente = null;
+var dadosPendentes = null;
+var adminAutenticado = null;
 var itemAtualDetalhes = null;
+
+function formatarMoeda(valor) {
+    if (valor === null || valor === undefined || isNaN(valor)) return 'R$ 0,00';
+    var n = Math.round((parseFloat(valor) + Number.EPSILON) * 100) / 100;
+    return 'R$ ' + n.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+function formatarNumero(valor) {
+    if (valor === null || valor === undefined || isNaN(valor)) return '0,00';
+    var n = Math.round((parseFloat(valor) + Number.EPSILON) * 100) / 100;
+    return n.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+function parseMoeda(str) {
+    if (!str) return 0;
+    if (typeof str === 'number') return str;
+    var limpo = String(str).replace(/[^\d,.-]/g, '').replace(/\./g, '').replace(',', '.');
+    var n = parseFloat(limpo);
+    return isNaN(n) ? 0 : n;
+}
+function mascaraMoedaUnitario(input) {
+    var d = input.value.replace(/\D/g, '');
+    if (!d) { input.value = ''; calcularValorTotal(); return; }
+    if (d.length > 15) d = d.substring(0, 15);
+    var n = parseInt(d, 10) / 100;
+    input.value = formatarNumero(n);
+    calcularValorTotal();
+}
+function calcularValorTotal() {
+    var qtd = parseFloat(document.getElementById('formQtd').value) || 0;
+    var unit = parseMoeda(document.getElementById('formValorUnitario').value);
+    document.getElementById('formValorTotal').value = (qtd * unit).toFixed(2);
+}
+document.addEventListener('input', function(e) {
+    if (e.target && (e.target.id === 'formQtd' || e.target.id === 'formValorUnitario')) {
+        calcularValorTotal();
+    }
+});
 
 // ============================================================
 // FIREBASE
 // ============================================================
 function inicializarFirebase() {
     if (typeof firebase === 'undefined') {
-        var script = document.createElement('script');
-        script.src = 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js';
-        script.onload = function() {
+        var s = document.createElement('script');
+        s.src = 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js';
+        s.onload = function() {
             var fs = document.createElement('script');
             fs.src = 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js';
             fs.onload = function() {
@@ -351,197 +353,241 @@ function inicializarFirebase() {
                     if (!firebase.apps.length) firebase.initializeApp(cfg);
                     db = firebase.firestore();
                     firebasePronto = true;
-                    console.log('🔥 Firebase conectado');
                     atualizarStatusFirebase('conectado');
                     escutarTudo();
-                } catch (e) {
-                    console.error('❌ Erro:', e);
-                    atualizarStatusFirebase('offline');
-                    carregarLocalStorage();
-                }
+                } catch (e) { atualizarStatusFirebase('offline'); carregarLocalStorage(); }
             };
             document.head.appendChild(fs);
         };
-        document.head.appendChild(script);
+        document.head.appendChild(s);
     } else {
         try {
             db = firebase.firestore();
             firebasePronto = true;
             atualizarStatusFirebase('conectado');
             escutarTudo();
-        } catch (e) {
-            atualizarStatusFirebase('offline');
-            carregarLocalStorage();
-        }
+        } catch (e) { atualizarStatusFirebase('offline'); carregarLocalStorage(); }
     }
 }
-
-function atualizarStatusFirebase(status) {
+function atualizarStatusFirebase(s) {
     var el = document.getElementById('statusFirebase');
-    if (status === 'conectado') {
-        el.className = 'status-firebase conectado';
-        el.innerHTML = '<span class="dot"></span><span>🟢 Firebase (Tempo Real)</span>';
-    } else {
-        el.className = 'status-firebase offline';
-        el.innerHTML = '<span class="dot"></span><span>🟡 Modo Local</span>';
-    }
+    if (s === 'conectado') { el.className = 'status-firebase conectado'; el.innerHTML = '<span class="dot"></span><span>🟢 Firebase (Tempo Real)</span>'; }
+    else { el.className = 'status-firebase offline'; el.innerHTML = '<span class="dot"></span><span>🟡 Modo Local</span>'; }
 }
-
 function escutarTudo() {
     if (!firebasePronto || !db) { carregarLocalStorage(); return; }
-
     db.collection('estoque').onSnapshot(function(snap) {
         estoque = [];
         snap.forEach(function(doc) { estoque.push({ _fbId: doc.id, ...doc.data() }); });
         estoque.sort(function(a, b) { return (a.codigo || '').localeCompare(b.codigo || ''); });
-        renderizarItens();
-        atualizarKPIs();
+        renderizarItens(); atualizarKPIs();
     });
-
     db.collection('projetos').onSnapshot(function(snap) {
         projetos = [];
         snap.forEach(function(doc) { projetos.push({ _fbId: doc.id, ...doc.data() }); });
-        preencherDropdownProjetos();
+        preencherDropdowns();
     });
-
+    db.collection('orcamentos').onSnapshot(function(snap) {
+        orcamentos = [];
+        snap.forEach(function(doc) { orcamentos.push({ _fbId: doc.id, ...doc.data() }); });
+        preencherDropdowns();
+    });
     db.collection('finances').onSnapshot(function(snap) {
-        notasFiscais = [];
-        snap.forEach(function(doc) { notasFiscais.push({ _fbId: doc.id, ...doc.data() }); });
-        preencherDropdownNotas();
+        financeiro = [];
+        snap.forEach(function(doc) { financeiro.push({ _fbId: doc.id, ...doc.data() }); });
+        preencherDropdowns();
     });
-
     db.collection('movimentacoes_estoque').onSnapshot(function(snap) {
         movimentacoes = [];
         snap.forEach(function(doc) { movimentacoes.push({ _fbId: doc.id, ...doc.data() }); });
     });
 }
-
 function carregarLocalStorage() {
     estoque = JSON.parse(localStorage.getItem('amovin_estoque') || '[]');
     projetos = JSON.parse(localStorage.getItem('amovin_projetos') || '[]');
-    notasFiscais = JSON.parse(localStorage.getItem('amovin_financeiro') || '[]');
-    preencherDropdownProjetos();
-    preencherDropdownNotas();
-    renderizarItens();
-    atualizarKPIs();
+    orcamentos = JSON.parse(localStorage.getItem('amovin_orcamentos_v2') || '[]');
+    financeiro = JSON.parse(localStorage.getItem('amovin_financeiro') || '[]');
+    preencherDropdowns();
+    renderizarItens(); atualizarKPIs();
 }
-
-// ============================================================
-// DROPDOWNS
-// ============================================================
-function preencherDropdownProjetos() {
-    var sel = document.getElementById('formProjeto');
-    if (!sel) return;
-    var atual = sel.value;
-    sel.innerHTML = '<option value="">— Nenhum —</option>';
-    projetos.forEach(function(p) {
-        var opt = document.createElement('option');
-        opt.value = p.codigo || p._fbId;
-        opt.textContent = (p.codigo || '') + ' - ' + (p.nome || '');
-        sel.appendChild(opt);
-    });
-    if (atual) sel.value = atual;
+function preencherDropdowns() {
+    var selNF = document.getElementById('formNotaFiscal');
+    if (selNF) {
+        var at = selNF.value;
+        selNF.innerHTML = '<option value="">— Nenhum —</option>';
+        financeiro.slice().sort(function(a, b) { return (b.date || '').localeCompare(a.date || ''); }).forEach(function(f) {
+            var opt = document.createElement('option');
+            opt.value = f.codigo || f._fbId;
+            opt.textContent = (f.codigo || '') + ' - ' + (f.description || '').substring(0, 40);
+            opt.dataset.fornecedor = f.empresaPessoaFisica || '';
+            opt.dataset.valor = f.value || 0;
+            opt.dataset.projeto = f.projeto_id || '';
+            selNF.appendChild(opt);
+        });
+        if (at) selNF.value = at;
+    }
+    var selP = document.getElementById('formProjeto');
+    if (selP) {
+        var atP = selP.value;
+        selP.innerHTML = '<option value="">— Nenhum —</option>';
+        projetos.forEach(function(p) {
+            var opt = document.createElement('option');
+            opt.value = p.codigo || p._fbId;
+            opt.textContent = (p.codigo || '') + ' - ' + (p.nome || '');
+            selP.appendChild(opt);
+        });
+        if (atP) selP.value = atP;
+    }
+    var selO = document.getElementById('formOrcamento');
+    if (selO) {
+        var atO = selO.value;
+        selO.innerHTML = '<option value="">— Nenhum —</option>';
+        orcamentos.forEach(function(o) {
+            var opt = document.createElement('option');
+            opt.value = o.codigo || o._fbId;
+            opt.textContent = (o.codigo || '') + ' - ' + (o.titulo || '');
+            selO.appendChild(opt);
+        });
+        if (atO) selO.value = atO;
+    }
 }
-
-function preencherDropdownNotas() {
-    var sel = document.getElementById('formNotaFiscal');
-    if (!sel) return;
-    var atual = sel.value;
-    sel.innerHTML = '<option value="">— Nenhum —</option>';
-    notasFiscais.sort(function(a, b) { return (b.date || '').localeCompare(a.date || ''); });
-    notasFiscais.forEach(function(n) {
-        var opt = document.createElement('option');
-        opt.value = n._fbId;
-        var cod = n.codigo || n.id || '';
-        opt.textContent = cod + ' - ' + (n.description || '').substring(0, 40);
-        opt.dataset.codigo = cod;
-        opt.dataset.fornecedor = n.empresaPessoaFisica || '';
-        opt.dataset.valor = n.value || 0;
-        opt.dataset.projeto = n.projetoVinculado || '';
-        sel.appendChild(opt);
-    });
-    if (atual) sel.value = atual;
-
-    sel.onchange = function() {
-        var opt = sel.options[sel.selectedIndex];
+document.addEventListener('change', function(e) {
+    if (e.target && e.target.id === 'formNotaFiscal') {
+        var opt = e.target.options[e.target.selectedIndex];
         if (opt && opt.value) {
             if (opt.dataset.fornecedor) document.getElementById('formFornecedor').value = opt.dataset.fornecedor;
-            if (opt.dataset.valor && parseFloat(opt.dataset.valor) > 0) {
-                document.getElementById('formValorUnitario').value = parseFloat(opt.dataset.valor).toFixed(2);
-                calcularValorTotal();
-            }
             if (opt.dataset.projeto) {
-                var p = document.getElementById('formProjeto');
-                for (var i = 0; i < p.options.length; i++) {
-                    if (p.options[i].value === opt.dataset.projeto) { p.selectedIndex = i; break; }
+                var selP = document.getElementById('formProjeto');
+                for (var i = 0; i < selP.options.length; i++) {
+                    if (selP.options[i].value === opt.dataset.projeto) { selP.selectedIndex = i; break; }
                 }
             }
+            mostrarToast('✅ Campos preenchidos pela nota!', 'success');
         }
-    };
-}
+    }
+});
 
 // ============================================================
-// CALCULAR VALOR TOTAL
-// ============================================================
-function calcularValorTotal() {
-    var qtd = parseFloat(document.getElementById('formQtd').value) || 0;
-    var unit = parseFloat(document.getElementById('formValorUnitario').value) || 0;
-    document.getElementById('formValorTotal').value = (qtd * unit).toFixed(2);
-}
-
-// ============================================================
-// GERAR CÓDIGO A-EST-YYYY-NNNN
+// CÓDIGO A-EST-YYYY-NNNN
 // ============================================================
 async function gerarProximoCodigo() {
     var ano = new Date().getFullYear();
     var prefixo = 'A-EST-' + ano + '-';
     var max = 0;
-
     if (firebasePronto && db) {
         try {
             var snap = await db.collection('estoque').get();
             snap.forEach(function(doc) {
                 var c = doc.data().codigo || '';
-                if (c.startsWith(prefixo)) {
-                    var n = parseInt(c.replace(prefixo, ''));
-                    if (n > max) max = n;
-                }
+                if (c.startsWith(prefixo)) { var n = parseInt(c.replace(prefixo, '')); if (n > max) max = n; }
             });
         } catch (e) {}
     } else {
         estoque.forEach(function(i) {
-            if (i.codigo && i.codigo.startsWith(prefixo)) {
-                var n = parseInt(i.codigo.replace(prefixo, ''));
-                if (n > max) max = n;
-            }
+            if (i.codigo && i.codigo.startsWith(prefixo)) { var n = parseInt(i.codigo.replace(prefixo, '')); if (n > max) max = n; }
         });
     }
     return prefixo + String(max + 1).padStart(4, '0');
 }
 
 // ============================================================
-// ABRIR FORM
+// AUTH
 // ============================================================
-async function abrirFormNovo() {
-    document.getElementById('modalTitulo').innerHTML = '➕ Novo Item <button class="fechar" onclick="fecharForm()">×</button>';
-    document.getElementById('itemId').value = '';
-    document.getElementById('formNome').value = '';
-    document.getElementById('formCategoria').value = 'Alimento';
-    document.getElementById('formUnidade').value = 'Unidade';
-    document.getElementById('formLocal').value = 'Almoxarifado';
-    document.getElementById('formQtd').value = '0';
-    document.getElementById('formQtdMinima').value = '5';
-    document.getElementById('formQtdIdeal').value = '20';
-    document.getElementById('formValorUnitario').value = '';
-    document.getElementById('formValorTotal').value = '';
-    document.getElementById('formNotaFiscal').value = '';
-    document.getElementById('formProjeto').value = '';
-    document.getElementById('formFornecedor').value = '';
-    document.getElementById('formObs').value = '';
+function pedirAutenticacao(acao, dados) {
+    acaoPendente = acao;
+    dadosPendentes = dados || null;
+    var msgs = { 'criar': 'Criar novo item', 'editar': 'Editar item', 'excluir': 'Excluir item', 'mov': 'Movimentar estoque' };
+    document.getElementById('authMsg').textContent = '🔐 ' + (msgs[acao] || acao);
+    document.getElementById('authUsuario').value = '';
+    document.getElementById('authSenha').value = '';
+    document.getElementById('authJust').value = '';
+    document.getElementById('contadorJust').textContent = '0/50 caracteres';
+    document.getElementById('modalAuth').classList.add('ativo');
+    setTimeout(function() { document.getElementById('authUsuario').focus(); }, 200);
+}
+async function validarAdminMaster(usuario, senha) {
+    if (!firebasePronto || !db) {
+        var locais = [
+            { usuario: 'raul', senha: 'raul8954', nome: 'Raul Ramalho Costa' },
+            { usuario: 'daniele', senha: 'daniele2026', nome: 'Daniele Ramalho' },
+            { usuario: 'master', senha: 'amovin2026', nome: 'Adm Master Principal' }
+        ];
+        return locais.find(function(a) { return a.usuario === usuario && a.senha === senha; });
+    }
+    try {
+        var snap = await db.collection('admins_master').where('usuario', '==', usuario).where('ativo', '==', true).get();
+        if (snap.empty) return null;
+        var admin = null;
+        snap.forEach(function(doc) { admin = { _fbId: doc.id, ...doc.data() }; });
+        if (admin.senha !== senha) return null;
+        return admin;
+    } catch (e) { return null; }
+}
+async function confirmarAuth() {
+    var usuario = document.getElementById('authUsuario').value.trim().toLowerCase();
+    var senha = document.getElementById('authSenha').value;
+    var just = document.getElementById('authJust').value.trim();
+    if (!usuario || !senha) { mostrarToast('⚠️ Preencha usuário e senha!', 'warning'); return; }
+    if (just.length < 50) { mostrarToast('⚠️ Justificativa mín 50 caracteres!', 'warning'); return; }
+    var admin = await validarAdminMaster(usuario, senha);
+    if (!admin) { mostrarToast('❌ Usuário ou senha incorretos!', 'error'); return; }
+    adminAutenticado = { ...admin, justificativa: just };
+    fecharAuth();
+    if (acaoPendente === 'criar' || acaoPendente === 'editar') abrirForm(dadosPendentes);
+    else if (acaoPendente === 'excluir') executarExclusao(dadosPendentes);
+    else if (acaoPendente === 'salvar') salvarItemFinal();
+    else if (acaoPendente === 'mov') executarMovimentacao(dadosPendentes);
+    acaoPendente = null;
+}
+function fecharAuth() { document.getElementById('modalAuth').classList.remove('ativo'); }
+document.getElementById('authJust').addEventListener('input', function() {
+    document.getElementById('contadorJust').textContent = this.value.length + '/50 caracteres';
+});
 
-    var codigo = await gerarProximoCodigo();
-    document.getElementById('formCodigo').value = codigo;
-
+// ============================================================
+// FORM
+// ============================================================
+async function abrirForm(itemId) {
+    document.getElementById('itemId').value = itemId || '';
+    if (itemId) {
+        var i = estoque.find(function(x) { return x._fbId === itemId; });
+        if (i) {
+            document.getElementById('modalTitulo').innerHTML = '✏️ Editar: ' + i.nome + ' <button class="fechar" onclick="fecharForm()">×</button>';
+            document.getElementById('formCodigo').value = i.codigo || '';
+            document.getElementById('formNome').value = i.nome || '';
+            document.getElementById('formCategoria').value = i.categoria || 'Alimento';
+            document.getElementById('formUnidade').value = i.unidade || 'Unidade';
+            document.getElementById('formLocal').value = i.local || 'Almoxarifado';
+            document.getElementById('formQtd').value = i.qtd || 0;
+            document.getElementById('formQtdMinima').value = i.qtdMinima || 5;
+            document.getElementById('formQtdIdeal').value = i.qtdIdeal || 20;
+            document.getElementById('formValorUnitario').value = formatarNumero(i.valorUnitario || 0);
+            document.getElementById('formValorTotal').value = (i.valorTotal || 0).toFixed(2);
+            document.getElementById('formNotaFiscal').value = i.notaFiscalOrigem || '';
+            document.getElementById('formProjeto').value = i.projetoVinculado || '';
+            document.getElementById('formOrcamento').value = i.orcamentoOrigem || '';
+            document.getElementById('formFornecedor').value = i.fornecedor || '';
+            document.getElementById('formObs').value = i.obs || '';
+        }
+    } else {
+        document.getElementById('modalTitulo').innerHTML = '➕ Novo Item <button class="fechar" onclick="fecharForm()">×</button>';
+        document.getElementById('formNome').value = '';
+        document.getElementById('formCategoria').value = 'Alimento';
+        document.getElementById('formUnidade').value = 'Unidade';
+        document.getElementById('formLocal').value = 'Almoxarifado';
+        document.getElementById('formQtd').value = '0';
+        document.getElementById('formQtdMinima').value = '5';
+        document.getElementById('formQtdIdeal').value = '20';
+        document.getElementById('formValorUnitario').value = '';
+        document.getElementById('formValorTotal').value = '';
+        document.getElementById('formNotaFiscal').value = '';
+        document.getElementById('formProjeto').value = '';
+        document.getElementById('formOrcamento').value = '';
+        document.getElementById('formFornecedor').value = '';
+        document.getElementById('formObs').value = '';
+        var cod = await gerarProximoCodigo();
+        document.getElementById('formCodigo').value = cod;
+    }
     document.getElementById('modalForm').classList.add('ativo');
 }
 function fecharForm() { document.getElementById('modalForm').classList.remove('ativo'); }
@@ -549,16 +595,18 @@ function fecharForm() { document.getElementById('modalForm').classList.remove('a
 // ============================================================
 // SALVAR
 // ============================================================
-async function salvarItem() {
+function confirmarSalvar() {
     var nome = document.getElementById('formNome').value.trim();
     if (!nome) { mostrarToast('⚠️ Nome é obrigatório!', 'warning'); return; }
-
-    var notaFbId = document.getElementById('formNotaFiscal').value;
-    var notaCodigo = '';
-    if (notaFbId) {
-        var nota = notasFiscais.find(function(n) { return n._fbId === notaFbId; });
-        if (nota) notaCodigo = nota.codigo || nota.id || '';
-    }
+    var idEdit = document.getElementById('itemId').value;
+    pedirAutenticacao(idEdit ? 'editar' : 'criar', idEdit || null);
+}
+async function salvarItemFinal() {
+    var nome = document.getElementById('formNome').value.trim();
+    var idEdit = document.getElementById('itemId').value;
+    var qtd = parseFloat(document.getElementById('formQtd').value) || 0;
+    var valorUnit = parseMoeda(document.getElementById('formValorUnitario').value);
+    var valorTotal = qtd * valorUnit;
 
     var dados = {
         codigo: document.getElementById('formCodigo').value,
@@ -566,121 +614,78 @@ async function salvarItem() {
         categoria: document.getElementById('formCategoria').value,
         unidade: document.getElementById('formUnidade').value,
         local: document.getElementById('formLocal').value,
-        qtd: parseFloat(document.getElementById('formQtd').value) || 0,
+        qtd: qtd,
         qtdMinima: parseFloat(document.getElementById('formQtdMinima').value) || 5,
         qtdIdeal: parseFloat(document.getElementById('formQtdIdeal').value) || 20,
-        valorUnitario: parseFloat(document.getElementById('formValorUnitario').value) || 0,
-        valorTotal: parseFloat(document.getElementById('formValorTotal').value) || 0,
-        notaFiscalFbId: notaFbId,
-        notaFiscalOrigem: notaCodigo,
+        valorUnitario: valorUnit,
+        valorTotal: valorTotal,
+        notaFiscalOrigem: document.getElementById('formNotaFiscal').value,
         projetoVinculado: document.getElementById('formProjeto').value,
+        orcamentoOrigem: document.getElementById('formOrcamento').value,
         fornecedor: document.getElementById('formFornecedor').value.trim(),
         obs: document.getElementById('formObs').value.trim(),
         atualizadoEm: new Date().toISOString()
     };
 
-    var idEdit = document.getElementById('itemId').value;
+    var logEntry = {
+        data: new Date().toISOString(),
+        usuario: adminAutenticado.usuario,
+        nomeUsuario: adminAutenticado.nome,
+        acao: idEdit ? 'editado' : 'criado',
+        justificativa: adminAutenticado.justificativa,
+        detalhes: 'Qtd: ' + qtd + ' ' + dados.unidade + ' | Valor: ' + formatarMoeda(valorTotal)
+    };
 
     if (firebasePronto && db) {
         try {
             if (idEdit) {
+                var i = estoque.find(function(x) { return x._fbId === idEdit; });
+                var hist = (i && i.historico) ? i.historico : [];
+                hist.push(logEntry);
+                dados.historico = hist;
                 await db.collection('estoque').doc(idEdit).update(dados);
                 mostrarToast('✅ Item atualizado!', 'success');
             } else {
                 dados.criadoEm = new Date().toISOString();
+                dados.historico = [logEntry];
                 await db.collection('estoque').add(dados);
                 mostrarToast('✅ Item ' + dados.codigo + ' cadastrado!', 'success');
             }
             fecharForm();
-        } catch (e) {
-            mostrarToast('❌ Erro: ' + e.message, 'error');
-        }
+            adminAutenticado = null;
+        } catch (e) { mostrarToast('❌ Erro: ' + e.message, 'error'); }
     } else {
         if (idEdit) {
-            var idx = estoque.findIndex(function(i) { return i._fbId === idEdit; });
-            if (idx >= 0) Object.assign(estoque[idx], dados);
+            var idx = estoque.findIndex(function(x) { return x._fbId === idEdit; });
+            if (idx >= 0) {
+                var hist = estoque[idx].historico || [];
+                hist.push(logEntry);
+                dados.historico = hist;
+                Object.assign(estoque[idx], dados);
+            }
         } else {
             dados._fbId = Date.now().toString();
-            dados.id = dados._fbId;
+            dados.historico = [logEntry];
             estoque.push(dados);
         }
         localStorage.setItem('amovin_estoque', JSON.stringify(estoque));
-        fecharForm();
-        renderizarItens();
-        atualizarKPIs();
-        mostrarToast('✅ Salvo localmente!', 'success');
+        fecharForm(); renderizarItens(); atualizarKPIs();
+        adminAutenticado = null;
     }
 }
 
 // ============================================================
-// EDITAR
+// EDITAR / DETALHES
 // ============================================================
-function editarItem(fbId) {
-    var i = estoque.find(function(x) { return x._fbId === fbId; });
-    if (!i) return;
-    document.getElementById('modalTitulo').innerHTML = '✏️ Editar: ' + i.nome + ' <button class="fechar" onclick="fecharForm()">×</button>';
-    document.getElementById('itemId').value = fbId;
-    document.getElementById('formCodigo').value = i.codigo || '';
-    document.getElementById('formNome').value = i.nome || '';
-    document.getElementById('formCategoria').value = i.categoria || 'Alimento';
-    document.getElementById('formUnidade').value = i.unidade || 'Unidade';
-    document.getElementById('formLocal').value = i.local || 'Almoxarifado';
-    document.getElementById('formQtd').value = i.qtd || 0;
-    document.getElementById('formQtdMinima').value = i.qtdMinima || 5;
-    document.getElementById('formQtdIdeal').value = i.qtdIdeal || 20;
-    document.getElementById('formValorUnitario').value = i.valorUnitario || '';
-    document.getElementById('formValorTotal').value = i.valorTotal || '';
-    document.getElementById('formNotaFiscal').value = i.notaFiscalFbId || '';
-    document.getElementById('formProjeto').value = i.projetoVinculado || '';
-    document.getElementById('formFornecedor').value = i.fornecedor || '';
-    document.getElementById('formObs').value = i.obs || '';
-    document.getElementById('modalForm').classList.add('ativo');
-}
+function editarItem(fbId) { pedirAutenticacao('editar', fbId); }
 
-// ============================================================
-// AJUSTE RÁPIDO DE QTD
-// ============================================================
-async function ajustarQtd(fbId, delta) {
-    var i = estoque.find(function(x) { return x._fbId === fbId; });
-    if (!i) return;
-    var novaQtd = Math.max(0, (i.qtd || 0) + delta);
-    if (firebasePronto && db) {
-        try {
-            await db.collection('estoque').doc(fbId).update({
-                qtd: novaQtd,
-                atualizadoEm: new Date().toISOString()
-            });
-            // Registra movimentação
-            await db.collection('movimentacoes_estoque').add({
-                itemId: fbId,
-                itemCodigo: i.codigo,
-                itemNome: i.nome,
-                tipo: delta > 0 ? 'entrada' : 'saida',
-                quantidade: Math.abs(delta),
-                qtdAnterior: i.qtd,
-                qtdNova: novaQtd,
-                data: new Date().toISOString()
-            });
-            mostrarToast((delta > 0 ? '📥 +' : '📤 ') + delta + ' ' + i.unidade, 'success');
-        } catch (e) { mostrarToast('❌ ' + e.message, 'error'); }
-    } else {
-        i.qtd = novaQtd;
-        localStorage.setItem('amovin_estoque', JSON.stringify(estoque));
-        renderizarItens();
-        atualizarKPIs();
-    }
-}
-
-// ============================================================
-// DETALHES
-// ============================================================
 function verDetalhes(fbId) {
     var i = estoque.find(function(x) { return x._fbId === fbId; });
     if (!i) return;
     itemAtualDetalhes = i;
     var status = getStatus(i);
     var html = '<div style="background:#F8F4ED;padding:14px;border-radius:10px;margin-bottom:16px;text-align:center;">' +
-        '<div style="font-size:11px;color:var(--cinza);">CÓDIGO ESTOQUE</div>' +
+        '<div style="font-size:11px;color:var(--cinza);">CÓDIGO</div>' +
         '<div style="font-size:22px;font-weight:800;color:var(--laranja);letter-spacing:1px;">' + (i.codigo || '---') + '</div>' +
         '</div>';
     html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">';
@@ -688,66 +693,153 @@ function verDetalhes(fbId) {
     html += dado('Categoria', i.categoria);
     html += dado('Unidade', i.unidade);
     html += dado('Localização', i.local);
-    html += dado('Quantidade', i.qtd + ' ' + i.unidade, false, status.classe);
+    html += dado('Qtd Atual', i.qtd + ' ' + i.unidade);
     html += dado('Qtd Mínima', i.qtdMinima);
     html += dado('Qtd Ideal', i.qtdIdeal);
-    html += dado('Valor Unitário', 'R$ ' + (i.valorUnitario || 0).toFixed(2).replace('.', ','));
-    html += dado('Valor Total', 'R$ ' + (i.valorTotal || 0).toFixed(2).replace('.', ','), false, 'destaque');
+    html += dado('Valor Unitário', formatarMoeda(i.valorUnitario || 0));
+    html += dado('Valor Total', formatarMoeda(i.valorTotal || 0), false, 'destaque');
     html += dado('Nota Fiscal', i.notaFiscalOrigem);
-    html += dado('Fornecedor', i.fornecedor);
+    html += dado('Orçamento', i.orcamentoOrigem);
     html += dado('Projeto', i.projetoVinculado);
+    html += dado('Fornecedor', i.fornecedor);
     html += '</div>';
-
-    // Histórico de movimentações
     var movsItem = movimentacoes.filter(function(m) { return m.itemId === fbId; });
     if (movsItem.length > 0) {
-        html += '<div style="margin-top:16px;"><div style="font-size:13px;font-weight:700;color:var(--laranja);margin-bottom:8px;">📊 Últimas Movimentações</div>';
+        html += '<div class="secao-titulo">📊 Movimentações</div>';
         html += '<div style="max-height:200px;overflow-y:auto;background:#FAFAFA;border-radius:8px;padding:10px;">';
         movsItem.slice(-10).reverse().forEach(function(m) {
             var dt = new Date(m.data).toLocaleString('pt-BR');
             var sinal = m.tipo === 'entrada' ? '+' : '-';
             var cor = m.tipo === 'entrada' ? 'var(--verde)' : 'var(--vermelho)';
-            html += '<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #F0E9DF;font-size:12px;">' +
-                '<span>' + dt + '</span>' +
-                '<span style="color:' + cor + ';font-weight:700;">' + sinal + m.quantidade + '</span>' +
-                '</div>';
+            html += '<div class="mov-item"><span>' + dt + '</span><span style="color:' + cor + ';font-weight:700;">' + sinal + m.quantidade + '</span></div>';
         });
-        html += '</div></div>';
+        html += '</div>';
     }
-
     if (i.obs) html += '<div style="margin-top:12px;padding:12px;background:#F8F4ED;border-radius:8px;font-size:13px;"><strong>📝 Obs:</strong> ' + i.obs + '</div>';
     document.getElementById('conteudoDetalhes').innerHTML = html;
     document.getElementById('modalDetalhes').classList.add('ativo');
 }
 function dado(l, v, full, classe) {
-    var corExtra = '';
-    if (classe === 'destaque') corExtra = 'color:var(--laranja);font-size:16px;';
-    if (classe === 'status-critico') corExtra = 'color:var(--vermelho);font-size:16px;font-weight:800;';
-    if (classe === 'status-alerta') corExtra = 'color:#E65100;font-size:16px;font-weight:800;';
-    if (classe === 'status-ok') corExtra = 'color:var(--verde);font-size:16px;font-weight:800;';
     return '<div style="' + (full ? 'grid-column:1/-1;' : '') + 'padding:8px;background:#FAFAFA;border-radius:6px;">' +
         '<div style="font-size:10px;color:var(--cinza);text-transform:uppercase;font-weight:600;">' + l + '</div>' +
-        '<div style="font-size:13px;font-weight:600;margin-top:2px;' + corExtra + '">' + (v || '—') + '</div></div>';
+        '<div style="font-size:13px;font-weight:600;margin-top:2px;' + (classe === 'destaque' ? 'color:var(--laranja);font-size:16px;' : '') + '">' + (v || '—') + '</div></div>';
 }
 function fecharDetalhes() { document.getElementById('modalDetalhes').classList.remove('ativo'); itemAtualDetalhes = null; }
 
 // ============================================================
-// STATUS DO ITEM
+// MOVIMENTAÇÃO RÁPIDA
 // ============================================================
-function getStatus(item) {
-    if (item.qtd <= 0) return { label: '🔴 Esgotado', classe: 'status-critico', tipo: 'critico' };
-    if (item.qtd <= item.qtdMinima) return { label: '⚠️ Baixo', classe: 'status-alerta', tipo: 'alerta' };
-    return { label: '✅ OK', classe: 'status-ok', tipo: 'ok' };
+function ajustarQtd(fbId, delta) {
+    pedirAutenticacao('mov', { fbId: fbId, delta: delta });
 }
+async function executarMovimentacao(dados) {
+    var i = estoque.find(function(x) { return x._fbId === dados.fbId; });
+    if (!i) { adminAutenticado = null; return; }
+    var novaQtd = Math.max(0, (i.qtd || 0) + dados.delta);
+    var logEntry = {
+        data: new Date().toISOString(),
+        usuario: adminAutenticado.usuario,
+        nomeUsuario: adminAutenticado.nome,
+        acao: dados.delta > 0 ? 'entrada +' + dados.delta : 'saída ' + dados.delta,
+        justificativa: adminAutenticado.justificativa,
+        detalhes: 'Qtd: ' + i.qtd + ' → ' + novaQtd
+    };
+    if (firebasePronto && db) {
+        try {
+            var hist = i.historico || [];
+            hist.push(logEntry);
+            await db.collection('estoque').doc(dados.fbId).update({ qtd: novaQtd, historico: hist, atualizadoEm: new Date().toISOString() });
+            await db.collection('movimentacoes_estoque').add({
+                itemId: dados.fbId, itemCodigo: i.codigo, itemNome: i.nome,
+                tipo: dados.delta > 0 ? 'entrada' : 'saida',
+                quantidade: Math.abs(dados.delta),
+                qtdAnterior: i.qtd, qtdNova: novaQtd,
+                usuario: adminAutenticado.usuario, nomeUsuario: adminAutenticado.nome,
+                justificativa: adminAutenticado.justificativa,
+                data: new Date().toISOString()
+            });
+            mostrarToast((dados.delta > 0 ? '📥 +' : '📤 ') + dados.delta + ' ' + i.unidade, 'success');
+        } catch (e) { mostrarToast('❌ ' + e.message, 'error'); }
+    } else {
+        i.qtd = novaQtd;
+        if (!i.historico) i.historico = [];
+        i.historico.push(logEntry);
+        localStorage.setItem('amovin_estoque', JSON.stringify(estoque));
+        renderizarItens(); atualizarKPIs();
+    }
+    adminAutenticado = null;
+}
+
+// ============================================================
+// EXCLUIR
+// ============================================================
+function excluirItem(fbId) {
+    var i = estoque.find(function(x) { return x._fbId === fbId; });
+    if (!i) return;
+    if (!confirm('Excluir o item "' + i.nome + '" (' + i.codigo + ')?\n\n⚠️ Esta ação é irreversível.')) return;
+    pedirAutenticacao('excluir', fbId);
+}
+async function executarExclusao(fbId) {
+    var i = estoque.find(function(x) { return x._fbId === fbId; });
+    if (!i) { adminAutenticado = null; return; }
+    var logEntry = {
+        data: new Date().toISOString(),
+        usuario: adminAutenticado.usuario,
+        nomeUsuario: adminAutenticado.nome,
+        acao: 'EXCLUÍDO',
+        justificativa: adminAutenticado.justificativa,
+        detalhes: i.codigo + ' - ' + i.nome
+    };
+    if (firebasePronto && db) {
+        try {
+            await db.collection('logs_exclusao').add({ modulo: 'estoque', itemCodigo: i.codigo, itemNome: i.nome, ...logEntry });
+            await db.collection('estoque').doc(fbId).delete();
+            mostrarToast('🗑️ Item excluído!', 'info');
+        } catch (e) { mostrarToast('❌ ' + e.message, 'error'); }
+    } else {
+        estoque = estoque.filter(function(x) { return x._fbId !== fbId; });
+        localStorage.setItem('amovin_estoque', JSON.stringify(estoque));
+        renderizarItens(); atualizarKPIs();
+    }
+    adminAutenticado = null;
+}
+
+// ============================================================
+// LOG
+// ============================================================
+function verLog(fbId) {
+    var i = estoque.find(function(x) { return x._fbId === fbId; });
+    if (!i) return;
+    var hist = i.historico || [];
+    var container = document.getElementById('conteudoLog');
+    if (hist.length === 0) { container.innerHTML = '<div class="sem-dados">Nenhuma alteração.</div>'; }
+    else {
+        container.innerHTML = hist.slice().reverse().map(function(h) {
+            var dt = new Date(h.data).toLocaleString('pt-BR');
+            return '<div class="log-item"><div class="quando">' + dt + '</div>' +
+                '<div class="quem">👤 ' + (h.nomeUsuario || h.usuario) + ' (@' + h.usuario + ')</div>' +
+                '<div class="acao">📌 ' + h.acao + '</div>' +
+                (h.detalhes ? '<div style="font-size:11px;color:var(--cinza);">' + h.detalhes + '</div>' : '') +
+                (h.justificativa ? '<div class="just"><strong>Justificativa:</strong> ' + h.justificativa + '</div>' : '') +
+                '</div>';
+        }).join('');
+    }
+    document.getElementById('modalLog').classList.add('ativo');
+}
+function fecharLog() { document.getElementById('modalLog').classList.remove('ativo'); }
 
 // ============================================================
 // RENDERIZAR
 // ============================================================
+function getStatus(item) {
+    if (item.qtd <= 0) return { label: '🔴 Esgotado', classe: 'status-critico', tipo: 'critico', qtd: 'critico' };
+    if (item.qtd <= item.qtdMinima) return { label: '⚠️ Baixo', classe: 'status-alerta', tipo: 'alerta', qtd: 'alerta' };
+    return { label: '✅ OK', classe: 'status-ok', tipo: 'ok', qtd: '' };
+}
 function renderizarItens() {
     var cat = document.getElementById('filtroCategoria').value;
     var st = document.getElementById('filtroStatus').value;
     var busca = document.getElementById('filtroBusca').value.toLowerCase();
-
     var filtrados = estoque.filter(function(i) {
         if (cat && i.categoria !== cat) return false;
         var status = getStatus(i);
@@ -756,66 +848,40 @@ function renderizarItens() {
                      (i.codigo || '').toLowerCase().indexOf(busca) === -1) return false;
         return true;
     });
-
-    document.getElementById('contadorFiltro').textContent = filtrados.length + ' de ' + estoque.length + ' itens';
+    document.getElementById('contadorFiltro').textContent = filtrados.length + ' de ' + estoque.length;
     document.getElementById('contadorItens').textContent = estoque.length + ' item' + (estoque.length !== 1 ? 's' : '');
-
     var container = document.getElementById('estoqueLista');
     if (filtrados.length === 0) {
-        container.innerHTML = '<div class="sem-dados" style="grid-column:1/-1;"><p style="font-size:48px;">📦</p><p style="margin-top:12px;">Nenhum item cadastrado.</p><button class="btn btn-primary" onclick="abrirFormNovo()" style="margin-top:16px;">➕ Cadastrar Primeiro Item</button></div>';
+        container.innerHTML = '<div class="sem-dados" style="grid-column:1/-1;"><p style="font-size:48px;">📦</p><p style="margin-top:12px;">Nenhum item.</p></div>';
         return;
     }
-
     container.innerHTML = filtrados.map(function(i) {
         var status = getStatus(i);
-        var qtdCls = i.qtd <= 0 ? 'critico' : (i.qtd <= i.qtdMinima ? 'alerta' : '');
-
         var vinculos = '';
-        if (i.projetoVinculado) vinculos += '<span class="vinculo projeto">📋 ' + i.projetoVinculado + '</span> ';
+        if (i.projetoVinculado) vinculos += '<span class="vinculo projeto">📋 ' + i.projetoVinculado + '</span>';
         if (i.notaFiscalOrigem) vinculos += '<span class="vinculo financeiro">💰 ' + i.notaFiscalOrigem + '</span>';
-
+        if (i.orcamentoOrigem) vinculos += '<span class="vinculo orcamento">📊 ' + i.orcamentoOrigem + '</span>';
+        var numLogs = (i.historico || []).length;
         return '<div class="estoque-card">' +
             '<div class="cabecalho"><span class="codigo">' + (i.codigo || '---') + '</span><span class="status ' + status.classe + '">' + status.label + '</span></div>' +
             '<div class="nome">📦 ' + (i.nome || 'Sem nome') + '</div>' +
             '<div class="detalhes">🏷️ ' + (i.categoria || '---') + ' • ' + (i.unidade || 'Unidade') + '</div>' +
             '<div class="detalhes">📍 ' + (i.local || 'Almoxarifado') + '</div>' +
-            '<div class="qtd-box">' +
-            '<div class="qtd ' + qtdCls + '">' + i.qtd + '</div>' +
-            '<div class="info">Min: ' + i.qtdMinima + '<br>Ideal: ' + i.qtdIdeal + '</div>' +
-            '</div>' +
+            '<div class="qtd-box"><div class="qtd ' + status.qtd + '">' + i.qtd + '</div><div class="info">Min: ' + i.qtdMinima + '<br>Ideal: ' + i.qtdIdeal + '</div></div>' +
             '<div class="qtd-input-group">' +
             '<button class="btn-menos" onclick="ajustarQtd(\'' + i._fbId + '\', -1)">−</button>' +
             '<button class="btn-mais" onclick="ajustarQtd(\'' + i._fbId + '\', +1)">+</button>' +
-            '<span style="font-size:11px;color:var(--cinza);margin-left:6px;">ajuste rápido</span>' +
+            '<span style="font-size:11px;color:var(--cinza);margin-left:6px;">ajuste</span>' +
             '</div>' +
-            '<div style="font-size:14px;font-weight:700;color:var(--verde);margin-top:8px;">R$ ' + (i.valorTotal || 0).toFixed(2).replace('.', ',') + '</div>' +
+            '<div style="font-size:14px;font-weight:700;color:var(--verde);margin-top:8px;">' + formatarMoeda(i.valorTotal || 0) + '</div>' +
             (vinculos ? '<div style="margin-top:6px;">' + vinculos + '</div>' : '') +
             '<div class="acoes">' +
-            '<button class="btn btn-outline btn-sm" onclick="verDetalhes(\'' + i._fbId + '\')">👁️ Ver</button>' +
-            '<button class="btn btn-outline btn-sm" onclick="editarItem(\'' + i._fbId + '\')">✏️ Editar</button>' +
-            '<button class="btn btn-danger btn-sm" onclick="excluirItem(\'' + i._fbId + '\')">🗑️</button>' +
+            '<button class="btn btn-outline" onclick="verDetalhes(\'' + i._fbId + '\')">👁️</button>' +
+            '<button class="btn btn-outline" onclick="editarItem(\'' + i._fbId + '\')">✏️</button>' +
+            '<button class="btn btn-teal" onclick="verLog(\'' + i._fbId + '\')">📜 (' + numLogs + ')</button>' +
+            '<button class="btn btn-danger" onclick="excluirItem(\'' + i._fbId + '\')">🗑️</button>' +
             '</div></div>';
     }).join('');
-}
-
-// ============================================================
-// EXCLUIR
-// ============================================================
-async function excluirItem(fbId) {
-    var i = estoque.find(function(x) { return x._fbId === fbId; });
-    if (!i) return;
-    if (!confirm('Excluir o item "' + i.nome + '" (' + i.codigo + ')?\n\nEsta ação não pode ser desfeita.')) return;
-    if (firebasePronto && db) {
-        try {
-            await db.collection('estoque').doc(fbId).delete();
-            mostrarToast('🗑️ Item excluído!', 'info');
-        } catch (e) { mostrarToast('❌ ' + e.message, 'error'); }
-    } else {
-        estoque = estoque.filter(function(x) { return x._fbId !== fbId; });
-        localStorage.setItem('amovin_estoque', JSON.stringify(estoque));
-        renderizarItens();
-        atualizarKPIs();
-    }
 }
 
 // ============================================================
@@ -827,14 +893,14 @@ function atualizarKPIs() {
     document.getElementById('kpiAlerta').textContent = estoque.filter(function(i) { return i.qtd > 0 && i.qtd <= i.qtdMinima; }).length;
     document.getElementById('kpiCritico').textContent = estoque.filter(function(i) { return i.qtd <= 0; }).length;
     var total = estoque.reduce(function(s, i) { return s + (i.valorTotal || 0); }, 0);
-    document.getElementById('kpiValorTotal').textContent = 'R$ ' + total.toFixed(2).replace('.', ',');
+    document.getElementById('kpiValorTotal').textContent = formatarMoeda(total);
 }
 
 // ============================================================
-// EXPORTAR CSV
+// CSV
 // ============================================================
 function exportarCSV() {
-    var linhas = [['Código', 'Nome', 'Categoria', 'Unidade', 'Local', 'Qtd', 'Qtd Mínima', 'Valor Unit.', 'Valor Total', 'Nota Fiscal', 'Projeto', 'Fornecedor']];
+    var linhas = [['Código', 'Nome', 'Categoria', 'Unidade', 'Local', 'Qtd', 'Qtd Min', 'Valor Unit', 'Valor Total', 'Nota', 'Projeto', 'Fornecedor']];
     estoque.forEach(function(i) {
         linhas.push([i.codigo || '', i.nome || '', i.categoria || '', i.unidade || '', i.local || '',
             i.qtd || 0, i.qtdMinima || 0, (i.valorUnitario || 0).toFixed(2), (i.valorTotal || 0).toFixed(2),
@@ -844,16 +910,11 @@ function exportarCSV() {
     var blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
     var url = URL.createObjectURL(blob);
     var a = document.createElement('a');
-    a.href = url;
-    a.download = 'estoque-amovin-' + new Date().toISOString().split('T')[0] + '.csv';
-    a.click();
-    URL.revokeObjectURL(url);
+    a.href = url; a.download = 'estoque-amovin-' + new Date().toISOString().split('T')[0] + '.csv';
+    a.click(); URL.revokeObjectURL(url);
     mostrarToast('📥 CSV exportado!', 'success');
 }
 
-// ============================================================
-// TOAST
-// ============================================================
 function mostrarToast(msg, tipo) {
     var t = document.createElement('div');
     t.className = 'toast toast-' + (tipo || 'success');
@@ -862,23 +923,11 @@ function mostrarToast(msg, tipo) {
     setTimeout(function() { t.remove(); }, 4000);
 }
 
-// Auto-calcular valor total ao digitar
-document.addEventListener('input', function(e) {
-    if (e.target.id === 'formQtd' || e.target.id === 'formValorUnitario') {
-        calcularValorTotal();
-    }
-});
-
-// ============================================================
-// INIT
-// ============================================================
 if (!sessionStorage.getItem('amovin_logado') && !localStorage.getItem('amovin_logado')) {
     console.log('⚠️ Sessão não encontrada, mas permitindo acesso.');
 }
 
-document.addEventListener('DOMContentLoaded', function() {
-    inicializarFirebase();
-});
+document.addEventListener('DOMContentLoaded', function() { inicializarFirebase(); });
 </script>
 </body>
 </html>
