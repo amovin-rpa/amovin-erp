@@ -28,7 +28,8 @@
         }
         .status-firebase.conectado { background: #E8F5E9; color: #2E7D32; border-color: #A5D6A7; }
         .status-firebase.offline { background: #FFF3E0; color: #E65100; border-color: #FFCC80; }
-        .status-firebase .dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+        .status-firebase .dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; animation: pulse 2s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
 
         .kpi-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 22px; }
         .kpi-card { background: #FFFFFF; padding: 16px; border-radius: 14px; border: 1px solid #F0E9DF; text-align: center; }
@@ -74,9 +75,6 @@
         .fill-vermelho { background: var(--vermelho); }
         .projeto-card .acoes { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
         .projeto-card .acoes .btn { font-size: 11px; padding: 6px 14px; }
-        .recursos-box { background: #F8F4ED; border-radius: 10px; padding: 14px 16px; margin: 10px 0; }
-        .recursos-box .recurso-item { display: flex; justify-content: space-between; padding: 4px 0; font-size: 12px; border-bottom: 1px solid #E5E0D8; }
-        .recursos-box .recurso-item:last-child { border-bottom: none; }
 
         .sem-dados { text-align: center; padding: 40px; color: #9CA3AF; }
         .loading { text-align: center; padding: 40px; color: var(--cinza); }
@@ -125,7 +123,6 @@
         </div>
     </div>
 
-    <!-- KPIs -->
     <div class="kpi-row">
         <div class="kpi-card"><div class="kpi-valor" id="kpiTotalProjetos">0</div><div class="kpi-label">📋 Projetos</div></div>
         <div class="kpi-card"><div class="kpi-valor" style="color:var(--verde);" id="kpiOrcamentoTotal">R$ 0</div><div class="kpi-label">💰 Orçamento Total</div></div>
@@ -133,7 +130,6 @@
         <div class="kpi-card"><div class="kpi-valor" style="color:var(--azul);" id="kpiSaldoTotal">R$ 0</div><div class="kpi-label">📊 Saldo</div></div>
     </div>
 
-    <!-- Lista de Projetos -->
     <div class="card">
         <h3>📂 Projetos Ativos <span class="badge" id="contadorProjetos">0 projetos</span></h3>
         <div id="projetosLista" class="projetos-grid">
@@ -155,7 +151,6 @@
     </div>
 </main>
 
-<!-- MODAL NOVO PROJETO -->
 <div class="modal-overlay" id="modalNovo">
     <div class="modal">
         <h2 id="modalTitulo">➕ Novo Projeto / Convênio</h2>
@@ -189,13 +184,15 @@
 <script src="menu.js?v=20260904"></script>
 <script>
 // ============================================================
-// PROJETOS E CONVÊNIOS - AMOVIN ERP (Firebase)
+// PROJETOS E CONVÊNIOS - AMOVIN ERP (Firebase com TEMPO REAL)
 // ============================================================
 
 var projetos = [];
 var orcamentos = [];
 var firebasePronto = false;
 var db = null;
+var unsubProjetos = null;
+var unsubOrcamentos = null;
 
 // ============================================================
 // INICIALIZAR FIREBASE
@@ -222,7 +219,7 @@ function inicializarFirebase() {
                     firebasePronto = true;
                     console.log('🔥 Firebase conectado');
                     atualizarStatusFirebase('conectado');
-                    carregarProjetos();
+                    escutarProjetos();
                 } catch (e) {
                     console.error('❌ Erro Firebase:', e);
                     atualizarStatusFirebase('offline');
@@ -245,7 +242,7 @@ function inicializarFirebase() {
             db = firebase.firestore();
             firebasePronto = true;
             atualizarStatusFirebase('conectado');
-            carregarProjetos();
+            escutarProjetos();
         } catch (e) {
             atualizarStatusFirebase('offline');
             carregarLocalStorage();
@@ -257,48 +254,48 @@ function atualizarStatusFirebase(status) {
     var el = document.getElementById('statusFirebase');
     if (status === 'conectado') {
         el.className = 'status-firebase conectado';
-        el.innerHTML = '<span class="dot"></span><span>🟢 Firebase Conectado</span>';
+        el.innerHTML = '<span class="dot"></span><span>🟢 Firebase Conectado (Tempo Real)</span>';
     } else if (status === 'offline') {
         el.className = 'status-firebase offline';
-        el.innerHTML = '<span class="dot"></span><span>🟡 Modo Local (Offline)</span>';
+        el.innerHTML = '<span class="dot"></span><span>🟡 Modo Local</span>';
     }
 }
 
 // ============================================================
-// CARREGAR PROJETOS DO FIREBASE
+// ESCUTAR PROJETOS EM TEMPO REAL (onSnapshot)
 // ============================================================
-async function carregarProjetos() {
+function escutarProjetos() {
     if (!firebasePronto || !db) { carregarLocalStorage(); return; }
 
-    try {
-        console.log('🔄 Carregando projetos do Firebase...');
+    console.log('🎧 Escutando coleção "projetos" em tempo real...');
 
-        // Carrega projetos
-        var snap = await db.collection('projetos').get();
+    // Escuta PROJETOS
+    unsubProjetos = db.collection('projetos').onSnapshot(function(snap) {
+        console.log('🔄 Projetos atualizados:', snap.size);
         projetos = [];
         snap.forEach(function(doc) {
             projetos.push({ id: doc.id, _fbId: doc.id, ...doc.data() });
         });
-        console.log('📋 Projetos:', projetos.length);
-
-        // Carrega orçamentos
-        try {
-            var snapOrc = await db.collection('orcamentos').get();
-            orcamentos = [];
-            snapOrc.forEach(function(doc) {
-                orcamentos.push({ _fbId: doc.id, ...doc.data() });
-            });
-            console.log('💰 Orçamentos:', orcamentos.length);
-        } catch (e) {
-            console.log('ℹ️ Coleção orcamentos ainda não existe');
-        }
-
         renderProjetos();
         atualizarKPIs();
-    } catch (e) {
-        console.error('❌ Erro ao carregar do Firebase:', e);
+    }, function(error) {
+        console.error('❌ Erro ao escutar projetos:', error);
+        mostrarToast('⚠️ Erro de conexão. Recarregue a página.', 'warning');
         carregarLocalStorage();
-    }
+    });
+
+    // Escuta ORÇAMENTOS
+    unsubOrcamentos = db.collection('orcamentos').onSnapshot(function(snap) {
+        console.log('🔄 Orçamentos atualizados:', snap.size);
+        orcamentos = [];
+        snap.forEach(function(doc) {
+            orcamentos.push({ _fbId: doc.id, ...doc.data() });
+        });
+        renderProjetos();
+        atualizarKPIs();
+    }, function(error) {
+        console.log('ℹ️ Coleção orcamentos ainda não existe');
+    });
 }
 
 // ============================================================
@@ -325,7 +322,7 @@ function renderProjetos() {
     }
 
     lista.innerHTML = projetos.map(function(p) {
-        var orcProj = orcamentos.filter(function(o) { return o.projeto_id === p._fbId || o.projeto_id === p.id; });
+        var orcProj = orcamentos.filter(function(o) { return o.projeto_id === p._fbId; });
         var totalPrevisto = orcProj.reduce(function(s, o) { return s + (o.previsto || 0); }, 0);
         var totalRealizado = orcProj.reduce(function(s, o) { return s + (o.realizado || 0); }, 0);
         var percentual = totalPrevisto > 0 ? Math.min(100, (totalRealizado / totalPrevisto) * 100) : 0;
@@ -368,7 +365,6 @@ function atualizarKPIs() {
         totalPrevisto += o.previsto || 0;
         totalRealizado += o.realizado || 0;
     });
-    // Se não houver orçamentos, usa o orcamento_total dos projetos
     if (orcamentos.length === 0) {
         totalPrevisto = projetos.reduce(function(s, p) { return s + (p.orcamento_total || 0); }, 0);
     }
@@ -386,11 +382,7 @@ function abrirModalNovo() {
     limparFormulario();
     document.getElementById('modalNovo').classList.add('ativo');
 }
-
-function fecharModalNovo() {
-    document.getElementById('modalNovo').classList.remove('ativo');
-}
-
+function fecharModalNovo() { document.getElementById('modalNovo').classList.remove('ativo'); }
 function limparFormulario() {
     ['novoNome','novoOrgao','novoTermo','novoValor','novoVigencia','novoParlamentar','novoDesc'].forEach(function(id) {
         document.getElementById(id).value = '';
@@ -404,7 +396,6 @@ function limparFormulario() {
 async function salvarProjeto() {
     var nome = document.getElementById('novoNome').value.trim();
     var valor = parseFloat(document.getElementById('novoValor').value) || 0;
-
     if (!nome) { mostrarToast('⚠️ Nome é obrigatório!', 'warning'); return; }
     if (valor <= 0) { mostrarToast('⚠️ Informe um valor válido!', 'warning'); return; }
 
@@ -417,34 +408,33 @@ async function salvarProjeto() {
         orcamento_total: valor,
         vigencia: document.getElementById('novoVigencia').value,
         status: document.getElementById('novoStatus').value,
-        data_criacao: new Date().toISOString(),
         atualizadoEm: new Date().toISOString()
     };
 
     var idEdit = document.getElementById('projetoIdEdit').value;
 
-    // Salva no Firebase
     if (firebasePronto && db) {
         try {
             if (idEdit) {
-                await db.collection('projetos').doc(idEdit).set(dados, { merge: true });
+                // UPDATE
+                await db.collection('projetos').doc(idEdit).update(dados);
                 mostrarToast('✅ Projeto atualizado!', 'success');
             } else {
+                // CREATE
+                dados.data_criacao = new Date().toISOString();
                 var ref = await db.collection('projetos').add(dados);
-                mostrarToast('✅ Projeto criado no Firebase!', 'success');
-                // Cria orçamentos padrão
                 await criarOrcamentosPadrao(ref.id, valor);
+                mostrarToast('✅ Projeto criado!', 'success');
             }
             fecharModalNovo();
-            carregarProjetos();
+            // O onSnapshot já vai atualizar a tela automaticamente
         } catch (e) {
             console.error('❌ Erro Firebase:', e);
-            mostrarToast('❌ Erro ao salvar: ' + e.message, 'error');
+            mostrarToast('❌ Erro: ' + e.message, 'error');
         }
     } else {
-        // Fallback localStorage
         if (idEdit) {
-            var idx = projetos.findIndex(function(p) { return p._fbId === idEdit || p.id === idEdit; });
+            var idx = projetos.findIndex(function(p) { return p._fbId === idEdit; });
             if (idx >= 0) Object.assign(projetos[idx], dados);
         } else {
             dados.id = Date.now();
@@ -478,7 +468,7 @@ async function criarOrcamentosPadrao(projetoId, total) {
 }
 
 // ============================================================
-// EDITAR PROJETO
+// EDITAR
 // ============================================================
 function editarProjeto(fbId) {
     var p = projetos.find(function(x) { return x._fbId === fbId; });
@@ -497,8 +487,7 @@ function editarProjeto(fbId) {
 }
 
 // ============================================================
-// VER DETALHES
-// ============================================================
+// VER DETALHES// ============================================================
 function verDetalhes(fbId) {
     var p = projetos.find(function(x) { return x._fbId === fbId; });
     if (!p) return;
@@ -522,7 +511,6 @@ async function alterarStatus(fbId) {
         try {
             await db.collection('projetos').doc(fbId).update({ status: novoStatus, atualizadoEm: new Date().toISOString() });
             mostrarToast('✅ Status atualizado!', 'success');
-            carregarProjetos();
         } catch (e) {
             mostrarToast('❌ Erro: ' + e.message, 'error');
         }
@@ -534,7 +522,7 @@ async function alterarStatus(fbId) {
 }
 
 // ============================================================
-// EXCLUIR PROJETO
+// EXCLUIR
 // ============================================================
 async function excluirProjeto(fbId) {
     var p = projetos.find(function(x) { return x._fbId === fbId; });
@@ -544,18 +532,16 @@ async function excluirProjeto(fbId) {
     if (firebasePronto && db) {
         try {
             await db.collection('projetos').doc(fbId).delete();
-            // Remove orçamentos vinculados
             var orcSnap = await db.collection('orcamentos').where('projeto_id', '==', fbId).get();
             var batch = db.batch();
             orcSnap.forEach(function(doc) { batch.delete(doc.ref); });
             await batch.commit();
             mostrarToast('🗑️ Projeto excluído!', 'info');
-            carregarProjetos();
         } catch (e) {
             mostrarToast('❌ Erro: ' + e.message, 'error');
         }
     } else {
-        projetos = projetos.filter(function(x) { return x._fbId !== fbId && x.id !== fbId; });
+        projetos = projetos.filter(function(x) { return x._fbId !== fbId; });
         localStorage.setItem('amovin_projetos', JSON.stringify(projetos));
         renderProjetos();
         atualizarKPIs();
