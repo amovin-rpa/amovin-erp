@@ -114,7 +114,7 @@ body { font-family: 'Inter', system-ui, sans-serif; background: #F8F4ED; display
     <div class="topo-bar">
         <div>
             <h1>📄 Notas Fiscais <span>+ IA</span></h1>
-            <span class="sub">Leitura inteligente com separação automática (CRM / BP / Estoque)</span>
+            <span class="sub">Leitura inteligente: XML (direto) · PDF · Imagem · Manual</span>
         </div>
         <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
             <div class="status-firebase" id="statusFirebase"><span class="dot"></span><span>⏳ Conectando...</span></div>
@@ -131,7 +131,7 @@ body { font-family: 'Inter', system-ui, sans-serif; background: #F8F4ED; display
             </div>
             <div>
                 <span class="status-ia" id="statusIA">⏳ Verificando...</span>
-                <span style="font-size:12px;color:var(--cinza);margin-left:12px;" id="modeloIA">Gemini Flash</span>
+                <span style="font-size:12px;color:var(--cinza);margin-left:12px;" id="modeloIA">Gemini</span>
             </div>
         </div>
         <div style="font-size:12px;color:var(--cinza);margin-top:4px;">
@@ -141,28 +141,30 @@ body { font-family: 'Inter', system-ui, sans-serif; background: #F8F4ED; display
         </div>
     </div>
 
-    <!-- PASSO 1: UPLOAD -->
     <div class="card" id="passoUpload">
-        <h3>📤 Enviar Nota Fiscal <span class="badge badge-ia">🤖 IA</span></h3>
+        <h3>📤 Enviar Nota Fiscal <span class="badge badge-ia">XML · PDF · Imagem</span></h3>
         <div class="dropzone" id="dropzone" onclick="document.getElementById('fileInput').click()">
             <span class="icone">📄</span>
             <p><strong>Clique ou arraste o arquivo</strong></p>
-            <span class="formatos">(PDF, XML, JPG, PNG)</span>
-            <input type="file" id="fileInput" accept=".pdf,.xml,.jpg,.jpeg,.png" style="display:none;" onchange="processarNota(event)" />
+            <span class="formatos">(XML, PDF, JPG, PNG)</span>
+            <input type="file" id="fileInput" accept=".xml,.pdf,.jpg,.jpeg,.png" style="display:none;" onchange="processarNota(event)" />
             <button class="btn-upload" onclick="event.stopPropagation();document.getElementById('fileInput').click()">📂 Selecionar</button>
         </div>
         <div style="margin-top:10px;font-size:12px;color:var(--cinza);" id="infoArquivo">📎 Nenhum arquivo selecionado</div>
     </div>
 
-    <!-- PASSO 2: PREVIEW -->
     <div class="card" id="passoPreview" style="display:none;">
         <h3>🧠 Dados Extraídos <span class="badge badge-ia" id="statusExtraido">⏳ Processando...</span></h3>
         <div class="resumo-nota">
             <div class="resumo-grid">
                 <div class="resumo-item"><div class="label">📋 Número</div><div class="valor" id="resumoNumero">---</div></div>
+                <div class="resumo-item"><div class="label">🔑 Chave Acesso</div><div class="valor" id="resumoChave">---</div></div>
                 <div class="resumo-item"><div class="label">📅 Data Emissão</div><div class="valor" id="resumoData">---</div></div>
                 <div class="resumo-item"><div class="label">🏢 Emitente</div><div class="valor" id="resumoEmitente">---</div></div>
                 <div class="resumo-item"><div class="label">📄 CNPJ</div><div class="valor" id="resumoCnpj">---</div></div>
+                <div class="resumo-item"><div class="label">📞 Telefone</div><div class="valor" id="resumoTelefone">---</div></div>
+                <div class="resumo-item"><div class="label">📋 Natureza Operação</div><div class="valor" id="resumoNatureza">---</div></div>
+                <div class="resumo-item"><div class="label">🔢 Série</div><div class="valor" id="resumoserie">---</div></div>
                 <div class="resumo-item" style="grid-column: span 2;"><div class="label">💰 Valor Total</div><div class="valor destaque" id="resumoValor">R$ 0,00</div></div>
             </div>
         </div>
@@ -170,7 +172,7 @@ body { font-family: 'Inter', system-ui, sans-serif; background: #F8F4ED; display
         <div id="previewIA" class="destinos-container"></div>
         <div class="info-prestacao">
             <strong>📋 Preparado para Prestação de Contas:</strong><br>
-            Os dados serão automaticamente formatados para os 3 documentos oficiais: <strong>REO</strong>, <strong>Controle Patrimonial</strong> e <strong>REF</strong>.
+            Os dados serão formatados para: <strong>REO</strong>, <strong>Controle Patrimonial</strong> e <strong>REF</strong>.
         </div>
         <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;">
             <button class="btn btn-success" onclick="avancarParaVinculo()" id="btnAvancar" disabled>✅ Avançar para Vinculação</button>
@@ -179,7 +181,6 @@ body { font-family: 'Inter', system-ui, sans-serif; background: #F8F4ED; display
         </div>
     </div>
 
-    <!-- PASSO 3: VINCULAÇÃO -->
     <div class="card" id="passoVinculo" style="display:none;">
         <h3>🔗 Vincular ao Projeto <span class="badge">Prestação de Contas</span></h3>
 
@@ -190,18 +191,17 @@ body { font-family: 'Inter', system-ui, sans-serif; background: #F8F4ED; display
             </select>
         </div>
 
-        <!-- ALERTA DE ORÇAMENTO -->
         <div id="alertaOrcamento" style="display:none;"></div>
 
         <div class="form-group">
-            <label>📊 Orçamento Fechado (obrigatório para vincular)</label>
+            <label>📊 Orçamento Fechado</label>
             <select id="orcamentoVinculo" onchange="atualizarSaldo()">
                 <option value="">Selecione um orçamento...</option>
             </select>
         </div>
 
         <div class="form-group">
-            <label>📦 Item do Orçamento (opcional)</label>
+            <label>📦 Item do Orçamento</label>
             <select id="orcamentoItemVinculo">
                 <option value="">— Nenhum —</option>
             </select>
@@ -209,7 +209,7 @@ body { font-family: 'Inter', system-ui, sans-serif; background: #F8F4ED; display
 
         <div class="form-group">
             <label>📂 Categoria do Orçamento *</label>
-            <select id="categoriaVinculo" onchange="atualizarSaldo()">
+            <select id="categoriaVinculo">
                 <option value="">Selecione...</option>
                 <option value="Equipamentos">🖥️ Equipamentos (BP)</option>
                 <option value="Materiais">📦 Materiais de Consumo (Estoque)</option>
@@ -220,7 +220,7 @@ body { font-family: 'Inter', system-ui, sans-serif; background: #F8F4ED; display
         </div>
 
         <div class="form-group">
-            <label>🏷️ Localização Física (para Controle Patrimonial)</label>
+            <label>🏷️ Localização Física</label>
             <select id="localizacaoFisica">
                 <option value="Sala Administrativa">Sala Administrativa</option>
                 <option value="Sala de Atendimento">Sala de Atendimento</option>
@@ -231,29 +231,24 @@ body { font-family: 'Inter', system-ui, sans-serif; background: #F8F4ED; display
         </div>
 
         <div class="form-group"><label>📅 Data de Entrega *</label><input type="date" id="dataEntrega"></div>
-        <div class="form-group"><label>📝 Observações</label><textarea id="obsVinculo" rows="2" placeholder="Ex: Compra para estruturação da sede..."></textarea></div>
+        <div class="form-group"><label>📝 Observações</label><textarea id="obsVinculo" rows="2"></textarea></div>
 
         <div style="display:flex;gap:12px;flex-wrap:wrap;">
-            <button class="btn btn-success" onclick="confirmarSalvar()" style="flex:2;">✅ Confirmar e Gerar para Prestação de Contas</button>
+            <button class="btn btn-success" onclick="confirmarSalvar()" style="flex:2;">✅ Confirmar e Vincular</button>
             <button class="btn btn-outline" onclick="voltarPreview()" style="flex:1;">← Voltar</button>
         </div>
     </div>
 
-    <!-- PASSO 4: CONFIRMAÇÃO -->
     <div class="card" id="passoConfirmacao" style="display:none;border:2px solid var(--verde);">
         <h3>✅ Vinculação Concluída! <span class="badge" style="background:#E8F5E9;color:#2E7D32;">Sucesso</span></h3>
         <div style="text-align:center;padding:20px 0;">
             <span style="font-size:64px;">🎉</span>
-            <h2 style="margin:12px 0 4px;color:var(--verde);">Nota processada com sucesso!</h2>
-            <p style="color:var(--cinza);">Os dados foram enviados para os módulos corretos.</p>
+            <h2 style="margin:12px 0 4px;color:var(--verde);">Nota processada!</h2>
         </div>
         <div id="resumoDestinos" style="background:#F8F4ED;border-radius:10px;padding:16px;margin:12px 0;"></div>
-        <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:12px;">
-            <button class="btn btn-primary" onclick="novaNota()">📄 Nova Nota</button>
-        </div>
+        <button class="btn btn-primary" onclick="novaNota()">📄 Nova Nota</button>
     </div>
 
-    <!-- MODAL MANUAL -->
     <div class="modal-overlay" id="modalManual">
         <div class="modal">
             <h2>✏️ Inserir Nota Fiscal Manualmente <button class="fechar" onclick="fecharModalManual()">×</button></h2>
@@ -266,9 +261,10 @@ body { font-family: 'Inter', system-ui, sans-serif; background: #F8F4ED; display
                 <div class="form-group"><label>📄 CNPJ *</label><input type="text" id="manualCnpj"></div>
                 <div class="form-group"><label>💰 Valor Total *</label><input type="number" id="manualValor" step="0.01"></div>
             </div>
+            <div class="form-group"><label>📞 Telefone</label><input type="text" id="manualTelefone"></div>
             <div class="form-group">
                 <label>📦 Itens (Descrição; Qtd; Valor Unit.; Valor Total; Tipo[bp/estoque/servico])</label>
-                <textarea id="manualItens" rows="4" placeholder="Ex:&#10;Computador Desktop; 1; 3500,00; 3500,00; bp&#10;Papel A4; 10; 25,00; 250,00; estoque"></textarea>
+                <textarea id="manualItens" rows="4" placeholder="Ex:&#10;Computador; 1; 3500,00; 3500,00; bp&#10;Papel A4; 10; 25,00; 250,00; estoque"></textarea>
             </div>
             <div class="btn-group">
                 <button class="btn btn-outline" onclick="fecharModalManual()">Cancelar</button>
@@ -277,16 +273,6 @@ body { font-family: 'Inter', system-ui, sans-serif; background: #F8F4ED; display
         </div>
     </div>
 
-    <!-- MODAL LOG -->
-    <div class="modal-overlay" id="modalLog">
-        <div class="modal modal-pequeno">
-            <h2>📜 Histórico <button class="fechar" onclick="fecharLog()">×</button></h2>
-            <div id="conteudoLog" style="max-height:400px;overflow-y:auto;"></div>
-            <div class="btn-group"><button class="btn btn-outline" onclick="fecharLog()">Fechar</button></div>
-        </div>
-    </div>
-
-    <!-- MODAL AUTH -->
     <div class="modal-overlay" id="modalAuth">
         <div class="modal modal-pequeno">
             <h2>🔐 Autenticação Master <button class="fechar" onclick="fecharAuth()">×</button></h2>
@@ -294,7 +280,7 @@ body { font-family: 'Inter', system-ui, sans-serif; background: #F8F4ED; display
             <div class="form-group"><label>Usuário Master</label><input type="text" id="authUsuario" placeholder="Ex: raul"></div>
             <div class="form-group"><label>Senha Master</label><input type="password" id="authSenha" placeholder="••••••••"></div>
             <div class="form-group"><label>Justificativa (mín 50 caracteres)</label>
-                <textarea id="authJust" rows="3" placeholder="Explique o motivo..."></textarea>
+                <textarea id="authJust" rows="3"></textarea>
                 <div style="font-size:10px;color:var(--cinza);margin-top:4px;" id="contadorJust">0/50 caracteres</div>
             </div>
             <div class="btn-group">
@@ -338,6 +324,12 @@ function parseMoeda(s) {
     var l = String(s).replace(/[^\d,.-]/g, '').replace(/\./g, '').replace(',', '.');
     var n = parseFloat(l);
     return isNaN(n) ? 0 : n;
+}
+function dataISOparaBR(s) {
+    if (!s) return '';
+    var p = s.split('-');
+    if (p.length === 3) return p[2] + '/' + p[1] + '/' + p[0];
+    return s;
 }
 
 // ============================================================
@@ -434,8 +426,6 @@ function preencherDropdownProjetos() {
         opt.textContent = (p.codigo || '') + ' - ' + (p.nome || '');
         sel.appendChild(opt);
     });
-    var emenda = projetos.find(function(p) { return p.nome && p.nome.toLowerCase().includes('lud falc'); });
-    if (emenda) sel.value = emenda.codigo || emenda._fbId;
 }
 
 function preencherDropdownOrcamentos() {
@@ -456,7 +446,7 @@ function preencherDropdownOrcamentos() {
 }
 
 // ============================================================
-// IA
+// IA - VERIFICAR CHAVE
 // ============================================================
 function verificarChave() {
     var key = AMOVIN_CONFIG.getGeminiKey();
@@ -467,7 +457,7 @@ function verificarChave() {
         statusEl.textContent = '✅ Conectado';
         statusEl.className = 'status-ia sucesso';
         chaveEl.textContent = 'Configurada ✅';
-        if (modeloEl) modeloEl.textContent = AMOVIN_CONFIG.MODELO_IA.replace('models/', '');
+        if (modeloEl && AMOVIN_CONFIG.MODELO_IA) modeloEl.textContent = AMOVIN_CONFIG.MODELO_IA;
     } else {
         statusEl.textContent = '⚠️ Sem chave';
         statusEl.className = 'status-ia erro';
@@ -485,7 +475,7 @@ function configurarChave() {
 async function testarConexao() {
     var key = AMOVIN_CONFIG.getGeminiKey();
     if (!key || key.length < 20) { mostrarToast('⚠️ Configure a chave primeiro!', 'warning'); return; }
-    var btn = document.querySelector('button[onclick="testarConexao()"]');
+    var btn = event.target;
     btn.disabled = true; btn.textContent = '⏳ Testando...';
     try {
         var resposta = await AMOVIN_CONFIG.callGeminiAPI('Responda apenas: OK', { json: false });
@@ -501,60 +491,298 @@ async function testarConexao() {
     } finally { btn.disabled = false; btn.textContent = '🧪 Testar'; }
 }
 
+// ============================================================
+// LEITURA DE XML (NFe, NFS-e, CT-e) — SEM IA
+// ============================================================
+function extrairDadosDoXML(xmlString) {
+    var parser = new DOMParser();
+    var xml = parser.parseFromString(xmlString, 'text/xml');
+
+    // Verifica se houve erro no parse
+    var erroParse = xml.querySelector('parsererror');
+    if (erroParse) return null;
+
+    // Remove namespaces para facilitar a busca
+    function getTag(tagName) {
+        // Busca a tag em qualquer namespace
+        var els = xml.getElementsByTagName('*');
+        for (var i = 0; i < els.length; i++) {
+            var nodeName = els[i].nodeName;
+            var localName = nodeName.split(':').pop();
+            if (localName === tagName) return els[i].textContent.trim();
+        }
+        return null;
+    }
+    function getTagAll(tagName) {
+        var els = xml.getElementsByTagName('*');
+        var resultado = [];
+        for (var i = 0; i < els.length; i++) {
+            var localName = els[i].nodeName.split(':').pop();
+            if (localName === tagName) resultado.push(els[i]);
+        }
+        return resultado;
+    }
+
+    // Identifica o tipo de documento
+    var ehNFe = getTag('nfeProc') || getTag('NFe') || getTag('infNFe');
+    var ehNFS = getTag('CompNfse') || getTag('InfNfse') || getTag('NFSe');
+    var ehCTe = getTag('cteProc') || getTag('CTe') || getTag('infCte');
+
+    var dados = { manual: false, origem: 'xml' };
+
+    if (ehNFe) {
+        // NF-e (produtos)
+        dados.tipoDocumento = 'NF-e';
+        dados.chaveAcesso = getTag('chNFe') || getTag('Id');
+        if (dados.chaveAcesso && dados.chaveAcesso.startsWith('NFe')) dados.chaveAcesso = dados.chaveAcesso.substring(3);
+        dados.numero = getTag('nNF');
+        dados.serie = getTag('serie');
+        dados.naturezaOperacao = getTag('natOp');
+        dados.dataEmissao = (getTag('dhEmi') || getTag('dEmi') || '').substring(0, 10);
+        dados.emitente = getTag('xNome');
+        dados.cnpj = (getTag('CNPJ') || '').replace(/\D/g, '');
+        dados.telefone = getTag('fone');
+        dados.valorTotal = parseFloat(getTag('vNF') || getTag('vProd') || 0);
+        dados.protocolo = getTag('nProt');
+
+        // Endereço do emitente
+        dados.enderecoEmitente = {
+            logradouro: getTag('xLgr'),
+            numero: getTag('nro'),
+            bairro: getTag('xBairro'),
+            municipio: getTag('xMun'),
+            uf: getTag('UF'),
+            cep: getTag('CEP')
+        };
+
+        // Itens
+        dados.itens = [];
+        var dets = getTagAll('det');
+        dets.forEach(function(det) {
+            var prod = det.querySelector('*[nodeName$="prod"], prod');
+            // Busca por tags dentro do det
+            var descricao = null, quantidade = 1, valorUnit = 0, valorTotal = 0;
+            var childs = det.getElementsByTagName('*');
+            for (var i = 0; i < childs.length; i++) {
+                var ln = childs[i].nodeName.split(':').pop();
+                if (ln === 'xProd') descricao = childs[i].textContent.trim();
+                if (ln === 'qCom') quantidade = parseFloat(childs[i].textContent) || 1;
+                if (ln === 'vUnCom') valorUnit = parseFloat(childs[i].textContent) || 0;
+                if (ln === 'vProd') valorTotal = parseFloat(childs[i].textContent) || 0;
+            }
+            if (descricao) {
+                var tipo = classificarItem(descricao);
+                dados.itens.push({ descricao: descricao, quantidade: quantidade, valor_unitario: valorUnit, valor_total: valorTotal, tipo: tipo });
+            }
+        });
+        return dados;
+    }
+
+    if (ehNFS) {
+        // NFS-e (serviços)
+        dados.tipoDocumento = 'NFS-e';
+        dados.numero = getTag('Numero') || getTag('nNF');
+        dados.dataEmissao = (getTag('DataEmissao') || getTag('dhEmi') || '').substring(0, 10);
+        dados.emitente = getTag('RazaoSocial') || getTag('xNome');
+        dados.cnpj = (getTag('Cnpj') || getTag('CNPJ') || '').replace(/\D/g, '');
+        dados.telefone = getTag('Telefone') || getTag('fone');
+        dados.valorTotal = parseFloat(getTag('ValorServicos') || getTag('vServ') || 0);
+        dados.naturezaOperacao = 'Prestação de Serviços';
+        dados.itens = [{
+            descricao: getTag('Discriminacao') || 'Serviço prestado',
+            quantidade: 1, valor_unitario: dados.valorTotal, valor_total: dados.valorTotal, tipo: 'servico'
+        }];
+        return dados;
+    }
+
+    if (ehCTe) {
+        // CT-e (transporte)
+        dados.tipoDocumento = 'CT-e';
+        dados.numero = getTag('nCT');
+        dados.serie = getTag('serie');
+        dados.dataEmissao = (getTag('dhEmi') || '').substring(0, 10);
+        dados.emitente = getTag('xNome');
+        dados.cnpj = (getTag('CNPJ') || '').replace(/\D/g, '');
+        dados.valorTotal = parseFloat(getTag('vTPrest') || getTag('vRec') || 0);
+        dados.naturezaOperacao = 'Prestação de Serviço de Transporte';
+        dados.itens = [{ descricao: 'Serviço de Transporte', quantidade: 1, valor_unitario: dados.valorTotal, valor_total: dados.valorTotal, tipo: 'servico' }];
+        return dados;
+    }
+
+    return null;
+}
+
+// ============================================================
+// CLASSIFICAÇÃO DE ITEM (bp / estoque / servico)
+// ============================================================
+function classificarItem(descricao) {
+    if (!descricao) return 'bp';
+    var d = descricao.toLowerCase();
+
+    // Palavras-chave para ESTOQUE (material de consumo)
+    var estoqueKws = ['papel', 'caneta', 'grampo', 'clips', 'lápis', 'borracha', 'fita', 'cola',
+        'café', 'açúcar', 'leite', 'bispo', 'água', 'suco', 'bolacha', 'biscoito', 'arroz', 'feijão',
+        'detergente', 'sabão', 'desinfetante', 'água sanitária', 'esponja', 'papel higiênico',
+        'álcool', 'saco de lixo', 'copo descartável', 'prato descartável', 'guardanapo',
+        'toner', 'cartucho', 'marcador', 'grampeador de mesa'];
+    for (var i = 0; i < estoqueKws.length; i++) {
+        if (d.indexOf(estoqueKws[i]) >= 0) return 'estoque';
+    }
+
+    // Palavras-chave para SERVIÇO
+    var servicoKws = ['serviço', 'consultoria', 'manutenção', 'instalação', 'treinamento',
+        'assessoria', 'auditoria', 'desenvolvimento', 'frete', 'transporte'];
+    for (var j = 0; j < servicoKws.length; j++) {
+        if (d.indexOf(servicoKws[j]) >= 0) return 'servico';
+    }
+
+    // Resto é BP (bem permanente)
+    return 'bp';
+}
+
+// ============================================================
+// LEITURA DE ARQUIVO (XML, PDF, Imagem)
+// ============================================================
 async function extrairTextoDoArquivo(file) {
-    if (file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf')) {
-        const arrayBuffer = await file.arrayBuffer();
-        const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
-        let textoCompleto = '';
-        for (let i = 1; i <= pdf.numPages; i++) {
-            const page = await pdf.getPage(i);
-            const textContent = await page.getTextContent();
-            textoCompleto += textContent.items.map(item => item.str).join(' ') + '\n';
+    var nome = file.name.toLowerCase();
+
+    // 1. XML
+    if (nome.endsWith('.xml')) {
+        return new Promise(function(resolve, reject) {
+            var reader = new FileReader();
+            reader.onload = function(e) { resolve(e.target.result); };
+            reader.onerror = function() { reject(new Error('Erro ao ler XML')); };
+            reader.readAsText(file);
+        });
+    }
+
+    // 2. PDF
+    if (file.type === 'application/pdf' || nome.endsWith('.pdf')) {
+        var arrayBuffer = await file.arrayBuffer();
+        var pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+        var textoCompleto = '';
+        for (var i = 1; i <= pdf.numPages; i++) {
+            var page = await pdf.getPage(i);
+            var textContent = await page.getTextContent();
+            textoCompleto += textContent.items.map(function(item) { return item.str; }).join(' ') + '\n';
+        }
+        // Se PDF sem texto → OCR
+        if (textoCompleto.trim().length < 50) {
+            var resultado = await Tesseract.recognize(file, 'por+eng');
+            return resultado.data.text;
         }
         return textoCompleto;
     }
+
+    // 3. Imagem
     if (file.type.startsWith('image/')) {
-        const resultado = await Tesseract.recognize(file, 'por+eng');
+        var resultado = await Tesseract.recognize(file, 'por+eng');
         return resultado.data.text;
     }
-    return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = (e) => resolve(e.target.result);
-        reader.onerror = () => reject(new Error('Erro ao ler arquivo'));
+
+    // 4. Outros
+    return new Promise(function(resolve, reject) {
+        var reader = new FileReader();
+        reader.onload = function(e) { resolve(e.target.result); };
+        reader.onerror = function() { reject(new Error('Erro ao ler arquivo')); };
         reader.readAsText(file);
     });
 }
 
+// ============================================================
+// PROCESSAR NOTA
+// ============================================================
 async function processarNota(event) {
     var file = event.target.files[0];
     if (!file) return;
+
     var info = document.getElementById('infoArquivo');
     info.innerHTML = '⏳ Lendo: ' + file.name + '...';
     document.getElementById('passoPreview').style.display = 'block';
     document.getElementById('previewIA').innerHTML = '<div style="text-align:center;padding:20px;">⏳ Extraindo...</div>';
     document.getElementById('statusExtraido').textContent = '📄 Lendo arquivo...';
+    document.getElementById('statusExtraido').className = 'badge badge-ia status-ia aviso';
+
     try {
+        var nome = file.name.toLowerCase();
+
+        // 🎯 XML: leitura direta, sem IA
+        if (nome.endsWith('.xml')) {
+            var textoXml = await extrairTextoDoArquivo(file);
+            var dadosXml = extrairDadosDoXML(textoXml);
+            if (dadosXml && (dadosXml.numero || dadosXml.emitente)) {
+                dadosNota = dadosXml;
+                info.innerHTML = '📎 XML lido: ' + file.name;
+                atualizarResumo(dadosXml);
+                mostrarPreviewComDestinos(dadosXml);
+                document.getElementById('statusExtraido').textContent = '✅ XML lido';
+                document.getElementById('statusExtraido').className = 'badge badge-ia status-ia sucesso';
+                document.getElementById('btnAvancar').disabled = false;
+                mostrarToast('✅ XML lido com sucesso!', 'success');
+                return;
+            } else {
+                throw new Error('XML inválido ou sem os campos esperados.');
+            }
+        }
+
+        // PDF / Imagem: usa IA
         var texto = await extrairTextoDoArquivo(file);
         if (!texto || texto.trim().length < 10) throw new Error('Arquivo ilegível.');
         info.innerHTML = '📎 ' + file.name + ' (' + texto.length + ' caracteres)';
         document.getElementById('statusExtraido').textContent = '🤖 IA analisando...';
         await extrairDadosComIA(texto);
+
     } catch (error) {
+        console.error(error);
         document.getElementById('statusExtraido').textContent = '❌ Erro';
-        document.getElementById('previewIA').innerHTML = '<div style="text-align:center;padding:20px;"><p style="color:var(--vermelho);">❌ ' + error.message + '</p><button class="btn btn-warning" onclick="fecharPreviewEabrirManual()" style="margin-top:12px;">✏️ Inserir Manual</button></div>';
+        document.getElementById('statusExtraido').className = 'badge badge-ia status-ia erro';
+        document.getElementById('previewIA').innerHTML =
+            '<div style="text-align:center;padding:20px;">' +
+            '<p style="color:var(--vermelho);font-weight:600;">❌ ' + error.message + '</p>' +
+            '<button class="btn btn-warning" onclick="fecharPreviewEabrirManual()" style="margin-top:12px;">✏️ Inserir Manual</button>' +
+            '</div>';
     }
 }
 
+// ============================================================
+// EXTRAIR DADOS COM IA (PDF / Imagem)
+// ============================================================
 async function extrairDadosComIA(texto) {
     var key = AMOVIN_CONFIG.getGeminiKey();
     if (!key || key.length < 20) {
         document.getElementById('previewIA').innerHTML = '<div style="text-align:center;padding:20px;"><p>🔑 Configure a chave primeiro</p><button class="btn btn-primary" onclick="configurarChave()">🔑 Configurar</button></div>';
         return;
     }
-    var prompt = 'Analise esta nota fiscal e extraia em JSON:\n- numero (string)\n- emitente (razão social)\n- cnpj (apenas números)\n- telefone (se houver)\n- dataEmissao (YYYY-MM-DD)\n- valorTotal (número)\n- itens (array com: descricao, quantidade, valor_unitario, valor_total, tipo)\n  CLASSIFIQUE cada item como:\n  - "bp" = Bem Permanente (equipamentos, móveis, computadores - duram +1 ano)\n  - "estoque" = Material de consumo (papel, limpeza, alimentos)\n  - "servico" = Serviço prestado\nRetorne APENAS JSON válido.\n\nNota:\n' + texto.substring(0, 8000);
+
+    var prompt = 'Você é um assistente especializado em extração de dados de notas fiscais brasileiras.\n\n' +
+        'Analise o texto abaixo e retorne APENAS um JSON VÁLIDO com TODOS os campos:\n' +
+        '{\n' +
+        '  "numero": "número da nota",\n' +
+        '  "chaveAcesso": "chave de acesso se houver",\n' +
+        '  "serie": "série",\n' +
+        '  "naturezaOperacao": "natureza da operação",\n' +
+        '  "emitente": "razão social",\n' +
+        '  "cnpj": "apenas números",\n' +
+        '  "telefone": "telefone",\n' +
+        '  "dataEmissao": "YYYY-MM-DD",\n' +
+        '  "valorTotal": número,\n' +
+        '  "enderecoEmitente": { "logradouro": "", "numero": "", "bairro": "", "municipio": "", "uf": "", "cep": "" },\n' +
+        '  "itens": [\n' +
+        '    { "descricao": "", "quantidade": número, "valor_unitario": número, "valor_total": número, "tipo": "bp|estoque|servico" }\n' +
+        '  ]\n' +
+        '}\n\n' +
+        'CLASSIFICAÇÃO:\n' +
+        '- "bp" = Bem Permanente (equipamentos, móveis, computadores, grampeador)\n' +
+        '- "estoque" = Material de consumo (papel, grampo, café, limpeza)\n' +
+        '- "servico" = Serviço prestado\n\n' +
+        'Se algum campo não existir, use null.\n\n' +
+        'TEXTO:\n' + texto.substring(0, 8000) + '\n\n' +
+        'Retorne APENAS o JSON.';
+
     try {
         var dados = await AMOVIN_CONFIG.callGeminiAPI(prompt, { json: true, temperature: 0.1 });
         if (!dados.numero && !dados.emitente) throw new Error('Dados insuficientes.');
+        dados.origem = 'ia';
         dadosNota = dados;
         if (!dados.itens || dados.itens.length === 0) {
             dados.itens = [{ descricao: 'Item da NF ' + dados.numero, quantidade: 1, valor_unitario: dados.valorTotal || 0, valor_total: dados.valorTotal || 0, tipo: 'bp' }];
@@ -567,14 +795,24 @@ async function extrairDadosComIA(texto) {
         mostrarToast('✅ Dados extraídos!', 'success');
     } catch (e) {
         document.getElementById('statusExtraido').textContent = '⚠️ Erro';
-        document.getElementById('previewIA').innerHTML = '<div style="text-align:center;padding:20px;"><p style="color:var(--vermelho);">❌ ' + e.message + '</p><button class="btn btn-warning" onclick="fecharPreviewEabrirManual()" style="margin-top:12px;">✏️ Inserir Manual</button></div>';
+        document.getElementById('statusExtraido').className = 'badge badge-ia status-ia aviso';
+        document.getElementById('previewIA').innerHTML =
+            '<div style="text-align:center;padding:20px;">' +
+            '<p style="color:var(--vermelho);font-weight:600;">❌ ' + e.message + '</p>' +
+            '<p style="font-size:12px;color:var(--cinza);margin-top:8px;">A IA pode estar sobrecarregada. Use o modo manual.</p>' +
+            '<button class="btn btn-warning" onclick="fecharPreviewEabrirManual()" style="margin-top:12px;">✏️ Inserir Manual</button>' +
+            '</div>';
     }
 }
 
 function atualizarResumo(dados) {
     document.getElementById('resumoNumero').textContent = dados.numero || '---';
+    document.getElementById('resumoChave').textContent = dados.chaveAcesso ? dados.chaveAcesso.substring(0, 20) + '...' : '---';
     document.getElementById('resumoEmitente').textContent = dados.emitente || '---';
     document.getElementById('resumoCnpj').textContent = dados.cnpj || '---';
+    document.getElementById('resumoTelefone').textContent = dados.telefone || '---';
+    document.getElementById('resumoNatureza').textContent = dados.naturezaOperacao || '---';
+    document.getElementById('resumoserie').textContent = dados.serie || '---';
     document.getElementById('resumoData').textContent = dados.dataEmissao || '---';
     document.getElementById('resumoValor').textContent = fm(dados.valorTotal || 0);
 }
@@ -585,7 +823,7 @@ function mostrarPreviewComDestinos(dados) {
     var totalBP = 0, totalEstoque = 0, totalServico = 0;
     if (dados.itens) {
         dados.itens.forEach(function(item) {
-            var tipo = (item.tipo || 'bp').toLowerCase();
+            var tipo = (item.tipo || classificarItem(item.descricao)).toLowerCase();
             if (tipo === 'bp') { itensBP.push(item); totalBP += (item.valor_total || 0); }
             else if (tipo === 'estoque') { itensEstoque.push(item); totalEstoque += (item.valor_total || 0); }
             else if (tipo === 'servico') { itensServico.push(item); totalServico += (item.valor_total || 0); }
@@ -593,8 +831,8 @@ function mostrarPreviewComDestinos(dados) {
         });
     }
     var html = '';
-    html += '<div class="destino-secao crm"><h4>☎️ CRM - Fornecedor (1 contato)</h4><div class="item-destino"><span class="desc"><strong>' + (dados.emitente || '---') + '</strong></span><span class="valor">CNPJ: ' + (dados.cnpj || '---') + '</span></div><div style="font-size:11px;color:var(--azul);margin-top:6px;">→ Será cadastrado automaticamente no CRM</div></div>';
-    html += '<div class="destino-secao bp"><h4>🏢 Patrimônio / BP (' + itensBP.length + ' item' + (itensBP.length !== 1 ? 's' : '') + ')</h4>';
+    html += '<div class="destino-secao crm"><h4>☎️ CRM - Fornecedor</h4><div class="item-destino"><span class="desc"><strong>' + (dados.emitente || '---') + '</strong></span><span class="valor">CNPJ: ' + (dados.cnpj || '---') + '</span></div></div>';
+    html += '<div class="destino-secao bp"><h4>🏢 Patrimônio / BP (' + itensBP.length + ')</h4>';
     if (itensBP.length === 0) html += '<div class="vazio">Nenhum bem permanente</div>';
     else {
         itensBP.forEach(function(item) {
@@ -603,7 +841,7 @@ function mostrarPreviewComDestinos(dados) {
         html += '<div class="total-secao" style="color:var(--laranja);">Total BP: ' + fm(totalBP) + '</div>';
     }
     html += '</div>';
-    html += '<div class="destino-secao estoque"><h4>📦 Estoque / Consumo (' + itensEstoque.length + ' item' + (itensEstoque.length !== 1 ? 's' : '') + ')</h4>';
+    html += '<div class="destino-secao estoque"><h4>📦 Estoque (' + itensEstoque.length + ')</h4>';
     if (itensEstoque.length === 0) html += '<div class="vazio">Nenhum material de consumo</div>';
     else {
         itensEstoque.forEach(function(item) {
@@ -613,15 +851,18 @@ function mostrarPreviewComDestinos(dados) {
     }
     html += '</div>';
     if (itensServico.length > 0) {
-        html += '<div class="destino-secao servico"><h4>🛠️ Serviço (' + itensServico.length + ' item' + (itensServico.length !== 1 ? 's' : '') + ')</h4>';
+        html += '<div class="destino-secao servico"><h4>🛠️ Serviço (' + itensServico.length + ')</h4>';
         itensServico.forEach(function(item) {
             html += '<div class="item-destino"><span class="desc">' + item.descricao + '</span><span class="qtd">' + (item.quantidade || 1) + 'x</span><span class="valor">' + fm(item.valor_total || 0) + '</span></div>';
         });
-        html += '<div class="total-secao" style="color:var(--roxo);">Total: ' + fm(totalServico) + '</div></div>';
+        html += '</div>';
     }
     preview.innerHTML = html;
 }
 
+// ============================================================
+// MODAL MANUAL
+// ============================================================
 function fecharPreviewEabrirManual() {
     document.getElementById('passoPreview').style.display = 'none';
     abrirModalManual();
@@ -637,20 +878,27 @@ function salvarManual() {
     var data = document.getElementById('manualData').value;
     var emitente = document.getElementById('manualEmitente').value.trim();
     var cnpj = document.getElementById('manualCnpj').value.trim();
+    var telefone = document.getElementById('manualTelefone').value.trim();
     var valor = parseFloat(document.getElementById('manualValor').value) || 0;
     var itensText = document.getElementById('manualItens').value.trim();
     if (!numero || !emitente || !data) { mostrarToast('⚠️ Preencha os campos obrigatórios!', 'warning'); return; }
     var itens = [];
     if (itensText) {
-        itensText.split('\n').filter(l => l.trim()).forEach(function(linha) {
-            var p = linha.split(';').map(x => x.trim());
+        itensText.split('\n').filter(function(l) { return l.trim(); }).forEach(function(linha) {
+            var p = linha.split(';').map(function(x) { return x.trim(); });
             if (p.length >= 4) {
-                itens.push({ descricao: p[0], quantidade: parseFloat(p[1]) || 1, valor_unitario: parseFloat(p[2].replace(',', '.')) || 0, valor_total: parseFloat(p[3].replace(',', '.')) || 0, tipo: (p[4] || 'bp').toLowerCase() });
+                itens.push({
+                    descricao: p[0],
+                    quantidade: parseFloat(p[1]) || 1,
+                    valor_unitario: parseFloat(p[2].replace(',', '.')) || 0,
+                    valor_total: parseFloat(p[3].replace(',', '.')) || 0,
+                    tipo: (p[4] || 'bp').toLowerCase()
+                });
             }
         });
     }
     if (itens.length === 0) itens.push({ descricao: 'Item NF ' + numero, quantidade: 1, valor_unitario: valor, valor_total: valor, tipo: 'bp' });
-    dadosNota = { numero: numero, emitente: emitente, cnpj: cnpj, dataEmissao: data, valorTotal: valor, itens: itens, manual: true };
+    dadosNota = { numero: numero, emitente: emitente, cnpj: cnpj, telefone: telefone, dataEmissao: data, valorTotal: valor, itens: itens, manual: true, origem: 'manual' };
     fecharModalManual();
     document.getElementById('passoPreview').style.display = 'block';
     document.getElementById('statusExtraido').textContent = '✏️ Manual';
@@ -662,7 +910,7 @@ function salvarManual() {
 }
 
 // ============================================================
-// VÍNCULO + ORÇAMENTO
+// VÍNCULO
 // ============================================================
 function avancarParaVinculo() {
     if (!dadosNota) return;
@@ -683,11 +931,11 @@ function verificarOrcamento() {
     if (orcsProjeto.length === 0) {
         alerta.style.display = 'block';
         alerta.className = 'alerta-orcamento';
-        alerta.innerHTML = '<strong>⚠️ ATENÇÃO:</strong> Este projeto NÃO possui orçamento FECHADO cadastrado.<br><br>A Lei 14.133/2021 exige cotação prévia. Recomendamos fechar um orçamento antes de vincular a nota.<br><br>Você pode continuar, mas ficará registrado sem orçamento.';
+        alerta.innerHTML = '<strong>⚠️ ATENÇÃO:</strong> Este projeto NÃO possui orçamento FECHADO. A Lei 14.133/2021 exige cotação prévia.<br>Você pode continuar, mas ficará sem orçamento vinculado.';
     } else {
         alerta.style.display = 'block';
         alerta.className = 'alerta-orcamento ok';
-        alerta.innerHTML = '<strong>✅ OK:</strong> Este projeto possui ' + orcsProjeto.length + ' orçamento(s) FECHADO(s). Selecione abaixo.';
+        alerta.innerHTML = '<strong>✅ OK:</strong> ' + orcsProjeto.length + ' orçamento(s) FECHADO(s) disponível(is).';
     }
 }
 
@@ -702,7 +950,7 @@ function atualizarSaldo() {
             itens.forEach(function(item, idx) {
                 var o = document.createElement('option');
                 o.value = item.id;
-                o.textContent = 'Item ' + (idx+1) + ': ' + item.descricao + ' (' + item.quantidade + ')';
+                o.textContent = 'Item ' + (idx + 1) + ': ' + item.descricao + ' (' + item.quantidade + ')';
                 o.dataset.valor = item.vencedorValorTotal || 0;
                 selItem.appendChild(o);
             });
@@ -728,8 +976,7 @@ function confirmarSalvar() {
 
 function pedirAutenticacao(acao) {
     acaoPendente = acao;
-    var msgs = { 'vincular': 'Vincular e registrar nota fiscal', 'excluir': 'Excluir nota fiscal' };
-    document.getElementById('authMsg').textContent = '🔐 ' + (msgs[acao] || acao);
+    document.getElementById('authMsg').textContent = '🔐 ' + (acao === 'vincular' ? 'Vincular e registrar nota' : acao);
     document.getElementById('authUsuario').value = '';
     document.getElementById('authSenha').value = '';
     document.getElementById('authJust').value = '';
@@ -737,6 +984,7 @@ function pedirAutenticacao(acao) {
     document.getElementById('modalAuth').classList.add('ativo');
     setTimeout(function() { document.getElementById('authUsuario').focus(); }, 200);
 }
+
 async function validarAdminMaster(usuario, senha) {
     if (!firebasePronto || !db) {
         var locais = [
@@ -755,6 +1003,7 @@ async function validarAdminMaster(usuario, senha) {
         return admin;
     } catch (e) { return null; }
 }
+
 async function confirmarAuth() {
     var u = document.getElementById('authUsuario').value.trim().toLowerCase();
     var s = document.getElementById('authSenha').value;
@@ -798,7 +1047,17 @@ async function executarVinculo() {
     var novaNota = {
         codigo: codigoInterno,
         numero: dadosNota.numero,
-        emitente: { razaoSocial: dadosNota.emitente, cnpj: dadosNota.cnpj, telefone: dadosNota.telefone || '' },
+        chaveAcesso: dadosNota.chaveAcesso || null,
+        serie: dadosNota.serie || null,
+        naturezaOperacao: dadosNota.naturezaOperacao || null,
+        protocolo: dadosNota.protocolo || null,
+        tipoDocumento: dadosNota.tipoDocumento || 'NF-e',
+        emitente: {
+            razaoSocial: dadosNota.emitente,
+            cnpj: dadosNota.cnpj,
+            telefone: dadosNota.telefone || '',
+            endereco: dadosNota.enderecoEmitente || null
+        },
         valorTotal: dadosNota.valorTotal || 0,
         dataEmissao: dadosNota.dataEmissao,
         dataEntrega: dataEntrega,
@@ -810,19 +1069,17 @@ async function executarVinculo() {
         localizacao_fisica: localizacao,
         observacao: obs,
         data_criacao: new Date().toISOString(),
-        origem: dadosNota.manual ? 'manual' : 'ia',
+        origem: dadosNota.origem || 'ia',
         historico: [logEntry]
     };
 
     var crmEnviado = false;
-    var bpEnviados = 0, estoqueEnviados = 0;
+    var bpEnviados = 0, estoqueEnviados = 0, servicoEnviados = 0;
 
     if (firebasePronto && db) {
         try {
-            // 1. Salvar nota
             await db.collection('notas_fiscais').add(novaNota);
 
-            // 2. CRM - Fornecedor
             if (dadosNota.emitente) {
                 var existe = contatos.some(function(c) { return c.cnpj === dadosNota.cnpj || c.nome === dadosNota.emitente; });
                 if (!existe) {
@@ -842,10 +1099,9 @@ async function executarVinculo() {
                 }
             }
 
-            // 3. Sala de Espera
             for (var i = 0; i < dadosNota.itens.length; i++) {
                 var item = dadosNota.itens[i];
-                var tipo = (item.tipo || 'bp').toLowerCase();
+                var tipo = (item.tipo || classificarItem(item.descricao)).toLowerCase();
                 await db.collection('produtos_espera').add({
                     descricao: item.descricao,
                     quantidade: item.quantidade || 1,
@@ -864,9 +1120,9 @@ async function executarVinculo() {
                 });
                 if (tipo === 'bp') bpEnviados++;
                 else if (tipo === 'estoque') estoqueEnviados++;
+                else servicoEnviados++;
             }
 
-            // 4. Atualizar orçamento (soma executado)
             if (orcamentoCod && orcamentoItemId) {
                 var orcSnap = await db.collection('orcamentos').where('codigo', '==', orcamentoCod).get();
                 orcSnap.forEach(async function(doc) {
@@ -886,7 +1142,6 @@ async function executarVinculo() {
                 });
             }
 
-            // 5. Prestação de Contas - REF
             await db.collection('prestacoes').add({
                 codigo: 'A-PC-' + new Date().getFullYear() + '-' + String(prestacoes.length + 1).padStart(4, '0'),
                 tipoPrestacao: 'projeto',
@@ -906,35 +1161,27 @@ async function executarVinculo() {
             mostrarToast('❌ Erro: ' + e.message, 'error');
         }
     } else {
-        // Fallback localStorage
         notas.push(novaNota);
         localStorage.setItem('amovin_notas_fiscais', JSON.stringify(notas));
-        if (dadosNota.emitente) {
-            var existe2 = contatos.some(function(c) { return c.cnpj === dadosNota.cnpj; });
-            if (!existe2) {
-                contatos.push({ nome: dadosNota.emitente, cnpjCpf: dadosNota.cnpj, categoria: 'Fornecedor' });
-                localStorage.setItem('amovin_contatos', JSON.stringify(contatos));
-                crmEnviado = true;
-            }
-        }
         dadosNota.itens.forEach(function(item) {
-            var tipo = (item.tipo || 'bp').toLowerCase();
+            var tipo = (item.tipo || classificarItem(item.descricao)).toLowerCase();
             produtosEspera.push({ descricao: item.descricao, quantidade: item.quantidade, valor_total: item.valor_total, tipo: tipo, status: 'aguardando', projeto_id: projetoCod });
             if (tipo === 'bp') bpEnviados++;
             else if (tipo === 'estoque') estoqueEnviados++;
+            else servicoEnviados++;
         });
         localStorage.setItem('amovin_produtos_espera', JSON.stringify(produtosEspera));
     }
 
-    // Tela de confirmação
     document.getElementById('passoVinculo').style.display = 'none';
     document.getElementById('passoConfirmacao').style.display = 'block';
     document.getElementById('resumoDestinos').innerHTML =
-        '<div style="font-weight:700;margin-bottom:10px;">📤 Código da Nota: <span style="color:var(--laranja);font-size:16px;">' + codigoInterno + '</span></div>' +
-        '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;">' +
-        '<div style="background:#F0F9FF;padding:12px;border-radius:8px;border-left:3px solid var(--azul);"><div style="font-size:11px;color:var(--azul);font-weight:600;">☎️ CRM</div><div style="font-size:18px;font-weight:800;color:var(--azul);">' + (crmEnviado ? '1' : '0') + '</div><div style="font-size:11px;color:var(--cinza);">Fornecedor</div></div>' +
-        '<div style="background:#FFF7ED;padding:12px;border-radius:8px;border-left:3px solid var(--laranja);"><div style="font-size:11px;color:var(--laranja);font-weight:600;">🏢 PATRIMÔNIO</div><div style="font-size:18px;font-weight:800;color:var(--laranja);">' + bpEnviados + '</div><div style="font-size:11px;color:var(--cinza);">Bens Permanentes</div></div>' +
-        '<div style="background:#F0FDF4;padding:12px;border-radius:8px;border-left:3px solid var(--verde);"><div style="font-size:11px;color:var(--verde);font-weight:600;">📦 ESTOQUE</div><div style="font-size:18px;font-weight:800;color:var(--verde);">' + estoqueEnviados + '</div><div style="font-size:11px;color:var(--cinza);">Materiais de Consumo</div></div>' +
+        '<div style="font-weight:700;margin-bottom:10px;">📤 Código: <span style="color:var(--laranja);font-size:16px;">' + codigoInterno + '</span></div>' +
+        '<div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px;">' +
+        '<div style="background:#F0F9FF;padding:12px;border-radius:8px;text-align:center;"><div style="font-size:11px;color:var(--azul);font-weight:600;">☎️ CRM</div><div style="font-size:20px;font-weight:800;color:var(--azul);">' + (crmEnviado ? '1' : '0') + '</div></div>' +
+        '<div style="background:#FFF7ED;padding:12px;border-radius:8px;text-align:center;"><div style="font-size:11px;color:var(--laranja);font-weight:600;">🏢 PATRIM.</div><div style="font-size:20px;font-weight:800;color:var(--laranja);">' + bpEnviados + '</div></div>' +
+        '<div style="background:#F0FDF4;padding:12px;border-radius:8px;text-align:center;"><div style="font-size:11px;color:var(--verde);font-weight:600;">📦 ESTOQUE</div><div style="font-size:20px;font-weight:800;color:var(--verde);">' + estoqueEnviados + '</div></div>' +
+        '<div style="background:#F5F0FF;padding:12px;border-radius:8px;text-align:center;"><div style="font-size:11px;color:var(--roxo);font-weight:600;">🛠️ SERV.</div><div style="font-size:20px;font-weight:800;color:var(--roxo);">' + servicoEnviados + '</div></div>' +
         '</div>';
 
     dadosNota = null;
@@ -942,7 +1189,7 @@ async function executarVinculo() {
 }
 
 // ============================================================
-// FUNÇÕES AUXILIARES
+// AUXILIARES
 // ============================================================
 function limparDados() {
     dadosNota = null;
@@ -956,12 +1203,15 @@ function limparDados() {
     document.getElementById('passoUpload').style.display = 'block';
 }
 function novaNota() { document.getElementById('passoConfirmacao').style.display = 'none'; limparDados(); }
-function fecharLog() { document.getElementById('modalLog').classList.remove('ativo'); }
 
 function exportarCSV() {
-    var linhas = [['Código', 'Nº NF', 'Data', 'Emitente', 'CNPJ', 'Valor', 'Projeto', 'Categoria']];
+    var linhas = [['Código', 'Nº NF', 'Chave', 'Data', 'Emitente', 'CNPJ', 'Valor', 'Projeto', 'Categoria']];
     notas.forEach(function(n) {
-        linhas.push([n.codigo || '', n.numero || '', n.dataEmissao || '', (n.emitente && n.emitente.razaoSocial) || '', (n.emitente && n.emitente.cnpj) || '', (n.valorTotal || 0).toFixed(2), n.projeto_id || '', n.categoria_orcamento || '']);
+        linhas.push([
+            n.codigo || '', n.numero || '', n.chaveAcesso || '', n.dataEmissao || '',
+            (n.emitente && n.emitente.razaoSocial) || '', (n.emitente && n.emitente.cnpj) || '',
+            (n.valorTotal || 0).toFixed(2), n.projeto_id || '', n.categoria_orcamento || ''
+        ]);
     });
     var csv = linhas.map(function(l) { return l.map(function(c) { return '"' + c + '"'; }).join(';'); }).join('\n');
     var blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
