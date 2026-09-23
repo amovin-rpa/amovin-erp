@@ -1,20 +1,29 @@
 /**
  * 📄 AMOVIN ERP - Arquivo Central de Configuração (config.js)
- * Versão: 3.0 (Definitiva e Blindada)
- * Descrição: Centraliza a chave da API, chamadas à IA e utilitários do sistema.
+ * Versão: 5.0 (Modelos 2026 + Retry + Fallback)
  */
 
 const AMOVIN_CONFIG = {
-    // ============================================================
-    // CONFIGURAÇÕES DA API
-    // ============================================================
     API_URL: 'https://generativelanguage.googleapis.com/v1beta/models/',
-    
-    // 🎯 MODELO COM MENOR RISCO:
-    // 'gemini-flash-latest' é o alias oficial do Google. Ele sempre aponta 
-    // para a versão estável mais recente da família Flash disponível na sua chave.
-    MODELO_IA: 'gemini-flash-latest', 
-    
+
+    // ============================================================
+    // MODELOS EM ORDEM DE PRIORIDADE (Setembro/2026)
+    // ============================================================
+    MODELOS_DISPONIVEIS: [
+        'gemini-3.8-flash',      // Principal — melhor para NF-e
+        'gemini-3.7-flash',      // Fallback 1
+        'gemini-3.6-flash',      // Fallback 2
+        'gemini-3.5-flash',      // Fallback 3
+        'gemini-3.5-flash-lite', // Fallback econômico
+        'gemini-2.5-flash'       // Último recurso
+    ],
+
+    MODELO_IA: 'gemini-3.8-flash',
+
+    MAX_TENTATIVAS: 3,
+    ESPERA_INICIAL: 1000, // 1 segundo
+    ESPERA_MAXIMA: 8000,  // 8 segundos
+
     // ============================================================
     // GERENCIAMENTO DE CHAVE
     // ============================================================
@@ -31,23 +40,14 @@ const AMOVIN_CONFIG = {
     },
 
     // ============================================================
-    // CHAMADA UNIFICADA À API DO GEMINI
+    // CHAMADA ÚNICA À API
     // ============================================================
-    callGeminiAPI: async function(prompt, options = {}) {
+    _chamarAPI: async function(prompt, model, options) {
         const apiKey = this.getGeminiKey();
-        
-        if (!apiKey) {
-            throw new Error('Chave da API não configurada. Clique em 🔑 Configurar.');
-        }
-
         const isJSON = options.json || false;
         const temperature = options.temperature !== undefined ? options.temperature : 0.1;
-        const model = options.model || this.MODELO_IA;
-        
-        // Monta a URL
         const url = `${this.API_URL}${model}:generateContent?key=${apiKey}`;
 
-        // Configurações de Geração
         const generationConfig = {
             temperature: temperature,
             topP: 0.95,
@@ -60,78 +60,114 @@ const AMOVIN_CONFIG = {
         }
 
         const body = {
-            contents: [{
-                parts: [{ text: prompt }]
-            }],
+            contents: [{ parts: [{ text: prompt }] }],
             generationConfig: generationConfig
         };
 
-        try {
-            const response = await fetch(url, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(body)
-            });
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body)
+        });
 
-            if (!response.ok) {
-                const errorData = await response.json().catch(() => ({}));
-                const errorMsg = errorData.error?.message || `Erro HTTP ${response.status}`;
-                
-                // Tratamento específico de erros
-                if (response.status === 404) {
-                    throw new Error(`Modelo "${model}" não encontrado. Verifique o console.`);
-                } else if (response.status === 429) {
-                    throw new Error('Limite de requisições excedido (429). Aguarde 1 minuto.');
-                } else if (response.status === 503) {
-                    throw new Error('Serviço do Google sobrecarregado (503). Tente o modo manual.');
-                }
-                throw new Error(errorMsg);
-            }
-
-            const data = await response.json();
-            
-            if (!data.candidates || !data.candidates[0]?.content?.parts[0]?.text) {
-                throw new Error('A IA retornou uma resposta vazia ou bloqueada.');
-            }
-
-            let textResult = data.candidates[0].content.parts[0].text;
-
-            // Se esperamos JSON, tentamos parsear
-            if (isJSON) {
-                try {
-                    return JSON.parse(textResult);
-                } catch (e) {
-                    // Fallback: tenta limpar markdown e parsear
-                    const limpo = textResult.replace(/```json/g, '').replace(/```/g, '').trim();
-                    return JSON.parse(limpo);
-                }
-            }
-
-            return textResult;
-
-        } catch (error) {
-            console.error('❌ Erro na API Gemini:', error);
-            throw error;
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            const errorMsg = errorData.error?.message || `Erro HTTP ${response.status}`;
+            const erro = new Error(errorMsg);
+            erro.status = response.status;
+            throw erro;
         }
+
+        const data = await response.json();
+
+        if (!data.candidates || !data.candidates[0]?.content?.parts[0]?.text) {
+            throw new Error('A IA retornou uma resposta vazia ou bloqueada.');
+        }
+
+        let textResult = data.candidates[0].content.parts[0].text;
+
+        if (isJSON) {
+            try {
+                return JSON.parse(textResult);
+            } catch (e) {
+                const limpo = textResult.replace(/```json/g, '').replace(/```/g, '').trim();
+                return JSON.parse(limpo);
+            }
+        }
+
+        return textResult;
     },
 
     // ============================================================
-    // UTILITÁRIOS DO SISTEMA
+    // CHAMADA COM RETRY + FALLBACK DE MODELO
+    // ============================================================
+    callGeminiAPI: async function(prompt, options = {}) {
+        const apiKey = this.getGeminiKey();
+        if (!apiKey) {
+            throw new Error('Chave da API não configurada. Clique em 🔑 Configurar.');
+        }
+
+        const modelos = options.model ? [options.model, ...this.MODELOS_DISPONIVEIS] : this.MODELOS_DISPONIVEIS;
+        let ultimoErro = null;
+        let espera = this.ESPERA_INICIAL;
+
+        for (let tentativa = 1; tentativa <= this.MAX_TENTATIVAS; tentativa++) {
+            for (let i = 0; i < modelos.length; i++) {
+                const modelo = modelos[i];
+                try {
+                    console.log(`🤖 Tentativa ${tentativa} | Modelo: ${modelo}`);
+                    const resultado = await this._chamarAPI(prompt, modelo, options);
+                    console.log(`✅ Sucesso com: ${modelo}`);
+                    return resultado;
+                } catch (error) {
+                    ultimoErro = error;
+                    console.warn(`⚠️ Falha ${modelo}:`, error.message);
+
+                    // Erros de cliente (chave inválida) — não tenta mais
+                    if (error.status === 400 || error.status === 401 || error.status === 403) {
+                        throw new Error('Chave da API inválida ou sem permissão.');
+                    }
+
+                    // Erros 404 (modelo não existe) — pula para o próximo
+                    if (error.status === 404) {
+                        continue;
+                    }
+
+                    // Erros 429/503 (transitórios) — tenta próximo modelo
+                    if (error.status === 429 || error.status === 503) {
+                        continue;
+                    }
+                }
+            }
+
+            // Espera exponencial antes da próxima rodada de tentativas
+            if (tentativa < this.MAX_TENTATIVAS) {
+                const jitter = Math.random() * 500;
+                const tempoEspera = Math.min(espera + jitter, this.ESPERA_MAXIMA);
+                console.log(`⏳ Aguardando ${(tempoEspera/1000).toFixed(1)}s...`);
+                await new Promise(resolve => setTimeout(resolve, tempoEspera));
+                espera *= 2; // Exponential backoff
+            }
+        }
+
+        throw new Error(
+            'O Google Gemini está sobrecarregado. ' +
+            'Use "✏️ Inserir Manual" ou aguarde alguns minutos.'
+        );
+    },
+
+    // ============================================================
+    // UTILITÁRIOS
     // ============================================================
     mostrarToast: function(mensagem, tipo = 'info') {
         const toast = document.createElement('div');
-        toast.className = `toast toast-${tipo}`;
         toast.innerHTML = mensagem;
-        
-        // Estilos inline para garantir que funcione mesmo sem o CSS do toast
-        toast.style.cssText = 'position:fixed;top:20px;right:20px;padding:16px 24px;border-radius:12px;color:white;font-weight:600;font-size:14px;z-index:10000;box-shadow:0 8px 32px rgba(0,0,0,0.15);animation:slideInRight 0.4s ease;max-width:400px;';
-        if (tipo === 'success') toast.style.background = '#57C220';
-        else if (tipo === 'error') toast.style.background = '#E53935';
-        else if (tipo === 'warning') toast.style.background = '#D97706';
-        else toast.style.background = '#1E88E5';
-        
+        toast.style.cssText = 'position:fixed;top:20px;right:20px;padding:16px 24px;border-radius:12px;color:white;font-weight:600;font-size:14px;z-index:10000;box-shadow:0 8px 32px rgba(0,0,0,0.15);max-width:400px;';
+        const cores = { success: '#57C220', error: '#E53935', warning: '#D97706', info: '#1E88E5' };
+        toast.style.background = cores[tipo] || cores.info;
+
         document.body.appendChild(toast);
-        
+
         setTimeout(() => {
             toast.style.opacity = '0';
             toast.style.transform = 'translateX(100%)';
@@ -141,7 +177,7 @@ const AMOVIN_CONFIG = {
     }
 };
 
-// Inicialização automática ao carregar a página
 document.addEventListener('DOMContentLoaded', () => {
-    console.log(`🚀 AMOVIN ERP Carregado | Modelo IA: ${AMOVIN_CONFIG.MODELO_IA}`);
+    console.log(`🚀 AMOVIN ERP | Modelo: ${AMOVIN_CONFIG.MODELO_IA}`);
+    console.log(`🔄 Fallback: ${AMOVIN_CONFIG.MODELOS_DISPONIVEIS.slice(1).join(' → ')}`);
 });
