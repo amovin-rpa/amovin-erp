@@ -1,19 +1,21 @@
 /**
  * 📄 AMOVIN ERP - config.js
- * Versão: 7.0 (Compatível com Chaves AQ. + Modelos 2026)
+ * Versão: 8.0 (Compatível com Chaves AQ. e Modelos Gemini 3.8 Flash)
  * Descrição: Centraliza a chave da API, chamadas à IA e utilitários do sistema.
  */
 
 const AMOVIN_CONFIG = {
     API_URL: 'https://generativelanguage.googleapis.com/v1beta/models/',
 
-    // Modelos atualizados (Setembro/2026)
+    // Modelos atualizados (Setembro/2026) - Ordem de prioridade
     MODELOS_DISPONIVEIS: [
-        'gemini-2.5-flash',
-        'gemini-2.0-flash'
+        'gemini-3.8-flash',      // Principal - melhor para NF-e
+        'gemini-3.7-flash',      // Fallback 1
+        'gemini-3.6-flash',      // Fallback 2
+        'gemini-3.5-flash-lite'  // Fallback econômico
     ],
 
-    MODELO_IA: 'gemini-2.5-flash',
+    MODELO_IA: 'gemini-3.8-flash',
 
     MAX_TENTATIVAS: 3,
     ESPERA_INICIAL: 1500,
@@ -50,7 +52,7 @@ const AMOVIN_CONFIG = {
             generationConfig: generationConfig
         };
 
-        // ✅ CORREÇÃO: A chave AQ. deve ser enviada no cabeçalho x-goog-api-key
+        // ✅ CORREÇÃO: Usa o cabeçalho x-goog-api-key para todas as chaves
         const response = await fetch(url, {
             method: 'POST',
             headers: { 
@@ -94,7 +96,7 @@ const AMOVIN_CONFIG = {
         if (!apiKey) {
             throw new Error('Chave da API não configurada. Clique em 🔑 Configurar.');
         }
-        // ✅ CORREÇÃO: Aceita chaves que começam com 'AIzaSy' ou 'AQ.'
+        // Aceita chaves que começam com 'AIzaSy' ou 'AQ.'
         if (!apiKey.startsWith('AIzaSy') && !apiKey.startsWith('AQ.')) {
             throw new Error('Chave inválida. O formato não é reconhecido.');
         }
