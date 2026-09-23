@@ -1,266 +1,996 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Amovin ERP Social • Financeiro</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
-<style>
-:root {
-  --laranja: #C65A11;
-  --amarelo: #F5C518;
-  --verde: #57C220;
-  --azul: #1E88E5;
-  --grafite: #1A1A1A;
-  --cinza: #6B7280;
-  --cinza-claro: #F8F4ED;
-  --branco: #FFFFFF;
-  --vermelho: #E53935;
-}
-* { margin:0; padding:0; box-sizing:border-box; }
-body { font-family: 'Inter', system-ui, sans-serif; background: #F8F4ED; display: flex; min-height: 100vh; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amovin ERP • Financeiro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --laranja: #C65A11; --laranja-escuro: #A04A0E; --amarelo: #F5C518; --verde: #57C220;
+            --azul: #1E88E5; --grafite: #1A1A1A; --cinza: #6B7280; --branco: #FFFFFF;
+            --vermelho: #E53935; --roxo: #7C3AED; --teal: #00897B;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', system-ui, sans-serif; background: #F8F4ED; display: flex; min-height: 100vh; }
 
-/* ============================================================
-   A SIDEBAR FOI REMOVIDA DAQUI - VEM DO menu.js
-   ============================================================ */
+        .main-content { flex: 1; margin-left: 270px; padding: 24px 30px; }
+        .topo-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 10px; }
+        .topo-bar h1 { font-size: 24px; font-weight: 700; color: var(--grafite); }
+        .topo-bar h1 span { color: var(--laranja); font-size: 14px; font-weight: 400; margin-left: 12px; }
+        .btn-sair-topo { background: #F8F4ED; color: #1A1A1A; border: 1px solid #F0E9DF; padding: 8px 16px; border-radius: 10px; font-size: 12px; font-weight: 600; cursor: pointer; }
 
-.main-content { flex: 1; margin-left: 270px; padding: 24px 30px; }
-.topo-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 10px; }
-.topo-bar h1 { font-size: 24px; font-weight: 700; color: var(--grafite); }
-.topo-bar h1 span { font-size: 14px; font-weight: 400; color: var(--cinza); margin-left: 12px; }
-.btn-sair-topo { background: #F8F4ED; color: #1A1A1A; border: 1px solid #F0E9DF; padding: 8px 16px; border-radius: 10px; font-size: 12px; font-weight: 600; cursor: pointer; }
+        .status-firebase {
+            display: flex; align-items: center; gap: 8px;
+            padding: 6px 14px; border-radius: 20px;
+            background: #F8F4ED; font-size: 12px; font-weight: 600;
+            border: 1px solid #F0E9DF;
+        }
+        .status-firebase.conectado { background: #E8F5E9; color: #2E7D32; border-color: #A5D6A7; }
+        .status-firebase.offline { background: #FFF3E0; color: #E65100; border-color: #FFCC80; }
+        .status-firebase .dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; animation: pulse 2s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
 
-.kpi-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 22px; }
-.kpi-card { background: #FFFFFF; padding: 18px; border-radius: 14px; border: 1px solid #F0E9DF; text-align: center; }
-.kpi-card .kpi-valor { font-size: 24px; font-weight: 800; color: var(--laranja); }
-.kpi-card .kpi-label { font-size: 11px; color: var(--cinza); }
+        .kpi-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 22px; }
+        .kpi-card { background: #FFFFFF; padding: 16px; border-radius: 14px; border: 1px solid #F0E9DF; text-align: center; }
+        .kpi-card .kpi-valor { font-size: 22px; font-weight: 800; color: var(--laranja); word-break: break-word; }
+        .kpi-card .kpi-label { font-size: 11px; color: var(--cinza); }
 
-.grid-financeiro { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-.card { background: #FFFFFF; padding: 24px; border-radius: 14px; border: 1px solid #F0E9DF; }
-.card h3 { font-size: 16px; font-weight: 700; color: var(--grafite); margin-bottom: 18px; padding-bottom: 12px; border-bottom: 1px solid #F0E9DF; display: flex; justify-content: space-between; align-items: center; }
+        .card { background: #FFFFFF; padding: 24px; border-radius: 14px; border: 1px solid #F0E9DF; margin-bottom: 20px; }
+        .card h3 { font-size: 16px; font-weight: 700; color: var(--grafite); margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid #F0E9DF; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
+        .card h3 .badge { font-size: 10px; font-weight: 600; padding: 3px 12px; border-radius: 20px; background: #FFF3E0; color: var(--laranja); }
 
-.form-group { margin-bottom: 14px; }
-.form-group label { display: block; font-size: 11px; font-weight: 600; color: var(--cinza); margin-bottom: 4px; text-transform: uppercase; }
-.form-group input, .form-group select { width: 100%; padding: 10px 12px; border: 1px solid #E5E0D8; border-radius: 8px; font-size: 13px; font-family: 'Inter', sans-serif; }
-.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .btn { padding: 10px 24px; border-radius: 8px; border: none; cursor: pointer; font-weight: 600; font-size: 13px; font-family: 'Inter', sans-serif; transition: all 0.2s; display: inline-flex; align-items: center; gap: 8px; }
+        .btn-primary { background: var(--laranja); color: white; }
+        .btn-primary:hover { background: var(--laranja-escuro); }
+        .btn-success { background: var(--verde); color: white; }
+        .btn-outline { background: transparent; color: var(--cinza); border: 1px solid #E5E0D8; }
+        .btn-outline:hover { background: #F8F4ED; }
+        .btn-danger { background: var(--vermelho); color: white; }
+        .btn-roxo { background: var(--roxo); color: white; }
+        .btn-teal { background: var(--teal); color: white; }
+        .btn-sm { padding: 5px 12px; font-size: 11px; }
 
-.btn { padding: 10px 18px; border-radius: 8px; border: none; cursor: pointer; font-weight: 600; font-size: 12px; }
-.btn-salvar { background: var(--laranja); color: white; }
-.btn-editar { background: var(--amarelo); color: #1A1A1A; }
-.btn-excluir { background: var(--vermelho); color: white; }
+        .form-group { margin-bottom: 14px; }
+        .form-group label { display: block; font-size: 11px; font-weight: 600; color: var(--cinza); margin-bottom: 4px; text-transform: uppercase; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px 12px; border: 1px solid #E5E0D8; border-radius: 8px; font-size: 13px; font-family: 'Inter', sans-serif; background: #FAFAFA; }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: var(--laranja); background: white; box-shadow: 0 0 0 3px rgba(198, 90, 17, 0.08); }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .form-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
 
-.lancamento-item { padding: 12px 16px; border-bottom: 1px solid #F0E9DF; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px; }
-.lancamento-item .descricao { font-weight: 600; color: var(--grafite); font-size: 13px; }
-.lancamento-item .valor { font-weight: 700; }
-.lancamento-item .valor.receita { color: var(--verde); }
-.lancamento-item .valor.despesa { color: var(--vermelho); }
-.lancamento-item .data { font-size: 11px; color: var(--cinza); }
-.lancamento-item .categoria { font-size: 10px; background: #F8F4ED; padding: 2px 10px; border-radius: 12px; color: var(--cinza); }
+        /* CAMPO DE MOEDA */
+        .campo-moeda { position: relative; }
+        .campo-moeda::before {
+            content: 'R$';
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--cinza);
+            font-weight: 600;
+            font-size: 13px;
+            pointer-events: none;
+        }
+        .campo-moeda input {
+            padding-left: 40px !important;
+            font-weight: 600;
+            font-size: 14px !important;
+            text-align: right;
+            letter-spacing: 0.3px;
+        }
+        .campo-moeda .preview-valor {
+            font-size: 10px;
+            color: var(--cinza);
+            text-align: right;
+            margin-top: 2px;
+            min-height: 12px;
+        }
 
-.sem-dados { text-align: center; padding: 30px; color: #9CA3AF; }
+        /* FILTROS */
+        .filtros-bar { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-bottom: 16px; padding: 12px; background: #F8F4ED; border-radius: 10px; }
+        .filtros-bar select, .filtros-bar input { padding: 8px 12px; border: 1px solid #E5E0D8; border-radius: 8px; font-size: 12px; font-family: 'Inter', sans-serif; background: white; }
+        .filtros-bar .info { font-size: 12px; color: var(--cinza); margin-left: auto; }
 
-.rodape { background: #FFFFFF; border-radius: 14px; padding: 12px 18px; border: 1px solid #F0E9DF; margin-top: 20px; }
-.rodape-grid { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
-.rodape-logo { flex-shrink: 0; } .rodape-logo .logo-vigorre { width: 50px; }
-.rodape-info { flex: 1; } .rodape-info .copyright { font-size: 8px; color: #8A8F98; } .rodape-info .tm { font-size: 6px; vertical-align: super; }
-.rodape-info .contato { font-size: 9px; color: #8A8F98; } .rodape-info a { color: #C65A11; text-decoration: none; } .rodape-info .email { font-size: 8px; color: #aaa; }
-.logo-vigorre-fallback { font-size: 12px; font-weight: 700; display: none; }
+        /* LISTA DE LANÇAMENTOS */
+        .lancamento-item { padding: 12px 16px; border-bottom: 1px solid #F0E9DF; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; transition: background 0.2s; }
+        .lancamento-item:hover { background: #FFF8E7; }
+        .lancamento-item:last-child { border-bottom: none; }
+        .lancamento-item .info { flex: 1; min-width: 200px; }
+        .lancamento-item .codigo { font-size: 10px; color: var(--laranja); font-weight: 700; letter-spacing: 0.5px; }
+        .lancamento-item .descricao { font-weight: 600; color: var(--grafite); font-size: 13px; }
+        .lancamento-item .detalhe { font-size: 11px; color: var(--cinza); margin-top: 2px; }
+        .lancamento-item .valor { font-weight: 700; font-size: 14px; white-space: nowrap; }
+        .lancamento-item .valor.receita { color: var(--verde); }
+        .lancamento-item .valor.despesa { color: var(--vermelho); }
+        .lancamento-item .status-badge { font-size: 10px; padding: 2px 10px; border-radius: 12px; font-weight: 600; }
+        .status-pago { background: #E8F5E9; color: #2E7D32; }
+        .status-pendente { background: #FFF3E0; color: #E65100; }
+        .lancamento-item .acoes { display: flex; gap: 4px; flex-wrap: wrap; }
 
-@media (max-width: 900px) { .main-content { margin-left: 0; } .grid-financeiro { grid-template-columns: 1fr; } }
-</style>
+        .sem-dados { text-align: center; padding: 40px; color: #9CA3AF; }
+        .loading { text-align: center; padding: 40px; color: var(--cinza); }
+        .loading .spinner { display: inline-block; width: 30px; height: 30px; border: 3px solid #E5E0D8; border-top: 3px solid var(--laranja); border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 10px; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        /* MODAIS */
+        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 9999; justify-content: center; align-items: center; padding: 20px; }
+        .modal-overlay.ativo { display: flex; }
+        .modal { background: white; border-radius: 16px; padding: 30px; max-width: 800px; width: 100%; max-height: 90vh; overflow-y: auto; }
+        .modal h2 { font-size: 20px; color: var(--grafite); margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; }
+        .modal .btn-group { display: flex; gap: 12px; margin-top: 16px; justify-content: flex-end; flex-wrap: wrap; }
+        .modal .fechar { background: none; border: none; font-size: 22px; cursor: pointer; color: var(--cinza); }
+
+        .secao-titulo { font-size: 13px; font-weight: 700; color: var(--laranja); text-transform: uppercase; margin: 20px 0 10px; padding-bottom: 6px; border-bottom: 2px solid var(--laranja); }
+
+        /* IMPRESSÃO DO RECIBO */
+        #areaImpressao { display: none; }
+
+        /* TOAST */
+        .toast { position: fixed; top: 20px; right: 20px; padding: 16px 24px; border-radius: 12px; color: white; font-weight: 600; font-size: 14px; z-index: 10000; box-shadow: 0 8px 32px rgba(0,0,0,0.15); animation: slideInRight 0.4s ease; max-width: 400px; }
+        .toast-success { background: var(--verde); }
+        .toast-error { background: var(--vermelho); }
+        .toast-warning { background: #E65100; }
+        @keyframes slideInRight { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+        .rodape { background: #FFFFFF; border-radius: 14px; padding: 12px 18px; border: 1px solid #F0E9DF; margin-top: 20px; }
+        .rodape-grid { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+        .rodape-logo .logo-vigorre { width: 50px; }
+        .rodape-info { flex: 1; }
+        .rodape-info .copyright { font-size: 8px; color: #8A8F98; }
+        .rodape-info .contato { font-size: 9px; color: #8A8F98; }
+        .rodape-info a { color: #C65A11; text-decoration: none; }
+
+        @media (max-width: 900px) { .main-content { margin-left: 0; } .form-row, .form-row-3 { grid-template-columns: 1fr; } }
+    </style>
 </head>
 <body>
 
-<!-- O MENU SERÁ CARREGADO PELO menu.js -->
 <div id="menu-container"></div>
 
 <main class="main-content">
-  <div class="topo-bar">
-    <h1>💰 Financeiro <span>Gestão de receitas e despesas</span></h1>
-    <button class="btn-sair-topo" onclick="window.location.href='dashboard.html'">🏠 Dashboard</button>
-  </div>
+    <div class="topo-bar">
+        <h1>💰 Financeiro <span>Gestão de receitas e despesas</span></h1>
+        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+            <div class="status-firebase" id="statusFirebase">
+                <span class="dot"></span>
+                <span>⏳ Conectando...</span>
+            </div>
+            <button class="btn btn-primary" onclick="abrirFormNovo()">➕ Novo Lançamento</button>
+            <button class="btn-sair-topo" onclick="window.location.href='dashboard.html'">🏠 Dashboard</button>
+        </div>
+    </div>
 
-  <div class="kpi-row">
-    <div class="kpi-card"><div class="kpi-valor" id="kpiTotalReceitas">R$ 0</div><div class="kpi-label">📈 Total Receitas</div></div>
-    <div class="kpi-card"><div class="kpi-valor" id="kpiTotalDespesas">R$ 0</div><div class="kpi-label">📉 Total Despesas</div></div>
-    <div class="kpi-card"><div class="kpi-valor" id="kpiSaldo">R$ 0</div><div class="kpi-label">💰 Saldo</div></div>
-    <div class="kpi-card"><div class="kpi-valor" id="kpiTotalLancamentos">0</div><div class="kpi-label">📋 Lançamentos</div></div>
-  </div>
+    <!-- KPIs -->
+    <div class="kpi-row">
+        <div class="kpi-card"><div class="kpi-valor" style="color:var(--verde);" id="kpiReceitas">R$ 0,00</div><div class="kpi-label">📈 Receitas</div></div>
+        <div class="kpi-card"><div class="kpi-valor" style="color:var(--vermelho);" id="kpiDespesas">R$ 0,00</div><div class="kpi-label">📉 Despesas</div></div>
+        <div class="kpi-card"><div class="kpi-valor" id="kpiSaldo">R$ 0,00</div><div class="kpi-label">💰 Saldo</div></div>
+        <div class="kpi-card"><div class="kpi-valor" style="color:var(--azul);" id="kpiTotalLanc">0</div><div class="kpi-label">📋 Lançamentos</div></div>
+        <div class="kpi-card"><div class="kpi-valor" style="color:#E65100;" id="kpiPendentes">R$ 0,00</div><div class="kpi-label">⏳ Pendentes</div></div>
+    </div>
 
-  <div class="grid-financeiro">
+    <!-- Filtros -->
     <div class="card">
-      <h3>📝 Novo Lançamento <span style="font-size:12px;color:var(--cinza);font-weight:400;" id="totalLancamentos">0 registros</span></h3>
-      <input type="hidden" id="lancamentoId">
-      <div class="form-group"><label>Tipo *</label><select id="tipoLancamento"><option value="receita">📈 Receita</option><option value="despesa">📉 Despesa</option></select></div>
-      <div class="form-group"><label>Descrição *</label><input type="text" id="descricaoLancamento" placeholder="Ex: Doação Mensal"></div>
-      <div class="form-group"><label>Categoria</label><select id="categoriaLancamento"><option>Doação</option><option>Convênio</option><option>Emenda</option><option>Patrocínio</option><option>Material</option><option>Serviço</option><option>Folha</option><option>Outros</option></select></div>
-      <div class="form-row"><div class="form-group"><label>Valor (R$) *</label><input type="number" id="valorLancamento" step="0.01" placeholder="0,00"></div><div class="form-group"><label>Data *</label><input type="date" id="dataLancamento"></div></div>
-      <div class="form-group"><label>Observações</label><input type="text" id="obsLancamento"></div>
-      <button class="btn btn-salvar" onclick="salvarLancamento()" style="width:100%;padding:12px;font-size:14px;">💾 Salvar Lançamento</button>
-    </div>
-    <div class="card">
-      <h3>📋 Últimos Lançamentos</h3>
-      <div id="listaLancamentos"><div class="sem-dados">Nenhum lançamento.</div></div>
-    </div>
-  </div>
+        <div class="filtros-bar">
+            <select id="filtroTipo" onchange="renderizarLancamentos()">
+                <option value="todos">📋 Todos</option>
+                <option value="income">📈 Receitas</option>
+                <option value="expense">📉 Despesas</option>
+            </select>
+            <select id="filtroStatus" onchange="renderizarLancamentos()">
+                <option value="todos">Todos os status</option>
+                <option value="Pago">✅ Pago</option>
+                <option value="Pendente">⏳ Pendente</option>
+            </select>
+            <select id="filtroMes" onchange="renderizarLancamentos()">
+                <option value="">Todos os meses</option>
+                <option value="01">Janeiro</option><option value="02">Fevereiro</option>
+                <option value="03">Março</option><option value="04">Abril</option>
+                <option value="05">Maio</option><option value="06">Junho</option>
+                <option value="07">Julho</option><option value="08">Agosto</option>
+                <option value="09">Setembro</option><option value="10">Outubro</option>
+                <option value="11">Novembro</option><option value="12">Dezembro</option>
+            </select>
+            <input type="text" id="filtroBusca" placeholder="🔍 Buscar descrição..." oninput="renderizarLancamentos()" style="min-width:200px;">
+            <span class="info" id="contadorFiltro"></span>
+        </div>
 
-  <div class="rodape">
-    <div class="rodape-grid">
-      <div class="rodape-logo">
-        <img src="images/logo-vigorre.png" alt="Vigorre" class="logo-vigorre" onerror="this.style.display='none';this.nextElementSibling.style.display='block';">
-        <span class="logo-vigorre-fallback">Vigorre</span>
-      </div>
-      <div class="rodape-info">
-        <div class="copyright">© 2026 VIGORRE DESIGNER<span class="tm">™</span> | Padrão SAP S/4HANA</div>
-        <div class="contato"><a href="https://www.vigorre.com.br">www.vigorre.com.br</a> | <a href="https://wa.me/5534991850735">(34) 99185-0735</a></div>
-        <div class="email">contato@vigorre.com.br</div>
-      </div>
+        <div id="listaLancamentos">
+            <div class="loading">
+                <div class="spinner"></div>
+                <div>Carregando lançamentos do Firebase...</div>
+            </div>
+        </div>
     </div>
-  </div>
+
+    <div class="rodape">
+        <div class="rodape-grid">
+            <div class="rodape-logo"><img src="images/logo-vigorre.png" alt="Vigorre" class="logo-vigorre" onerror="this.style.display='none';"></div>
+            <div class="rodape-info">
+                <div class="copyright">© 2026 VIGORRE DESIGNER™</div>
+                <div class="contato"><a href="https://www.vigorre.com.br">www.vigorre.com.br</a> | <a href="https://wa.me/5534991850735">(34) 99185-0735</a></div>
+            </div>
+        </div>
+    </div>
 </main>
+
+<!-- ============================================================
+MODAL: NOVO/EDITAR LANÇAMENTO
+============================================================ -->
+<div class="modal-overlay" id="modalForm">
+    <div class="modal">
+        <h2 id="modalTitulo">➕ Novo Lançamento <button class="fechar" onclick="fecharForm()">×</button></h2>
+
+        <input type="hidden" id="lancId">
+        <input type="hidden" id="lancCodigo">
+
+        <div class="secao-titulo">📋 Dados Principais</div>
+        <div class="form-row">
+            <div class="form-group">
+                <label>Tipo *</label>
+                <select id="formTipo" onchange="atualizarPreviewTipo()">
+                    <option value="income">📈 Receita</option>
+                    <option value="expense">📉 Despesa</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Status *</label>
+                <select id="formStatus">
+                    <option value="Pago">✅ Pago</option>
+                    <option value="Pendente">⏳ Pendente</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label>Descrição *</label>
+            <input type="text" id="formDescricao" placeholder="Ex: Café da manhã - Reunião Diretoria">
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label>Categoria *</label>
+                <select id="formCategoria">
+                    <option value="Doação">🤝 Doação</option>
+                    <option value="Convênio">🏛️ Convênio</option>
+                    <option value="Emenda">🏛️ Emenda</option>
+                    <option value="Patrocínio">💼 Patrocínio</option>
+                    <option value="Material">📦 Material</option>
+                    <option value="Serviço">🛠️ Serviço</option>
+                    <option value="Folha">💼 Folha</option>
+                    <option value="Alimentação">🍽️ Alimentação</option>
+                    <option value="Transporte">🚗 Transporte</option>
+                    <option value="Evento">📅 Evento</option>
+                    <option value="Outros" selected>📌 Outros</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Data do Lançamento *</label>
+                <input type="date" id="formData" onchange="atualizarPreviewData()">
+            </div>
+        </div>
+
+        <div class="secao-titulo">💰 Valor</div>
+        <div class="form-group">
+            <label>Valor Total *</label>
+            <div class="campo-moeda">
+                <input type="text" id="formValor" placeholder="0,00" inputmode="numeric" autocomplete="off" oninput="mascaraMoeda(this)" onblur="formatarMoedaBlur(this)">
+                <div class="preview-valor" id="previewValor"></div>
+            </div>
+        </div>
+
+        <div class="secao-titulo">🏢 Origem / Fornecedor</div>
+        <div class="form-row-3">
+            <div class="form-group">
+                <label>Tipo de Origem</label>
+                <select id="formTipoOrigem">
+                    <option value="PJ">🏢 Pessoa Jurídica</option>
+                    <option value="PF">👤 Pessoa Física</option>
+                </select>
+            </div>
+            <div class="form-group" style="grid-column: span 2;">
+                <label>Nome da Empresa / Pessoa</label>
+                <input type="text" id="formEmpresaPessoa" placeholder="Ex: Padoca do Zé">
+            </div>
+        </div>
+        <div class="form-group">
+            <label>CNPJ / CPF (opcional)</label>
+            <input type="text" id="formCnpjCpf" placeholder="00.000.000/0000-00">
+        </div>
+
+        <div class="secao-titulo">📄 Nota Fiscal</div>
+        <div class="form-group">
+            <label style="display:flex;align-items:center;gap:8px;text-transform:none;font-size:13px;cursor:pointer;">
+                <input type="checkbox" id="formHasFiscalReceipt" checked style="width:18px;height:18px;cursor:pointer;">
+                <span>Possui Nota Fiscal emitida?</span>
+            </label>
+        </div>
+
+        <div class="secao-titulo">🎉 Evento (opcional)</div>
+        <div class="form-row">
+            <div class="form-group">
+                <label>Nome do Evento</label>
+                <input type="text" id="formEventName" placeholder="Ex: Festa Junina 2026">
+            </div>
+            <div class="form-group">
+                <label>Data do Evento</label>
+                <input type="date" id="formEventDate">
+            </div>
+        </div>
+
+        <div class="secao-titulo">📝 Observações</div>
+        <div class="form-group">
+            <label>Observações Adicionais</label>
+            <textarea id="formObs" rows="2" placeholder="Ex: Pagamento à vista em dinheiro..."></textarea>
+        </div>
+
+        <div class="btn-group">
+            <button class="btn btn-outline" onclick="fecharForm()">Cancelar</button>
+            <button class="btn btn-success" onclick="salvarLancamento()">💾 Salvar Lançamento</button>
+        </div>
+    </div>
+</div>
+
+<!-- ============================================================
+MODAL: VER DETALHES
+============================================================ -->
+<div class="modal-overlay" id="modalDetalhes">
+    <div class="modal">
+        <h2>📋 Detalhes do Lançamento <button class="fechar" onclick="fecharDetalhes()">×</button></h2>
+        <div id="conteudoDetalhes"></div>
+        <div class="btn-group">
+            <button class="btn btn-roxo" onclick="imprimirReciboAtual()">🖨️ Imprimir Recibo</button>
+            <button class="btn btn-outline" onclick="fecharDetalhes()">Fechar</button>
+        </div>
+    </div>
+</div>
 
 <script src="menu.js?v=20260904"></script>
 <script>
 // ============================================================
-// BANCO DE DADOS LOCAL
+// FINANCEIRO - AMOVIN ERP (Firebase com Tempo Real)
 // ============================================================
-var lancamentos = JSON.parse(localStorage.getItem('amovin_financeiro') || '[]');
-var editandoId = null;
 
-if (lancamentos.length === 0) {
-    lancamentos = [
-        { id: 1, tipo: 'receita', descricao: 'Doação Mensal - Parceiro A', categoria: 'Doação', valor: 5000, data: new Date().toISOString().split('T')[0], obs: 'Referente a junho/2026' },
-        { id: 2, tipo: 'despesa', descricao: 'Material Esportivo', categoria: 'Material', valor: 1200, data: new Date().toISOString().split('T')[0], obs: 'Compra de bolas e redes' }
-    ];
-    salvar();
+var lancamentos = [];
+var firebasePronto = false;
+var db = null;
+var unsubLancamentos = null;
+var lancamentoAtualDetalhes = null;
+
+// ============================================================
+// FORMATAÇÃO MONETÁRIA
+// ============================================================
+function formatarMoeda(valor) {
+    if (valor === null || valor === undefined || isNaN(valor)) return 'R$ 0,00';
+    var n = Math.round((parseFloat(valor) + Number.EPSILON) * 100) / 100;
+    return 'R$ ' + n.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
-function salvar() { localStorage.setItem('amovin_financeiro', JSON.stringify(lancamentos)); }
-
-function fm(v) { return 'R$ ' + (v||0).toFixed(2).replace('.', ','); }
-
-function atualizarKPIs() {
-    var receitas = lancamentos.filter(function(l) { return l.tipo === 'receita'; });
-    var despesas = lancamentos.filter(function(l) { return l.tipo === 'despesa'; });
-    var totalReceitas = receitas.reduce(function(s, l) { return s + l.valor; }, 0);
-    var totalDespesas = despesas.reduce(function(s, l) { return s + l.valor; }, 0);
-    var saldo = totalReceitas - totalDespesas;
-
-    document.getElementById('kpiTotalReceitas').textContent = fm(totalReceitas);
-    document.getElementById('kpiTotalDespesas').textContent = fm(totalDespesas);
-    document.getElementById('kpiSaldo').textContent = fm(saldo);
-    document.getElementById('kpiSaldo').style.color = saldo >= 0 ? '#57C220' : '#E53935';
-    document.getElementById('kpiTotalLancamentos').textContent = lancamentos.length;
-    document.getElementById('totalLancamentos').textContent = lancamentos.length + ' registros';
+function formatarNumero(valor) {
+    if (valor === null || valor === undefined || isNaN(valor)) return '0,00';
+    var n = Math.round((parseFloat(valor) + Number.EPSILON) * 100) / 100;
+    return n.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+function parseMoeda(str) {
+    if (!str) return 0;
+    if (typeof str === 'number') return str;
+    var limpo = String(str).replace(/[^\d,.-]/g, '');
+    limpo = limpo.replace(/\./g, '').replace(',', '.');
+    var n = parseFloat(limpo);
+    return isNaN(n) ? 0 : n;
+}
+function mascaraMoeda(input) {
+    var digitos = input.value.replace(/\D/g, '');
+    if (!digitos) { input.value = ''; atualizarPreviewValor(0); return; }
+    if (digitos.length > 15) digitos = digitos.substring(0, 15);
+    var numero = parseInt(digitos, 10) / 100;
+    input.value = formatarNumero(numero);
+    atualizarPreviewValor(numero);
+}
+function formatarMoedaBlur(input) {
+    var n = parseMoeda(input.value);
+    input.value = formatarNumero(n);
+    atualizarPreviewValor(n);
+}
+function atualizarPreviewValor(numero) {
+    var preview = document.getElementById('previewValor');
+    if (!preview) return;
+    preview.textContent = numero > 0 ? '= ' + formatarMoeda(numero) : '';
 }
 
+// ============================================================
+// INICIALIZAR FIREBASE
+// ============================================================
+function inicializarFirebase() {
+    if (typeof firebase === 'undefined') {
+        var script = document.createElement('script');
+        script.src = 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js';
+        script.onload = function() {
+            var fs = document.createElement('script');
+            fs.src = 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js';
+            fs.onload = function() {
+                try {
+                    var cfg = {
+                        apiKey: "AIzaSyDQO-69vVBhmBK8oLt0DzfyigBmjxzu7b4",
+                        authDomain: "gestao-amovin.firebaseapp.com",
+                        projectId: "gestao-amovin",
+                        storageBucket: "gestao-amovin.firebasestorage.app",
+                        messagingSenderId: "316793420445",
+                        appId: "1:316793420445:web:68e9898bbfcd30853f3274"
+                    };
+                    if (!firebase.apps.length) firebase.initializeApp(cfg);
+                    db = firebase.firestore();
+                    firebasePronto = true;
+                    console.log('🔥 Firebase conectado');
+                    atualizarStatusFirebase('conectado');
+                    escutarLancamentos();
+                } catch (e) {
+                    console.error('❌ Erro Firebase:', e);
+                    atualizarStatusFirebase('offline');
+                    carregarLocalStorage();
+                }
+            };
+            fs.onerror = function() { atualizarStatusFirebase('offline'); carregarLocalStorage(); };
+            document.head.appendChild(fs);
+        };
+        script.onerror = function() { atualizarStatusFirebase('offline'); carregarLocalStorage(); };
+        document.head.appendChild(script);
+    } else {
+        try {
+            db = firebase.firestore();
+            firebasePronto = true;
+            atualizarStatusFirebase('conectado');
+            escutarLancamentos();
+        } catch (e) {
+            atualizarStatusFirebase('offline');
+            carregarLocalStorage();
+        }
+    }
+}
+
+function atualizarStatusFirebase(status) {
+    var el = document.getElementById('statusFirebase');
+    if (status === 'conectado') {
+        el.className = 'status-firebase conectado';
+        el.innerHTML = '<span class="dot"></span><span>🟢 Firebase (Tempo Real)</span>';
+    } else {
+        el.className = 'status-firebase offline';
+        el.innerHTML = '<span class="dot"></span><span>🟡 Modo Local</span>';
+    }
+}
+
+// ============================================================
+// ESCUTAR EM TEMPO REAL
+// ============================================================
+function escutarLancamentos() {
+    if (!firebasePronto || !db) { carregarLocalStorage(); return; }
+    console.log('🎧 Escutando coleção "finances"...');
+
+    unsubLancamentos = db.collection('finances').onSnapshot(function(snap) {
+        console.log('🔄 Lançamentos atualizados:', snap.size);
+        lancamentos = [];
+        snap.forEach(function(doc) {
+            lancamentos.push({ _fbId: doc.id, ...doc.data() });
+        });
+        // Ordena por data (mais recente primeiro)
+        lancamentos.sort(function(a, b) {
+            return (b.date || '').localeCompare(a.date || '');
+        });
+        renderizarLancamentos();
+        atualizarKPIs();
+    }, function(error) {
+        console.error('❌ Erro ao escutar:', error);
+        mostrarToast('⚠️ Erro de conexão', 'warning');
+        carregarLocalStorage();
+    });
+}
+
+function carregarLocalStorage() {
+    console.log('📦 Carregando do localStorage...');
+    lancamentos = JSON.parse(localStorage.getItem('amovin_financeiro') || '[]');
+    renderizarLancamentos();
+    atualizarKPIs();
+}
+
+// ============================================================
+// GERAR PRÓXIMO CÓDIGO (ASFIN0001, ASFIN0002, ...)
+// ============================================================
+async function gerarProximoCodigo() {
+    if (!firebasePronto || !db) {
+        // Fallback: baseado nos lançamentos locais
+        var max = 0;
+        lancamentos.forEach(function(l) {
+            if (l.codigo && l.codigo.startsWith('ASFIN')) {
+                var num = parseInt(l.codigo.replace('ASFIN', ''));
+                if (num > max) max = num;
+            }
+        });
+        return 'ASFIN' + String(max + 1).padStart(4, '0');
+    }
+
+    try {
+        // Busca o maior código na coleção
+        var snap = await db.collection('finances').orderBy('codigo', 'desc').limit(1).get();
+        if (snap.empty) return 'ASFIN0001';
+        var maiorCodigo = '';
+        snap.forEach(function(doc) {
+            var c = doc.data().codigo || '';
+            if (c > maiorCodigo) maiorCodigo = c;
+        });
+        if (!maiorCodigo) return 'ASFIN0001';
+        var numero = parseInt(maiorCodigo.replace('ASFIN', '')) || 0;
+        return 'ASFIN' + String(numero + 1).padStart(4, '0');
+    } catch (e) {
+        console.error('Erro ao gerar código:', e);
+        return 'ASFIN0001';
+    }
+}
+
+// ============================================================
+// EXTRAIR MÊS E ANO
+// ============================================================
+function extrairMesAno(dataStr) {
+    if (!dataStr) return { month: '', year: '' };
+    var partes = dataStr.split('-'); // YYYY-MM-DD
+    if (partes.length >= 2) {
+        return { month: partes[1], year: partes[0] };
+    }
+    return { month: '', year: '' };
+}
+
+// ============================================================
+// ABRIR FORM NOVO
+// ============================================================
+async function abrirFormNovo() {
+    document.getElementById('modalTitulo').innerHTML = '➕ Novo Lançamento <button class="fechar" onclick="fecharForm()">×</button>';
+    document.getElementById('lancId').value = '';
+    document.getElementById('formTipo').value = 'expense';
+    document.getElementById('formStatus').value = 'Pago';
+    document.getElementById('formDescricao').value = '';
+    document.getElementById('formCategoria').value = 'Outros';
+    document.getElementById('formData').value = new Date().toISOString().split('T')[0];
+    document.getElementById('formValor').value = '';
+    document.getElementById('formTipoOrigem').value = 'PJ';
+    document.getElementById('formEmpresaPessoa').value = '';
+    document.getElementById('formCnpjCpf').value = '';
+    document.getElementById('formHasFiscalReceipt').checked = true;
+    document.getElementById('formEventName').value = '';
+    document.getElementById('formEventDate').value = '';
+    document.getElementById('formObs').value = '';
+    document.getElementById('previewValor').textContent = '';
+
+    // Gera próximo código
+    var codigo = await gerarProximoCodigo();
+    document.getElementById('lancCodigo').value = codigo;
+    console.log('📌 Próximo código:', codigo);
+
+    document.getElementById('modalForm').classList.add('ativo');
+}
+function fecharForm() {
+    document.getElementById('modalForm').classList.remove('ativo');
+}
+
+// ============================================================
+// SALVAR
+// ============================================================
+async function salvarLancamento() {
+    var tipo = document.getElementById('formTipo').value;
+    var status = document.getElementById('formStatus').value;
+    var descricao = document.getElementById('formDescricao').value.trim();
+    var categoria = document.getElementById('formCategoria').value;
+    var data = document.getElementById('formData').value;
+    var valor = parseMoeda(document.getElementById('formValor').value);
+    var tipoOrigem = document.getElementById('formTipoOrigem').value;
+    var empresaPessoaFisica = document.getElementById('formEmpresaPessoa').value.trim();
+    var cnpjCpf = document.getElementById('formCnpjCpf').value.trim();
+    var hasFiscalReceipt = document.getElementById('formHasFiscalReceipt').checked;
+    var eventName = document.getElementById('formEventName').value.trim();
+    var eventDate = document.getElementById('formEventDate').value;
+    var obs = document.getElementById('formObs').value.trim();
+
+    // Validações
+    if (!descricao) { mostrarToast('⚠️ Descrição é obrigatória!', 'warning'); return; }
+    if (!data) { mostrarToast('⚠️ Data é obrigatória!', 'warning'); return; }
+    if (valor <= 0) { mostrarToast('⚠️ Valor deve ser maior que zero!', 'warning'); return; }
+
+    var mesAno = extrairMesAno(data);
+    var idEdit = document.getElementById('lancId').value;
+    var codigo = document.getElementById('lancCodigo').value;
+
+    var dados = {
+        type: tipo,
+        category: categoria,
+        description: descricao,
+        empresaPessoaFisica: empresaPessoaFisica,
+        tipoOrigem: tipoOrigem,
+        cnpjCpf: cnpjCpf,
+        value: valor,
+        date: data,
+        month: mesAno.month,
+        year: mesAno.year,
+        status: status,
+        hasFiscalReceipt: hasFiscalReceipt,
+        eventName: eventName,
+        eventDate: eventDate,
+        obs: obs,
+        atualizadoEm: new Date().toISOString()
+    };
+
+    if (firebasePronto && db) {
+        try {
+            if (idEdit) {
+                await db.collection('finances').doc(idEdit).update(dados);
+                mostrarToast('✅ Lançamento atualizado!', 'success');
+            } else {
+                dados.codigo = codigo;
+                dados.id = codigo;
+                dados.criadoEm = new Date().toISOString();
+                await db.collection('finances').add(dados);
+                mostrarToast('✅ Lançamento ' + codigo + ' criado!', 'success');
+            }
+            fecharForm();
+        } catch (e) {
+            console.error('❌ Erro:', e);
+            mostrarToast('❌ Erro: ' + e.message, 'error');
+        }
+    } else {
+        // Fallback localStorage
+        if (idEdit) {
+            var idx = lancamentos.findIndex(function(l) { return l._fbId === idEdit; });
+            if (idx >= 0) Object.assign(lancamentos[idx], dados);
+        } else {
+            dados._fbId = Date.now().toString();
+            dados.codigo = codigo;
+            dados.id = codigo;
+            lancamentos.push(dados);
+        }
+        localStorage.setItem('amovin_financeiro', JSON.stringify(lancamentos));
+        fecharForm();
+        renderizarLancamentos();
+        atualizarKPIs();
+        mostrarToast('✅ Salvo localmente!', 'success');
+    }
+}
+
+// ============================================================
+// EDITAR
+// ============================================================
+function editarLancamento(fbId) {
+    var l = lancamentos.find(function(x) { return x._fbId === fbId; });
+    if (!l) return;
+    document.getElementById('modalTitulo').innerHTML = '✏️ Editar: ' + (l.codigo || '') + ' <button class="fechar" onclick="fecharForm()">×</button>';
+    document.getElementById('lancId').value = fbId;
+    document.getElementById('lancCodigo').value = l.codigo || '';
+    document.getElementById('formTipo').value = l.type || 'expense';
+    document.getElementById('formStatus').value = l.status || 'Pago';
+    document.getElementById('formDescricao').value = l.description || '';
+    document.getElementById('formCategoria').value = l.category || 'Outros';
+    document.getElementById('formData').value = l.date || '';
+    document.getElementById('formValor').value = formatarNumero(l.value || 0);
+    document.getElementById('formTipoOrigem').value = l.tipoOrigem || 'PJ';
+    document.getElementById('formEmpresaPessoa').value = l.empresaPessoaFisica || '';
+    document.getElementById('formCnpjCpf').value = l.cnpjCpf || '';
+    document.getElementById('formHasFiscalReceipt').checked = l.hasFiscalReceipt !== false;
+    document.getElementById('formEventName').value = l.eventName || '';
+    document.getElementById('formEventDate').value = l.eventDate || '';
+    document.getElementById('formObs').value = l.obs || '';
+    atualizarPreviewValor(l.value || 0);
+    document.getElementById('modalForm').classList.add('ativo');
+}
+
+// ============================================================
+// EXCLUIR
+// ============================================================
+async function excluirLancamento(fbId) {
+    var l = lancamentos.find(function(x) { return x._fbId === fbId; });
+    if (!l) return;
+    if (!confirm('Excluir o lançamento "' + (l.codigo || '') + ' - ' + (l.description || '') + '"?')) return;
+
+    if (firebasePronto && db) {
+        try {
+            await db.collection('finances').doc(fbId).delete();
+            mostrarToast('🗑️ Lançamento excluído!', 'info');
+        } catch (e) {
+            mostrarToast('❌ Erro: ' + e.message, 'error');
+        }
+    } else {
+        lancamentos = lancamentos.filter(function(x) { return x._fbId !== fbId; });
+        localStorage.setItem('amovin_financeiro', JSON.stringify(lancamentos));
+        renderizarLancamentos();
+        atualizarKPIs();
+    }
+}
+
+// ============================================================
+// RENDERIZAR
+// ============================================================
 function renderizarLancamentos() {
-    var lista = lancamentos.slice().sort(function(a, b) { return new Date(b.data) - new Date(a.data); }).slice(0, 20);
+    var tipo = document.getElementById('filtroTipo').value;
+    var status = document.getElementById('filtroStatus').value;
+    var mes = document.getElementById('filtroMes').value;
+    var busca = document.getElementById('filtroBusca').value.toLowerCase();
+
+    var filtrados = lancamentos.filter(function(l) {
+        if (tipo !== 'todos' && l.type !== tipo) return false;
+        if (status !== 'todos' && l.status !== status) return false;
+        if (mes && l.month !== mes) return false;
+        if (busca && (l.description || '').toLowerCase().indexOf(busca) === -1 &&
+                     (l.empresaPessoaFisica || '').toLowerCase().indexOf(busca) === -1) return false;
+        return true;
+    });
+
+    document.getElementById('contadorFiltro').textContent = filtrados.length + ' de ' + lancamentos.length + ' lançamentos';
+
     var container = document.getElementById('listaLancamentos');
-    if (lista.length === 0) {
-        container.innerHTML = '<div class="sem-dados">Nenhum lançamento.</div>';
+    if (filtrados.length === 0) {
+        container.innerHTML = '<div class="sem-dados"><p style="font-size:48px;">💰</p><p style="margin-top:12px;">Nenhum lançamento encontrado.</p><button class="btn btn-primary" onclick="abrirFormNovo()" style="margin-top:16px;">➕ Criar Primeiro Lançamento</button></div>';
         return;
     }
-    container.innerHTML = lista.map(function(l) {
-        var valorClass = l.tipo === 'receita' ? 'receita' : 'despesa';
-        var sinal = l.tipo === 'receita' ? '+' : '-';
-        var data = new Date(l.data + 'T00:00:00').toLocaleDateString('pt-BR');
+
+    container.innerHTML = filtrados.map(function(l) {
+        var valorClass = l.type === 'income' ? 'receita' : 'despesa';
+        var sinal = l.type === 'income' ? '+' : '-';
+        var dataFmt = l.date ? new Date(l.date + 'T00:00:00').toLocaleDateString('pt-BR') : '-';
+        var statusClass = l.status === 'Pago' ? 'status-pago' : 'status-pendente';
+
+        var detalheExtra = '';
+        if (l.empresaPessoaFisica) detalheExtra += ' • 🏢 ' + l.empresaPessoaFisica;
+        if (l.eventName) detalheExtra += ' • 🎉 ' + l.eventName;
+        if (l.hasFiscalReceipt === false) detalheExtra += ' • <span style="color:#E65100;">📄 Sem NF</span>';
+
         return '<div class="lancamento-item">' +
-            '<div><span class="descricao">' + l.descricao + '</span> <span class="categoria">' + l.categoria + '</span></div>' +
-            '<div><span class="valor ' + valorClass + '">' + sinal + ' ' + fm(l.valor) + '</span> <span class="data">' + data + '</span>' +
-            '<button class="btn btn-editar" onclick="editarLancamento(' + l.id + ')" style="padding:4px 8px;font-size:10px;margin-left:4px;">✏️</button>' +
-            '<button class="btn btn-excluir" onclick="excluirLancamento(' + l.id + ')" style="padding:4px 8px;font-size:10px;">🗑️</button></div></div>';
+            '<div class="info">' +
+            '<div class="codigo">' + (l.codigo || l.id || '---') + '</div>' +
+            '<div class="descricao">' + (l.description || 'Sem descrição') + '</div>' +
+            '<div class="detalhe">' + (l.category || 'Outros') + ' • ' + dataFmt + detalheExtra + '</div>' +
+            '</div>' +
+            '<div style="text-align:right;min-width:130px;">' +
+            '<div class="valor ' + valorClass + '">' + sinal + ' ' + formatarMoeda(l.value || 0) + '</div>' +
+            '<span class="status-badge ' + statusClass + '">' + (l.status || 'Pago') + '</span>' +
+            '</div>' +
+            '<div class="acoes">' +
+            '<button class="btn btn-outline btn-sm" onclick="verDetalhes(\'' + l._fbId + '\')">👁️</button>' +
+            '<button class="btn btn-outline btn-sm" onclick="editarLancamento(\'' + l._fbId + '\')">✏️</button>' +
+            '<button class="btn btn-danger btn-sm" onclick="excluirLancamento(\'' + l._fbId + '\')">🗑️</button>' +
+            '</div>' +
+            '</div>';
     }).join('');
 }
 
-window.salvarLancamento = function() {
-    var tipo = document.getElementById('tipoLancamento').value;
-    var descricao = document.getElementById('descricaoLancamento').value.trim();
-    var valor = parseFloat(document.getElementById('valorLancamento').value) || 0;
-    var data = document.getElementById('dataLancamento').value;
-
-    if (!descricao) { alert('Preencha a descrição!'); return; }
-    if (valor <= 0) { alert('Valor deve ser maior que zero!'); return; }
-    if (!data) { alert('Selecione a data!'); return; }
-
-    var dados = {
-        tipo: tipo,
-        descricao: descricao,
-        categoria: document.getElementById('categoriaLancamento').value,
-        valor: valor,
-        data: data,
-        obs: document.getElementById('obsLancamento').value.trim()
-    };
-
-    if (editandoId) {
-        var idx = lancamentos.findIndex(function(l) { return l.id === editandoId; });
-        if (idx >= 0) {
-            for (var k in dados) lancamentos[idx][k] = dados[k];
-        }
-        editandoId = null;
-    } else {
-        dados.id = Date.now();
-        lancamentos.push(dados);
-    }
-
-    salvar();
-    limparForm();
-    atualizarKPIs();
-    renderizarLancamentos();
-    alert('✅ Lançamento salvo com sucesso!');
-};
-
-window.editarLancamento = function(id) {
-    var l = lancamentos.find(function(x) { return x.id === id; });
-    if (!l) return;
-    editandoId = id;
-    document.getElementById('lancamentoId').value = id;
-    document.getElementById('tipoLancamento').value = l.tipo;
-    document.getElementById('descricaoLancamento').value = l.descricao;
-    document.getElementById('categoriaLancamento').value = l.categoria;
-    document.getElementById('valorLancamento').value = l.valor;
-    document.getElementById('dataLancamento').value = l.data;
-    document.getElementById('obsLancamento').value = l.obs || '';
-    document.querySelector('.card h3').innerHTML = '✏️ Editando Lançamento <span style="font-size:12px;color:var(--cinza);font-weight:400;">' + l.descricao + '</span>';
-};
-
-window.excluirLancamento = function(id) {
-    if (!confirm('Excluir este lançamento?')) return;
-    lancamentos = lancamentos.filter(function(l) { return l.id !== id; });
-    salvar();
-    atualizarKPIs();
-    renderizarLancamentos();
-};
-
-function limparForm() {
-    editandoId = null;
-    document.getElementById('lancamentoId').value = '';
-    document.getElementById('tipoLancamento').value = 'receita';
-    document.getElementById('descricaoLancamento').value = '';
-    document.getElementById('categoriaLancamento').value = 'Doação';
-    document.getElementById('valorLancamento').value = '';
-    document.getElementById('dataLancamento').value = new Date().toISOString().split('T')[0];
-    document.getElementById('obsLancamento').value = '';
-    document.querySelector('.card h3').innerHTML = '📝 Novo Lançamento <span style="font-size:12px;color:var(--cinza);font-weight:400;" id="totalLancamentos">' + lancamentos.length + ' registros</span>';
+// ============================================================
+// KPIs
+// ============================================================
+function atualizarKPIs() {
+    var totalReceitas = 0, totalDespesas = 0, totalPendentes = 0;
+    lancamentos.forEach(function(l) {
+        if (l.type === 'income') totalReceitas += l.value || 0;
+        else totalDespesas += l.value || 0;
+        if (l.status === 'Pendente') totalPendentes += l.value || 0;
+    });
+    var saldo = totalReceitas - totalDespesas;
+    document.getElementById('kpiReceitas').textContent = formatarMoeda(totalReceitas);
+    document.getElementById('kpiDespesas').textContent = formatarMoeda(totalDespesas);
+    document.getElementById('kpiSaldo').textContent = formatarMoeda(saldo);
+    document.getElementById('kpiSaldo').style.color = saldo >= 0 ? 'var(--verde)' : 'var(--vermelho)';
+    document.getElementById('kpiTotalLanc').textContent = lancamentos.length;
+    document.getElementById('kpiPendentes').textContent = formatarMoeda(totalPendentes);
 }
 
-document.getElementById('dataLancamento').value = new Date().toISOString().split('T')[0];
+// ============================================================
+// VER DETALHES
+// ============================================================
+function verDetalhes(fbId) {
+    var l = lancamentos.find(function(x) { return x._fbId === fbId; });
+    if (!l) return;
+    lancamentoAtualDetalhes = l;
+
+    var dataFmt = l.date ? new Date(l.date + 'T00:00:00').toLocaleDateString('pt-BR') : '-';
+    var eventDateFmt = l.eventDate ? new Date(l.eventDate + 'T00:00:00').toLocaleDateString('pt-BR') : '-';
+    var tipoLabel = l.type === 'income' ? '📈 Receita' : '📉 Despesa';
+
+    document.getElementById('conteudoDetalhes').innerHTML =
+        '<div style="background:#F8F4ED;padding:14px;border-radius:10px;margin-bottom:16px;text-align:center;">' +
+        '<div style="font-size:11px;color:var(--cinza);">CÓDIGO</div>' +
+        '<div style="font-size:22px;font-weight:800;color:var(--laranja);letter-spacing:1px;">' + (l.codigo || l.id || '---') + '</div>' +
+        '</div>' +
+        '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">' +
+        dado('Tipo', tipoLabel) +
+        dado('Status', l.status || 'Pago') +
+        dado('Descrição', l.description || '-', true) +
+        dado('Categoria', l.category || 'Outros') +
+        dado('Data', dataFmt) +
+        dado('Valor', formatarMoeda(l.value || 0), false, 'destaque') +
+        dado('Empresa/Pessoa', (l.tipoOrigem || 'PJ') + ' • ' + (l.empresaPessoaFisica || '-')) +
+        dado('CNPJ/CPF', l.cnpjCpf || '-') +
+        dado('Tem NF?', l.hasFiscalReceipt !== false ? '✅ Sim' : '❌ Não') +
+        dado('Evento', l.eventName || '-') +
+        dado('Data do Evento', eventDateFmt) +
+        dado('Mês/Ano', (l.month || '--') + '/' + (l.year || '----')) +
+        '</div>' +
+        (l.obs ? '<div style="margin-top:12px;padding:12px;background:#F8F4ED;border-radius:8px;font-size:13px;"><strong>📝 Obs:</strong> ' + l.obs + '</div>' : '');
+
+    document.getElementById('modalDetalhes').classList.add('ativo');
+}
+function dado(label, valor, full, classe) {
+    return '<div style="' + (full ? 'grid-column:1/-1;' : '') + 'padding:8px;background:#FAFAFA;border-radius:6px;">' +
+        '<div style="font-size:10px;color:var(--cinza);text-transform:uppercase;font-weight:600;">' + label + '</div>' +
+        '<div style="font-size:13px;font-weight:600;margin-top:2px;' + (classe === 'destaque' ? 'color:var(--laranja);font-size:16px;' : '') + '">' + valor + '</div>' +
+        '</div>';
+}
+function fecharDetalhes() {
+    document.getElementById('modalDetalhes').classList.remove('ativo');
+    lancamentoAtualDetalhes = null;
+}
 
 // ============================================================
-// CONTROLE DE PERFIL
+// IMPRIMIR RECIBO (para lançamentos SEM nota fiscal)
 // ============================================================
-var perfil = sessionStorage.getItem('amovin_perfil') || 'admin';
-var modulosPermitidos = {
-    admin: ['dashboard','bi','capta','sala-espera','pre-cadastro','financeiro','orcamentos','prestacao-contas','pessoas','profissionais','voluntarios','agenda-telefonica','agenda','documentos','qrcodes','notas-fiscais','estoque','patrimonio','biblioteca','certificados','chat','assistente','relatorios','configuracoes','backup'],
-    recepcao: ['dashboard','pessoas','agenda-telefonica','agenda','documentos'],
-    consulta: ['dashboard','agenda','agenda-telefonica','assistente'],
-    financeiro: ['dashboard','financeiro','orcamentos','prestacao-contas','relatorios'],
-    voluntario: ['dashboard','agenda','voluntarios','agenda-telefonica']
-};
+function imprimirReciboAtual() {
+    if (!lancamentoAtualDetalhes) return;
+    imprimirRecibo(lancamentoAtualDetalhes);
+}
 
-if (!sessionStorage.getItem('amovin_logado')) { window.location.href = 'index.html'; }
+function imprimirRecibo(l) {
+    var tipoLabel = l.type === 'income' ? 'RECEITA' : 'DESPESA';
+    var dataFmt = l.date ? new Date(l.date + 'T00:00:00').toLocaleDateString('pt-BR') : '-';
+    var eventDateFmt = l.eventDate ? new Date(l.eventDate + 'T00:00:00').toLocaleDateString('pt-BR') : '';
+    var valor = formatarMoeda(l.value || 0);
+    var valorExtenso = numeroPorExtenso(l.value || 0);
 
-atualizarKPIs();
-renderizarLancamentos();
+    var html = '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Recibo ' + (l.codigo || '') + '</title>';
+    html += '<style>';
+    html += 'body { font-family: Arial, sans-serif; padding: 40px; max-width: 700px; margin: 0 auto; color: #1A1A1A; }';
+    html += '.header { text-align: center; border-bottom: 3px solid #C65A11; padding-bottom: 16px; margin-bottom: 24px; }';
+    html += '.header h1 { color: #C65A11; font-size: 24px; margin: 0; }';
+    html += '.header p { color: #6B7280; font-size: 11px; margin: 4px 0; }';
+    html += '.codigo-box { background: #FFF3E0; border: 2px dashed #C65A11; padding: 12px; text-align: center; margin-bottom: 24px; border-radius: 8px; }';
+    html += '.codigo-box .label { font-size: 10px; color: #6B7280; letter-spacing: 1px; }';
+    html += '.codigo-box .codigo { font-size: 28px; font-weight: bold; color: #C65A11; letter-spacing: 3px; margin-top: 4px; }';
+    html += '.tipo { display: inline-block; padding: 4px 16px; border-radius: 20px; font-size: 12px; font-weight: bold; margin-bottom: 16px; }';
+    html += '.tipo.receita { background: #E8F5E9; color: #2E7D32; }';
+    html += '.tipo.despesa { background: #FFEBEE; color: #C62828; }';
+    html += 'table { width: 100%; border-collapse: collapse; margin: 16px 0; }';
+    html += 'td { padding: 10px 12px; border-bottom: 1px solid #E5E0D8; font-size: 13px; }';
+    html += 'td.label { color: #6B7280; width: 35%; font-weight: 600; }';
+    html += 'td.valor { font-weight: 600; }';
+    html += '.valor-destaque { font-size: 22px; color: #C65A11; font-weight: bold; text-align: center; padding: 16px; background: #FFF8E7; border-radius: 8px; margin: 20px 0; }';
+    html += '.aviso { background: #FEF3C7; border-left: 4px solid #E65100; padding: 12px; font-size: 12px; margin: 20px 0; border-radius: 4px; }';
+    html += '.assinaturas { margin-top: 60px; display: flex; justify-content: space-between; }';
+    html += '.assinatura { border-top: 1px solid #1A1A1A; width: 45%; padding-top: 6px; text-align: center; font-size: 12px; }';
+    html += '.rodape { margin-top: 40px; text-align: center; font-size: 10px; color: #8A8F98; border-top: 1px solid #E5E0D8; padding-top: 16px; }';
+    html += '@media print { body { padding: 20px; } }';
+    html += '</style></head><body>';
+
+    html += '<div class="header">';
+    html += '<h1>🌻 AMOVIN</h1>';
+    html += '<p>Associação e Movimento pela Inclusão em Rio Paranaíba/MG</p>';
+    html += '<p>CNPJ: 55.880.046/0001-34</p>';
+    html += '</div>';
+
+    html += '<div class="codigo-box">';
+    html += '<div class="label">CÓDIGO DE CONTROLE</div>';
+    html += '<div class="codigo">' + (l.codigo || l.id || '---') + '</div>';
+    html += '</div>';
+
+    html += '<div style="text-align:center;">';
+    html += '<span class="tipo ' + (l.type === 'income' ? 'receita' : 'despesa') + '">' + tipoLabel + '</span>';
+    html += '</div>';
+
+    html += '<table>';
+    html += '<tr><td class="label">Data</td><td class="valor">' + dataFmt + '</td></tr>';
+    html += '<tr><td class="label">Descrição</td><td class="valor">' + (l.description || '-') + '</td></tr>';
+    html += '<tr><td class="label">Categoria</td><td class="valor">' + (l.category || 'Outros') + '</td></tr>';
+    html += '<tr><td class="label">' + (l.tipoOrigem === 'PF' ? 'Pessoa Física' : 'Empresa') + '</td><td class="valor">' + (l.empresaPessoaFisica || '-') + '</td></tr>';
+    if (l.cnpjCpf) html += '<tr><td class="label">CNPJ/CPF</td><td class="valor">' + l.cnpjCpf + '</td></tr>';
+    if (l.eventName) html += '<tr><td class="label">Evento</td><td class="valor">' + l.eventName + (eventDateFmt ? ' — ' + eventDateFmt : '') + '</td></tr>';
+    html += '<tr><td class="label">Status</td><td class="valor">' + (l.status || 'Pago') + '</td></tr>';
+    if (l.obs) html += '<tr><td class="label">Observações</td><td class="valor">' + l.obs + '</td></tr>';
+    html += '</table>';
+
+    html += '<div class="valor-destaque">' + valor + '</div>';
+    html += '<div style="text-align:center;font-size:12px;color:#6B7280;font-style:italic;">(' + valorExtenso + ')</div>';
+
+    if (l.hasFiscalReceipt === false) {
+        html += '<div class="aviso">';
+        html += '<strong>⚠️ SEM NOTA FISCAL</strong><br>';
+        html += 'Este lançamento não possui nota fiscal emitida. Este recibo serve como comprovante interno de controle financeiro da AMOVIN.';
+        html += '</div>';
+    }
+
+    html += '<div class="assinaturas">';
+    html += '<div class="assinatura">Responsável Financeiro</div>';
+    html += '<div class="assinatura">' + (l.empresaPessoaFisica || 'Recebedor') + '</div>';
+    html += '</div>';
+
+    html += '<div class="rodape">';
+    html += 'Documento gerado em ' + new Date().toLocaleString('pt-BR') + '<br>';
+    html += 'AMOVIN ERP • www.vigorre.com.br • (34) 99185-0735';
+    html += '</div>';
+
+    html += '</body></html>';
+
+    var win = window.open('', '_blank');
+    win.document.write(html);
+    win.document.close();
+    setTimeout(function() { win.print(); }, 500);
+}
+
+// ============================================================
+// NÚMERO POR EXTENSO (simplificado)
+// ============================================================
+function numeroPorExtenso(valor) {
+    if (valor === 0) return 'zero reais';
+    var reais = Math.floor(valor);
+    var centavos = Math.round((valor - reais) * 100);
+
+    var unidades = ['', 'um', 'dois', 'três', 'quatro', 'cinco', 'seis', 'sete', 'oito', 'nove'];
+    var especiais = ['dez', 'onze', 'doze', 'treze', 'quatorze', 'quinze', 'dezesseis', 'dezessete', 'dezoito', 'dezenove'];
+    var dezenas = ['', '', 'vinte', 'trinta', 'quarenta', 'cinquenta', 'sessenta', 'setenta', 'oitenta', 'noventa'];
+    var centenas = ['', 'cento', 'duzentos', 'trezentos', 'quatrocentos', 'quinhentos', 'seiscentos', 'setecentos', 'oitocentos', 'novecentos'];
+
+    function extensoAte999(n) {
+        if (n === 0) return '';
+        if (n === 100) return 'cem';
+        var c = Math.floor(n / 100);
+        var d = Math.floor((n % 100) / 10);
+        var u = n % 10;
+        var partes = [];
+        if (c > 0) partes.push(centenas[c]);
+        if (d === 1) partes.push(especiais[u]);
+        else {
+            if (d > 0) partes.push(dezenas[d]);
+            if (u > 0) partes.push(unidades[u]);
+        }
+        return partes.join(' e ');
+    }
+
+    function extensoCompleto(n) {
+        if (n === 0) return 'zero';
+        if (n < 1000) return extensoAte999(n);
+        if (n < 1000000) {
+            var mil = Math.floor(n / 1000);
+            var resto = n % 1000;
+            var partes = [];
+            partes.push(mil === 1 ? 'mil' : extensoAte999(mil) + ' mil');
+            if (resto > 0) partes.push(extensoAte999(resto));
+            return partes.join(' e ');
+        }
+        var milhao = Math.floor(n / 1000000);
+        var resto = n % 1000000;
+        var partes = [extensoAte999(milhao) + (milhao === 1 ? ' milhão' : ' milhões')];
+        if (resto > 0) partes.push(extensoCompleto(resto));
+        return partes.join(' e ');
+    }
+
+    var texto = extensoCompleto(reais);
+    texto += reais === 1 ? ' real' : ' reais';
+    if (centavos > 0) {
+        texto += ' e ' + extensoAte999(centavos) + (centavos === 1 ? ' centavo' : ' centavos');
+    }
+    return texto;
+}
+
+// ============================================================
+// TOAST
+// ============================================================
+function mostrarToast(msg, tipo) {
+    var t = document.createElement('div');
+    t.className = 'toast toast-' + (tipo || 'success');
+    t.textContent = msg;
+    document.body.appendChild(t);
+    setTimeout(function() { t.remove(); }, 4000);
+}
+
+// ============================================================
+// SESSÃO
+// ============================================================
+if (!sessionStorage.getItem('amovin_logado') && !localStorage.getItem('amovin_logado')) {
+    console.log('⚠️ Sessão não encontrada, mas permitindo acesso.');
+}
+
+// ============================================================
+// INICIALIZAÇÃO
+// ============================================================
+document.addEventListener('DOMContentLoaded', function() {
+    inicializarFirebase();
+});
 </script>
 </body>
 </html>
