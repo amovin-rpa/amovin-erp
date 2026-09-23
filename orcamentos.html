@@ -7,18 +7,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --laranja: #C65A11;
-            --laranja-escuro: #A04A0E;
-            --amarelo: #F5C518;
-            --verde: #57C220;
-            --azul: #1E88E5;
-            --grafite: #1A1A1A;
-            --cinza: #6B7280;
-            --cinza-claro: #F8F4ED;
-            --branco: #FFFFFF;
-            --vermelho: #E53935;
+            --laranja: #C65A11; --laranja-escuro: #A04A0E; --amarelo: #F5C518; --verde: #57C220;
+            --azul: #1E88E5; --grafite: #1A1A1A; --cinza: #6B7280; --branco: #FFFFFF;
+            --vermelho: #E53935; --roxo: #7C3AED; --teal: #00897B;
         }
-        * { margin:0; padding:0; box-sizing:border-box; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Inter', system-ui, sans-serif; background: #F8F4ED; display: flex; min-height: 100vh; }
 
         .main-content { flex: 1; margin-left: 270px; padding: 24px 30px; }
@@ -27,166 +20,1184 @@
         .topo-bar h1 span { color: var(--laranja); }
         .btn-sair-topo { background: #F8F4ED; color: #1A1A1A; border: 1px solid #F0E9DF; padding: 8px 16px; border-radius: 10px; font-size: 12px; font-weight: 600; cursor: pointer; }
 
+        .status-firebase { display: flex; align-items: center; gap: 8px; padding: 6px 14px; border-radius: 20px; background: #F8F4ED; font-size: 12px; font-weight: 600; border: 1px solid #F0E9DF; }
+        .status-firebase.conectado { background: #E8F5E9; color: #2E7D32; border-color: #A5D6A7; }
+        .status-firebase.offline { background: #FFF3E0; color: #E65100; border-color: #FFCC80; }
+        .status-firebase .dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; animation: pulse 2s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+        .kpi-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 15px; margin-bottom: 22px; }
+        .kpi-card { background: #FFFFFF; padding: 16px; border-radius: 14px; border: 1px solid #F0E9DF; text-align: center; }
+        .kpi-card .kpi-valor { font-size: 22px; font-weight: 800; color: var(--laranja); word-break: break-word; }
+        .kpi-card .kpi-label { font-size: 11px; color: var(--cinza); }
+
         .card { background: #FFFFFF; padding: 24px; border-radius: 14px; border: 1px solid #F0E9DF; margin-bottom: 20px; }
         .card h3 { font-size: 16px; font-weight: 700; color: var(--grafite); margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid #F0E9DF; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
         .card h3 .badge { font-size: 10px; font-weight: 600; padding: 3px 12px; border-radius: 20px; background: #FFF3E0; color: var(--laranja); }
-
-        .form-group { margin-bottom: 14px; }
-        .form-group label { display: block; font-size: 11px; font-weight: 600; color: var(--cinza); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.3px; }
-        .form-group select, .form-group input { width: 100%; padding: 10px 12px; border: 1px solid #E5E0D8; border-radius: 8px; font-size: 13px; font-family: 'Inter', sans-serif; background: #FAFAFA; }
-        .form-group select:focus, .form-group input:focus { outline: none; border-color: var(--laranja); }
-        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 
         .btn { padding: 10px 24px; border-radius: 8px; border: none; cursor: pointer; font-weight: 600; font-size: 13px; font-family: 'Inter', sans-serif; transition: all 0.2s; display: inline-flex; align-items: center; gap: 8px; }
         .btn-primary { background: var(--laranja); color: white; }
         .btn-primary:hover { background: var(--laranja-escuro); }
         .btn-success { background: var(--verde); color: white; }
-        .btn-success:hover { background: #388E3C; }
         .btn-outline { background: transparent; color: var(--cinza); border: 1px solid #E5E0D8; }
         .btn-outline:hover { background: #F8F4ED; }
-        .btn-full { width: 100%; padding: 14px; font-size: 15px; justify-content: center; }
+        .btn-danger { background: var(--vermelho); color: white; }
+        .btn-sm { padding: 5px 12px; font-size: 11px; }
         .btn-azul { background: var(--azul); color: white; }
-        .btn-azul:hover { background: #1565C0; }
+        .btn-roxo { background: var(--roxo); color: white; }
+        .btn-teal { background: var(--teal); color: white; }
+        .btn-amarelo { background: var(--amarelo); color: #1A1A1A; }
 
-        .orcamento-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #F0E9DF; flex-wrap: wrap; gap: 8px; }
-        .orcamento-item:last-child { border-bottom: none; }
-        .orcamento-item .categoria { font-weight: 600; font-size: 14px; color: var(--grafite); }
-        .orcamento-item .valores { font-size: 13px; }
-        .orcamento-item .valores .previsto { color: var(--cinza); }
-        .orcamento-item .valores .realizado { color: var(--laranja); font-weight: 600; }
-        .orcamento-item .valores .disponivel { color: var(--verde); font-weight: 600; }
-        .orcamento-item .valores .estourado { color: var(--vermelho); font-weight: 600; }
-        .orcamento-item .barra { width: 100%; height: 4px; background: #F0E9DF; border-radius: 2px; margin-top: 4px; overflow: hidden; }
-        .orcamento-item .barra .fill { height: 100%; border-radius: 2px; transition: width 0.8s ease; }
+        .form-group { margin-bottom: 14px; }
+        .form-group label { display: block; font-size: 11px; font-weight: 600; color: var(--cinza); margin-bottom: 4px; text-transform: uppercase; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px 12px; border: 1px solid #E5E0D8; border-radius: 8px; font-size: 13px; font-family: 'Inter', sans-serif; background: #FAFAFA; }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: var(--laranja); background: white; box-shadow: 0 0 0 3px rgba(198, 90, 17, 0.08); }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .form-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
 
-        .sem-dados { text-align: center; padding: 30px; color: #9CA3AF; }
-        .total-geral { font-size: 18px; font-weight: 800; color: var(--grafite); padding: 16px 0 0; border-top: 2px solid var(--laranja); margin-top: 12px; text-align: center; }
+        .campo-moeda { position: relative; }
+        .campo-moeda::before { content: 'R$'; position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--cinza); font-weight: 600; font-size: 13px; pointer-events: none; }
+        .campo-moeda input { padding-left: 40px !important; font-weight: 600; font-size: 14px !important; text-align: right; }
+
+        .filtros-bar { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-bottom: 16px; padding: 12px; background: #F8F4ED; border-radius: 10px; }
+        .filtros-bar select, .filtros-bar input { padding: 8px 12px; border: 1px solid #E5E0D8; border-radius: 8px; font-size: 12px; font-family: 'Inter', sans-serif; background: white; }
+        .filtros-bar .info { font-size: 12px; color: var(--cinza); margin-left: auto; }
+
+        .orcamento-card { background: #FFFFFF; border-radius: 14px; border: 1px solid #F0E9DF; padding: 20px; margin-bottom: 16px; transition: all 0.3s; }
+        .orcamento-card:hover { box-shadow: 0 6px 24px rgba(0,0,0,0.06); }
+        .orcamento-card .cabecalho { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; gap: 10px; flex-wrap: wrap; }
+        .orcamento-card .codigo { font-size: 10px; color: var(--laranja); font-weight: 700; background: #FFF3E0; padding: 3px 10px; border-radius: 12px; }
+        .orcamento-card .titulo { font-size: 16px; font-weight: 700; color: var(--grafite); margin: 6px 0 4px; }
+        .orcamento-card .status { font-size: 10px; padding: 4px 12px; border-radius: 12px; font-weight: 700; white-space: nowrap; }
+        .status-em-cotacao { background: #FFF3E0; color: #E65100; }
+        .status-fechado { background: #E3F2FD; color: #1565C0; }
+        .status-execucao { background: #F3E5F5; color: #7B1FA2; }
+        .status-concluido { background: #E8F5E9; color: #2E7D32; }
+        .status-cancelado { background: #FFEBEE; color: #C62828; }
+        .orcamento-card .info-geral { font-size: 12px; color: var(--cinza); margin-bottom: 8px; }
+        .orcamento-card .totais { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; margin: 12px 0; padding: 12px; background: #F8F4ED; border-radius: 10px; }
+        .orcamento-card .totais .item { text-align: center; }
+        .orcamento-card .totais .item .label { font-size: 10px; color: var(--cinza); text-transform: uppercase; }
+        .orcamento-card .totais .item .valor { font-size: 15px; font-weight: 800; color: var(--grafite); margin-top: 2px; }
+        .orcamento-card .totais .item .valor.verde { color: var(--verde); }
+        .orcamento-card .totais .item .valor.azul { color: var(--azul); }
+        .orcamento-card .totais .item .valor.vermelho { color: var(--vermelho); }
+        .orcamento-card .barra { width: 100%; height: 8px; background: #F0E9DF; border-radius: 4px; overflow: hidden; margin: 8px 0; }
+        .orcamento-card .barra .fill { height: 100%; border-radius: 4px; transition: width 0.8s ease; background: var(--verde); }
+        .orcamento-card .acoes { display: flex; gap: 6px; margin-top: 12px; flex-wrap: wrap; }
+
+        /* ITENS DO ORÇAMENTO (dentro do modal) */
+        .item-bloco { background: #FAFAFA; border-radius: 10px; padding: 16px; margin-bottom: 14px; border-left: 4px solid var(--laranja); }
+        .item-bloco .item-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; gap: 8px; flex-wrap: wrap; }
+        .item-bloco .item-numero { font-size: 11px; font-weight: 700; color: var(--laranja); }
+        .item-bloco .item-nome { font-size: 14px; font-weight: 700; color: var(--grafite); }
+        .cotacao-linha { display: grid; grid-template-columns: 2fr 1.2fr 1.2fr 1fr 60px; gap: 8px; align-items: center; padding: 8px 0; border-bottom: 1px solid #E5E0D8; font-size: 12px; }
+        .cotacao-linha.header { font-weight: 700; color: var(--cinza); font-size: 10px; text-transform: uppercase; border-bottom: 2px solid var(--cinza); }
+        .cotacao-linha.vencedor { background: #E8F5E9; border-radius: 6px; padding: 8px 10px; margin: 4px 0; border-bottom: none; }
+        .cotacao-linha .vencedor-badge { color: var(--verde); font-weight: 700; font-size: 14px; text-align: center; }
+        .cotacao-linha input { padding: 5px 8px; font-size: 12px; border: 1px solid #E5E0D8; border-radius: 6px; width: 100%; }
+
+        .btn-icon { background: transparent; border: none; cursor: pointer; font-size: 14px; padding: 4px 6px; border-radius: 4px; }
+        .btn-icon:hover { background: #F0E9DF; }
+        .btn-remove { color: var(--vermelho); }
+        .btn-add { color: var(--verde); font-weight: 700; }
+
+        /* MODAL */
+        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 9999; justify-content: center; align-items: center; padding: 20px; overflow-y: auto; }
+        .modal-overlay.ativo { display: flex; }
+        .modal { background: white; border-radius: 16px; padding: 30px; max-width: 1100px; width: 100%; max-height: 95vh; overflow-y: auto; margin: auto; }
+        .modal.modal-pequeno { max-width: 500px; }
+        .modal h2 { font-size: 20px; color: var(--grafite); margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; }
+        .modal .btn-group { display: flex; gap: 12px; margin-top: 16px; justify-content: flex-end; flex-wrap: wrap; }
+        .modal .fechar { background: none; border: none; font-size: 22px; cursor: pointer; color: var(--cinza); }
+
+        .secao-titulo { font-size: 13px; font-weight: 700; color: var(--laranja); text-transform: uppercase; margin: 20px 0 10px; padding-bottom: 6px; border-bottom: 2px solid var(--laranja); }
+
+        /* TABELA COMPARATIVA */
+        .tabela-comparativa { width: 100%; border-collapse: collapse; font-size: 12px; margin: 12px 0; }
+        .tabela-comparativa th { background: #F0E9DF; padding: 8px; text-align: left; font-weight: 700; color: var(--grafite); font-size: 11px; text-transform: uppercase; }
+        .tabela-comparativa td { padding: 8px; border-bottom: 1px solid #E5E0D8; }
+        .tabela-comparativa .vencedor { background: #E8F5E9; font-weight: 700; color: #2E7D32; }
+
+        /* LOG */
+        .log-item { padding: 8px 12px; border-bottom: 1px solid #F0E9DF; font-size: 12px; }
+        .log-item .quando { font-size: 10px; color: var(--cinza); }
+        .log-item .quem { font-weight: 700; color: var(--laranja); }
+        .log-item .acao { color: var(--grafite); }
+
+        .sem-dados { text-align: center; padding: 40px; color: #9CA3AF; }
+        .loading { text-align: center; padding: 40px; color: var(--cinza); }
+        .loading .spinner { display: inline-block; width: 30px; height: 30px; border: 3px solid #E5E0D8; border-top: 3px solid var(--laranja); border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 10px; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        .toast { position: fixed; top: 20px; right: 20px; padding: 16px 24px; border-radius: 12px; color: white; font-weight: 600; font-size: 14px; z-index: 10000; box-shadow: 0 8px 32px rgba(0,0,0,0.15); animation: slideInRight 0.4s ease; max-width: 400px; }
+        .toast-success { background: var(--verde); }
+        .toast-error { background: var(--vermelho); }
+        .toast-warning { background: #E65100; }
+        @keyframes slideInRight { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
 
         .rodape { background: #FFFFFF; border-radius: 14px; padding: 12px 18px; border: 1px solid #F0E9DF; margin-top: 20px; }
         .rodape-grid { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
-        .rodape-logo { flex-shrink: 0; } .rodape-logo .logo-vigorre { width: 50px; }
-        .rodape-info { flex: 1; } .rodape-info .copyright { font-size: 8px; color: #8A8F98; } .rodape-info .tm { font-size: 6px; vertical-align: super; }
-        .rodape-info .contato { font-size: 9px; color: #8A8F98; } .rodape-info a { color: #C65A11; text-decoration: none; } .rodape-info .email { font-size: 8px; color: #aaa; }
-        .logo-vigorre-fallback { font-size: 12px; font-weight: 700; display: none; }
+        .rodape-logo .logo-vigorre { width: 50px; }
+        .rodape-info { flex: 1; }
+        .rodape-info .copyright { font-size: 8px; color: #8A8F98; }
+        .rodape-info .contato { font-size: 9px; color: #8A8F98; }
+        .rodape-info a { color: #C65A11; text-decoration: none; }
 
-        @media (max-width: 900px) { .main-content { margin-left: 0; } .form-row { grid-template-columns: 1fr; } .orcamento-item { flex-direction: column; align-items: stretch; } }
+        @media (max-width: 900px) {
+            .main-content { margin-left: 0; }
+            .form-row, .form-row-3 { grid-template-columns: 1fr; }
+            .cotacao-linha { grid-template-columns: 1fr 1fr; }
+            .cotacao-linha.header { display: none; }
+        }
     </style>
 </head>
 <body>
 
-    <div id="menu-container"></div>
+<div id="menu-container"></div>
 
-    <main class="main-content">
-        <div class="topo-bar">
+<main class="main-content">
+    <div class="topo-bar">
+        <div>
             <h1>📊 Orçamentos <span>AMOVIN</span></h1>
+        </div>
+        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+            <div class="status-firebase" id="statusFirebase">
+                <span class="dot"></span>
+                <span>⏳ Conectando...</span>
+            </div>
+            <button class="btn btn-primary" onclick="abrirFormNovo()">➕ Novo Orçamento</button>
             <button class="btn-sair-topo" onclick="window.location.href='dashboard.html'">🏠 Dashboard</button>
         </div>
+    </div>
 
-        <div class="card">
-            <h3>🎯 Selecione o Projeto <span class="badge">Orçamento</span></h3>
-            <div class="form-row">
-                <div class="form-group">
-                    <label>Projeto</label>
-                    <select id="selectProjeto" onchange="carregarOrcamento()">
-                        <option value="">Selecione um projeto...</option>
-                    </select>
-                </div>
-                <div style="display:flex;align-items:flex-end;gap:8px;flex-wrap:wrap;">
-                    <button class="btn btn-primary" onclick="carregarOrcamento()">📊 Carregar</button>
-                    <button class="btn btn-success" onclick="window.location.href='projetos-convenios.html'">📋 Gerenciar Projetos</button>
-                </div>
+    <!-- KPIs -->
+    <div class="kpi-row">
+        <div class="kpi-card"><div class="kpi-valor" id="kpiTotal">0</div><div class="kpi-label">📊 Total</div></div>
+        <div class="kpi-card"><div class="kpi-valor" style="color:#E65100;" id="kpiEmCotacao">0</div><div class="kpi-label">⏳ Em Cotação</div></div>
+        <div class="kpi-card"><div class="kpi-valor" style="color:var(--azul);" id="kpiFechados">0</div><div class="kpi-label">🔒 Fechados</div></div>
+        <div class="kpi-card"><div class="kpi-valor" style="color:var(--roxo);" id="kpiExecucao">0</div><div class="kpi-label">📋 Em Execução</div></div>
+        <div class="kpi-card"><div class="kpi-valor" style="color:var(--verde);" id="kpiConcluidos">0</div><div class="kpi-label">✅ Concluídos</div></div>
+        <div class="kpi-card"><div class="kpi-valor" style="color:var(--verde);" id="kpiEconomia">R$ 0,00</div><div class="kpi-label">💰 Economia Total</div></div>
+    </div>
+
+    <!-- Filtros e Lista -->
+    <div class="card">
+        <h3>📋 Orçamentos Cadastrados <span class="badge" id="contadorOrcamentos">0 orçamentos</span></h3>
+
+        <div class="filtros-bar">
+            <select id="filtroStatus" onchange="renderizarOrcamentos()">
+                <option value="">Todos os status</option>
+                <option value="Em Cotação">⏳ Em Cotação</option>
+                <option value="Fechado">🔒 Fechado</option>
+                <option value="Em Execução">📋 Em Execução</option>
+                <option value="Concluído">✅ Concluído</option>
+                <option value="Cancelado">❌ Cancelado</option>
+            </select>
+            <select id="filtroProjeto" onchange="renderizarOrcamentos()">
+                <option value="">Todos os projetos</option>
+            </select>
+            <input type="text" id="filtroBusca" placeholder="🔍 Buscar título, código..." oninput="renderizarOrcamentos()" style="min-width:200px;">
+            <span class="info" id="contadorFiltro"></span>
+        </div>
+
+        <div id="orcamentosLista">
+            <div class="loading">
+                <div class="spinner"></div>
+                <div>Carregando orçamentos do Firebase...</div>
             </div>
         </div>
+    </div>
 
-        <div class="card" id="areaOrcamento" style="display:none;">
-            <h3 id="tituloOrcamento">📋 Orçamento - <span id="nomeProjetoOrcamento">---</span></h3>
-            <div id="listaOrcamento"><div class="sem-dados">Nenhum orçamento definido para este projeto.</div></div>
-            <div class="total-geral" id="totalGeralOrcamento">Total: R$ 0,00</div>
-        </div>
-
-        <div class="rodape">
-            <div class="rodape-grid">
-                <div class="rodape-logo"><img src="images/logo-vigorre.png" alt="Vigorre" class="logo-vigorre" onerror="this.style.display='none';this.nextElementSibling.style.display='block';"><span class="logo-vigorre-fallback">Vigorre</span></div>
-                <div class="rodape-info">
-                    <div class="copyright">© 2026 VIGORRE DESIGNER<span class="tm">™</span></div>
-                    <div class="contato"><a href="https://www.vigorre.com.br">www.vigorre.com.br</a> | <a href="https://wa.me/5534991850735">(34) 99185-0735</a></div>
-                    <div class="email">contato@vigorre.com.br</div>
-                </div>
+    <div class="rodape">
+        <div class="rodape-grid">
+            <div class="rodape-logo"><img src="images/logo-vigorre.png" alt="Vigorre" class="logo-vigorre" onerror="this.style.display='none';"></div>
+            <div class="rodape-info">
+                <div class="copyright">© 2026 VIGORRE DESIGNER™</div>
+                <div class="contato"><a href="https://www.vigorre.com.br">www.vigorre.com.br</a> | <a href="https://wa.me/5534991850735">(34) 99185-0735</a></div>
             </div>
         </div>
-    </main>
+    </div>
+</main>
 
-    <script src="config.js"></script>
-    <script src="menu.js?v=20260904"></script>
-    <script>
-        var projetos = JSON.parse(localStorage.getItem('amovin_projetos') || '[]');
-        var orcamentos = JSON.parse(localStorage.getItem('amovin_orcamentos') || '[]');
+<!-- MODAL NOVO/EDITAR ORÇAMENTO -->
+<div class="modal-overlay" id="modalForm">
+    <div class="modal">
+        <h2 id="modalTitulo">➕ Novo Orçamento <button class="fechar" onclick="fecharForm()">×</button></h2>
+        <input type="hidden" id="orcId">
 
-        function preencherProjetos() {
-            var select = document.getElementById('selectProjeto');
-            select.innerHTML = '<option value="">Selecione um projeto...</option>';
-            projetos.forEach(function(p) {
-                var option = document.createElement('option');
-                option.value = p.id;
-                option.textContent = p.nome;
-                select.appendChild(option);
-            });
+        <div class="secao-titulo">📋 Dados do Orçamento</div>
+        <div class="form-group">
+            <label>Título *</label>
+            <input type="text" id="formTitulo" placeholder="Ex: Emenda Lud Falcão - Estruturação Sede">
+        </div>
+        <div class="form-group">
+            <label>Descrição</label>
+            <textarea id="formDescricao" rows="2" placeholder="Descrição do objeto da compra..."></textarea>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label>Projeto Vinculado (opcional)</label>
+                <select id="formProjeto">
+                    <option value="">— Nenhum (compra institucional) —</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Código do Orçamento</label>
+                <input type="text" id="formCodigo" readonly style="background:#F0E9DF;font-weight:700;color:var(--laranja);">
+            </div>
+        </div>
+        <div class="form-group">
+            <label>Fundamentação Legal</label>
+            <input type="text" id="formFundamentacao" value="Lei 14.133/2021, art. 23 - Menor preço" readonly style="background:#F0E9DF;">
+        </div>
+
+        <div class="secao-titulo">📦 Itens do Orçamento (mínimo 3 cotações por item)</div>
+        <div id="itensContainer"></div>
+        <button class="btn btn-azul" onclick="adicionarItem()" style="margin-top:10px;">➕ Adicionar Item</button>
+
+        <div class="btn-group" style="margin-top:24px;">
+            <button class="btn btn-outline" onclick="fecharForm()">Cancelar</button>
+            <button class="btn btn-success" onclick="salvarOrcamento()">💾 Salvar Orçamento</button>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL DETALHES -->
+<div class="modal-overlay" id="modalDetalhes">
+    <div class="modal">
+        <h2>📋 Detalhes do Orçamento <button class="fechar" onclick="fecharDetalhes()">×</button></h2>
+        <div id="conteudoDetalhes"></div>
+        <div class="btn-group">
+            <button class="btn btn-teal" onclick="imprimirMapaCotacao()">🖨️ Mapa de Cotação</button>
+            <button class="btn btn-outline" onclick="fecharDetalhes()">Fechar</button>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL SENHA ADMIN -->
+<div class="modal-overlay" id="modalSenha">
+    <div class="modal modal-pequeno">
+        <h2>🔐 Confirmação <button class="fechar" onclick="fecharSenha()">×</button></h2>
+        <div id="senhaMsg" style="font-size:13px;color:var(--cinza);margin-bottom:16px;"></div>
+        <div class="form-group">
+            <label>Senha de Administrador</label>
+            <input type="password" id="senhaInput" placeholder="Digite a senha" onkeypress="if(event.key==='Enter')confirmarSenha()">
+        </div>
+        <div class="form-group">
+            <label>Justificativa (obrigatória, mín 50 caracteres)</label>
+            <textarea id="justificativaInput" rows="3" placeholder="Explique o motivo da alteração..."></textarea>
+            <div style="font-size:10px;color:var(--cinza);margin-top:4px;" id="contadorJust"></div>
+        </div>
+        <div class="btn-group">
+            <button class="btn btn-outline" onclick="fecharSenha()">Cancelar</button>
+            <button class="btn btn-success" onclick="confirmarSenha()">✅ Confirmar</button>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL LOG -->
+<div class="modal-overlay" id="modalLog">
+    <div class="modal modal-pequeno">
+        <h2>📜 Histórico de Alterações <button class="fechar" onclick="fecharLog()">×</button></h2>
+        <div id="conteudoLog" style="max-height:400px;overflow-y:auto;"></div>
+        <div class="btn-group">
+            <button class="btn btn-outline" onclick="fecharLog()">Fechar</button>
+        </div>
+    </div>
+</div>
+
+<script src="menu.js?v=20260904"></script>
+<script>
+// ============================================================
+// ORÇAMENTOS - AMOVIN ERP (Firebase Tempo Real)
+// Código: A-ORC-YYYY-NNNN
+// ============================================================
+
+var orcamentos = [];
+var projetos = [];
+var firebasePronto = false;
+var db = null;
+var orcAtualDetalhes = null;
+var orcEditandoId = null;
+var itensTemp = [];
+var acaoPendente = null;
+
+var SENHA_ADMIN = 'amovin2026';
+
+var CATEGORIAS = ['Equipamentos', 'Materiais', 'Serviços', 'Capacitação', 'Infraestrutura', 'Outros'];
+
+// ============================================================
+// FORMATAÇÃO MONETÁRIA
+// ============================================================
+function formatarMoeda(valor) {
+    if (valor === null || valor === undefined || isNaN(valor)) return 'R$ 0,00';
+    var n = Math.round((parseFloat(valor) + Number.EPSILON) * 100) / 100;
+    return 'R$ ' + n.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+function formatarNumero(valor) {
+    if (valor === null || valor === undefined || isNaN(valor)) return '0,00';
+    var n = Math.round((parseFloat(valor) + Number.EPSILON) * 100) / 100;
+    return n.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+function parseMoeda(str) {
+    if (!str) return 0;
+    if (typeof str === 'number') return str;
+    var limpo = String(str).replace(/[^\d,.-]/g, '');
+    limpo = limpo.replace(/\./g, '').replace(',', '.');
+    var n = parseFloat(limpo);
+    return isNaN(n) ? 0 : n;
+}
+function mascaraMoeda(input) {
+    var digitos = input.value.replace(/\D/g, '');
+    if (!digitos) { input.value = ''; return; }
+    if (digitos.length > 15) digitos = digitos.substring(0, 15);
+    var numero = parseInt(digitos, 10) / 100;
+    input.value = formatarNumero(numero);
+}
+
+function usuarioLogado() {
+    return sessionStorage.getItem('amovin_nome') || localStorage.getItem('amovin_usuario') || 'Sistema';
+}
+
+// ============================================================
+// FIREBASE
+// ============================================================
+function inicializarFirebase() {
+    if (typeof firebase === 'undefined') {
+        var script = document.createElement('script');
+        script.src = 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js';
+        script.onload = function() {
+            var fs = document.createElement('script');
+            fs.src = 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js';
+            fs.onload = function() {
+                try {
+                    var cfg = {
+                        apiKey: "AIzaSyDQO-69vVBhmBK8oLt0DzfyigBmjxzu7b4",
+                        authDomain: "gestao-amovin.firebaseapp.com",
+                        projectId: "gestao-amovin",
+                        storageBucket: "gestao-amovin.firebasestorage.app",
+                        messagingSenderId: "316793420445",
+                        appId: "1:316793420445:web:68e9898bbfcd30853f3274"
+                    };
+                    if (!firebase.apps.length) firebase.initializeApp(cfg);
+                    db = firebase.firestore();
+                    firebasePronto = true;
+                    atualizarStatusFirebase('conectado');
+                    escutarTudo();
+                } catch (e) {
+                    atualizarStatusFirebase('offline');
+                    carregarLocalStorage();
+                }
+            };
+            document.head.appendChild(fs);
+        };
+        document.head.appendChild(script);
+    } else {
+        try {
+            db = firebase.firestore();
+            firebasePronto = true;
+            atualizarStatusFirebase('conectado');
+            escutarTudo();
+        } catch (e) {
+            atualizarStatusFirebase('offline');
+            carregarLocalStorage();
         }
+    }
+}
 
-        function carregarOrcamento() {
-            var projetoId = parseInt(document.getElementById('selectProjeto').value);
-            if (!projetoId) { document.getElementById('areaOrcamento').style.display = 'none'; return; }
+function atualizarStatusFirebase(status) {
+    var el = document.getElementById('statusFirebase');
+    if (status === 'conectado') {
+        el.className = 'status-firebase conectado';
+        el.innerHTML = '<span class="dot"></span><span>🟢 Firebase (Tempo Real)</span>';
+    } else {
+        el.className = 'status-firebase offline';
+        el.innerHTML = '<span class="dot"></span><span>🟡 Modo Local</span>';
+    }
+}
 
-            var projeto = projetos.find(function(p) { return p.id === projetoId; });
-            if (!projeto) { document.getElementById('areaOrcamento').style.display = 'none'; return; }
+function escutarTudo() {
+    if (!firebasePronto || !db) { carregarLocalStorage(); return; }
 
-            document.getElementById('areaOrcamento').style.display = 'block';
-            document.getElementById('nomeProjetoOrcamento').textContent = projeto.nome;
+    db.collection('orcamentos').onSnapshot(function(snap) {
+        orcamentos = [];
+        snap.forEach(function(doc) { orcamentos.push({ _fbId: doc.id, ...doc.data() }); });
+        orcamentos.sort(function(a, b) { return (b.criadoEm || '').localeCompare(a.criadoEm || ''); });
+        renderizarOrcamentos();
+        atualizarKPIs();
+    });
 
-            var orcProjeto = orcamentos.filter(function(o) { return o.projeto_id === projetoId; });
-            var container = document.getElementById('listaOrcamento');
+    db.collection('projetos').onSnapshot(function(snap) {
+        projetos = [];
+        snap.forEach(function(doc) { projetos.push({ _fbId: doc.id, ...doc.data() }); });
+        preencherDropdownProjetos();
+        preencherFiltroProjetos();
+    });
+}
 
-            if (orcProjeto.length === 0) {
-                container.innerHTML = '<div class="sem-dados">Nenhum orçamento definido para este projeto. <a href="projetos-convenios.html" style="color:var(--laranja);">Gerenciar Projetos</a></div>';
-                document.getElementById('totalGeralOrcamento').textContent = 'Total: R$ 0,00';
-                return;
+function carregarLocalStorage() {
+    orcamentos = JSON.parse(localStorage.getItem('amovin_orcamentos_v2') || '[]');
+    projetos = JSON.parse(localStorage.getItem('amovin_projetos') || '[]');
+    preencherDropdownProjetos();
+    preencherFiltroProjetos();
+    renderizarOrcamentos();
+    atualizarKPIs();
+}
+
+function preencherDropdownProjetos() {
+    var sel = document.getElementById('formProjeto');
+    if (!sel) return;
+    var atual = sel.value;
+    sel.innerHTML = '<option value="">— Nenhum (compra institucional) —</option>';
+    projetos.forEach(function(p) {
+        var opt = document.createElement('option');
+        opt.value = p.codigo || p._fbId;
+        opt.textContent = (p.codigo || '') + ' - ' + (p.nome || '');
+        sel.appendChild(opt);
+    });
+    if (atual) sel.value = atual;
+}
+
+function preencherFiltroProjetos() {
+    var sel = document.getElementById('filtroProjeto');
+    if (!sel) return;
+    sel.innerHTML = '<option value="">Todos os projetos</option>';
+    projetos.forEach(function(p) {
+        var opt = document.createElement('option');
+        opt.value = p.codigo || p._fbId;
+        opt.textContent = (p.codigo || '') + ' - ' + (p.nome || '');
+        sel.appendChild(opt);
+    });
+}
+
+// ============================================================
+// GERAR CÓDIGO A-ORC-YYYY-NNNN
+// ============================================================
+async function gerarProximoCodigo() {
+    var ano = new Date().getFullYear();
+    var prefixo = 'A-ORC-' + ano + '-';
+    var max = 0;
+
+    if (firebasePronto && db) {
+        try {
+            var snap = await db.collection('orcamentos').get();
+            snap.forEach(function(doc) {
+                var c = doc.data().codigo || '';
+                if (c.startsWith(prefixo)) {
+                    var n = parseInt(c.replace(prefixo, ''));
+                    if (n > max) max = n;
+                }
+            });
+        } catch (e) {}
+    } else {
+        orcamentos.forEach(function(o) {
+            if (o.codigo && o.codigo.startsWith(prefixo)) {
+                var n = parseInt(o.codigo.replace(prefixo, ''));
+                if (n > max) max = n;
             }
+        });
+    }
+    return prefixo + String(max + 1).padStart(4, '0');
+}
 
-            var totalPrevisto = 0, totalRealizado = 0;
-            var html = '';
+// ============================================================
+// FORM - ORÇAMENTO
+// ============================================================
+async function abrirFormNovo() {
+    orcEditandoId = null;
+    itensTemp = [];
+    document.getElementById('modalTitulo').innerHTML = '➕ Novo Orçamento <button class="fechar" onclick="fecharForm()">×</button>';
+    document.getElementById('orcId').value = '';
+    document.getElementById('formTitulo').value = '';
+    document.getElementById('formDescricao').value = '';
+    document.getElementById('formProjeto').value = '';
+    var codigo = await gerarProximoCodigo();
+    document.getElementById('formCodigo').value = codigo;
+    document.getElementById('itensContainer').innerHTML = '';
+    adicionarItem();
+    document.getElementById('modalForm').classList.add('ativo');
+}
+function fecharForm() { document.getElementById('modalForm').classList.remove('ativo'); }
 
-            orcProjeto.forEach(function(o) {
-                totalPrevisto += o.previsto || 0;
-                totalRealizado += o.realizado || 0;
-                var disponivel = (o.previsto || 0) - (o.realizado || 0);
-                var percentual = o.previsto > 0 ? Math.min((o.realizado / o.previsto) * 100, 100) : 0;
-                var cor = percentual < 70 ? 'fill-verde' : (percentual < 90 ? 'fill-laranja' : 'fill-vermelho');
-                var classeSaldo = disponivel >= 0 ? 'disponivel' : 'estourado';
+// ============================================================
+// ITENS
+// ============================================================
+function adicionarItem() {
+    var id = 'item_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5);
+    itensTemp.push({
+        id: id,
+        descricao: '',
+        quantidade: 1,
+        unidade: 'Unidade',
+        categoria: 'Equipamentos',
+        projeto_item_id: '',
+        cotacoes: [
+            { id: 'cot_' + Date.now() + '_1', fornecedor: '', cnpjCpf: '', valorUnitario: 0, valorTotal: 0, prazoEntrega: '', validade: '', vencedor: false },
+            { id: 'cot_' + Date.now() + '_2', fornecedor: '', cnpjCpf: '', valorUnitario: 0, valorTotal: 0, prazoEntrega: '', validade: '', vencedor: false },
+            { id: 'cot_' + Date.now() + '_3', fornecedor: '', cnpjCpf: '', valorUnitario: 0, valorTotal: 0, prazoEntrega: '', validade: '', vencedor: false }
+        ],
+        notasVinculadas: [],
+        totalExecutado: 0,
+        saldoRestante: 0
+    });
+    renderizarItensForm();
+}
 
-                html += '<div class="orcamento-item">' +
-                    '<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;width:100%;">' +
-                    '<span class="categoria">' + o.categoria + '</span>' +
-                    '<span class="valores">' +
-                    '<span class="previsto">Previsto: R$ ' + (o.previsto || 0).toFixed(2).replace('.', ',') + '</span> | ' +
-                    '<span class="realizado">Realizado: R$ ' + (o.realizado || 0).toFixed(2).replace('.', ',') + '</span> | ' +
-                    '<span class="' + classeSaldo + '">Saldo: R$ ' + disponivel.toFixed(2).replace('.', ',') + '</span>' +
-                    '</span>' +
-                    '</div>' +
-                    '<div class="barra"><div class="fill ' + cor + '" style="width:' + percentual + '%;"></div></div>' +
+function removerItem(itemId) {
+    if (!confirm('Remover este item?')) return;
+    itensTemp = itensTemp.filter(function(i) { return i.id !== itemId; });
+    renderizarItensForm();
+}
+
+function adicionarCotacao(itemId) {
+    var item = itensTemp.find(function(i) { return i.id === itemId; });
+    if (!item) return;
+    item.cotacoes.push({
+        id: 'cot_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
+        fornecedor: '',
+        cnpjCpf: '',
+        valorUnitario: 0,
+        valorTotal: 0,
+        prazoEntrega: '',
+        validade: '',
+        vencedor: false
+    });
+    renderizarItensForm();
+}
+
+function removerCotacao(itemId, cotId) {
+    var item = itensTemp.find(function(i) { return i.id === itemId; });
+    if (!item) return;
+    if (item.cotacoes.length <= 1) { mostrarToast('⚠️ Mínimo 1 cotação!', 'warning'); return; }
+    item.cotacoes = item.cotacoes.filter(function(c) { return c.id !== cotId; });
+    renderizarItensForm();
+}
+
+function renderizarItensForm() {
+    var container = document.getElementById('itensContainer');
+    if (itensTemp.length === 0) {
+        container.innerHTML = '<div class="sem-dados" style="padding:20px;">Nenhum item. Clique em "Adicionar Item".</div>';
+        return;
+    }
+    container.innerHTML = itensTemp.map(function(item, idx) {
+        var vencedor = item.cotacoes.reduce(function(menor, c) {
+            if (!c.vencedor && c.valorTotal > 0) {
+                if (!menor || c.valorTotal < menor.valorTotal) return c;
+            }
+            return menor;
+        }, null);
+        // Recalcula vencedor automaticamente
+        var menor = null;
+        item.cotacoes.forEach(function(c) {
+            if (c.fornecedor && c.valorTotal > 0) {
+                if (!menor || c.valorTotal < menor.valorTotal) menor = c;
+            }
+        });
+        item.cotacoes.forEach(function(c) {
+            c.vencedor = (menor && c.id === menor.id);
+        });
+
+        return '<div class="item-bloco">' +
+            '<div class="item-header">' +
+            '<div><span class="item-numero">ITEM ' + (idx + 1) + '</span> <span class="item-nome">' + (item.descricao || 'Novo item') + '</span></div>' +
+            '<button class="btn-icon btn-remove" onclick="removerItem(\'' + item.id + '\')" title="Remover item">🗑️</button>' +
+            '</div>' +
+            '<div class="form-row-3">' +
+            '<div class="form-group"><label>Descrição *</label><input type="text" value="' + (item.descricao || '') + '" onchange="atualizarItem(\'' + item.id + '\',\'descricao\',this.value)" placeholder="Ex: Notebook Dell Inspiron 15"></div>' +
+            '<div class="form-group"><label>Quantidade *</label><input type="number" value="' + item.quantidade + '" min="1" onchange="atualizarItem(\'' + item.id + '\',\'quantidade\',this.value)"></div>' +
+            '<div class="form-group"><label>Unidade</label><select onchange="atualizarItem(\'' + item.id + '\',\'unidade\',this.value)">' +
+                ['Unidade', 'Pacote', 'Caixa', 'Kg', 'Litro', 'Resma', 'Fardo', 'Metro'].map(function(u) { return '<option value="' + u + '"' + (item.unidade === u ? ' selected' : '') + '>' + u + '</option>'; }).join('') +
+            '</select></div>' +
+            '</div>' +
+            '<div class="form-row-3">' +
+            '<div class="form-group"><label>Categoria</label><select onchange="atualizarItem(\'' + item.id + '\',\'categoria\',this.value)">' +
+                CATEGORIAS.map(function(c) { return '<option value="' + c + '"' + (item.categoria === c ? ' selected' : '') + '>' + c + '</option>'; }).join('') +
+            '</select></div>' +
+            '<div class="form-group"><label>Projeto deste Item (opcional)</label><select onchange="atualizarItem(\'' + item.id + '\',\'projeto_item_id\',this.value)">' +
+                '<option value="">— Sem projeto específico —</option>' +
+                projetos.map(function(p) { return '<option value="' + (p.codigo || p._fbId) + '"' + (item.projeto_item_id === (p.codigo || p._fbId) ? ' selected' : '') + '>' + (p.codigo || '') + ' - ' + (p.nome || '') + '</option>'; }).join('') +
+            '</select></div>' +
+            '<div class="form-group"><label>Cotações (' + item.cotacoes.length + ')</label></div>' +
+            '</div>' +
+
+            '<div class="cotacao-linha header">' +
+            '<span>Fornecedor *</span><span>CNPJ/CPF</span><span>Valor Unitário</span><span>Valor Total</span><span>Vence</span>' +
+            '</div>' +
+
+            item.cotacoes.map(function(c) {
+                return '<div class="cotacao-linha' + (c.vencedor ? ' vencedor' : '') + '">' +
+                    '<input type="text" value="' + (c.fornecedor || '') + '" placeholder="Nome" onchange="atualizarCotacao(\'' + item.id + '\',\'' + c.id + '\',\'fornecedor\',this.value)">' +
+                    '<input type="text" value="' + (c.cnpjCpf || '') + '" placeholder="CNPJ/CPF" onchange="atualizarCotacao(\'' + item.id + '\',\'' + c.id + '\',\'cnpjCpf\',this.value)">' +
+                    '<input type="text" value="' + formatarNumero(c.valorUnitario || 0) + '" placeholder="0,00" oninput="mascaraMoeda(this);atualizarCotacaoValor(\'' + item.id + '\',\'' + c.id + '\',this.value)">' +
+                    '<input type="text" value="' + formatarNumero(c.valorTotal || 0) + '" readonly style="background:#F0E9DF;font-weight:700;color:' + (c.vencedor ? 'var(--verde)' : 'var(--grafite)') + ';">' +
+                    '<span class="vencedor-badge">' + (c.vencedor ? '✅' : '') + '</span>' +
                     '</div>';
-            });
+            }).join('') +
 
-            container.innerHTML = html;
-            document.getElementById('totalGeralOrcamento').textContent = 'Total: R$ ' + totalRealizado.toFixed(2).replace('.', ',') + ' / R$ ' + totalPrevisto.toFixed(2).replace('.', ',') + ' (' + (totalPrevisto > 0 ? (totalRealizado / totalPrevisto * 100).toFixed(0) : 0) + '%)';
+            '<button class="btn-icon btn-add" onclick="adicionarCotacao(\'' + item.id + '\')" style="margin-top:8px;font-size:12px;">➕ Adicionar cotaç��o (' + item.cotacoes.length + ')</button>' +
+
+            (menor ? '<div style="margin-top:12px;padding:10px;background:#E8F5E9;border-radius:8px;font-size:12px;font-weight:700;color:#2E7D32;">🏆 Vencedor: ' + menor.fornecedor + ' — ' + formatarMoeda(menor.valorTotal) + '</div>' : '') +
+            '</div>';
+    }).join('');
+}
+
+function atualizarItem(itemId, campo, valor) {
+    var item = itensTemp.find(function(i) { return i.id === itemId; });
+    if (!item) return;
+    item[campo] = campo === 'quantidade' ? parseInt(valor) || 1 : valor;
+    recalcularVencedores();
+    renderizarItensForm();
+}
+
+function atualizarCotacao(itemId, cotId, campo, valor) {
+    var item = itensTemp.find(function(i) { return i.id === itemId; });
+    if (!item) return;
+    var cot = item.cotacoes.find(function(c) { return c.id === cotId; });
+    if (!cot) return;
+    cot[campo] = valor;
+}
+
+function atualizarCotacaoValor(itemId, cotId, valorStr) {
+    var item = itensTemp.find(function(i) { return i.id === itemId; });
+    if (!item) return;
+    var cot = item.cotacoes.find(function(c) { return c.id === cotId; });
+    if (!cot) return;
+    cot.valorUnitario = parseMoeda(valorStr);
+    cot.valorTotal = cot.valorUnitario * item.quantidade;
+    recalcularVencedores();
+    renderizarItensForm();
+}
+
+function recalcularVencedores() {
+    itensTemp.forEach(function(item) {
+        var menor = null;
+        item.cotacoes.forEach(function(c) {
+            if (c.fornecedor && c.valorTotal > 0) {
+                if (!menor || c.valorTotal < menor.valorTotal) menor = c;
+            }
+        });
+        item.cotacoes.forEach(function(c) {
+            c.vencedor = (menor && c.id === menor.id);
+        });
+        item.vencedorFornecedor = menor ? menor.fornecedor : '';
+        item.vencedorValorTotal = menor ? menor.valorTotal : 0;
+    });
+}
+
+// ============================================================
+// SALVAR ORÇAMENTO
+// ============================================================
+async function salvarOrcamento() {
+    var titulo = document.getElementById('formTitulo').value.trim();
+    if (!titulo) { mostrarToast('⚠️ Título é obrigatório!', 'warning'); return; }
+
+    // Valida itens
+    if (itensTemp.length === 0) { mostrarToast('⚠️ Adicione pelo menos 1 item!', 'warning'); return; }
+    for (var i = 0; i < itensTemp.length; i++) {
+        var item = itensTemp[i];
+        if (!item.descricao) { mostrarToast('⚠️ Item ' + (i+1) + ': preencha a descrição!', 'warning'); return; }
+        var validas = item.cotacoes.filter(function(c) { return c.fornecedor && c.valorTotal > 0; });
+        if (validas.length < 3) {
+            var continuar = confirm('⚠️ ATENÇÃO\n\nItem ' + (i+1) + ' (' + item.descricao + ') tem apenas ' + validas.length + ' cotação(ões) válida(s).\n\nA Lei 14.133/2021 exige mínimo 3.\n\nDeseja continuar mesmo assim?\n(Será necessário justificar depois)');
+            if (!continuar) return;
+            item.cotacoesReduzidas = true;
         }
+    }
 
-        if (!sessionStorage.getItem('amovin_logado')) { window.location.href = 'index.html'; }
+    var projetoId = document.getElementById('formProjeto').value;
+    var projetoNome = '';
+    if (projetoId) {
+        var p = projetos.find(function(x) { return (x.codigo || x._fbId) === projetoId; });
+        if (p) projetoNome = p.nome || '';
+    }
 
-        preencherProjetos();
+    var valorTotal = itensTemp.reduce(function(s, i) {
+        var menor = null;
+        i.cotacoes.forEach(function(c) {
+            if (c.fornecedor && c.valorTotal > 0) {
+                if (!menor || c.valorTotal < menor.valorTotal) menor = c;
+            }
+        });
+        return s + (menor ? menor.valorTotal : 0);
+    }, 0);
 
-        var urlParams = new URLSearchParams(window.location.search);
-        var projetoId = urlParams.get('projeto');
-        if (projetoId) { document.getElementById('selectProjeto').value = projetoId; carregarOrcamento(); }
-    </script>
+    var dados = {
+        titulo: titulo,
+        descricao: document.getElementById('formDescricao').value.trim(),
+        projeto_id: projetoId || null,
+        projeto_nome: projetoNome || null,
+        itens: itensTemp.map(function(i) {
+            return {
+                id: i.id,
+                descricao: i.descricao,
+                quantidade: i.quantidade,
+                unidade: i.unidade,
+                categoria: i.categoria,
+                projeto_item_id: i.projeto_item_id || null,
+                cotacoes: i.cotacoes,
+                vencedorFornecedor: i.vencedorFornecedor || '',
+                vencedorValorTotal: i.vencedorValorTotal || 0,
+                notasVinculadas: i.notasVinculadas || [],
+                totalExecutado: i.totalExecutado || 0,
+                saldoRestante: (i.vencedorValorTotal || 0) - (i.totalExecutado || 0)
+            };
+        }),
+        valorTotalOrcado: valorTotal,
+        valorTotalExecutado: 0,
+        saldoRestante: valorTotal,
+        percentualExecucao: 0,
+        status: 'Em Cotação',
+        fundamentacaoLegal: 'Lei 14.133/2021, art. 23 - Menor preço',
+        historico: [],
+        atualizadoEm: new Date().toISOString()
+    };
+
+    // Adiciona entrada no histórico
+    dados.historico.push({
+        data: new Date().toISOString(),
+        usuario: usuarioLogado(),
+        acao: orcEditandoId ? 'editado' : 'criado',
+        detalhes: itensTemp.length + ' item(ns)'
+    });
+
+    var idEdit = orcEditandoId;
+
+    if (firebasePronto && db) {
+        try {
+            if (idEdit) {
+                await db.collection('orcamentos').doc(idEdit).update(dados);
+                mostrarToast('✅ Orçamento atualizado!', 'success');
+            } else {
+                dados.codigo = document.getElementById('formCodigo').value;
+                dados.criadoEm = new Date().toISOString();
+                await db.collection('orcamentos').add(dados);
+                mostrarToast('✅ Orçamento ' + dados.codigo + ' criado!', 'success');
+            }
+            fecharForm();
+        } catch (e) {
+            mostrarToast('❌ Erro: ' + e.message, 'error');
+        }
+    } else {
+        if (idEdit) {
+            var idx = orcamentos.findIndex(function(o) { return o._fbId === idEdit; });
+            if (idx >= 0) Object.assign(orcamentos[idx], dados);
+        } else {
+            dados._fbId = Date.now().toString();
+            dados.id = dados._fbId;
+            dados.codigo = document.getElementById('formCodigo').value;
+            orcamentos.push(dados);
+        }
+        localStorage.setItem('amovin_orcamentos_v2', JSON.stringify(orcamentos));
+        fecharForm();
+        renderizarOrcamentos();
+        atualizarKPIs();
+        mostrarToast('✅ Salvo localmente!', 'success');
+    }
+}
+
+// ============================================================
+// RENDERIZAR LISTA
+// ============================================================
+function renderizarOrcamentos() {
+    var st = document.getElementById('filtroStatus').value;
+    var proj = document.getElementById('filtroProjeto').value;
+    var busca = document.getElementById('filtroBusca').value.toLowerCase();
+
+    var filtrados = orcamentos.filter(function(o) {
+        if (st && o.status !== st) return false;
+        if (proj && o.projeto_id !== proj) return false;
+        if (busca && (o.titulo || '').toLowerCase().indexOf(busca) === -1 &&
+                     (o.codigo || '').toLowerCase().indexOf(busca) === -1) return false;
+        return true;
+    });
+
+    document.getElementById('contadorFiltro').textContent = filtrados.length + ' de ' + orcamentos.length + ' orçamentos';
+    document.getElementById('contadorOrcamentos').textContent = orcamentos.length + ' orçamento' + (orcamentos.length !== 1 ? 's' : '');
+
+    var container = document.getElementById('orcamentosLista');
+    if (filtrados.length === 0) {
+        container.innerHTML = '<div class="sem-dados"><p style="font-size:48px;">📊</p><p style="margin-top:12px;">Nenhum orçamento cadastrado.</p><button class="btn btn-primary" onclick="abrirFormNovo()" style="margin-top:16px;">➕ Criar Primeiro Orçamento</button></div>';
+        return;
+    }
+
+    container.innerHTML = filtrados.map(function(o) {
+        var statusClass = 'status-' + (o.status || 'Em Cotação').toLowerCase().replace('ç', 'c').replace('ã', 'a').replace(' ', '-');
+        var perc = o.valorTotalOrcado > 0 ? (o.valorTotalExecutado / o.valorTotalOrcado * 100) : 0;
+        var corBarra = perc < 70 ? 'fill-verde' : (perc < 90 ? 'fill-laranja' : 'fill-vermelho');
+
+        return '<div class="orcamento-card">' +
+            '<div class="cabecalho">' +
+            '<div><span class="codigo">' + (o.codigo || '---') + '</span><div class="titulo">' + (o.titulo || 'Sem título') + '</div></div>' +
+            '<span class="status ' + statusClass + '">' + (o.status || 'Em Cotação') + '</span>' +
+            '</div>' +
+            '<div class="info-geral">' +
+            (o.projeto_nome ? '📋 Projeto: <strong>' + o.projeto_nome + '</strong> • ' : '🏛️ Compra institucional • ') +
+            (o.itens ? o.itens.length : 0) + ' item(ns)' +
+            '</div>' +
+            '<div class="totais">' +
+            '<div class="item"><div class="label">Orçado</div><div class="valor azul">' + formatarMoeda(o.valorTotalOrcado || 0) + '</div></div>' +
+            '<div class="item"><div class="label">Executado</div><div class="valor">' + formatarMoeda(o.valorTotalExecutado || 0) + '</div></div>' +
+            '<div class="item"><div class="label">Saldo</div><div class="valor verde">' + formatarMoeda(o.saldoRestante || 0) + '</div></div>' +
+            '</div>' +
+            '<div class="barra"><div class="fill ' + corBarra + '" style="width:' + perc.toFixed(1) + '%;"></div></div>' +
+            '<div style="font-size:11px;color:var(--cinza);text-align:right;">Execução: ' + perc.toFixed(1) + '%</div>' +
+            '<div class="acoes">' +
+            '<button class="btn btn-outline btn-sm" onclick="verDetalhes(\'' + o._fbId + '\')">👁️ Ver</button>' +
+            (o.status === 'Em Cotação' ? '<button class="btn btn-outline btn-sm" onclick="editarOrcamento(\'' + o._fbId + '\')">✏️ Editar</button>' : '') +
+            (o.status === 'Em Cotação' ? '<button class="btn btn-success btn-sm" onclick="fecharOrcamento(\'' + o._fbId + '\')">🔒 Fechar</button>' : '') +
+            (o.status === 'Fechado' ? '<button class="btn btn-amarelo btn-sm" onclick="reabrirOrcamento(\'' + o._fbId + '\')">🔓 Reabrir</button>' : '') +
+            '<button class="btn btn-teal btn-sm" onclick="verLog(\'' + o._fbId + '\')">📜 Log</button>' +
+            '<button class="btn btn-danger btn-sm" onclick="excluirOrcamento(\'' + o._fbId + '\')">🗑️</button>' +
+            '</div></div>';
+    }).join('');
+}
+
+// ============================================================
+// AÇÕES
+// ============================================================
+function verDetalhes(fbId) {
+    var o = orcamentos.find(function(x) { return x._fbId === fbId; });
+    if (!o) return;
+    orcAtualDetalhes = o;
+    var html = '';
+    html += '<div style="background:#F8F4ED;padding:14px;border-radius:10px;margin-bottom:16px;text-align:center;">';
+    html += '<div style="font-size:11px;color:var(--cinza);">CÓDIGO</div>';
+    html += '<div style="font-size:22px;font-weight:800;color:var(--laranja);letter-spacing:1px;">' + (o.codigo || '---') + '</div>';
+    html += '<div style="font-size:13px;color:var(--grafite);margin-top:6px;">' + (o.titulo || '') + '</div>';
+    html += '</div>';
+
+    if (o.descricao) html += '<div style="margin-bottom:12px;font-size:13px;color:var(--cinza);">' + o.descricao + '</div>';
+    if (o.projeto_nome) html += '<div style="margin-bottom:12px;font-size:13px;"><strong>📋 Projeto:</strong> ' + o.projeto_nome + '</div>';
+
+    var totalEconomia = 0;
+    (o.itens || []).forEach(function(item, idx) {
+        html += '<div style="background:#FAFAFA;border-radius:10px;padding:16px;margin-bottom:14px;border-left:4px solid var(--laranja);">';
+        html += '<div style="font-weight:700;color:var(--grafite);margin-bottom:10px;">ITEM ' + (idx+1) + ': ' + item.descricao + ' (' + item.quantidade + ' ' + item.unidade + ')</div>';
+        html += '<table class="tabela-comparativa"><thead><tr><th>Fornecedor</th><th>CNPJ/CPF</th><th>Unitário</th><th>Total</th><th>Vencedor</th></tr></thead><tbody>';
+        var maiorValor = 0;
+        (item.cotacoes || []).forEach(function(c) {
+            if (c.valorTotal > maiorValor) maiorValor = c.valorTotal;
+            html += '<tr class="' + (c.vencedor ? 'vencedor' : '') + '">' +
+                '<td>' + (c.fornecedor || '—') + '</td>' +
+                '<td>' + (c.cnpjCpf || '—') + '</td>' +
+                '<td>' + formatarMoeda(c.valorUnitario || 0) + '</td>' +
+                '<td>' + formatarMoeda(c.valorTotal || 0) + '</td>' +
+                '<td>' + (c.vencedor ? '✅ MENOR' : '') + '</td>' +
+                '</tr>';
+        });
+        html += '</tbody></table>';
+        if (item.vencedorValorTotal && maiorValor > item.vencedorValorTotal) {
+            var economiaItem = maiorValor - item.vencedorValorTotal;
+            totalEconomia += economiaItem;
+            html += '<div style="font-size:11px;color:var(--verde);margin-top:6px;">💰 Economia deste item: ' + formatarMoeda(economiaItem) + ' (vs. maior cotação ' + formatarMoeda(maiorValor) + ')</div>';
+        }
+        html += '</div>';
+    });
+
+    html += '<div style="background:#E8F5E9;padding:16px;border-radius:10px;margin-top:16px;">';
+    html += '<div style="display:flex;justify-content:space-between;padding:4px 0;font-size:13px;"><span>Total Orçado:</span><strong>' + formatarMoeda(o.valorTotalOrcado) + '</strong></div>';
+    html += '<div style="display:flex;justify-content:space-between;padding:4px 0;font-size:13px;"><span>Economia Total:</span><strong style="color:var(--verde);">' + formatarMoeda(totalEconomia) + '</strong></div>';
+    html += '</div>';
+
+    document.getElementById('conteudoDetalhes').innerHTML = html;
+    document.getElementById('modalDetalhes').classList.add('ativo');
+}
+function fecharDetalhes() { document.getElementById('modalDetalhes').classList.remove('ativo'); orcAtualDetalhes = null; }
+
+async function editarOrcamento(fbId) {
+    var o = orcamentos.find(function(x) { return x._fbId === fbId; });
+    if (!o) return;
+    if (o.status !== 'Em Cotação') {
+        mostrarToast('⚠️ Só é possível editar orçamentos "Em Cotação". Reabra primeiro.', 'warning');
+        return;
+    }
+    orcEditandoId = fbId;
+    itensTemp = JSON.parse(JSON.stringify(o.itens || []));
+    document.getElementById('modalTitulo').innerHTML = '✏️ Editar Orçamento <button class="fechar" onclick="fecharForm()">×</button>';
+    document.getElementById('formTitulo').value = o.titulo || '';
+    document.getElementById('formDescricao').value = o.descricao || '';
+    document.getElementById('formProjeto').value = o.projeto_id || '';
+    document.getElementById('formCodigo').value = o.codigo || '';
+    renderizarItensForm();
+    document.getElementById('modalForm').classList.add('ativo');
+}
+
+async function fecharOrcamento(fbId) {
+    var o = orcamentos.find(function(x) { return x._fbId === fbId; });
+    if (!o) return;
+
+    // Valida 3 cotações por item
+    var problemas = [];
+    (o.itens || []).forEach(function(item, idx) {
+        var validas = (item.cotacoes || []).filter(function(c) { return c.fornecedor && c.valorTotal > 0; });
+        if (validas.length < 3) problemas.push('Item ' + (idx+1) + ' (' + item.descricao + '): ' + validas.length + ' cotação(ões)');
+    });
+
+    if (problemas.length > 0) {
+        if (!confirm('⚠️ ATENÇÃO — Lei 14.133/2021\n\nMínimo de 3 cotações por item.\n\nItens com menos de 3:\n' + problemas.join('\n') + '\n\nDeseja fechar mesmo assim?\n(Será registrado no histórico como justificativa)')) return;
+    }
+
+    pedirSenha('Fechar orçamento ' + o.codigo + '?', function(just) {
+        var hist = o.historico || [];
+        hist.push({
+            data: new Date().toISOString(),
+            usuario: usuarioLogado(),
+            acao: 'fechado',
+            justificativa: just,
+            detalhes: 'Valor: ' + formatarMoeda(o.valorTotalOrcado)
+        });
+
+        if (firebasePronto && db) {
+            db.collection('orcamentos').doc(fbId).update({
+                status: 'Fechado',
+                dataFechamento: new Date().toISOString(),
+                historico: hist,
+                atualizadoEm: new Date().toISOString()
+            }).then(function() {
+                mostrarToast('🔒 Orçamento fechado!', 'success');
+            }).catch(function(e) {
+                mostrarToast('❌ ' + e.message, 'error');
+            });
+        } else {
+            o.status = 'Fechado';
+            o.dataFechamento = new Date().toISOString();
+            o.historico = hist;
+            localStorage.setItem('amovin_orcamentos_v2', JSON.stringify(orcamentos));
+            renderizarOrcamentos();
+            atualizarKPIs();
+        }
+    });
+}
+
+async function reabrirOrcamento(fbId) {
+    var o = orcamentos.find(function(x) { return x._fbId === fbId; });
+    if (!o) return;
+    if (o.valorTotalExecutado > 0) {
+        mostrarToast('⚠️ Não é possível reabrir orçamento com notas vinculadas!', 'warning');
+        return;
+    }
+    pedirSenha('Reabrir orçamento ' + o.codigo + '?\n\nO orçamento voltará para "Em Cotação" e poderá ser editado.', function(just) {
+        var hist = o.historico || [];
+        hist.push({
+            data: new Date().toISOString(),
+            usuario: usuarioLogado(),
+            acao: 'reaberto',
+            justificativa: just,
+            detalhes: 'Valores anteriores: ' + formatarMoeda(o.valorTotalOrcado)
+        });
+
+        if (firebasePronto && db) {
+            db.collection('orcamentos').doc(fbId).update({
+                status: 'Em Cotação',
+                reaberto: true,
+                ultimaReabertura: new Date().toISOString(),
+                historico: hist,
+                atualizadoEm: new Date().toISOString()
+            }).then(function() {
+                mostrarToast('🔓 Orçamento reaberto!', 'success');
+            }).catch(function(e) {
+                mostrarToast('❌ ' + e.message, 'error');
+            });
+        } else {
+            o.status = 'Em Cotação';
+            o.historico = hist;
+            localStorage.setItem('amovin_orcamentos_v2', JSON.stringify(orcamentos));
+            renderizarOrcamentos();
+        }
+    });
+}
+
+async function excluirOrcamento(fbId) {
+    var o = orcamentos.find(function(x) { return x._fbId === fbId; });
+    if (!o) return;
+    if (o.valorTotalExecutado > 0) {
+        mostrarToast('⚠️ Não é possível excluir orçamento com execução!', 'warning');
+        return;
+    }
+    if (!confirm('Excluir o orçamento "' + o.titulo + '" (' + o.codigo + ')?\n\nEsta ação não pode ser desfeita.')) return;
+    pedirSenha('Exclusão permanente do orçamento ' + o.codigo, function(just) {
+        if (firebasePronto && db) {
+            db.collection('orcamentos').doc(fbId).delete().then(function() {
+                mostrarToast('🗑️ Orçamento excluído!', 'info');
+            }).catch(function(e) {
+                mostrarToast('❌ ' + e.message, 'error');
+            });
+        } else {
+            orcamentos = orcamentos.filter(function(x) { return x._fbId !== fbId; });
+            localStorage.setItem('amovin_orcamentos_v2', JSON.stringify(orcamentos));
+            renderizarOrcamentos();
+            atualizarKPIs();
+        }
+    });
+}
+
+// ============================================================
+// SENHA ADMIN
+// ============================================================
+function pedirSenha(mensagem, callback) {
+    acaoPendente = callback;
+    document.getElementById('senhaMsg').innerHTML = mensagem;
+    document.getElementById('senhaInput').value = '';
+    document.getElementById('justificativaInput').value = '';
+    document.getElementById('contadorJust').textContent = '0/50 caracteres';
+    document.getElementById('modalSenha').classList.add('ativo');
+    setTimeout(function() { document.getElementById('senhaInput').focus(); }, 200);
+}
+
+function confirmarSenha() {
+    var senha = document.getElementById('senhaInput').value;
+    var just = document.getElementById('justificativaInput').value.trim();
+    if (senha !== SENHA_ADMIN) { mostrarToast('❌ Senha incorreta!', 'error'); return; }
+    if (just.length < 50) { mostrarToast('⚠️ Justificativa deve ter no mínimo 50 caracteres!', 'warning'); return; }
+    fecharSenha();
+    if (acaoPendente) { acaoPendente(just); acaoPendente = null; }
+}
+function fecharSenha() {
+    document.getElementById('modalSenha').classList.remove('ativo');
+    acaoPendente = null;
+}
+
+document.getElementById('justificativaInput').addEventListener('input', function() {
+    document.getElementById('contadorJust').textContent = this.value.length + '/50 caracteres';
+});
+
+// ============================================================
+// LOG
+// ============================================================
+function verLog(fbId) {
+    var o = orcamentos.find(function(x) { return x._fbId === fbId; });
+    if (!o) return;
+    var hist = o.historico || [];
+    var container = document.getElementById('conteudoLog');
+    if (hist.length === 0) {
+        container.innerHTML = '<div class="sem-dados">Nenhuma alteração registrada.</div>';
+    } else {
+        container.innerHTML = hist.slice().reverse().map(function(h) {
+            var dt = new Date(h.data).toLocaleString('pt-BR');
+            return '<div class="log-item">' +
+                '<div class="quando">' + dt + '</div>' +
+                '<div class="quem">👤 ' + (h.usuario || 'Sistema') + '</div>' +
+                '<div class="acao">📌 ' + (h.acao || 'ação') + '</div>' +
+                (h.detalhes ? '<div style="font-size:11px;color:var(--cinza);">' + h.detalhes + '</div>' : '') +
+                (h.justificativa ? '<div style="font-size:11px;color:var(--laranja);margin-top:4px;"><strong>Justificativa:</strong> ' + h.justificativa + '</div>' : '') +
+                '</div>';
+        }).join('');
+    }
+    document.getElementById('modalLog').classList.add('ativo');
+}
+function fecharLog() { document.getElementById('modalLog').classList.remove('ativo'); }
+
+// ============================================================
+// MAPA DE COTAÇÃO (Imprimir)
+// ============================================================
+function imprimirMapaCotacao() {
+    if (!orcAtualDetalhes) return;
+    var o = orcAtualDetalhes;
+    var html = '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Mapa de Cotação ' + o.codigo + '</title>';
+    html += '<style>';
+    html += 'body { font-family: Arial, sans-serif; padding: 20px; color: #1A1A1A; font-size: 12px; }';
+    html += 'h1 { color: #C65A11; text-align: center; font-size: 18px; margin-bottom: 4px; }';
+    html += 'h2 { text-align: center; font-size: 14px; font-weight: normal; color: #666; margin-bottom: 20px; }';
+    html += '.info-box { background: #F8F4ED; padding: 12px; border-radius: 8px; margin-bottom: 16px; }';
+    html += '.info-box div { padding: 4px 0; }';
+    html += '.info-box strong { color: #C65A11; }';
+    html += 'table { width: 100%; border-collapse: collapse; margin: 12px 0; }';
+    html += 'th { background: #F0E9DF; padding: 8px; text-align: left; font-size: 11px; }';
+    html += 'td { padding: 8px; border-bottom: 1px solid #E5E0D8; font-size: 11px; }';
+    html += '.vencedor { background: #E8F5E9; font-weight: bold; color: #2E7D32; }';
+    html += '.titulo-item { background: #C65A11; color: white; padding: 8px 12px; border-radius: 6px; margin-top: 16px; font-weight: bold; }';
+    html += '.total-geral { background: #C65A11; color: white; padding: 14px; text-align: center; font-size: 16px; font-weight: bold; border-radius: 8px; margin-top: 20px; }';
+    html += '.assinatura { margin-top: 60px; text-align: center; }';
+    html += '.assinatura div { border-top: 1px solid #1A1A1A; display: inline-block; padding-top: 6px; width: 300px; }';
+    html += '@media print { body { padding: 10px; } }';
+    html += '</style></head><body>';
+
+    html += '<h1>🌻 AMOVIN</h1>';
+    html += '<h2>Mapa de Cotação — Lei 14.133/2021, art. 23</h2>';
+
+    html += '<div class="info-box">';
+    html += '<div><strong>Código:</strong> ' + (o.codigo || '---') + '</div>';
+    html += '<div><strong>Título:</strong> ' + (o.titulo || '') + '</div>';
+    if (o.projeto_nome) html += '<div><strong>Projeto:</strong> ' + o.projeto_nome + '</div>';
+    html += '<div><strong>Data:</strong> ' + new Date(o.criadoEm || Date.now()).toLocaleDateString('pt-BR') + '</div>';
+    html += '<div><strong>Status:</strong> ' + (o.status || '') + '</div>';
+    html += '</div>';
+
+    (o.itens || []).forEach(function(item, idx) {
+        html += '<div class="titulo-item">ITEM ' + (idx+1) + ': ' + item.descricao + ' — ' + item.quantidade + ' ' + item.unidade + '</div>';
+        html += '<table><thead><tr><th>Fornecedor</th><th>CNPJ/CPF</th><th>Valor Unitário</th><th>Valor Total</th><th>Vencedor</th></tr></thead><tbody>';
+        (item.cotacoes || []).forEach(function(c) {
+            html += '<tr class="' + (c.vencedor ? 'vencedor' : '') + '">' +
+                '<td>' + (c.fornecedor || '—') + '</td>' +
+                '<td>' + (c.cnpjCpf || '—') + '</td>' +
+                '<td>' + formatarMoeda(c.valorUnitario || 0) + '</td>' +
+                '<td>' + formatarMoeda(c.valorTotal || 0) + '</td>' +
+                '<td>' + (c.vencedor ? '✅ MENOR PREÇO' : '') + '</td>' +
+                '</tr>';
+        });
+        html += '</tbody></table>';
+    });
+
+    html += '<div class="total-geral">VALOR TOTAL DO ORÇAMENTO: ' + formatarMoeda(o.valorTotalOrcado) + '</div>';
+
+    html += '<div class="assinatura">';
+    html += '<div>Responsável pela Cotação</div>';
+    html += '</div>';
+
+    html += '<div style="text-align:center;margin-top:40px;font-size:10px;color:#888;">Documento gerado em ' + new Date().toLocaleString('pt-BR') + ' • AMOVIN ERP</div>';
+    html += '</body></html>';
+
+    var win = window.open('', '_blank');
+    win.document.write(html);
+    win.document.close();
+    setTimeout(function() { win.print(); }, 500);
+}
+
+// ============================================================
+// KPIs
+// ============================================================
+function atualizarKPIs() {
+    document.getElementById('kpiTotal').textContent = orcamentos.length;
+    document.getElementById('kpiEmCotacao').textContent = orcamentos.filter(function(o) { return o.status === 'Em Cotação'; }).length;
+    document.getElementById('kpiFechados').textContent = orcamentos.filter(function(o) { return o.status === 'Fechado'; }).length;
+    document.getElementById('kpiExecucao').textContent = orcamentos.filter(function(o) { return o.status === 'Em Execução'; }).length;
+    document.getElementById('kpiConcluidos').textContent = orcamentos.filter(function(o) { return o.status === 'Concluído'; }).length;
+
+    var economiaTotal = 0;
+    orcamentos.forEach(function(o) {
+        (o.itens || []).forEach(function(item) {
+            var maior = 0;
+            (item.cotacoes || []).forEach(function(c) {
+                if (c.valorTotal > maior) maior = c.valorTotal;
+            });
+            if (maior > item.vencedorValorTotal) economiaTotal += (maior - item.vencedorValorTotal);
+        });
+    });
+    document.getElementById('kpiEconomia').textContent = formatarMoeda(economiaTotal);
+}
+
+// ============================================================
+// TOAST
+// ============================================================
+function mostrarToast(msg, tipo) {
+    var t = document.createElement('div');
+    t.className = 'toast toast-' + (tipo || 'success');
+    t.textContent = msg;
+    document.body.appendChild(t);
+    setTimeout(function() { t.remove(); }, 4000);
+}
+
+// ============================================================
+// INIT
+// ============================================================
+if (!sessionStorage.getItem('amovin_logado') && !localStorage.getItem('amovin_logado')) {
+    console.log('⚠️ Sessão não encontrada, mas permitindo acesso.');
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    inicializarFirebase();
+});
+</script>
 </body>
 </html>
