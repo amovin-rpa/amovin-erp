@@ -3,80 +3,84 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Amovin ERP Social • Backup</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<title>Amovin ERP • Backup Manual</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root {
-  --laranja: #C65A11;
-  --amarelo: #F5C518;
-  --verde: #57C220;
-  --azul: #1E88E5;
-  --grafite: #1A1A1A;
-  --cinza: #6B7280;
-  --cinza-claro: #F8F4ED;
-  --branco: #FFFFFF;
-  --vermelho: #E53935;
+    --laranja: #C65A11; --laranja-escuro: #A04A0E; --amarelo: #F5C518; --verde: #57C220;
+    --azul: #1E88E5; --grafite: #1A1A1A; --cinza: #6B7280; --branco: #FFFFFF;
+    --vermelho: #E53935; --roxo: #7C3AED; --teal: #00897B; --dourado: #D97706;
 }
 * { margin:0; padding:0; box-sizing:border-box; }
 body { font-family: 'Inter', system-ui, sans-serif; background: #F8F4ED; display: flex; min-height: 100vh; }
-
 .main-content { flex: 1; margin-left: 270px; padding: 24px 30px; }
-.topo-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+.topo-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 10px; }
 .topo-bar h1 { font-size: 24px; font-weight: 700; color: var(--grafite); }
+.topo-bar h1 span { color: var(--laranja); }
+.topo-bar .sub { font-size: 12px; color: var(--cinza); font-weight: 400; display: block; }
 .btn-sair-topo { background: #F8F4ED; color: #1A1A1A; border: 1px solid #F0E9DF; padding: 8px 16px; border-radius: 10px; font-size: 12px; font-weight: 600; cursor: pointer; }
-
-.kpi-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 15px; margin-bottom: 25px; }
-.kpi-card { background: #FFFFFF; padding: 20px; border-radius: 14px; border: 1px solid #F0E9DF; text-align: center; }
-.kpi-card .kpi-valor { font-size: 24px; font-weight: 800; color: var(--laranja); }
+.kpi-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 15px; margin-bottom: 22px; }
+.kpi-card { background: #FFFFFF; padding: 16px; border-radius: 14px; border: 1px solid #F0E9DF; text-align: center; }
+.kpi-card .kpi-valor { font-size: 22px; font-weight: 800; color: var(--laranja); word-break: break-word; }
 .kpi-card .kpi-label { font-size: 11px; color: var(--cinza); }
-.kpi-card .kpi-valor.verde { color: var(--verde); }
-.kpi-card .kpi-valor.vermelho { color: var(--vermelho); }
-
-.grid-backup { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-.card { background: #FFFFFF; padding: 24px; border-radius: 14px; border: 1px solid #F0E9DF; }
-.card h3 { font-size: 16px; font-weight: 700; color: var(--grafite); margin-bottom: 18px; padding-bottom: 12px; border-bottom: 1px solid #F0E9DF; display: flex; align-items: center; gap: 10px; }
-.card h3 .badge { font-size: 10px; font-weight: 600; padding: 2px 10px; border-radius: 20px; background: #E8F5E9; color: #2E7D32; }
-.card h3 .badge-danger { background: #FFEBEE; color: #C62828; }
-
-.btn { padding: 10px 18px; border-radius: 8px; border: none; cursor: pointer; font-weight: 600; font-size: 12px; font-family: 'Inter', sans-serif; }
-.btn-verde { background: var(--verde); color: white; }
-.btn-verde:hover { background: #388E3C; }
+.card { background: #FFFFFF; padding: 24px; border-radius: 14px; border: 1px solid #F0E9DF; margin-bottom: 20px; }
+.card h3 { font-size: 16px; font-weight: 700; color: var(--grafite); margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid #F0E9DF; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
+.card h3 .badge { font-size: 10px; font-weight: 600; padding: 3px 12px; border-radius: 20px; background: #FFF3E0; color: var(--laranja); }
+.btn { padding: 10px 24px; border-radius: 8px; border: none; cursor: pointer; font-weight: 600; font-size: 13px; font-family: 'Inter', sans-serif; transition: all 0.2s; display: inline-flex; align-items: center; gap: 8px; }
+.btn-primary { background: var(--laranja); color: white; } .btn-primary:hover { background: var(--laranja-escuro); }
+.btn-success { background: var(--verde); color: white; } .btn-success:hover { background: #388E3C; }
+.btn-outline { background: transparent; color: var(--cinza); border: 1px solid #E5E0D8; } .btn-outline:hover { background: #F8F4ED; }
 .btn-azul { background: var(--azul); color: white; }
-.btn-azul:hover { background: #1565C0; }
-.btn-vermelho { background: var(--vermelho); color: white; }
-.btn-vermelho:hover { background: #C62828; }
-.btn-laranja { background: var(--laranja); color: white; }
-.btn-laranja:hover { background: #A04A0E; }
-.btn-cinza { background: #E5E0D8; color: var(--grafite); }
-.btn-cinza:hover { background: #D5D0C8; }
-
-.backup-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; background: #F8F4ED; border-radius: 8px; margin-bottom: 8px; border-left: 4px solid var(--verde); }
-.backup-item .backup-info { font-size: 13px; }
-.backup-item .backup-info .nome { font-weight: 600; color: var(--grafite); }
-.backup-item .backup-info .detalhe { font-size: 11px; color: var(--cinza); }
-.backup-item .backup-acoes { display: flex; gap: 6px; }
-
-.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 20px; }
-.modal { background: white; border-radius: 16px; width: 100%; max-width: 500px; max-height: 85vh; overflow-y: auto; }
-.modal-header { padding: 18px 22px; border-bottom: 1px solid #F0E9DF; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; background: white; z-index: 2; }
-.modal-header h3 { font-size: 18px; }
-.modal-body { padding: 22px; }
-.modal-body p { font-size: 13px; color: var(--cinza); margin-bottom: 14px; line-height: 1.6; }
-.modal-body .form-group { margin-bottom: 14px; }
-.modal-body .form-group label { display: block; font-size: 11px; font-weight: 600; color: var(--cinza); margin-bottom: 4px; text-transform: uppercase; }
-.modal-body .form-group input { width: 100%; padding: 10px 12px; border: 1px solid #E5E0D8; border-radius: 8px; font-size: 13px; font-family: 'Inter', sans-serif; }
-.btn-fechar { background: none; border: none; font-size: 22px; cursor: pointer; color: var(--cinza); }
-.modal-actions { display: flex; gap: 10px; margin-top: 15px; flex-wrap: wrap; }
-.modal-actions .btn { flex: 1; text-align: center; }
-
+.btn-roxo { background: var(--roxo); color: white; }
+.btn-teal { background: var(--teal); color: white; }
+.btn-amarelo { background: var(--amarelo); color: #1A1A1A; }
+.btn-danger { background: var(--vermelho); color: white; }
+.btn-full { width: 100%; padding: 16px; font-size: 15px; justify-content: center; }
+.btn-grande { padding: 18px 40px; font-size: 18px; border-radius: 12px; }
+.banner-status { padding: 20px 24px; border-radius: 12px; margin-bottom: 20px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+.banner-status.ok { background: linear-gradient(135deg, #E8F5E9, #C8E6C9); border-left: 5px solid var(--verde); }
+.banner-status.atencao { background: linear-gradient(135deg, #FFF8E7, #FFECB3); border-left: 5px solid var(--dourado); }
+.banner-status.urgente { background: linear-gradient(135deg, #FFEBEE, #FFCDD2); border-left: 5px solid var(--vermelho); }
+.banner-status .icone { font-size: 48px; }
+.banner-status .texto { flex: 1; }
+.banner-status .texto .titulo { font-size: 18px; font-weight: 800; color: var(--grafite); margin-bottom: 4px; }
+.banner-status .texto .descricao { font-size: 13px; color: var(--cinza); }
+.banner-status .texto .ultimo { font-size: 12px; color: var(--grafite); margin-top: 6px; font-weight: 600; }
+.aviso-box { background: #FEF3C7; border-left: 4px solid var(--dourado); padding: 16px 20px; border-radius: 10px; margin: 16px 0; font-size: 13px; line-height: 1.6; }
+.aviso-box strong { color: var(--laranja); }
+.info-box { background: #E3F2FD; border-left: 4px solid var(--azul); padding: 16px 20px; border-radius: 10px; margin: 16px 0; font-size: 13px; line-height: 1.6; }
+.info-box strong { color: var(--azul); }
+.sucesso-box { background: #E8F5E9; border-left: 4px solid var(--verde); padding: 16px 20px; border-radius: 10px; margin: 16px 0; font-size: 13px; }
+.sucesso-box strong { color: var(--verde); }
+.passo-box { background: #F8F4ED; border-radius: 10px; padding: 16px; margin-bottom: 12px; display: flex; gap: 14px; align-items: flex-start; }
+.passo-num { background: var(--laranja); color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; flex-shrink: 0; }
+.passo-texto { flex: 1; font-size: 13px; line-height: 1.6; }
+.passo-texto strong { color: var(--laranja); }
+.passo-texto code { background: #FFF3E0; padding: 2px 8px; border-radius: 4px; font-family: monospace; font-size: 12px; color: var(--laranja); }
+.checklist { list-style: none; }
+.checklist li { padding: 8px 0; font-size: 13px; display: flex; align-items: flex-start; gap: 10px; }
+.checklist li::before { content: '✅'; font-size: 16px; flex-shrink: 0; }
+.estatistica-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin: 16px 0; }
+.estatistica-item { background: #F8F4ED; border-radius: 10px; padding: 14px; text-align: center; }
+.estatistica-item .num { font-size: 24px; font-weight: 800; color: var(--laranja); }
+.estatistica-item .lbl { font-size: 11px; color: var(--cinza); margin-top: 4px; }
+.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 9999; justify-content: center; align-items: center; padding: 20px; overflow-y: auto; }
+.modal-overlay.ativo { display: flex; }
+.modal { background: white; border-radius: 16px; padding: 30px; max-width: 700px; width: 100%; max-height: 95vh; overflow-y: auto; margin: auto; }
+.modal h2 { font-size: 20px; color: var(--grafite); margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; }
+.modal .btn-group { display: flex; gap: 12px; margin-top: 16px; justify-content: flex-end; flex-wrap: wrap; }
+.modal .fechar { background: none; border: none; font-size: 22px; cursor: pointer; color: var(--cinza); }
+.toast { position: fixed; top: 20px; right: 20px; padding: 16px 24px; border-radius: 12px; color: white; font-weight: 600; font-size: 14px; z-index: 10000; box-shadow: 0 8px 32px rgba(0,0,0,0.15); animation: slideInRight 0.4s ease; max-width: 400px; }
+.toast-success { background: var(--verde); } .toast-error { background: var(--vermelho); } .toast-warning { background: var(--dourado); }
+@keyframes slideInRight { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
 .rodape { background: #FFFFFF; border-radius: 14px; padding: 12px 18px; border: 1px solid #F0E9DF; margin-top: 20px; }
-.rodape-grid { display: flex; align-items: center; gap: 12px; }
-.rodape-logo { flex-shrink: 0; } .rodape-logo .logo-vigorre { width: 50px; }
-.rodape-info { flex: 1; } .rodape-info .copyright { font-size: 8px; color: #8A8F98; } .rodape-info .tm { font-size: 6px; vertical-align: super; }
-.rodape-info .contato { font-size: 9px; color: #8A8F98; } .rodape-info a { color: #C65A11; text-decoration: none; } .rodape-info .email { font-size: 8px; color: #aaa; }
-.logo-vigorre-fallback { font-size: 12px; font-weight: 700; display: none; }
-
-@media (max-width: 900px) { .main-content { margin-left: 0; } .grid-backup { grid-template-columns: 1fr; } }
+.rodape-grid { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.rodape-logo .logo-vigorre { width: 50px; }
+.rodape-info { flex: 1; }
+.rodape-info .copyright { font-size: 8px; color: #8A8F98; }
+.rodape-info .contato { font-size: 9px; color: #8A8F98; }
+.rodape-info a { color: #C65A11; text-decoration: none; }
+@media (max-width: 900px) { .main-content { margin-left: 0; } }
 </style>
 </head>
 <body>
@@ -84,323 +88,504 @@ body { font-family: 'Inter', system-ui, sans-serif; background: #F8F4ED; display
 <div id="menu-container"></div>
 
 <main class="main-content">
-  <div class="topo-bar">
-    <h1>💾 Backup e Restauração</h1>
-    <button class="btn-sair-topo" onclick="window.location.href='dashboard.html'">🏠 Dashboard</button>
-  </div>
-
-  <div class="kpi-row">
-    <div class="kpi-card"><div class="kpi-valor" id="kpiBackups">0</div><div class="kpi-label">Backups Salvos</div></div>
-    <div class="kpi-card"><div class="kpi-valor verde" id="kpiUltimo">-</div><div class="kpi-label">Último Backup</div></div>
-    <div class="kpi-card"><div class="kpi-valor" id="kpiRegistros">0</div><div class="kpi-label">Total de Registros</div></div>
-    <div class="kpi-card"><div class="kpi-valor" id="kpiTamanho">0 KB</div><div class="kpi-label">Tamanho Estimado</div></div>
-  </div>
-
-  <div class="grid-backup">
-    <div class="card">
-      <h3>📤 Exportar Backup <span class="badge">Manual</span></h3>
-      <p style="font-size:13px;color:var(--cinza);margin-bottom:16px;">Exporte todos os dados do sistema em formato JSON. Recomendado fazer antes de grandes alterações.</p>
-      <button class="btn btn-verde" onclick="exportarBackup()" style="width:100%;padding:14px;font-size:14px;">📤 Exportar Backup Completo</button>
-      <div style="margin-top:12px;">
-        <button class="btn btn-azul" onclick="exportarBackupParcial('pessoas')" style="width:48%;">👥 Pessoas</button>
-        <button class="btn btn-azul" onclick="exportarBackupParcial('financeiro')" style="width:48%;">💰 Financeiro</button>
-      </div>
-      <div id="statusExport" style="margin-top:10px;font-size:12px;color:var(--cinza);"></div>
-    </div>
-
-    <div class="card">
-      <h3>📥 Importar Backup <span class="badge badge-danger">Atenção</span></h3>
-      <p style="font-size:13px;color:var(--cinza);margin-bottom:16px;">Restaura dados de um backup anterior. <strong>Isso sobrescreverá todos os dados atuais.</strong></p>
-      <button class="btn btn-laranja" onclick="importarBackup()" style="width:100%;padding:14px;font-size:14px;">📥 Importar Backup</button>
-      <div id="statusImport" style="margin-top:10px;font-size:12px;color:var(--cinza);"></div>
-    </div>
-
-    <div class="card" style="grid-column: 1 / -1;">
-      <h3>📋 Histórico de Backups <span class="badge">Local</span></h3>
-      <div id="listaBackups"><div style="text-align:center;padding:20px;color:var(--cinza);">Nenhum backup salvo.</div></div>
-    </div>
-
-    <div class="card" style="grid-column: 1 / -1;">
-      <h3>🔄 Agendamento <span class="badge">Beta</span></h3>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+    <div class="topo-bar">
         <div>
-          <div class="form-group" style="margin-bottom:8px;">
-            <label>Frequência</label>
-            <select id="frequenciaBackup" style="width:100%;padding:10px;border:1px solid #E5E0D8;border-radius:8px;font-size:13px;font-family:'Inter',sans-serif;">
-              <option value="diario">Diário</option>
-              <option value="semanal" selected>Semanal</option>
-              <option value="mensal">Mensal</option>
-              <option value="desativado">Desativado</option>
-            </select>
-          </div>
+            <h1>💾 Backup Manual <span>AMOVIN</span></h1>
+            <span class="sub">Baixe os dados e salve no Google Drive</span>
         </div>
-        <div>
-          <div class="form-group" style="margin-bottom:8px;">
-            <label>Horário</label>
-            <input type="time" id="horarioBackup" value="02:00" style="width:100%;padding:10px;border:1px solid #E5E0D8;border-radius:8px;font-size:13px;font-family:'Inter',sans-serif;">
-          </div>
-        </div>
-      </div>
-      <button class="btn btn-laranja" onclick="salvarAgendamento()" style="width:100%;padding:12px;font-size:13px;">💾 Salvar Agendamento</button>
-      <div id="statusAgendamento" style="margin-top:10px;font-size:12px;color:var(--cinza);"></div>
+        <button class="btn-sair-topo" onclick="window.location.href='dashboard.html'">🏠 Dashboard</button>
     </div>
-  </div>
 
-  <div class="rodape">
-    <div class="rodape-grid">
-      <div class="rodape-logo"><img src="images/logo-vigorre.png" alt="Vigorre" class="logo-vigorre" onerror="this.style.display='none';this.nextElementSibling.style.display='block';"><span class="logo-vigorre-fallback">Vigorre</span></div>
-      <div class="rodape-info">
-        <div class="copyright">© 2026 VIGORRE DESIGNER<span class="tm">™</span></div>
-        <div class="contato"><a href="https://www.vigorre.com.br">www.vigorre.com.br</a> | <a href="https://wa.me/5534991850735">(34) 99185-0735</a></div>
-        <div class="email">contato@vigorre.com.br</div>
-      </div>
+    <!-- BANNER DE STATUS DINÂMICO -->
+    <div id="bannerStatus" class="banner-status ok">
+        <div class="icone" id="bannerIcone">🟢</div>
+        <div class="texto">
+            <div class="titulo" id="bannerTitulo">Verificando...</div>
+            <div class="descricao" id="bannerDescricao">Aguarde enquanto verificamos o status do último backup.</div>
+            <div class="ultimo" id="bannerUltimo"></div>
+        </div>
     </div>
-  </div>
+
+    <!-- AVISO -->
+    <div class="card">
+        <h3>⚠️ Por que o Backup é MANUAL? <span class="badge" style="background:#FFEBEE;color:#C62828;">Importante</span></h3>
+        <div class="aviso-box">
+            <strong>⚠️ Atenção:</strong> O backup automático no plano gratuito do Firebase pode <strong>estourar a cota de 50.000 leituras diárias</strong> e <strong>bloquear o sistema inteiro</strong> até o dia seguinte.<br><br>
+            Por isso, o backup é <strong>MANUAL</strong>: você decide quando fazer, e não há risco de bloqueio.<br><br>
+            <strong>🎯 Recomendação:</strong> Faça o backup <strong>1 vez por dia</strong> (ou no máximo a cada 2 dias).
+        </div>
+    </div>
+
+    <!-- ESTATÍSTICAS -->
+    <div class="card">
+        <h3>📊 Dados Disponíveis no Navegador</h3>
+        <div class="estatistica-grid" id="estatisticas">
+            <div class="estatistica-item"><div class="num" id="estTotal">0</div><div class="lbl">Total de Registros</div></div>
+            <div class="estatistica-item"><div class="num" id="estProjetos">0</div><div class="lbl">Projetos</div></div>
+            <div class="estatistica-item"><div class="num" id="estOrcamentos">0</div><div class="lbl">Orçamentos</div></div>
+            <div class="estatistica-item"><div class="num" id="estNotas">0</div><div class="lbl">Notas Fiscais</div></div>
+            <div class="estatistica-item"><div class="num" id="estPatrimonios">0</div><div class="lbl">Patrimônios</div></div>
+            <div class="estatistica-item"><div class="num" id="estEstoque">0</div><div class="lbl">Estoque</div></div>
+            <div class="estatistica-item"><div class="num" id="estPessoas">0</div><div class="lbl">Pessoas</div></div>
+            <div class="estatistica-item"><div class="num" id="estTamanho">0 KB</div><div class="lbl">Tamanho</div></div>
+        </div>
+        <div class="info-box">
+            ℹ️ Esses dados estão no <strong>cache do seu navegador</strong> (localStorage). O backup NÃO consulta o Firebase, então não gasta cota.
+        </div>
+    </div>
+
+    <!-- BOTÃO PRINCIPAL -->
+    <div class="card" style="text-align:center;background:linear-gradient(135deg, #FFF7ED, #FEF3C7);">
+        <h3 style="border:none;justify-content:center;">📥 Fazer Backup Agora</h3>
+        <p style="color:var(--cinza);font-size:14px;margin-bottom:20px;">Clique no botão abaixo para baixar o arquivo .json com TODOS os dados.</p>
+        <button class="btn btn-success btn-grande" onclick="iniciarBackup()" style="margin:0 auto;">📥 BAIXAR BACKUP COMPLETO</button>
+        <p style="color:var(--cinza);font-size:12px;margin-top:16px;">⏱️ Tempo estimado: menos de 5 segundos</p>
+    </div>
+
+    <!-- INSTRUÇÕES -->
+    <div class="card">
+        <h3>📖 Como Salvar no Google Drive</h3>
+
+        <div class="passo-box">
+            <div class="passo-num">1</div>
+            <div class="passo-texto">
+                <strong>Clique em "BAIXAR BACKUP COMPLETO"</strong><br>
+                O arquivo será baixado automaticamente para a pasta <code>Downloads</code>.<br>
+                Nome: <code>backup-amovin-2026-09-23_18-30-00.json</code>
+            </div>
+        </div>
+
+        <div class="passo-box">
+            <div class="passo-num">2</div>
+            <div class="passo-texto">
+                <strong>Abra o Google Drive</strong><br>
+                Acesse: <a href="https://drive.google.com" target="_blank" style="color:var(--azul);">drive.google.com</a>
+            </div>
+        </div>
+
+        <div class="passo-box">
+            <div class="passo-num">3</div>
+            <div class="passo-texto">
+                <strong>Vá para a pasta específica:</strong><br>
+                <code style="font-size:14px;padding:6px 12px;display:inline-block;margin-top:6px;">📁 AMOVIN - Backups / Backup 2026</code><br>
+                <span style="font-size:12px;color:var(--cinza);margin-top:6px;display:block;">Estrutura recomendada:</span>
+                <code style="font-size:11px;display:block;margin-top:4px;padding:8px;background:#FFF3E0;border-radius:6px;white-space:pre;">Google Drive/
+└── AMOVIN - Backups/
+    ├── Backup 2025/
+    ├── Backup 2026/
+    │   ├── backup-amovin-2026-09-23_18-30-00.json
+    │   ├── backup-amovin-2026-09-22_18-30-00.json
+    │   └── ...
+    └── Backup 2027/</code>
+            </div>
+        </div>
+
+        <div class="passo-box">
+            <div class="passo-num">4</div>
+            <div class="passo-texto">
+                <strong>Arraste o arquivo .json para a pasta</strong><br>
+                Ou clique em "Novo → Upload de arquivo" e selecione o arquivo baixado.
+            </div>
+        </div>
+
+        <div class="passo-box">
+            <div class="passo-num">5</div>
+            <div class="passo-texto">
+                <strong>Pronto! ✅</strong><br>
+                Seu backup está seguro no Google Drive.
+            </div>
+        </div>
+    </div>
+
+    <!-- HISTÓRICO DE BACKUPS -->
+    <div class="card">
+        <h3>📅 Histórico de Backups</h3>
+        <div id="historicoBackups" style="font-size:13px;color:var(--cinza);">Nenhum backup registrado.</div>
+    </div>
+
+    <!-- RESTAURAR -->
+    <div class="card">
+        <h3>📤 Restaurar um Backup <span class="badge" style="background:#FFEBEE;color:#C62828;">Cuidado</span></h3>
+        <div class="aviso-box">
+            <strong>⚠️ Atenção:</strong> Restaurar um backup irá <strong>sobrescrever os dados atuais</strong> do navegador.<br>
+            Use apenas se necessário (ex: após limpar o cache).
+        </div>
+        <input type="file" id="restoreInput" accept=".json" style="display:none;" onchange="restaurarBackup(event)">
+        <button class="btn btn-outline" onclick="document.getElementById('restoreInput').click()" style="margin-top:8px;">📤 Selecionar arquivo .json para restaurar</button>
+    </div>
+
+    <div class="rodape">
+        <div class="rodape-grid">
+            <div class="rodape-logo"><img src="images/logo-vigorre.png" alt="Vigorre" class="logo-vigorre" onerror="this.style.display='none';"></div>
+            <div class="rodape-info">
+                <div class="copyright">© 2026 VIGORRE DESIGNER™</div>
+                <div class="contato"><a href="https://www.vigorre.com.br">www.vigorre.com.br</a> | <a href="https://wa.me/5534991850735">(34) 99185-0735</a></div>
+            </div>
+        </div>
+    </div>
 </main>
 
 <!-- MODAL CONFIRMAÇÃO -->
-<div class="modal-overlay" id="modalConfirmacao" style="display:none;">
-  <div class="modal">
-    <div class="modal-header">
-      <h3 id="modalConfirmacaoTitulo">⚠️ Confirmar Ação</h3>
-      <button class="btn-fechar" onclick="fecharModalConfirmacao()">✕</button>
+<div class="modal-overlay" id="modalBackup">
+    <div class="modal">
+        <h2>💾 Confirmar Backup <button class="fechar" onclick="fecharModal()">×</button></h2>
+        <div class="info-box">
+            <strong>📋 Vamos fazer o backup agora?</strong><br><br>
+            Isso irá:
+            <ul style="margin-top:8px;margin-left:20px;">
+                <li>📦 Coletar todos os dados do navegador</li>
+                <li>📄 Gerar um arquivo <code>.json</code></li>
+                <li>📥 Baixar o arquivo para o seu computador</li>
+            </ul>
+            <br>
+            <strong>⏱️ Leva menos de 5 segundos</strong> e não consome cota do Firebase.
+        </div>
+        <div class="btn-group">
+            <button class="btn btn-outline" onclick="fecharModal()">Cancelar</button>
+            <button class="btn btn-success" onclick="confirmarBackup()">✅ Sim, fazer backup agora</button>
+        </div>
     </div>
-    <div class="modal-body">
-      <p id="modalConfirmacaoMensagem">Tem certeza que deseja realizar esta ação?</p>
-      <div class="modal-actions">
-        <button class="btn btn-verde" id="modalConfirmacaoBtnSim" onclick="fecharModalConfirmacao()">✅ Sim</button>
-        <button class="btn btn-vermelho" onclick="fecharModalConfirmacao()">❌ Cancelar</button>
-      </div>
-    </div>
-  </div>
 </div>
 
-<script src="config.js"></script>
+<!-- MODAL AVISO DE ATRASO -->
+<div class="modal-overlay" id="modalAtraso">
+    <div class="modal">
+        <h2>⚠️ Backup Atrasado! <button class="fechar" onclick="fecharModalAtraso()">×</button></h2>
+        <div class="aviso-box">
+            <strong>🚨 Atenção!</strong><br><br>
+            Seu último backup foi há <strong id="diasAtrasoModal">0</strong> dias.<br><br>
+            Para manter seus dados seguros, recomendamos fazer o backup <strong>1 vez por dia</strong> ou no máximo <strong>a cada 2 dias</strong>.<br><br>
+            <strong>Deseja fazer o backup agora?</strong>
+        </div>
+        <div class="sucesso-box">
+            ✅ O backup leva menos de 5 segundos e <strong>NÃO</strong> bloqueia o sistema.
+        </div>
+        <div class="btn-group">
+            <button class="btn btn-outline" onclick="fecharModalAtraso()">Agora não</button>
+            <button class="btn btn-success" onclick="fazerBackupDoModal()">✅ Fazer Backup Agora</button>
+        </div>
+    </div>
+</div>
+
 <script src="menu.js?v=20260904"></script>
 <script>
 // ============================================================
-// BANCO DE DADOS
+// BACKUP MANUAL - AMOVIN ERP
 // ============================================================
-var backups = JSON.parse(localStorage.getItem('amovin_backups_lista') || '[]');
-var acaoConfirmacao = null;
 
-function salvarBackups() {
-    localStorage.setItem('amovin_backups_lista', JSON.stringify(backups));
-}
+var CHAVES_BACKUP = [
+    'amovin_projetos', 'amovin_orcamentos_v2', 'amovin_notas_fiscais', 'amovin_financeiro',
+    'amovin_bens', 'amovin_estoque', 'amovin_produtos_espera', 'amovin_beneficiarios',
+    'amovin_profissionais', 'amovin_voluntarios', 'amovin_pessoas', 'amovin_contatos',
+    'amovin_agenda', 'amovin_slots', 'amovin_prestacoes', 'amovin_qrcodes',
+    'amovin_movimentacoes_estoque', 'amovin_admins_master', 'amovin_logs_exclusao',
+    'amovin_config', 'amovin_instituicao', 'amovin_seguranca'
+];
 
-function getDadosCompletos() {
-    var chaves = ['pessoas', 'contatos', 'documentos_oficiais', 'estoque', 'bens', 'agendamentos', 'certificados', 'orcamentos', 'documentos', 'perfis'];
-    var dados = {};
-    chaves.forEach(function(k) {
-        var val = localStorage.getItem('amovin_' + k);
-        dados[k] = val ? JSON.parse(val) : [];
-    });
-    dados.instituicao = JSON.parse(localStorage.getItem('amovin_instituicao'));
-    dados.seguranca = JSON.parse(localStorage.getItem('amovin_seguranca'));
-    dados.gemini_key = localStorage.getItem('amovin_gemini_key') ? '****' : null;
-    dados.data = new Date().toISOString();
-    return dados;
-}
+// ============================================================
+// VERIFICAR STATUS DO BACKUP
+// ============================================================
+function verificarStatusBackup() {
+    var ultimo = localStorage.getItem('amovin_ultimo_backup');
+    var banner = document.getElementById('bannerStatus');
+    var icone = document.getElementById('bannerIcone');
+    var titulo = document.getElementById('bannerTitulo');
+    var descricao = document.getElementById('bannerDescricao');
+    var ultimoTexto = document.getElementById('bannerUltimo');
 
-function contarRegistros() {
-    var total = 0;
-    var chaves = ['pessoas', 'contatos', 'documentos_oficiais', 'estoque', 'bens', 'agendamentos', 'certificados', 'orcamentos', 'documentos', 'perfis'];
-    chaves.forEach(function(k) {
-        var val = localStorage.getItem('amovin_' + k);
-        if (val) {
-            try { total += JSON.parse(val).length; } catch(e) {}
-        }
-    });
-    return total;
-}
-
-function calcularTamanho() {
-    var total = 0;
-    for (var i = 0; i < localStorage.length; i++) {
-        var key = localStorage.key(i);
-        if (key && key.startsWith('amovin_')) {
-            total += localStorage.getItem(key).length;
-        }
-    }
-    return total;
-}
-
-function atualizarKPIs() {
-    document.getElementById('kpiBackups').textContent = backups.length;
-    if (backups.length > 0) {
-        var ultimo = backups[backups.length - 1];
-        document.getElementById('kpiUltimo').textContent = new Date(ultimo.data).toLocaleDateString('pt-BR') + ' ' + new Date(ultimo.data).toLocaleTimeString('pt-BR', {hour:'2-digit',minute:'2-digit'});
-    } else {
-        document.getElementById('kpiUltimo').textContent = '-';
-    }
-    document.getElementById('kpiRegistros').textContent = contarRegistros();
-    var tam = calcularTamanho();
-    if (tam > 1024 * 1024) {
-        document.getElementById('kpiTamanho').textContent = (tam / (1024 * 1024)).toFixed(2) + ' MB';
-    } else if (tam > 1024) {
-        document.getElementById('kpiTamanho').textContent = (tam / 1024).toFixed(2) + ' KB';
-    } else {
-        document.getElementById('kpiTamanho').textContent = tam + ' B';
-    }
-}
-
-function renderizarBackups() {
-    var container = document.getElementById('listaBackups');
-    if (backups.length === 0) {
-        container.innerHTML = '<div style="text-align:center;padding:20px;color:var(--cinza);">Nenhum backup salvo.</div>';
+    if (!ultimo) {
+        // Nunca fez backup
+        banner.className = 'banner-status urgente';
+        icone.textContent = '🚨';
+        titulo.textContent = 'Você NUNCA fez backup!';
+        descricao.textContent = 'Seus dados estão em risco. Faça o backup AGORA para não perder nada.';
+        ultimoTexto.textContent = '⚠️ Nenhum backup registrado neste navegador.';
+        mostrarModalAtraso(999);
         return;
     }
-    container.innerHTML = backups.slice().reverse().map(function(b, idx) {
-        var data = new Date(b.data);
-        var dataStr = data.toLocaleDateString('pt-BR') + ' ' + data.toLocaleTimeString('pt-BR', {hour:'2-digit',minute:'2-digit'});
-        var tamanho = b.tamanho || 'N/A';
-        var registros = b.registros || 'N/A';
-        return '<div class="backup-item">' +
-            '<div class="backup-info"><span class="nome">📦 Backup #' + (backups.length - idx) + '</span><br><span class="detalhe">📅 ' + dataStr + ' | 📊 ' + registros + ' registros | 💾 ' + tamanho + '</span></div>' +
-            '<div class="backup-acoes">' +
-            '<button class="btn btn-azul" style="padding:4px 10px;font-size:10px;" onclick="baixarBackup(' + (backups.length - idx - 1) + ')">📥</button>' +
-            '<button class="btn btn-vermelho" style="padding:4px 10px;font-size:10px;" onclick="excluirBackup(' + (backups.length - idx - 1) + ')">🗑️</button>' +
-            '</div></div>';
-    }).join('');
+
+    var d = new Date(ultimo);
+    var agora = new Date();
+    var diffMs = agora - d;
+    var diasAtras = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+    var horasAtras = Math.floor(diffMs / (1000 * 60 * 60));
+
+    var dataFormatada = d.toLocaleString('pt-BR');
+
+    if (diasAtras === 0) {
+        // Backup hoje
+        banner.className = 'banner-status ok';
+        icone.textContent = '🟢';
+        titulo.textContent = '✅ Backup em dia!';
+        descricao.textContent = 'Você fez backup hoje. Seus dados estão seguros.';
+        ultimoTexto.textContent = '📅 Último backup: ' + dataFormatada + ' (' + (horasAtras === 0 ? 'há menos de 1 hora' : 'há ' + horasAtras + ' hora' + (horasAtras !== 1 ? 's' : '')) + ')';
+    } else if (diasAtras <= 2) {
+        // 1-2 dias
+        banner.className = 'banner-status ok';
+        icone.textContent = '🟢';
+        titulo.textContent = '✅ Backup recente';
+        descricao.textContent = 'Você fez backup ' + diasAtras + ' dia' + (diasAtras !== 1 ? 's' : '') + ' atrás. Ainda está em dia.';
+        ultimoTexto.textContent = '📅 Último backup: ' + dataFormatada;
+    } else if (diasAtras <= 5) {
+        // 3-5 dias
+        banner.className = 'banner-status atencao';
+        icone.textContent = '🟡';
+        titulo.textContent = '⚠️ Backup com atraso';
+        descricao.textContent = 'Você fez backup há ' + diasAtras + ' dias. Recomendamos fazer HOJE para manter a segurança.';
+        ultimoTexto.textContent = '📅 Último backup: ' + dataFormatada;
+    } else {
+        // +5 dias
+        banner.className = 'banner-status urgente';
+        icone.textContent = '🚨';
+        titulo.textContent = '🚨 URGENTE: Backup muito atrasado!';
+        descricao.textContent = 'Você fez backup há ' + diasAtras + ' dias. Seus dados estão em RISCO!';
+        ultimoTexto.textContent = '📅 Último backup: ' + dataFormatada;
+        mostrarModalAtraso(diasAtras);
+    }
+
+    // Atualiza histórico
+    atualizarHistorico();
 }
 
-window.exportarBackup = function() {
-    var dados = getDadosCompletos();
-    var json = JSON.stringify(dados, null, 2);
-    var blob = new Blob([json], { type: 'application/json' });
-    var url = URL.createObjectURL(blob);
-    var a = document.createElement('a');
-    a.href = url;
-    a.download = 'backup-amovin-' + new Date().toISOString().split('T')[0] + '.json';
-    a.click();
-    URL.revokeObjectURL(url);
+function mostrarModalAtraso(dias) {
+    // Só mostra se não foi mostrado hoje
+    var hoje = new Date().toISOString().split('T')[0];
+    var ultimoAviso = localStorage.getItem('amovin_ultimo_aviso_backup');
+    if (ultimoAviso === hoje) return;
 
-    var entry = {
-        data: new Date().toISOString(),
-        tamanho: (blob.size / 1024).toFixed(2) + ' KB',
-        registros: contarRegistros()
-    };
-    backups.push(entry);
-    salvarBackups();
-    atualizarKPIs();
-    renderizarBackups();
+    document.getElementById('diasAtrasoModal').textContent = dias === 999 ? 'vários' : dias;
+    document.getElementById('modalAtraso').classList.add('ativo');
+}
 
-    document.getElementById('statusExport').textContent = '✅ Backup exportado com sucesso em ' + new Date().toLocaleString('pt-BR');
-    setTimeout(function() { document.getElementById('statusExport').textContent = ''; }, 5000);
-};
+function fecharModalAtraso() {
+    localStorage.setItem('amovin_ultimo_aviso_backup', new Date().toISOString().split('T')[0]);
+    document.getElementById('modalAtraso').classList.remove('ativo');
+}
 
-window.exportarBackupParcial = function(tipo) {
-    var map = { 'pessoas': ['pessoas', 'contatos'], 'financeiro': ['orcamentos', 'documentos_oficiais'] };
-    var chaves = map[tipo] || [];
-    if (chaves.length === 0) { alert('Tipo inválido!'); return; }
+function fazerBackupDoModal() {
+    fecharModalAtraso();
+    iniciarBackup();
+}
 
-    var dados = {};
-    chaves.forEach(function(k) {
-        var val = localStorage.getItem('amovin_' + k);
-        dados[k] = val ? JSON.parse(val) : [];
+// ============================================================
+// HISTÓRICO DE BACKUPS
+// ============================================================
+function atualizarHistorico() {
+    var hist = JSON.parse(localStorage.getItem('amovin_historico_backups') || '[]');
+    var container = document.getElementById('historicoBackups');
+
+    if (hist.length === 0) {
+        // Se não tem histórico, cria com o último backup
+        var ultimo = localStorage.getItem('amovin_ultimo_backup');
+        if (ultimo) {
+            hist = [{ data: ultimo, registros: 0 }];
+            localStorage.setItem('amovin_historico_backups', JSON.stringify(hist));
+        }
+    }
+
+    if (hist.length === 0) {
+        container.innerHTML = 'Nenhum backup registrado.';
+        return;
+    }
+
+    var html = '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;">';
+    hist.slice(-10).reverse().forEach(function(b) {
+        var d = new Date(b.data);
+        html += '<div style="background:#F8F4ED;border-radius:8px;padding:12px;font-size:12px;">' +
+            '<div style="font-weight:700;color:var(--grafite);">📅 ' + d.toLocaleDateString('pt-BR') + '</div>' +
+            '<div style="color:var(--cinza);">🕐 ' + d.toLocaleTimeString('pt-BR') + '</div>' +
+            (b.registros ? '<div style="color:var(--azul);margin-top:4px;">📊 ' + b.registros + ' registros</div>' : '') +
+            '</div>';
     });
-    dados.data = new Date().toISOString();
-    dados.tipo = tipo;
+    html += '</div>';
+    container.innerHTML = html;
+}
 
+// ============================================================
+// ESTATÍSTICAS
+// ============================================================
+function calcularEstatisticas() {
+    var total = 0, tamanhoTotal = 0;
+    CHAVES_BACKUP.forEach(function(k) {
+        var val = localStorage.getItem(k);
+        if (val) {
+            tamanhoTotal += val.length;
+            try {
+                var parsed = JSON.parse(val);
+                if (Array.isArray(parsed)) total += parsed.length;
+            } catch (e) {}
+        }
+    });
+    document.getElementById('estTotal').textContent = total;
+    document.getElementById('estProjetos').textContent = getTamanho('amovin_projetos');
+    document.getElementById('estOrcamentos').textContent = getTamanho('amovin_orcamentos_v2');
+    document.getElementById('estNotas').textContent = getTamanho('amovin_notas_fiscais');
+    document.getElementById('estPatrimonios').textContent = getTamanho('amovin_bens');
+    document.getElementById('estEstoque').textContent = getTamanho('amovin_estoque');
+    document.getElementById('estPessoas').textContent = getTamanho('amovin_beneficiarios') + getTamanho('amovin_profissionais') + getTamanho('amovin_voluntarios');
+    if (tamanhoTotal > 1024 * 1024) document.getElementById('estTamanho').textContent = (tamanhoTotal / (1024 * 1024)).toFixed(2) + ' MB';
+    else if (tamanhoTotal > 1024) document.getElementById('estTamanho').textContent = (tamanhoTotal / 1024).toFixed(1) + ' KB';
+    else document.getElementById('estTamanho').textContent = tamanhoTotal + ' B';
+}
+function getTamanho(chave) {
+    var val = localStorage.getItem(chave);
+    if (!val) return 0;
+    try {
+        var parsed = JSON.parse(val);
+        if (Array.isArray(parsed)) return parsed.length;
+    } catch (e) {}
+    return 0;
+}
+
+// ============================================================
+// BACKUP
+// ============================================================
+function iniciarBackup() { document.getElementById('modalBackup').classList.add('ativo'); }
+function fecharModal() { document.getElementById('modalBackup').classList.remove('ativo'); }
+function confirmarBackup() { fecharModal(); fazerBackup(); }
+
+function fazerBackup() {
+    var dados = {
+        _metadata: {
+            sistema: 'AMOVIN ERP Social',
+            versao: '2.0',
+            tipo: 'backup_manual',
+            data_backup: new Date().toISOString(),
+            data_formatada: new Date().toLocaleString('pt-BR'),
+            usuario: sessionStorage.getItem('amovin_usuario') || 'desconhecido'
+        },
+        dados: {}
+    };
+    CHAVES_BACKUP.forEach(function(k) {
+        var val = localStorage.getItem(k);
+        if (val) {
+            try { dados.dados[k.replace('amovin_', '')] = JSON.parse(val); }
+            catch (e) { dados.dados[k.replace('amovin_', '')] = val; }
+        }
+    });
+    for (var i = 0; i < localStorage.length; i++) {
+        var key = localStorage.key(i);
+        if (key && key.startsWith('amovin_') && !dados.dados[key.replace('amovin_', '')]) {
+            try { dados.dados[key.replace('amovin_', '')] = JSON.parse(localStorage.getItem(key)); }
+            catch (e) { dados.dados[key.replace('amovin_', '')] = localStorage.getItem(key); }
+        }
+    }
     var json = JSON.stringify(dados, null, 2);
     var blob = new Blob([json], { type: 'application/json' });
+    var dataHoje = new Date().toISOString().split('T')[0];
+    var horaAgora = new Date().toTimeString().split(' ')[0].replace(/:/g, '-');
+    var nomeArquivo = 'backup-amovin-' + dataHoje + '_' + horaAgora + '.json';
     var url = URL.createObjectURL(blob);
     var a = document.createElement('a');
-    a.href = url;
-    a.download = 'backup-' + tipo + '-' + new Date().toISOString().split('T')[0] + '.json';
-    a.click();
+    a.href = url; a.download = nomeArquivo;
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
     URL.revokeObjectURL(url);
 
-    document.getElementById('statusExport').textContent = '✅ Backup parcial (' + tipo + ') exportado!';
-    setTimeout(function() { document.getElementById('statusExport').textContent = ''; }, 3000);
-};
+    // Estatísticas
+    var totalRegistros = 0;
+    Object.keys(dados.dados).forEach(function(k) {
+        if (Array.isArray(dados.dados[k])) totalRegistros += dados.dados[k].length;
+    });
+    var tamanhoKB = (json.length / 1024).toFixed(1);
 
-window.importarBackup = function() {
-    var input = document.createElement('input');
-    input.type = 'file';
-    input.accept = '.json';
-    input.onchange = function(e) {
-        var file = e.target.files[0];
-        if (!file) return;
-        var reader = new FileReader();
-        reader.onload = function(ev) {
-            try {
-                var dados = JSON.parse(ev.target.result);
-                if (!confirm('⚠️ Isso sobrescreverá TODOS os dados atuais. Continuar?')) return;
+    // Atualiza localStorage
+    localStorage.setItem('amovin_ultimo_backup', new Date().toISOString());
 
-                for (var key in dados) {
-                    if (key === 'data' || key === 'tipo') continue;
-                    if (typeof dados[key] === 'object') {
-                        localStorage.setItem('amovin_' + key, JSON.stringify(dados[key]));
-                    } else if (key === 'gemini_key') {
-                        if (dados[key] && dados[key] !== '****') {
-                            localStorage.setItem('amovin_gemini_key', dados[key]);
-                        }
-                    }
-                }
-                document.getElementById('statusImport').textContent = '✅ Backup importado! Recarregando...';
-                alert('✅ Backup importado! A página será recarregada.');
-                location.reload();
-            } catch (err) {
-                alert('❌ Erro ao ler o arquivo. Verifique se é um backup válido.');
-            }
-        };
-        reader.readAsText(file);
+    // Adiciona ao histórico
+    var hist = JSON.parse(localStorage.getItem('amovin_historico_backups') || '[]');
+    hist.push({ data: new Date().toISOString(), registros: totalRegistros, tamanho: tamanhoKB });
+    // Mantém apenas os últimos 50
+    if (hist.length > 50) hist = hist.slice(-50);
+    localStorage.setItem('amovin_historico_backups', JSON.stringify(hist));
+
+    mostrarToast('✅ Backup baixado! ' + nomeArquivo, 'success');
+    setTimeout(function() { mostrarModalSucesso(nomeArquivo, totalRegistros, tamanhoKB); }, 500);
+
+    // Atualiza a página
+    setTimeout(function() {
+        verificarStatusBackup();
+        atualizarHistorico();
+    }, 1000);
+}
+
+function mostrarModalSucesso(nomeArquivo, totalRegistros, tamanhoKB) {
+    var modal = document.createElement('div');
+    modal.className = 'modal-overlay ativo';
+    modal.innerHTML =
+        '<div class="modal" style="max-width:600px;">' +
+        '<h2>✅ Backup Concluído! <button class="fechar" onclick="this.closest(\'.modal-overlay\').remove()">×</button></h2>' +
+        '<div class="sucesso-box"><strong>🎉 Arquivo baixado com sucesso!</strong><br><br>' +
+        '📄 <strong>Nome:</strong> <code>' + nomeArquivo + '</code><br>' +
+        '📊 <strong>Registros:</strong> ' + totalRegistros + '<br>' +
+        '💾 <strong>Tamanho:</strong> ' + tamanhoKB + ' KB<br>' +
+        '📅 <strong>Data:</strong> ' + new Date().toLocaleString('pt-BR') + '</div>' +
+        '<div style="background:#F8F4ED;border-radius:10px;padding:16px;margin:16px 0;">' +
+        '<strong style="color:var(--laranja);">📌 Próximos passos:</strong>' +
+        '<div style="margin-top:12px;">' +
+        '<div style="padding:8px 0;font-size:13px;">1️⃣ Abra o <a href="https://drive.google.com" target="_blank" style="color:var(--azul);font-weight:600;">Google Drive</a></div>' +
+        '<div style="padding:8px 0;font-size:13px;">2️⃣ Acesse a pasta: <code style="background:#FFF3E0;padding:2px 8px;border-radius:4px;">AMOVIN - Backups / Backup 2026</code></div>' +
+        '<div style="padding:8px 0;font-size:13px;">3️⃣ Arraste o arquivo <code style="background:#FFF3E0;padding:2px 8px;border-radius:4px;">' + nomeArquivo + '</code></div>' +
+        '<div style="padding:8px 0;font-size:13px;">4️⃣ Pronto! Seu backup está seguro ✅</div>' +
+        '</div></div>' +
+        '<div class="btn-group">' +
+        '<button class="btn btn-outline" onclick="this.closest(\'.modal-overlay\').remove()">Fechar</button>' +
+        '<button class="btn btn-azul" onclick="window.open(\'https://drive.google.com\', \'_blank\')">📁 Abrir Google Drive</button>' +
+        '</div></div>';
+    document.body.appendChild(modal);
+}
+
+// ============================================================
+// RESTAURAR
+// ============================================================
+function restaurarBackup(event) {
+    var file = event.target.files[0];
+    if (!file) return;
+    if (!confirm('⚠️ ATENÇÃO!\n\nRestaurar este backup irá SOBRESCREVER os dados atuais.\n\nDeseja continuar?')) {
+        document.getElementById('restoreInput').value = '';
+        return;
+    }
+    var reader = new FileReader();
+    reader.onload = function(e) {
+        try {
+            var dados = JSON.parse(e.target.result);
+            if (!dados._metadata || !dados.dados) throw new Error('Arquivo inválido.');
+            var contador = 0;
+            Object.keys(dados.dados).forEach(function(k) {
+                var chave = 'amovin_' + k;
+                var valor = dados.dados[k];
+                if (typeof valor === 'object') localStorage.setItem(chave, JSON.stringify(valor));
+                else localStorage.setItem(chave, valor);
+                contador++;
+            });
+            mostrarToast('✅ Backup restaurado! ' + contador + ' tabelas.', 'success');
+            setTimeout(function() {
+                if (confirm('✅ Backup restaurado!\n\nDeseja recarregar a página?')) location.reload();
+            }, 1000);
+        } catch (err) { mostrarToast('❌ Erro: ' + err.message, 'error'); }
+        document.getElementById('restoreInput').value = '';
     };
-    input.click();
-};
-
-window.baixarBackup = function(idx) {
-    if (idx < 0 || idx >= backups.length) return;
-    alert('📥 Para baixar um backup do histórico, use a opção "Exportar Backup" para gerar um novo arquivo. Os backups listados são apenas referências.');
-};
-
-window.excluirBackup = function(idx) {
-    if (idx < 0 || idx >= backups.length) return;
-    if (!confirm('Excluir este registro de backup?')) return;
-    backups.splice(idx, 1);
-    salvarBackups();
-    atualizarKPIs();
-    renderizarBackups();
-};
-
-window.salvarAgendamento = function() {
-    var config = { frequencia: document.getElementById('frequenciaBackup').value, horario: document.getElementById('horarioBackup').value };
-    localStorage.setItem('amovin_backup_agendamento', JSON.stringify(config));
-    document.getElementById('statusAgendamento').textContent = '✅ Agendamento salvo! (' + config.frequencia + ' às ' + config.horario + ')';
-    setTimeout(function() { document.getElementById('statusAgendamento').textContent = ''; }, 5000);
-    alert('✅ Agendamento salvo!');
-};
-
-function carregarAgendamento() {
-    var config = JSON.parse(localStorage.getItem('amovin_backup_agendamento'));
-    if (config) {
-        document.getElementById('frequenciaBackup').value = config.frequencia || 'semanal';
-        document.getElementById('horarioBackup').value = config.horario || '02:00';
-        document.getElementById('statusAgendamento').textContent = '📌 Agendamento: ' + config.frequencia + ' às ' + config.horario;
-    }
+    reader.readAsText(file);
 }
 
-function abrirModalConfirmacao(titulo, mensagem, acao) {
-    document.getElementById('modalConfirmacaoTitulo').textContent = titulo;
-    document.getElementById('modalConfirmacaoMensagem').textContent = mensagem;
-    document.getElementById('modalConfirmacao').style.display = 'flex';
-    acaoConfirmacao = acao;
+// ============================================================
+// TOAST
+// ============================================================
+function mostrarToast(msg, tipo) {
+    var t = document.createElement('div');
+    t.className = 'toast toast-' + (tipo || 'success');
+    t.textContent = msg;
+    document.body.appendChild(t);
+    setTimeout(function() { t.remove(); }, 4000);
 }
 
-function fecharModalConfirmacao() {
-    document.getElementById('modalConfirmacao').style.display = 'none';
-    if (acaoConfirmacao) {
-        acaoConfirmacao();
-        acaoConfirmacao = null;
-    }
+if (!sessionStorage.getItem('amovin_logado') && !localStorage.getItem('amovin_logado')) {
+    console.log('⚠️ Sessão não encontrada, mas permitindo acesso.');
 }
 
-if (!sessionStorage.getItem('amovin_logado')) window.location.href = 'index.html';
-
-atualizarKPIs();
-renderizarBackups();
-carregarAgendamento();
+document.addEventListener('DOMContentLoaded', function() {
+    calcularEstatisticas();
+    verificarStatusBackup();
+});
 </script>
 </body>
 </html>
