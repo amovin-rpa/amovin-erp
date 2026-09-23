@@ -3,45 +3,49 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Amovin ERP Social • Agenda</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<title>Amovin ERP • Agenda</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root {
-  --laranja: #C65A11;
-  --amarelo: #F5C518;
-  --verde: #57C220;
-  --azul: #1E88E5;
-  --grafite: #1A1A1A;
-  --cinza: #6B7280;
-  --cinza-claro: #F8F4ED;
-  --branco: #FFFFFF;
-  --vermelho: #E53935;
+  --laranja: #C65A11; --laranja-escuro: #A04A0E; --amarelo: #F5C518; --verde: #57C220;
+  --azul: #1E88E5; --grafite: #1A1A1A; --cinza: #6B7280; --branco: #FFFFFF;
+  --vermelho: #E53935; --roxo: #7C3AED; --teal: #00897B;
 }
 * { margin:0; padding:0; box-sizing:border-box; }
 body { font-family: 'Inter', system-ui, sans-serif; background: #F8F4ED; display: flex; min-height: 100vh; }
-
 .main-content { flex: 1; margin-left: 270px; padding: 24px 30px; }
 .topo-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 10px; }
 .topo-bar h1 { font-size: 24px; font-weight: 700; color: var(--grafite); }
 .btn-sair-topo { background: #F8F4ED; color: #1A1A1A; border: 1px solid #F0E9DF; padding: 8px 16px; border-radius: 10px; font-size: 12px; font-weight: 600; cursor: pointer; }
-
+.status-firebase { display: flex; align-items: center; gap: 8px; padding: 6px 14px; border-radius: 20px; background: #F8F4ED; font-size: 12px; font-weight: 600; border: 1px solid #F0E9DF; }
+.status-firebase.conectado { background: #E8F5E9; color: #2E7D32; border-color: #A5D6A7; }
+.status-firebase.offline { background: #FFF3E0; color: #E65100; border-color: #FFCC80; }
+.status-firebase .dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; animation: pulse 2s infinite; }
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
 .abas { display: flex; gap: 6px; margin-bottom: 22px; flex-wrap: wrap; }
-.aba { padding: 10px 22px; border: 1px solid #F0E9DF; border-radius: 10px 10px 0 0; cursor: pointer; font-weight: 600; font-size: 13px; background: #FFFFFF; color: var(--cinza); transition: all 0.2s; }
+.aba { padding: 10px 22px; border: 1px solid #F0E9DF; border-radius: 10px; cursor: pointer; font-weight: 600; font-size: 13px; background: #FFFFFF; color: var(--cinza); transition: all 0.2s; }
 .aba.ativa { background: var(--laranja); color: white; border-color: var(--laranja); }
-
 .grid-agenda { display: grid; grid-template-columns: 380px 1fr; gap: 20px; }
 .card { background: #FFFFFF; padding: 24px; border-radius: 14px; border: 1px solid #F0E9DF; }
 .card h3 { font-size: 16px; font-weight: 700; color: var(--grafite); margin-bottom: 18px; padding-bottom: 12px; border-bottom: 1px solid #F0E9DF; }
-
 .form-group { margin-bottom: 14px; }
 .form-group label { display: block; font-size: 11px; font-weight: 600; color: var(--cinza); margin-bottom: 4px; text-transform: uppercase; }
-.form-group input, .form-group select { width: 100%; padding: 10px 12px; border: 1px solid #E5E0D8; border-radius: 8px; font-size: 13px; font-family: 'Inter', sans-serif; }
+.form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px 12px; border: 1px solid #E5E0D8; border-radius: 8px; font-size: 13px; font-family: 'Inter', sans-serif; }
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: var(--laranja); }
 .linha-dupla { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-
-.btn-salvar { width: 100%; padding: 12px; background: var(--laranja); color: white; border: none; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; transition: background 0.2s; }
-.btn-salvar:hover { background: #A04A0E; }
+.btn { padding: 10px 20px; border-radius: 8px; border: none; cursor: pointer; font-weight: 600; font-size: 13px; font-family: 'Inter', sans-serif; }
+.btn-salvar { width: 100%; padding: 12px; background: var(--laranja); color: white; font-weight: 700; }
+.btn-salvar:hover { background: var(--laranja-escuro); }
 .btn-cancelar { width: 100%; padding: 10px; background: #F0E9DF; border: none; border-radius: 10px; cursor: pointer; font-size: 13px; margin-top: 5px; }
-
+.btn-sm { padding: 5px 12px; font-size: 11px; }
+.btn-teal { background: var(--teal); color: white; }
+.btn-danger { background: var(--vermelho); color: white; }
+.btn-azul { background: var(--azul); color: white; }
+.btn-roxo { background: var(--roxo); color: white; }
+.btn-outline { background: transparent; color: var(--cinza); border: 1px solid #E5E0D8; }
+.filtros-bar { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-bottom: 16px; padding: 12px; background: #F8F4ED; border-radius: 10px; }
+.filtros-bar select, .filtros-bar input { padding: 8px 12px; border: 1px solid #E5E0D8; border-radius: 8px; font-size: 12px; font-family: 'Inter', sans-serif; background: white; }
+.filtros-bar .info { font-size: 12px; color: var(--cinza); margin-left: auto; }
 .evento-item { display: flex; align-items: center; gap: 14px; padding: 14px; border-radius: 10px; margin-bottom: 8px; background: #F8F4ED; border-left: 4px solid var(--laranja); flex-wrap: wrap; }
 .evento-item.presente { border-left-color: var(--verde); background: #E8F5E9; }
 .evento-item.falta { border-left-color: var(--vermelho); background: #FFEBEE; }
@@ -50,28 +54,45 @@ body { font-family: 'Inter', system-ui, sans-serif; background: #F8F4ED; display
 .evento-info { flex: 1; }
 .evento-info .nome { font-weight: 600; color: var(--grafite); }
 .evento-info .detalhe { font-size: 12px; color: var(--cinza); }
-
+.evento-info .codigo { font-size: 10px; color: var(--laranja); font-weight: 700; }
 .btn-acao { padding: 6px 10px; border-radius: 6px; border: none; cursor: pointer; font-size: 11px; font-weight: 700; margin: 2px; }
 .btn-presente { background: var(--verde); color: white; }
 .btn-falta { background: var(--vermelho); color: white; }
 .btn-editar { background: var(--amarelo); color: #1A1A1A; }
 .btn-excluir { background: #E5E0D8; color: #1A1A1A; }
-
 .status-badge { display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: 10px; font-weight: 600; }
 .badge-agendado { background: #E3F2FD; color: #1565C0; }
 .badge-presente { background: #E8F5E9; color: #2E7D32; }
 .badge-falta { background: #FFEBEE; color: #C62828; }
 .badge-cancelado { background: #F3E5F5; color: #7B1FA2; }
 .sem-dados { text-align: center; padding: 40px; color: #9CA3AF; }
-
+.loading { text-align: center; padding: 40px; color: var(--cinza); }
+.loading .spinner { display: inline-block; width: 30px; height: 30px; border: 3px solid #E5E0D8; border-top: 3px solid var(--laranja); border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 10px; }
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 9999; justify-content: center; align-items: center; padding: 20px; overflow-y: auto; }
+.modal-overlay.ativo { display: flex; }
+.modal { background: white; border-radius: 16px; padding: 30px; max-width: 550px; width: 100%; max-height: 95vh; overflow-y: auto; margin: auto; }
+.modal.modal-pequeno { max-width: 500px; }
+.modal h2 { font-size: 20px; color: var(--grafite); margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; }
+.modal .btn-group { display: flex; gap: 12px; margin-top: 16px; justify-content: flex-end; flex-wrap: wrap; }
+.modal .fechar { background: none; border: none; font-size: 22px; cursor: pointer; color: var(--cinza); }
+.secao-titulo { font-size: 13px; font-weight: 700; color: var(--laranja); text-transform: uppercase; margin: 20px 0 10px; padding-bottom: 6px; border-bottom: 2px solid var(--laranja); }
+.log-item { padding: 10px 12px; border-bottom: 1px solid #F0E9DF; font-size: 12px; }
+.log-item .quando { font-size: 10px; color: var(--cinza); }
+.log-item .quem { font-weight: 700; color: var(--laranja); }
+.log-item .acao { color: var(--grafite); font-weight: 600; }
+.log-item .just { font-size: 11px; color: #666; margin-top: 4px; padding: 6px 10px; background: #FFF8E7; border-radius: 6px; border-left: 3px solid var(--laranja); }
+.toast { position: fixed; top: 20px; right: 20px; padding: 16px 24px; border-radius: 12px; color: white; font-weight: 600; font-size: 14px; z-index: 10000; box-shadow: 0 8px 32px rgba(0,0,0,0.15); animation: slideInRight 0.4s ease; max-width: 400px; }
+.toast-success { background: var(--verde); } .toast-error { background: var(--vermelho); } .toast-warning { background: #E65100; }
+@keyframes slideInRight { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
 .rodape { background: #FFFFFF; border-radius: 14px; padding: 12px 18px; border: 1px solid #F0E9DF; margin-top: 20px; }
 .rodape-grid { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
-.rodape-logo { flex-shrink: 0; } .rodape-logo .logo-vigorre { width: 50px; }
-.rodape-info { flex: 1; } .rodape-info .copyright { font-size: 8px; color: #8A8F98; } .rodape-info .tm { font-size: 6px; vertical-align: super; }
-.rodape-info .contato { font-size: 9px; color: #8A8F98; } .rodape-info a { color: #C65A11; text-decoration: none; } .rodape-info .email { font-size: 8px; color: #aaa; }
-.logo-vigorre-fallback { font-size: 12px; font-weight: 700; display: none; }
-
-@media (max-width: 768px) { .main-content { margin-left: 0; } .grid-agenda { grid-template-columns: 1fr; } }
+.rodape-logo .logo-vigorre { width: 50px; }
+.rodape-info { flex: 1; }
+.rodape-info .copyright { font-size: 8px; color: #8A8F98; }
+.rodape-info .contato { font-size: 9px; color: #8A8F98; }
+.rodape-info a { color: #C65A11; text-decoration: none; }
+@media (max-width: 900px) { .main-content { margin-left: 0; } .grid-agenda { grid-template-columns: 1fr; } }
 </style>
 </head>
 <body>
@@ -79,7 +100,14 @@ body { font-family: 'Inter', system-ui, sans-serif; background: #F8F4ED; display
 <div id="menu-container"></div>
 
 <main class="main-content">
-  <div class="topo-bar"><h1>📅 Agenda</h1><button class="btn-sair-topo" onclick="window.location.href='dashboard.html'">🏠 Dashboard</button></div>
+  <div class="topo-bar">
+    <h1>📅 Agenda <span>AMOVIN</span></h1>
+    <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+      <div class="status-firebase" id="statusFirebase"><span class="dot"></span><span>⏳ Conectando...</span></div>
+      <button class="btn btn-outline" onclick="exportarCSV()" style="padding:10px 20px;border-radius:8px;cursor:pointer;font-weight:600;font-size:13px;font-family:'Inter',sans-serif;">📥 CSV</button>
+      <button class="btn-sair-topo" onclick="window.location.href='dashboard.html'">🏠 Dashboard</button>
+    </div>
+  </div>
 
   <div class="abas">
     <button class="aba ativa" onclick="mudarAba('agendamentos',this)">📋 Agendamentos</button>
@@ -91,17 +119,46 @@ body { font-family: 'Inter', system-ui, sans-serif; background: #F8F4ED; display
       <div class="card">
         <h3 id="tituloForm">📝 Novo Agendamento</h3>
         <input type="hidden" id="eventoId">
-        <div class="form-group"><label>Beneficiário *</label><select id="beneficiario"><option value="">Selecione...</option><option value="1">Maria Silva</option><option value="2">João Santos</option><option value="3">Ana Costa</option><option value="4">Pedro Lima</option><option value="5">Carla Souza</option></select></div>
-        <div class="form-group"><label>Profissional *</label><select id="profissional"><option>Dr. Carlos Mendes</option><option>Dra. Lucia Ferreira</option><option>Profa. Sandra Reis</option></select></div>
-        <div class="linha-dupla"><div class="form-group"><label>Data *</label><input type="date" id="dataEvento"></div><div class="form-group"><label>Horário *</label><select id="horaEvento"><option value="">Selecione...</option><option>08:00</option><option>08:30</option><option>09:00</option><option>09:30</option><option>10:00</option><option>10:30</option><option>11:00</option><option>11:30</option><option>13:00</option><option>13:30</option><option>14:00</option><option>14:30</option><option>15:00</option><option>15:30</option><option>16:00</option><option>16:30</option><option>17:00</option></select></div></div>
-        <div class="form-group"><label>Sala *</label><select id="salaEvento"><option value="1">Sala 1</option><option value="2">Sala 2</option><option value="3">Sala 3</option></select></div>
+        <div class="form-group"><label>Código</label><input type="text" id="codigoEvento" readonly style="background:#F0E9DF;font-weight:700;color:var(--laranja);"></div>
+        <div class="form-group"><label>Beneficiário *</label><select id="beneficiario"><option value="">Selecione...</option></select></div>
+        <div class="form-group"><label>Profissional *</label><select id="profissional"><option value="">Selecione...</option></select></div>
+        <div class="linha-dupla">
+          <div class="form-group"><label>Data *</label><input type="date" id="dataEvento"></div>
+          <div class="form-group"><label>Horário *</label>
+            <select id="horaEvento">
+              <option value="">Selecione...</option>
+              <option>08:00</option><option>08:30</option><option>09:00</option><option>09:30</option>
+              <option>10:00</option><option>10:30</option><option>11:00</option><option>11:30</option>
+              <option>13:00</option><option>13:30</option><option>14:00</option><option>14:30</option>
+              <option>15:00</option><option>15:30</option><option>16:00</option><option>16:30</option><option>17:00</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group"><label>Sala</label>
+          <select id="salaEvento">
+            <option value="Sala 1">Sala 1</option>
+            <option value="Sala 2">Sala 2</option>
+            <option value="Sala 3">Sala 3</option>
+          </select>
+        </div>
         <div class="form-group"><label>Observações</label><input type="text" id="obsEvento"></div>
-        <button class="btn-salvar" onclick="salvarAgendamento()">💾 Salvar</button>
-        <button class="btn-cancelar" id="btnCancelar" style="display:none;" onclick="cancelarEdicao()">Cancelar</button>
+        <button class="btn btn-salvar" onclick="confirmarSalvar()">💾 Salvar</button>
+        <button class="btn-cancelar" id="btnCancelar" style="display:none;" onclick="cancelarEdicao()">Cancelar Edição</button>
       </div>
       <div class="card">
-        <h3>📋 Agendamentos <span style="font-weight:400;font-size:13px;color:var(--cinza);" id="totalAgendamentos"></span></h3>
-        <div id="listaAgendamentos"><div class="sem-dados">Nenhum agendamento.</div></div>
+        <h3>📋 Agendamentos de Hoje <span style="font-weight:400;font-size:13px;color:var(--cinza);" id="totalAgendamentos"></span></h3>
+        <div class="filtros-bar">
+          <input type="date" id="filtroData" onchange="renderizarAgendamentos()">
+          <select id="filtroStatus" onchange="renderizarAgendamentos()">
+            <option value="">Todos</option>
+            <option value="agendado">Agendado</option>
+            <option value="presente">Presente</option>
+            <option value="falta">Falta</option>
+            <option value="cancelado">Cancelado</option>
+          </select>
+          <span class="info" id="contadorFiltro"></span>
+        </div>
+        <div id="listaAgendamentos"><div class="loading"><div class="spinner"></div><div>Carregando...</div></div></div>
       </div>
     </div>
   </div>
@@ -110,74 +167,603 @@ body { font-family: 'Inter', system-ui, sans-serif; background: #F8F4ED; display
     <div class="card"><h3>🕐 Horários Disponíveis</h3>
       <div class="grid-agenda">
         <div class="card" style="border:1px solid #F0E9DF;">
-          <div class="linha-dupla"><div class="form-group"><label>Data</label><input type="date" id="slotData"></div><div class="form-group"><label>Horário</label><input type="time" id="slotHora"></div></div>
-          <div class="form-group"><label>Sala</label><select id="slotSala"><option value="1">Sala 1</option><option value="2">Sala 2</option><option value="3">Sala 3</option></select></div>
-          <button class="btn-salvar" onclick="adicionarSlot()">➕ Adicionar</button>
+          <div class="linha-dupla">
+            <div class="form-group"><label>Data</label><input type="date" id="slotData"></div>
+            <div class="form-group"><label>Horário</label><input type="time" id="slotHora"></div>
+          </div>
+          <div class="form-group"><label>Sala</label>
+            <select id="slotSala">
+              <option value="Sala 1">Sala 1</option>
+              <option value="Sala 2">Sala 2</option>
+              <option value="Sala 3">Sala 3</option>
+            </select>
+          </div>
+          <button class="btn btn-salvar" onclick="confirmarAdicionarSlot()">➕ Adicionar</button>
         </div>
         <div id="listaSlots" style="max-height:400px;overflow-y:auto;"><div class="sem-dados">Nenhum horário.</div></div>
       </div>
     </div>
   </div>
 
-  <div class="rodape"><div class="rodape-grid"><div class="rodape-logo"><img src="images/logo-vigorre.png" alt="Vigorre" class="logo-vigorre" onerror="this.style.display='none';this.nextElementSibling.style.display='block';"><span class="logo-vigorre-fallback">Vigorre</span></div><div class="rodape-info"><div class="copyright">© 2026 VIGORRE DESIGNER<span class="tm">™</span></div><div class="contato"><a href="https://www.vigorre.com.br">www.vigorre.com.br</a> | <a href="https://wa.me/5534991850735">(34) 99185-0735</a></div><div class="email">contato@vigorre.com.br</div></div></div></div>
+  <div class="rodape">
+    <div class="rodape-grid">
+      <div class="rodape-logo"><img src="images/logo-vigorre.png" alt="Vigorre" class="logo-vigorre" onerror="this.style.display='none';"></div>
+      <div class="rodape-info">
+        <div class="copyright">© 2026 VIGORRE DESIGNER™</div>
+        <div class="contato"><a href="https://www.vigorre.com.br">www.vigorre.com.br</a> | <a href="https://wa.me/5534991850735">(34) 99185-0735</a></div>
+      </div>
+    </div>
+  </div>
 </main>
 
-<script src="config.js"></script>
+<!-- MODAL LOG -->
+<div class="modal-overlay" id="modalLog">
+  <div class="modal modal-pequeno"><h2>📜 Histórico <button class="fechar" onclick="fecharLog()">×</button></h2>
+    <div id="conteudoLog" style="max-height:400px;overflow-y:auto;"></div>
+    <div class="btn-group"><button class="btn btn-outline" onclick="fecharLog()">Fechar</button></div>
+  </div>
+</div>
+
+<!-- MODAL AUTH -->
+<div class="modal-overlay" id="modalAuth">
+  <div class="modal modal-pequeno">
+    <h2>🔐 Autenticação Master <button class="fechar" onclick="fecharAuth()">×</button></h2>
+    <div id="authMsg" style="font-size:13px;color:var(--cinza);margin-bottom:16px;"></div>
+    <div class="form-group"><label>Usuário Master</label><input type="text" id="authUsuario" placeholder="Ex: raul"></div>
+    <div class="form-group"><label>Senha Master</label><input type="password" id="authSenha" placeholder="••••••••"></div>
+    <div class="form-group"><label>Justificativa (mín 50 caracteres)</label>
+      <textarea id="authJust" rows="3" placeholder="Explique o motivo..."></textarea>
+      <div style="font-size:10px;color:var(--cinza);margin-top:4px;" id="contadorJust">0/50 caracteres</div>
+    </div>
+    <div class="btn-group">
+      <button class="btn btn-outline" onclick="fecharAuth()">Cancelar</button>
+      <button class="btn btn-success" onclick="confirmarAuth()" style="background:var(--verde);color:white;padding:10px 20px;border-radius:8px;border:none;cursor:pointer;font-weight:600;">✅ Confirmar</button>
+    </div>
+  </div>
+</div>
+
 <script src="menu.js?v=20260904"></script>
 <script>
-var agendamentos = JSON.parse(localStorage.getItem('amovin_agendamentos') || '[]');
-var slots = JSON.parse(localStorage.getItem('amovin_slots') || '[]');
+// ============================================================
+// AGENDA - AMOVIN ERP (Firebase + Auth Master + Log)
+// Código: A-AGE-YYYY-NNNN
+// ============================================================
+
+var agendamentos = [];
+var slots = [];
+var beneficiarios = [];
+var profissionais = [];
+var firebasePronto = false;
+var db = null;
+var acaoPendente = null;
+var dadosPendentes = null;
+var adminAutenticado = null;
 var editandoId = null;
-var bn = {1:'Maria Silva',2:'João Santos',3:'Ana Costa',4:'Pedro Lima',5:'Carla Souza'};
-var sn = {1:'Sala 1',2:'Sala 2',3:'Sala 3'};
 
-if (agendamentos.length === 0) {
-    agendamentos = [
-        {id:1,beneficiario:'1',profissional:'Dr. Carlos Mendes',data:new Date().toISOString().split('T')[0],hora:'09:00',sala:'1',obs:'Psicologia',status:'agendado'},
-        {id:2,beneficiario:'2',profissional:'Dra. Lucia Ferreira',data:new Date().toISOString().split('T')[0],hora:'10:00',sala:'2',obs:'Social',status:'presente'}
-    ];
-    salvar();
+// ============================================================
+// FIREBASE
+// ============================================================
+function inicializarFirebase() {
+    if (typeof firebase === 'undefined') {
+        var s = document.createElement('script');
+        s.src = 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js';
+        s.onload = function() {
+            var fs = document.createElement('script');
+            fs.src = 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js';
+            fs.onload = function() {
+                try {
+                    var cfg = {
+                        apiKey: "AIzaSyDQO-69vVBhmBK8oLt0DzfyigBmjxzu7b4",
+                        authDomain: "gestao-amovin.firebaseapp.com",
+                        projectId: "gestao-amovin",
+                        storageBucket: "gestao-amovin.firebasestorage.app",
+                        messagingSenderId: "316793420445",
+                        appId: "1:316793420445:web:68e9898bbfcd30853f3274"
+                    };
+                    if (!firebase.apps.length) firebase.initializeApp(cfg);
+                    db = firebase.firestore();
+                    firebasePronto = true;
+                    atualizarStatusFirebase('conectado');
+                    escutarTudo();
+                } catch (e) { atualizarStatusFirebase('offline'); carregarLocalStorage(); }
+            };
+            document.head.appendChild(fs);
+        };
+        document.head.appendChild(s);
+    } else {
+        try {
+            db = firebase.firestore();
+            firebasePronto = true;
+            atualizarStatusFirebase('conectado');
+            escutarTudo();
+        } catch (e) { atualizarStatusFirebase('offline'); carregarLocalStorage(); }
+    }
 }
-function salvar() { localStorage.setItem('amovin_agendamentos', JSON.stringify(agendamentos)); localStorage.setItem('amovin_slots', JSON.stringify(slots)); }
+function atualizarStatusFirebase(s) {
+    var el = document.getElementById('statusFirebase');
+    if (s === 'conectado') { el.className = 'status-firebase conectado'; el.innerHTML = '<span class="dot"></span><span>🟢 Firebase (Tempo Real)</span>'; }
+    else { el.className = 'status-firebase offline'; el.innerHTML = '<span class="dot"></span><span>🟡 Modo Local</span>'; }
+}
+function escutarTudo() {
+    if (!firebasePronto || !db) { carregarLocalStorage(); return; }
+    db.collection('agenda').onSnapshot(function(snap) {
+        agendamentos = [];
+        snap.forEach(function(doc) { agendamentos.push({ _fbId: doc.id, ...doc.data() }); });
+        renderizarAgendamentos();
+    });
+    db.collection('slots_agenda').onSnapshot(function(snap) {
+        slots = [];
+        snap.forEach(function(doc) { slots.push({ _fbId: doc.id, ...doc.data() }); });
+        renderizarSlots();
+    });
+    db.collection('beneficiaries').onSnapshot(function(snap) {
+        beneficiarios = [];
+        snap.forEach(function(doc) { beneficiarios.push({ _fbId: doc.id, ...doc.data() }); });
+        preencherDropdownBeneficiarios();
+    });
+    db.collection('professionals').onSnapshot(function(snap) {
+        profissionais = [];
+        snap.forEach(function(doc) { profissionais.push({ _fbId: doc.id, ...doc.data() }); });
+        preencherDropdownProfissionais();
+    });
+}
+function carregarLocalStorage() {
+    agendamentos = JSON.parse(localStorage.getItem('amovin_agenda') || '[]');
+    slots = JSON.parse(localStorage.getItem('amovin_slots') || '[]');
+    beneficiarios = JSON.parse(localStorage.getItem('amovin_beneficiarios') || '[]');
+    profissionais = JSON.parse(localStorage.getItem('amovin_profissionais') || '[]');
+    preencherDropdownBeneficiarios();
+    preencherDropdownProfissionais();
+    renderizarAgendamentos(); renderizarSlots();
+}
+function preencherDropdownBeneficiarios() {
+    var sel = document.getElementById('beneficiario');
+    if (!sel) return;
+    var at = sel.value;
+    sel.innerHTML = '<option value="">Selecione...</option>';
+    beneficiarios.forEach(function(b) {
+        var opt = document.createElement('option');
+        opt.value = b._fbId;
+        opt.textContent = (b.fullName || b.nome || '') + ' (' + (b.cpf || '') + ')';
+        sel.appendChild(opt);
+    });
+    if (at) sel.value = at;
+}
+function preencherDropdownProfissionais() {
+    var sel = document.getElementById('profissional');
+    if (!sel) return;
+    var at = sel.value;
+    sel.innerHTML = '<option value="">Selecione...</option>';
+    profissionais.forEach(function(p) {
+        var opt = document.createElement('option');
+        opt.value = p._fbId;
+        opt.textContent = (p.name || p.fullName || '') + ' (' + (p.specialty || '') + ')';
+        sel.appendChild(opt);
+    });
+    if (at) sel.value = at;
+}
 
+// ============================================================
+// CÓDIGO A-AGE-YYYY-NNNN
+// ============================================================
+async function gerarProximoCodigo() {
+    var ano = new Date().getFullYear();
+    var prefixo = 'A-AGE-' + ano + '-';
+    var max = 0;
+    if (firebasePronto && db) {
+        try {
+            var snap = await db.collection('agenda').get();
+            snap.forEach(function(doc) {
+                var c = doc.data().codigo || '';
+                if (c.startsWith(prefixo)) { var n = parseInt(c.replace(prefixo, '')); if (n > max) max = n; }
+            });
+        } catch (e) {}
+    } else {
+        agendamentos.forEach(function(a) {
+            if (a.codigo && a.codigo.startsWith(prefixo)) { var n = parseInt(a.codigo.replace(prefixo, '')); if (n > max) max = n; }
+        });
+    }
+    return prefixo + String(max + 1).padStart(4, '0');
+}
+
+// ============================================================
+// AUTH
+// ============================================================
+function pedirAutenticacao(acao, dados) {
+    acaoPendente = acao;
+    dadosPendentes = dados || null;
+    var msgs = { 'criar': 'Criar novo agendamento', 'editar': 'Editar agendamento', 'excluir': 'Excluir agendamento', 'status': 'Alterar status', 'slot': 'Gerenciar horário' };
+    document.getElementById('authMsg').textContent = '🔐 ' + (msgs[acao] || acao);
+    document.getElementById('authUsuario').value = '';
+    document.getElementById('authSenha').value = '';
+    document.getElementById('authJust').value = '';
+    document.getElementById('contadorJust').textContent = '0/50 caracteres';
+    document.getElementById('modalAuth').classList.add('ativo');
+    setTimeout(function() { document.getElementById('authUsuario').focus(); }, 200);
+}
+async function validarAdminMaster(usuario, senha) {
+    if (!firebasePronto || !db) {
+        var locais = [
+            { usuario: 'raul', senha: 'raul8954', nome: 'Raul Ramalho Costa' },
+            { usuario: 'daniele', senha: 'daniele2026', nome: 'Daniele Ramalho' },
+            { usuario: 'master', senha: 'amovin2026', nome: 'Adm Master Principal' }
+        ];
+        return locais.find(function(a) { return a.usuario === usuario && a.senha === senha; });
+    }
+    try {
+        var snap = await db.collection('admins_master').where('usuario', '==', usuario).where('ativo', '==', true).get();
+        if (snap.empty) return null;
+        var admin = null;
+        snap.forEach(function(doc) { admin = { _fbId: doc.id, ...doc.data() }; });
+        if (admin.senha !== senha) return null;
+        return admin;
+    } catch (e) { return null; }
+}
+async function confirmarAuth() {
+    var usuario = document.getElementById('authUsuario').value.trim().toLowerCase();
+    var senha = document.getElementById('authSenha').value;
+    var just = document.getElementById('authJust').value.trim();
+    if (!usuario || !senha) { mostrarToast('⚠️ Preencha usuário e senha!', 'warning'); return; }
+    if (just.length < 50) { mostrarToast('⚠️ Justificativa mín 50 caracteres!', 'warning'); return; }
+    var admin = await validarAdminMaster(usuario, senha);
+    if (!admin) { mostrarToast('❌ Usuário ou senha incorretos!', 'error'); return; }
+    adminAutenticado = { ...admin, justificativa: just };
+    fecharAuth();
+    if (acaoPendente === 'salvar') salvarAgendamentoFinal();
+    else if (acaoPendente === 'excluir') executarExclusao(dadosPendentes);
+    else if (acaoPendente === 'status') executarMudancaStatus(dadosPendentes);
+    else if (acaoPendente === 'slot') executarSlot();
+    acaoPendente = null;
+}
+function fecharAuth() { document.getElementById('modalAuth').classList.remove('ativo'); }
+document.getElementById('authJust').addEventListener('input', function() {
+    document.getElementById('contadorJust').textContent = this.value.length + '/50 caracteres';
+});
+
+// ============================================================
+// AGENDAMENTOS
+// ============================================================
+async function confirmarSalvar() {
+    var b = document.getElementById('beneficiario').value;
+    var p = document.getElementById('profissional').value;
+    var d = document.getElementById('dataEvento').value;
+    var h = document.getElementById('horaEvento').value;
+    if (!b || !p || !d || !h) { mostrarToast('⚠️ Preencha todos os campos!', 'warning'); return; }
+
+    // Verifica conflito de sala
+    var sala = document.getElementById('salaEvento').value;
+    var conflito = agendamentos.find(function(a) {
+        return a.data === d && a.hora === h && a.sala === sala && a._fbId !== editandoId && a.status !== 'cancelado';
+    });
+    if (conflito) { mostrarToast('⚠️ Sala ' + sala + ' já ocupada neste horário!', 'warning'); return; }
+
+    pedirAutenticacao('salvar', null);
+}
+
+async function salvarAgendamentoFinal() {
+    var bId = document.getElementById('beneficiario').value;
+    var pId = document.getElementById('profissional').value;
+    var d = document.getElementById('dataEvento').value;
+    var h = document.getElementById('horaEvento').value;
+    var sala = document.getElementById('salaEvento').value;
+    var obs = document.getElementById('obsEvento').value.trim();
+
+    var benef = beneficiarios.find(function(x) { return x._fbId === bId; });
+    var prof = profissionais.find(function(x) { return x._fbId === pId; });
+    var nomeBenef = benef ? (benef.fullName || benef.nome) : '';
+    var nomeProf = prof ? (prof.name || prof.fullName) : '';
+
+    var dados = {
+        beneficiarioId: bId,
+        beneficiarioNome: nomeBenef,
+        profissionalId: pId,
+        profissionalNome: nomeProf,
+        data: d,
+        hora: h,
+        sala: sala,
+        obs: obs,
+        status: 'agendado',
+        atualizadoEm: new Date().toISOString()
+    };
+
+    var logEntry = {
+        data: new Date().toISOString(),
+        usuario: adminAutenticado.usuario,
+        nomeUsuario: adminAutenticado.nome,
+        acao: editandoId ? 'editado' : 'criado',
+        justificativa: adminAutenticado.justificativa,
+        detalhes: nomeBenef + ' • ' + d + ' ' + h + ' • ' + sala
+    };
+
+    if (firebasePronto && db) {
+        try {
+            if (editandoId) {
+                var a = agendamentos.find(function(x) { return x._fbId === editandoId; });
+                var hist = (a && a.historico) ? a.historico : [];
+                hist.push(logEntry);
+                dados.historico = hist;
+                await db.collection('agenda').doc(editandoId).update(dados);
+                mostrarToast('✅ Agendamento atualizado!', 'success');
+            } else {
+                dados.codigo = await gerarProximoCodigo();
+                dados.criadoEm = new Date().toISOString();
+                dados.historico = [logEntry];
+                await db.collection('agenda').add(dados);
+                mostrarToast('✅ Agendamento ' + dados.codigo + ' criado!', 'success');
+            }
+            limparForm(); editandoId = null;
+            document.getElementById('btnCancelar').style.display = 'none';
+            document.getElementById('tituloForm').textContent = '📝 Novo Agendamento';
+            adminAutenticado = null;
+        } catch (e) { mostrarToast('❌ Erro: ' + e.message, 'error'); }
+    } else {
+        if (editandoId) {
+            var idx = agendamentos.findIndex(function(x) { return x._fbId === editandoId; });
+            if (idx >= 0) {
+                var hist = agendamentos[idx].historico || [];
+                hist.push(logEntry);
+                dados.historico = hist;
+                Object.assign(agendamentos[idx], dados);
+            }
+        } else {
+            dados._fbId = Date.now().toString();
+            dados.codigo = await gerarProximoCodigo();
+            dados.historico = [logEntry];
+            agendamentos.push(dados);
+        }
+        localStorage.setItem('amovin_agenda', JSON.stringify(agendamentos));
+        limparForm(); editandoId = null;
+        document.getElementById('btnCancelar').style.display = 'none';
+        renderizarAgendamentos();
+        adminAutenticado = null;
+    }
+}
+
+function editarAgendamento(fbId) {
+    var a = agendamentos.find(function(x) { return x._fbId === fbId; });
+    if (!a) return;
+    editandoId = fbId;
+    document.getElementById('tituloForm').textContent = '✏️ Editando: ' + a.codigo;
+    document.getElementById('codigoEvento').value = a.codigo || '';
+    document.getElementById('beneficiario').value = a.beneficiarioId || '';
+    document.getElementById('profissional').value = a.profissionalId || '';
+    document.getElementById('dataEvento').value = a.data || '';
+    document.getElementById('horaEvento').value = a.hora || '';
+    document.getElementById('salaEvento').value = a.sala || 'Sala 1';
+    document.getElementById('obsEvento').value = a.obs || '';
+    document.getElementById('btnCancelar').style.display = 'block';
+}
+
+function cancelarEdicao() {
+    editandoId = null;
+    limparForm();
+    document.getElementById('btnCancelar').style.display = 'none';
+    document.getElementById('tituloForm').textContent = '📝 Novo Agendamento';
+}
+
+function limparForm() {
+    document.getElementById('beneficiario').value = '';
+    document.getElementById('profissional').value = '';
+    document.getElementById('dataEvento').value = new Date().toISOString().split('T')[0];
+    document.getElementById('horaEvento').value = '';
+    document.getElementById('salaEvento').value = 'Sala 1';
+    document.getElementById('obsEvento').value = '';
+}
+
+function excluirAgendamento(fbId) {
+    var a = agendamentos.find(function(x) { return x._fbId === fbId; });
+    if (!a) return;
+    if (!confirm('Excluir agendamento ' + a.codigo + '?\n\n⚠️ Esta ação é irreversível.')) return;
+    pedirAutenticacao('excluir', fbId);
+}
+async function executarExclusao(fbId) {
+    var a = agendamentos.find(function(x) { return x._fbId === fbId; });
+    if (!a) { adminAutenticado = null; return; }
+    var logEntry = {
+        data: new Date().toISOString(),
+        usuario: adminAutenticado.usuario, nomeUsuario: adminAutenticado.nome,
+        acao: 'EXCLUÍDO', justificativa: adminAutenticado.justificativa,
+        detalhes: a.codigo + ' - ' + a.beneficiarioNome
+    };
+    if (firebasePronto && db) {
+        try {
+            await db.collection('logs_exclusao').add({ modulo: 'agenda', itemCodigo: a.codigo, itemNome: a.beneficiarioNome, ...logEntry });
+            await db.collection('agenda').doc(fbId).delete();
+            mostrarToast('🗑️ Agendamento excluído!', 'info');
+        } catch (e) { mostrarToast('❌ ' + e.message, 'error'); }
+    } else {
+        agendamentos = agendamentos.filter(function(x) { return x._fbId !== fbId; });
+        localStorage.setItem('amovin_agenda', JSON.stringify(agendamentos));
+        renderizarAgendamentos();
+    }
+    adminAutenticado = null;
+}
+
+function marcarPresenca(fbId) { pedirAutenticacao('status', { fbId: fbId, novoStatus: 'presente' }); }
+function marcarFalta(fbId) { pedirAutenticacao('status', { fbId: fbId, novoStatus: 'falta' }); }
+
+async function executarMudancaStatus(dados) {
+    var a = agendamentos.find(function(x) { return x._fbId === dados.fbId; });
+    if (!a) { adminAutenticado = null; return; }
+    var logEntry = {
+        data: new Date().toISOString(),
+        usuario: adminAutenticado.usuario, nomeUsuario: adminAutenticado.nome,
+        acao: 'status: ' + a.status + ' → ' + dados.novoStatus,
+        justificativa: adminAutenticado.justificativa
+    };
+    if (firebasePronto && db) {
+        try {
+            var hist = a.historico || [];
+            hist.push(logEntry);
+            await db.collection('agenda').doc(dados.fbId).update({ status: dados.novoStatus, historico: hist });
+            mostrarToast('✅ Status atualizado!', 'success');
+        } catch (e) { mostrarToast('❌ ' + e.message, 'error'); }
+    } else {
+        a.status = dados.novoStatus;
+        if (!a.historico) a.historico = [];
+        a.historico.push(logEntry);
+        localStorage.setItem('amovin_agenda', JSON.stringify(agendamentos));
+        renderizarAgendamentos();
+    }
+    adminAutenticado = null;
+}
+
+function verLog(fbId) {
+    var a = agendamentos.find(function(x) { return x._fbId === fbId; });
+    if (!a) return;
+    var hist = a.historico || [];
+    var container = document.getElementById('conteudoLog');
+    if (hist.length === 0) { container.innerHTML = '<div class="sem-dados">Nenhuma alteração.</div>'; }
+    else {
+        container.innerHTML = hist.slice().reverse().map(function(h) {
+            var dt = new Date(h.data).toLocaleString('pt-BR');
+            return '<div class="log-item"><div class="quando">' + dt + '</div>' +
+                '<div class="quem">👤 ' + (h.nomeUsuario || h.usuario) + ' (@' + h.usuario + ')</div>' +
+                '<div class="acao">📌 ' + h.acao + '</div>' +
+                (h.detalhes ? '<div style="font-size:11px;color:var(--cinza);">' + h.detalhes + '</div>' : '') +
+                (h.justificativa ? '<div class="just"><strong>Justificativa:</strong> ' + h.justificativa + '</div>' : '') +
+                '</div>';
+        }).join('');
+    }
+    document.getElementById('modalLog').classList.add('ativo');
+}
+function fecharLog() { document.getElementById('modalLog').classList.remove('ativo'); }
+
+// ============================================================
+// RENDERIZAR
+// ============================================================
 function renderizarAgendamentos() {
-    var hoje = new Date().toISOString().split('T')[0];
-    var lista = agendamentos.filter(function(a){return a.data===hoje;}).sort(function(a,b){return a.hora.localeCompare(b.hora);});
-    document.getElementById('totalAgendamentos').textContent = lista.length + ' hoje';
-    document.getElementById('dataEvento').value = hoje;
+    var filtroData = document.getElementById('filtroData').value || new Date().toISOString().split('T')[0];
+    var filtroStatus = document.getElementById('filtroStatus').value;
+    var lista = agendamentos.filter(function(a) {
+        if (a.data !== filtroData) return false;
+        if (filtroStatus && a.status !== filtroStatus) return false;
+        return true;
+    }).sort(function(a, b) { return (a.hora || '').localeCompare(b.hora || ''); });
+
+    document.getElementById('totalAgendamentos').textContent = lista.length + ' agendamento' + (lista.length !== 1 ? 's' : '');
+    document.getElementById('contadorFiltro').textContent = lista.length + ' registro' + (lista.length !== 1 ? 's' : '');
+    document.getElementById('dataEvento').value = filtroData;
+
     var c = document.getElementById('listaAgendamentos');
     if (lista.length === 0) { c.innerHTML = '<div class="sem-dados">Nenhum agendamento.</div>'; return; }
-    c.innerHTML = lista.map(function(a){
-        var cs = a.status==='presente'?'presente':a.status==='falta'?'falta':a.status==='cancelado'?'cancelado':'';
-        return '<div class="evento-item '+cs+'"><div class="evento-hora">'+a.hora+'</div><div class="evento-info"><div class="nome">'+(bn[a.beneficiario]||'Beneficiário')+' <span class="status-badge badge-'+(a.status||'agendado')+'">'+(a.status||'Agendado')+'</span></div><div class="detalhe">👤 '+a.profissional+' | 🏠 '+sn[a.sala]+(a.obs?' | 📝 '+a.obs:'')+'</div></div><div style="display:flex;gap:3px;flex-wrap:wrap;">'+(a.status==='agendado'?'<button class="btn-acao btn-presente" onclick="marcarPresenca('+a.id+')">✅</button><button class="btn-acao btn-falta" onclick="marcarFalta('+a.id+')">❌</button>':'')+'<button class="btn-acao btn-editar" onclick="editarAgendamento('+a.id+')">✏️</button><button class="btn-acao btn-excluir" onclick="excluirAgendamento('+a.id+')">🗑️</button></div></div>';
+
+    c.innerHTML = lista.map(function(a) {
+        var cs = a.status === 'presente' ? 'presente' : a.status === 'falta' ? 'falta' : a.status === 'cancelado' ? 'cancelado' : '';
+        var badgeClass = 'badge-' + (a.status || 'agendado');
+        var numLogs = (a.historico || []).length;
+        return '<div class="evento-item ' + cs + '">' +
+            '<div class="evento-hora">' + (a.hora || '') + '</div>' +
+            '<div class="evento-info">' +
+            '<div class="codigo">' + (a.codigo || '') + '</div>' +
+            '<div class="nome">' + (a.beneficiarioNome || 'Beneficiário') + ' <span class="status-badge ' + badgeClass + '">' + (a.status || 'Agendado') + '</span></div>' +
+            '<div class="detalhe">👤 ' + (a.profissionalNome || '') + ' | 🏠 ' + (a.sala || '') + (a.obs ? ' | 📝 ' + a.obs : '') + '</div>' +
+            '</div>' +
+            '<div style="display:flex;gap:3px;flex-wrap:wrap;">' +
+            (a.status === 'agendado' ? '<button class="btn-acao btn-presente" onclick="marcarPresenca(\'' + a._fbId + '\')">✅</button><button class="btn-acao btn-falta" onclick="marcarFalta(\'' + a._fbId + '\')">❌</button>' : '') +
+            '<button class="btn-acao btn-editar" onclick="editarAgendamento(\'' + a._fbId + '\')">✏️</button>' +
+            '<button class="btn-acao btn-teal" onclick="verLog(\'' + a._fbId + '\')">📜' + (numLogs ? ' (' + numLogs + ')' : '') + '</button>' +
+            '<button class="btn-acao btn-excluir" onclick="excluirAgendamento(\'' + a._fbId + '\')">🗑️</button>' +
+            '</div></div>';
     }).join('');
 }
 
-window.salvarAgendamento = function() {
-    var b = document.getElementById('beneficiario').value, p = document.getElementById('profissional').value, d = document.getElementById('dataEvento').value, h = document.getElementById('horaEvento').value, s = document.getElementById('salaEvento').value, o = document.getElementById('obsEvento').value;
-    if (!b||!p||!d||!h) { alert('Preencha os campos!'); return; }
-    var conflito = agendamentos.find(function(a){return a.data===d&&a.hora===h&&a.sala===s&&a.id!==editandoId&&a.status!=='cancelado';});
-    if (conflito) { alert('Sala '+sn[s]+' ocupada!'); return; }
-    if (editandoId) { var idx = agendamentos.findIndex(function(a){return a.id===editandoId;}); if (idx>=0) agendamentos[idx] = Object.assign({},agendamentos[idx],{beneficiario:b,profissional:p,data:d,hora:h,sala:s,obs:o}); editandoId=null; document.getElementById('btnCancelar').style.display='none'; document.getElementById('tituloForm').textContent='Novo Agendamento'; }
-    else { agendamentos.push({id:Date.now(),beneficiario:b,profissional:p,data:d,hora:h,sala:s,obs:o,status:'agendado'}); }
-    salvar(); renderizarAgendamentos(); limparForm();
-};
-window.editarAgendamento = function(id) { var a = agendamentos.find(function(a){return a.id===id;}); if(!a)return; editandoId=id; document.getElementById('tituloForm').textContent='Editando'; document.getElementById('beneficiario').value=a.beneficiario; document.getElementById('profissional').value=a.profissional; document.getElementById('dataEvento').value=a.data; document.getElementById('horaEvento').value=a.hora; document.getElementById('salaEvento').value=a.sala; document.getElementById('obsEvento').value=a.obs||''; document.getElementById('btnCancelar').style.display='block'; };
-window.excluirAgendamento = function(id) { if(!confirm('Excluir?'))return; agendamentos=agendamentos.filter(function(a){return a.id!==id;}); salvar(); renderizarAgendamentos(); };
-window.cancelarEdicao = function() { editandoId=null; limparForm(); document.getElementById('btnCancelar').style.display='none'; };
-window.marcarPresenca = function(id) { var a=agendamentos.find(function(a){return a.id===id;}); if(a){a.status='presente';salvar();renderizarAgendamentos();} };
-window.marcarFalta = function(id) { var a=agendamentos.find(function(a){return a.id===id;}); if(a){a.status='falta';salvar();renderizarAgendamentos();} };
-function limparForm() { document.getElementById('beneficiario').value='';document.getElementById('profissional').value='';document.getElementById('horaEvento').value='';document.getElementById('obsEvento').value=''; }
+function renderizarSlots() {
+    var c = document.getElementById('listaSlots');
+    if (slots.length === 0) { c.innerHTML = '<div class="sem-dados">Nenhum horário.</div>'; return; }
+    c.innerHTML = slots.sort(function(a, b) { return a.data.localeCompare(b.data) || a.hora.localeCompare(b.hora); }).map(function(s) {
+        return '<div style="display:flex;justify-content:space-between;padding:10px;border-bottom:1px solid #F0E9DF;flex-wrap:wrap;gap:6px;">' +
+            '<span>📅 ' + new Date(s.data + 'T00:00:00').toLocaleDateString('pt-BR') + ' 🕐 ' + s.hora + ' | ' + s.sala + '</span>' +
+            '<button class="btn-acao btn-excluir" onclick="removerSlot(\'' + s._fbId + '\')">🗑️</button>' +
+            '</div>';
+    }).join('');
+}
 
-window.adicionarSlot = function() { var d=document.getElementById('slotData').value,h=document.getElementById('slotHora').value,s=document.getElementById('slotSala').value; if(!d||!h)return; slots.push({data:d,hora:h,sala:s}); salvar(); renderizarSlots(); };
-window.removerSlot = function(d,h,s) { slots=slots.filter(function(sl){return !(sl.data===d&&sl.hora===h&&sl.sala===s);}); salvar(); renderizarSlots(); };
-function renderizarSlots() { var c=document.getElementById('listaSlots'); if(slots.length===0){c.innerHTML='<div class="sem-dados">Nenhum horário.</div>';return;} c.innerHTML=slots.sort(function(a,b){return a.data.localeCompare(b.data)||a.hora.localeCompare(b.hora);}).map(function(s){return '<div style="display:flex;justify-content:space-between;padding:10px;border-bottom:1px solid #F0E9DF;flex-wrap:wrap;gap:6px;"><span>📅 '+new Date(s.data+'T00:00:00').toLocaleDateString('pt-BR')+' 🕐 '+s.hora+' | '+sn[s.sala]+'</span><button class="btn-acao btn-excluir" onclick="removerSlot(\''+s.data+'\',\''+s.hora+'\',\''+s.sala+'\')">🗑️</button></div>';}).join(''); }
+// ============================================================
+// SLOTS
+// ============================================================
+function confirmarAdicionarSlot() {
+    var d = document.getElementById('slotData').value;
+    var h = document.getElementById('slotHora').value;
+    if (!d || !h) { mostrarToast('⚠️ Preencha data e hora!', 'warning'); return; }
+    pedirAutenticacao('slot', null);
+}
+async function executarSlot() {
+    var d = document.getElementById('slotData').value;
+    var h = document.getElementById('slotHora').value;
+    var s = document.getElementById('slotSala').value;
+    var dados = { data: d, hora: h, sala: s, criadoEm: new Date().toISOString() };
+    if (firebasePronto && db) {
+        try {
+            await db.collection('slots_agenda').add(dados);
+            mostrarToast('✅ Horário adicionado!', 'success');
+            document.getElementById('slotData').value = '';
+            document.getElementById('slotHora').value = '';
+        } catch (e) { mostrarToast('❌ ' + e.message, 'error'); }
+    } else {
+        dados._fbId = Date.now().toString();
+        slots.push(dados);
+        localStorage.setItem('amovin_slots', JSON.stringify(slots));
+        renderizarSlots();
+    }
+    adminAutenticado = null;
+}
+async function removerSlot(fbId) {
+    if (!confirm('Remover este horário?')) return;
+    if (firebasePronto && db) {
+        try {
+            await db.collection('slots_agenda').doc(fbId).delete();
+            mostrarToast('🗑️ Removido!', 'info');
+        } catch (e) { mostrarToast('❌ ' + e.message, 'error'); }
+    } else {
+        slots = slots.filter(function(x) { return x._fbId !== fbId; });
+        localStorage.setItem('amovin_slots', JSON.stringify(slots));
+        renderizarSlots();
+    }
+}
 
-window.mudarAba = function(aba, btn) { document.querySelectorAll('.aba').forEach(function(a){a.classList.remove('ativa');}); btn.classList.add('ativa'); document.getElementById('aba-agendamentos').style.display = aba==='agendamentos'?'block':'none'; document.getElementById('aba-disponibilidade').style.display = aba==='disponibilidade'?'block':'none'; };
+// ============================================================
+// CSV
+// ============================================================
+function exportarCSV() {
+    var linhas = [['Código', 'Data', 'Hora', 'Beneficiário', 'Profissional', 'Sala', 'Status', 'Obs']];
+    agendamentos.forEach(function(a) {
+        linhas.push([a.codigo || '', a.data || '', a.hora || '', a.beneficiarioNome || '', a.profissionalNome || '',
+            a.sala || '', a.status || '', a.obs || '']);
+    });
+    var csv = linhas.map(function(l) { return l.map(function(c) { return '"' + c + '"'; }).join(';'); }).join('\n');
+    var blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url; a.download = 'agenda-amovin-' + new Date().toISOString().split('T')[0] + '.csv';
+    a.click(); URL.revokeObjectURL(url);
+    mostrarToast('📥 CSV exportado!', 'success');
+}
 
-if (!sessionStorage.getItem('amovin_logado')) { window.location.href = 'index.html'; }
+function mudarAba(aba, btn) {
+    document.querySelectorAll('.aba').forEach(function(a) { a.classList.remove('ativa'); });
+    btn.classList.add('ativa');
+    document.getElementById('aba-agendamentos').style.display = aba === 'agendamentos' ? 'block' : 'none';
+    document.getElementById('aba-disponibilidade').style.display = aba === 'disponibilidade' ? 'block' : 'none';
+}
 
-renderizarAgendamentos(); renderizarSlots();
+function mostrarToast(msg, tipo) {
+    var t = document.createElement('div');
+    t.className = 'toast toast-' + (tipo || 'success');
+    t.textContent = msg;
+    document.body.appendChild(t);
+    setTimeout(function() { t.remove(); }, 4000);
+}
+
+if (!sessionStorage.getItem('amovin_logado') && !localStorage.getItem('amovin_logado')) {
+    console.log('⚠️ Sessão não encontrada, mas permitindo acesso.');
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('filtroData').value = new Date().toISOString().split('T')[0];
+    document.getElementById('dataEvento').value = new Date().toISOString().split('T')[0];
+    inicializarFirebase();
+});
 </script>
 </body>
 </html>
