@@ -48,7 +48,7 @@
         .campo-moeda::before { content: 'R$'; position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--cinza); font-weight: 600; font-size: 13px; pointer-events: none; }
         .campo-moeda input { padding-left: 40px !important; font-weight: 600; font-size: 14px !important; text-align: right; }
         .campo-moeda .preview-valor { font-size: 10px; color: var(--cinza); text-align: right; margin-top: 2px; min-height: 12px; }
-        .filtros-bar { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-bottom: 16px; padding: 12px; background: #F8F4ED; border-radius: 10px; }
+        .filtros-bar { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-bottom: 16px; padding: 12px; background: #F8F4ED; border-radius: 10px; }
         .filtros-bar select, .filtros-bar input { padding: 8px 12px; border: 1px solid #E5E0D8; border-radius: 8px; font-size: 12px; font-family: 'Inter', sans-serif; background: white; }
         .filtros-bar .info { font-size: 12px; color: var(--cinza); margin-left: auto; }
         .lancamento-item { padding: 12px 16px; border-bottom: 1px solid #F0E9DF; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; transition: background 0.2s; }
@@ -124,17 +124,10 @@
     <div class="card">
         <h3>📋 Lançamentos <span class="badge" id="contadorLanc">0 lançamentos</span></h3>
         <div class="filtros-bar">
-            <select id="filtroTipo" onchange="renderizarLancamentos()">
-                <option value="todos">📋 Todos</option>
-                <option value="income">📈 Receitas</option>
-                <option value="expense">📉 Despesas</option>
+            <select id="filtroAno" onchange="renderizarLancamentos()" autocomplete="off">
+                <option value="">Todos os anos</option>
             </select>
-            <select id="filtroStatus" onchange="renderizarLancamentos()">
-                <option value="todos">Todos os status</option>
-                <option value="Pago">✅ Pago</option>
-                <option value="Pendente">⏳ Pendente</option>
-            </select>
-            <select id="filtroMes" onchange="renderizarLancamentos()">
+            <select id="filtroMes" onchange="renderizarLancamentos()" autocomplete="off">
                 <option value="">Todos os meses</option>
                 <option value="01">Janeiro</option><option value="02">Fevereiro</option>
                 <option value="03">Março</option><option value="04">Abril</option>
@@ -143,18 +136,17 @@
                 <option value="09">Setembro</option><option value="10">Outubro</option>
                 <option value="11">Novembro</option><option value="12">Dezembro</option>
             </select>
-            <input type="text" id="filtroBusca" placeholder="🔍 Buscar..." oninput="renderizarLancamentos()" style="min-width:180px;">
-            <select id="filtroNF" onchange="renderizarLancamentos()">
-                <option value="todos">📄 Tem NF?</option>
-                <option value="sim">✅ Com NF</option>
-                <option value="nao">❌ Sem NF</option>
+            <select id="filtroTipo" onchange="renderizarLancamentos()" autocomplete="off">
+                <option value="todos">📋 Todos</option>
+                <option value="income">📈 Receitas</option>
+                <option value="expense">📉 Despesas</option>
             </select>
-            <select id="filtroOrigem" onchange="renderizarLancamentos()">
-                <option value="todos">🏢 PJ ou PF</option>
-                <option value="PJ">🏢 Pessoa Jurídica</option>
-                <option value="PF">👤 Pessoa Física</option>
+            <select id="filtroStatus" onchange="renderizarLancamentos()" autocomplete="off">
+                <option value="todos">Todos os status</option>
+                <option value="Pago">✅ Pago</option>
+                <option value="Pendente">⏳ Pendente</option>
             </select>
-            <select id="filtroCategoria" onchange="renderizarLancamentos()">
+            <select id="filtroCategoria" onchange="renderizarLancamentos()" autocomplete="off">
                 <option value="todos">📂 Todas as categorias</option>
                 <option value="Doação">🤝 Doação</option>
                 <option value="Convênio">🏛️ Convênio</option>
@@ -168,7 +160,18 @@
                 <option value="Evento">📅 Evento</option>
                 <option value="Outros">📌 Outros</option>
             </select>
-            <input type="text" id="filtroEmpresa" placeholder="🏢 Empresa / Pessoa..." oninput="renderizarLancamentos()" style="min-width:180px;">
+            <select id="filtroOrigem" onchange="renderizarLancamentos()" autocomplete="off">
+                <option value="todos">🏢 PJ ou PF</option>
+                <option value="PJ">🏢 Pessoa Jurídica</option>
+                <option value="PF">👤 Pessoa Física</option>
+            </select>
+            <select id="filtroNF" onchange="renderizarLancamentos()" autocomplete="off">
+                <option value="todos">📄 Tem NF?</option>
+                <option value="sim">✅ Com NF</option>
+                <option value="nao">❌ Sem NF</option>
+            </select>
+            <input type="text" id="filtroEmpresa" placeholder="🏢 Empresa / Pessoa..." oninput="renderizarLancamentos()" style="min-width:180px;" autocomplete="off" name="nf_empresa_x1">
+            <input type="text" id="filtroBusca" placeholder="🔍 Buscar tudo..." oninput="renderizarLancamentos()" style="min-width:180px;" autocomplete="off" name="nf_busca_x2">
             <button class="btn btn-outline btn-sm" onclick="limparFiltros()" style="padding:8px 12px;">🧹 Limpar</button>
             <span class="info" id="contadorFiltro"></span>
         </div>
@@ -196,22 +199,22 @@
         <div class="secao-titulo">📋 Dados Principais</div>
         <div class="form-row">
             <div class="form-group"><label>Tipo *</label>
-                <select id="formTipo">
+                <select id="formTipo" autocomplete="off">
                     <option value="income">📈 Receita</option>
                     <option value="expense" selected>📉 Despesa</option>
                 </select>
             </div>
             <div class="form-group"><label>Status *</label>
-                <select id="formStatus">
+                <select id="formStatus" autocomplete="off">
                     <option value="Pago">✅ Pago</option>
                     <option value="Pendente">⏳ Pendente</option>
                 </select>
             </div>
         </div>
-        <div class="form-group"><label>Descrição *</label><input type="text" id="formDescricao" placeholder="Ex: Café da manhã - Reunião Diretoria"></div>
+        <div class="form-group"><label>Descrição *</label><input type="text" id="formDescricao" placeholder="Ex: Café da manhã - Reunião Diretoria" autocomplete="off" name="nf_desc_x1"></div>
         <div class="form-row">
             <div class="form-group"><label>Categoria *</label>
-                <select id="formCategoria">
+                <select id="formCategoria" autocomplete="off">
                     <option value="Doação">🤝 Doação</option>
                     <option value="Convênio">🏛️ Convênio</option>
                     <option value="Emenda">🏛️ Emenda</option>
@@ -225,11 +228,11 @@
                     <option value="Outros" selected>📌 Outros</option>
                 </select>
             </div>
-            <div class="form-group"><label>Data *</label><input type="date" id="formData"></div>
+            <div class="form-group"><label>Data *</label><input type="date" id="formData" autocomplete="off"></div>
         </div>
         <div class="form-group"><label>Valor Total *</label>
             <div class="campo-moeda">
-                <input type="text" id="formValor" placeholder="0,00" inputmode="numeric" oninput="mascaraMoeda(this)" onblur="formatarMoedaBlur(this)">
+                <input type="text" id="formValor" placeholder="0,00" inputmode="numeric" oninput="mascaraMoeda(this)" onblur="formatarMoedaBlur(this)" autocomplete="off" name="nf_valor_x1">
                 <div class="preview-valor" id="previewValor"></div>
             </div>
         </div>
@@ -237,20 +240,20 @@
         <div class="secao-titulo">🏢 Origem / Fornecedor</div>
         <div class="form-row-3">
             <div class="form-group"><label>Tipo</label>
-                <select id="formTipoOrigem">
+                <select id="formTipoOrigem" autocomplete="off">
                     <option value="PJ">🏢 Pessoa Jurídica</option>
                     <option value="PF">👤 Pessoa Física</option>
                 </select>
             </div>
-            <div class="form-group" style="grid-column: span 2;"><label>Nome da Empresa / Pessoa</label><input type="text" id="formEmpresaPessoa" placeholder="Ex: Padoca do Zé"></div>
+            <div class="form-group" style="grid-column: span 2;"><label>Nome da Empresa / Pessoa</label><input type="text" id="formEmpresaPessoa" placeholder="Ex: Padoca do Zé" autocomplete="off" name="nf_emp_x1"></div>
         </div>
         <div class="form-row">
-            <div class="form-group"><label>CNPJ / CPF (opcional)</label><input type="text" id="formCnpjCpf" placeholder="00.000.000/0000-00"></div>
-            <div class="form-group"><label>📞 Telefone do Fornecedor</label><input type="text" id="formTelefone" placeholder="(34) 99999-9999"></div>
+            <div class="form-group"><label>CNPJ / CPF (opcional)</label><input type="text" id="formCnpjCpf" placeholder="00.000.000/0000-00" autocomplete="off" name="nf_cnpj_x1"></div>
+            <div class="form-group"><label>📞 Telefone do Fornecedor</label><input type="text" id="formTelefone" placeholder="(34) 99999-9999" autocomplete="off" name="nf_tel_x1"></div>
         </div>
         <div class="form-row">
             <div class="form-group"><label>💳 Forma de Pagamento *</label>
-                <select id="formFormaPagamento">
+                <select id="formFormaPagamento" autocomplete="off">
                     <option value="">Selecione...</option>
                     <option value="Pix">Pix</option>
                     <option value="Dinheiro">Dinheiro</option>
@@ -262,7 +265,7 @@
                 </select>
             </div>
             <div class="form-group"><label>📋 Natureza do Gasto *</label>
-                <select id="formNatureza">
+                <select id="formNatureza" autocomplete="off">
                     <option value="Serviço">🛠️ Serviço Prestado</option>
                     <option value="Compra de Material">📦 Compra de Material</option>
                     <option value="Locação">🏠 Locação</option>
@@ -270,7 +273,7 @@
                 </select>
             </div>
         </div>
-        <div class="form-group"><label>📍 Local de Emissão</label><input type="text" id="formLocalEmissao" placeholder="Rio Paranaíba - MG" value="Rio Paranaíba - MG"></div>
+        <div class="form-group"><label>📍 Local de Emissão</label><input type="text" id="formLocalEmissao" placeholder="Rio Paranaíba - MG" value="Rio Paranaíba - MG" autocomplete="off" name="nf_local_x1"></div>
 
         <div class="secao-titulo">📄 Nota Fiscal</div>
         <div class="form-group">
@@ -282,25 +285,25 @@
 
         <div class="secao-titulo">🎉 Evento (opcional)</div>
         <div class="form-row">
-            <div class="form-group"><label>Nome do Evento</label><input type="text" id="formEventName" placeholder="Ex: Festa Junina 2026"></div>
-            <div class="form-group"><label>Data do Evento</label><input type="date" id="formEventDate"></div>
+            <div class="form-group"><label>Nome do Evento</label><input type="text" id="formEventName" placeholder="Ex: Festa Junina 2026" autocomplete="off" name="nf_event_x1"></div>
+            <div class="form-group"><label>Data do Evento</label><input type="date" id="formEventDate" autocomplete="off"></div>
         </div>
 
         <div class="secao-titulo">🔗 Vínculos</div>
         <div class="form-row">
             <div class="form-group"><label>Projeto (opcional)</label>
-                <select id="formProjeto"><option value="">— Nenhum (institucional) —</option></select>
+                <select id="formProjeto" autocomplete="off"><option value="">— Nenhum (institucional) —</option></select>
             </div>
             <div class="form-group"><label>Orçamento (opcional)</label>
-                <select id="formOrcamento"><option value="">— Nenhum —</option></select>
+                <select id="formOrcamento" autocomplete="off"><option value="">— Nenhum —</option></select>
             </div>
         </div>
         <div class="form-group"><label>Item do Orçamento (opcional)</label>
-            <select id="formOrcamentoItem"><option value="">— Nenhum —</option></select>
+            <select id="formOrcamentoItem" autocomplete="off"><option value="">— Nenhum —</option></select>
         </div>
 
         <div class="secao-titulo">📝 Observações</div>
-        <div class="form-group"><textarea id="formObs" rows="2" placeholder="Ex: Pagamento à vista em dinheiro..."></textarea></div>
+        <div class="form-group"><textarea id="formObs" rows="2" placeholder="Ex: Pagamento à vista em dinheiro..." autocomplete="off" name="nf_obs_x1"></textarea></div>
 
         <div class="btn-group">
             <button class="btn btn-outline" onclick="fecharForm()">Cancelar</button>
@@ -333,10 +336,10 @@
     <div class="modal modal-pequeno">
         <h2>🔐 Autenticação Master <button class="fechar" onclick="fecharAuth()">×</button></h2>
         <div id="authMsg" style="font-size:13px;color:var(--cinza);margin-bottom:16px;"></div>
-        <div class="form-group"><label>Usuário Master</label><input type="text" id="authUsuario" placeholder="Ex: raul"></div>
-        <div class="form-group"><label>Senha Master</label><input type="password" id="authSenha" placeholder="••••••••"></div>
+        <div class="form-group"><label>Usuário Master</label><input type="text" id="authUsuario" placeholder="Ex: raul" autocomplete="off" name="nf_authu_x1"></div>
+        <div class="form-group"><label>Senha Master</label><input type="password" id="authSenha" placeholder="••••••••" autocomplete="new-password" name="nf_auths_x1"></div>
         <div class="form-group"><label>Justificativa (mín 50 caracteres)</label>
-            <textarea id="authJust" rows="3" placeholder="Explique o motivo da alteração..."></textarea>
+            <textarea id="authJust" rows="3" placeholder="Explique o motivo da alteração..." autocomplete="off" name="nf_authj_x1"></textarea>
             <div style="font-size:10px;color:var(--cinza);margin-top:4px;" id="contadorJust">0/50 caracteres</div>
         </div>
         <div class="btn-group">
@@ -350,7 +353,7 @@
 // ============================================================
 // FINANCEIRO - AMOVIN ERP (Firebase + Auth Master + Log)
 // Código: A-FIN-YYYY-NNNN
-// Filtros: Tipo, Status, Mês, Busca, NF, PJ/PF, Categoria, Empresa
+// Filtros: Ano, Mês, Tipo, Status, Categoria, PJ/PF, NF, Empresa, Busca
 // KPIs reagem ao filtro aplicado
 // Recibo premium com logo, natureza, forma de pagamento
 // ============================================================
@@ -364,6 +367,7 @@ var acaoPendente = null;
 var dadosPendentes = null;
 var adminAutenticado = null;
 var lancAtualDetalhes = null;
+var anosPopulados = false;
 
 function formatarMoeda(valor) {
     if (valor === null || valor === undefined || isNaN(valor)) return 'R$ 0,00';
@@ -456,6 +460,7 @@ function escutarTudo() {
         lancamentos = [];
         snap.forEach(function(doc) { lancamentos.push({ _fbId: doc.id, ...doc.data() }); });
         lancamentos.sort(function(a, b) { return (b.date || '').localeCompare(a.date || ''); });
+        popularAnos();
         renderizarLancamentos();
     });
     db.collection('projetos').onSnapshot(function(snap) {
@@ -473,9 +478,38 @@ function carregarLocalStorage() {
     lancamentos = JSON.parse(localStorage.getItem('amovin_financeiro') || '[]');
     projetos = JSON.parse(localStorage.getItem('amovin_projetos') || '[]');
     orcamentos = JSON.parse(localStorage.getItem('amovin_orcamentos_v2') || '[]');
+    popularAnos();
     preencherDropdownProjetos();
     preencherDropdownOrcamentos();
     renderizarLancamentos();
+}
+
+// Popula o dropdown de Anos com base nos anos existentes nos lançamentos
+function popularAnos() {
+    var sel = document.getElementById('filtroAno');
+    if (!sel) return;
+    var valorAtual = sel.value;
+    var anosSet = {};
+    lancamentos.forEach(function(l) {
+        if (l.year) anosSet[l.year] = true;
+    });
+    var anos = Object.keys(anosSet).sort().reverse();
+    // Se não achou nenhum, usa o ano atual
+    if (anos.length === 0) anos = [String(new Date().getFullYear())];
+    sel.innerHTML = '<option value="">Todos os anos</option>';
+    anos.forEach(function(a) {
+        var opt = document.createElement('option');
+        opt.value = a;
+        opt.textContent = a;
+        sel.appendChild(opt);
+    });
+    // Se é a primeira vez que popula, deixa o ano mais recente selecionado
+    if (!anosPopulados) {
+        sel.value = anos[0];
+        anosPopulados = true;
+    } else if (valorAtual) {
+        sel.value = valorAtual;
+    }
 }
 
 function preencherDropdownProjetos() {
@@ -777,7 +811,7 @@ async function salvarLancamentoFinal() {
             lancamentos.push(dados);
         }
         localStorage.setItem('amovin_financeiro', JSON.stringify(lancamentos));
-        fecharForm(); renderizarLancamentos();
+        fecharForm(); popularAnos(); renderizarLancamentos();
         adminAutenticado = null;
     }
 }
@@ -860,7 +894,7 @@ async function executarExclusao(fbId) {
     } else {
         lancamentos = lancamentos.filter(function(x) { return x._fbId !== fbId; });
         localStorage.setItem('amovin_financeiro', JSON.stringify(lancamentos));
-        renderizarLancamentos();
+        popularAnos(); renderizarLancamentos();
     }
     adminAutenticado = null;
 }
@@ -890,54 +924,77 @@ function fecharLog() { document.getElementById('modalLog').classList.remove('ati
 // FILTRO ÚNICO — usado pela lista E pelos KPIs
 // ============================================================
 function obterLancamentosFiltrados() {
+    var elAno = document.getElementById('filtroAno');
+    var elMes = document.getElementById('filtroMes');
     var elTipo = document.getElementById('filtroTipo');
     var elStatus = document.getElementById('filtroStatus');
-    var elMes = document.getElementById('filtroMes');
-    var elBusca = document.getElementById('filtroBusca');
-    var elNF = document.getElementById('filtroNF');
-    var elOrigem = document.getElementById('filtroOrigem');
     var elCategoria = document.getElementById('filtroCategoria');
+    var elOrigem = document.getElementById('filtroOrigem');
+    var elNF = document.getElementById('filtroNF');
     var elEmpresa = document.getElementById('filtroEmpresa');
+    var elBusca = document.getElementById('filtroBusca');
 
+    var ano = elAno ? elAno.value : '';
+    var mes = elMes ? elMes.value : '';
     var tipo = elTipo ? elTipo.value : 'todos';
     var status = elStatus ? elStatus.value : 'todos';
-    var mes = elMes ? elMes.value : '';
-    var busca = elBusca ? elBusca.value.toLowerCase() : '';
-    var nf = elNF ? elNF.value : 'todos';
-    var origem = elOrigem ? elOrigem.value : 'todos';
     var categoria = elCategoria ? elCategoria.value : 'todos';
+    var origem = elOrigem ? elOrigem.value : 'todos';
+    var nf = elNF ? elNF.value : 'todos';
     var empresa = elEmpresa ? elEmpresa.value.toLowerCase() : '';
+    var busca = elBusca ? elBusca.value.toLowerCase() : '';
 
     return lancamentos.filter(function(l) {
+        if (ano && l.year !== ano) return false;
+        if (mes && l.month !== mes) return false;
         if (tipo !== 'todos' && l.type !== tipo) return false;
         if (status !== 'todos' && l.status !== status) return false;
-        if (mes && l.month !== mes) return false;
-
-        if (busca &&
-            (l.description || '').toLowerCase().indexOf(busca) === -1 &&
-            (l.empresaPessoaFisica || '').toLowerCase().indexOf(busca) === -1) return false;
+        if (categoria !== 'todos' && (l.category || 'Outros') !== categoria) return false;
+        if (origem !== 'todos' && (l.tipoOrigem || 'PJ') !== origem) return false;
 
         if (nf === 'sim' && l.hasFiscalReceipt === false) return false;
         if (nf === 'nao' && l.hasFiscalReceipt !== false) return false;
 
-        if (origem !== 'todos' && (l.tipoOrigem || 'PJ') !== origem) return false;
-
-        if (categoria !== 'todos' && (l.category || 'Outros') !== categoria) return false;
-
         if (empresa && (l.empresaPessoaFisica || '').toLowerCase().indexOf(empresa) === -1) return false;
+
+        if (busca) {
+            var alvo = [
+                l.description, l.empresaPessoaFisica, l.cnpjCpf, l.telefone,
+                l.codigo, l.category, l.natureza, l.obs, l.eventName
+            ].join(' ').toLowerCase();
+            if (alvo.indexOf(busca) === -1) return false;
+        }
 
         return true;
     });
 }
 
 function limparFiltros() {
-    var ids = ['filtroTipo', 'filtroStatus', 'filtroMes', 'filtroBusca', 'filtroNF', 'filtroOrigem', 'filtroCategoria', 'filtroEmpresa'];
-    ids.forEach(function(id) {
-        var el = document.getElementById(id);
-        if (!el) return;
-        if (id === 'filtroMes' || id === 'filtroBusca' || id === 'filtroEmpresa') el.value = '';
-        else el.value = 'todos';
-    });
+    var elAno = document.getElementById('filtroAno');
+    var elMes = document.getElementById('filtroMes');
+    var elTipo = document.getElementById('filtroTipo');
+    var elStatus = document.getElementById('filtroStatus');
+    var elCategoria = document.getElementById('filtroCategoria');
+    var elOrigem = document.getElementById('filtroOrigem');
+    var elNF = document.getElementById('filtroNF');
+    var elEmpresa = document.getElementById('filtroEmpresa');
+    var elBusca = document.getElementById('filtroBusca');
+
+    // Ano volta para o ano mais recente disponível
+    if (elAno) {
+        var anos = [];
+        lancamentos.forEach(function(l) { if (l.year && anos.indexOf(l.year) === -1) anos.push(l.year); });
+        anos.sort().reverse();
+        elAno.value = anos.length > 0 ? anos[0] : '';
+    }
+    if (elMes) elMes.value = '';
+    if (elTipo) elTipo.value = 'todos';
+    if (elStatus) elStatus.value = 'todos';
+    if (elCategoria) elCategoria.value = 'todos';
+    if (elOrigem) elOrigem.value = 'todos';
+    if (elNF) elNF.value = 'todos';
+    if (elEmpresa) elEmpresa.value = '';
+    if (elBusca) elBusca.value = '';
     renderizarLancamentos();
 }
 
