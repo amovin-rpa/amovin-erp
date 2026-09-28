@@ -7,909 +7,1053 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --laranja: #C65A11;
-            --laranja-escuro: #A04A0E;
-            --amarelo: #F5C518;
-            --verde: #57C220;
-            --azul: #1E88E5;
-            --grafite: #1A1A1A;
-            --cinza: #6B7280;
-            --cinza-claro: #F8F4ED;
-            --branco: #FFFFFF;
-            --vermelho: #E53935;
-            --sap-blue: #003366;
-            --sap-light-blue: #E6F0FA;
+            --laranja: #C65A11; --laranja-escuro: #A04A0E; --amarelo: #F5C518; --verde: #57C220;
+            --azul: #1E88E5; --grafite: #1A1A1A; --cinza: #6B7280; --branco: #FFFFFF;
+            --vermelho: #E53935; --roxo: #7C3AED; --teal: #00897B;
+            --aerp-azul: #003366; --aerp-azul-claro: #E6F0FA;
         }
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body {
-            font-family: 'Inter', system-ui, sans-serif;
-            background: #F8F4ED;
-            display: flex;
-            min-height: 100vh;
-        }
-
-        .main-content {
-            flex: 1;
-            margin-left: 270px;
-            padding: 24px 30px;
-        }
-        .topo-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 24px;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-        .topo-bar h1 {
-            font-size: 24px;
-            font-weight: 700;
-            color: var(--grafite);
-        }
-        .topo-bar h1 span {
-            color: var(--laranja);
-        }
-        .topo-bar .subtitle {
-            font-size: 12px;
-            color: var(--cinza);
-            font-weight: 400;
-            display: block;
-        }
-        .btn-sair-topo {
-            background: #F8F4ED;
-            color: #1A1A1A;
-            border: 1px solid #F0E9DF;
-            padding: 8px 16px;
-            border-radius: 10px;
-            font-size: 12px;
-            font-weight: 600;
-            cursor: pointer;
-        }
-
-        /* ============================================
-           TABS - ESTILO SAP/INTERNATIONAL
-           ============================================ */
-        .tabs-container {
-            background: #FFFFFF;
-            border-radius: 14px;
-            border: 1px solid #F0E9DF;
-            overflow: hidden;
-            margin-bottom: 20px;
-        }
-        .tabs-header {
-            display: flex;
-            background: #FAFAFA;
-            border-bottom: 1px solid #F0E9DF;
-            overflow-x: auto;
-            flex-wrap: nowrap;
-        }
-        .tab-btn {
-            padding: 14px 24px;
-            border: none;
-            background: transparent;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 13px;
-            color: var(--cinza);
-            transition: all 0.2s;
-            font-family: 'Inter', sans-serif;
-            white-space: nowrap;
-            border-bottom: 3px solid transparent;
-        }
-        .tab-btn:hover {
-            background: #FFF8E7;
-            color: var(--laranja);
-        }
-        .tab-btn.ativo {
-            color: var(--laranja);
-            border-bottom-color: var(--laranja);
-            background: #FFF8E7;
-        }
-        .tab-content {
-            padding: 24px;
-            display: none;
-        }
-        .tab-content.ativo {
-            display: block;
-        }
-
-        /* ============================================
-           CARDS E FORMULÁRIOS
-           ============================================ */
-        .config-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
-        .config-card {
-            background: #FFFFFF;
-            padding: 20px;
-            border-radius: 12px;
-            border: 1px solid #F0E9DF;
-        }
-        .config-card h4 {
-            font-size: 14px;
-            font-weight: 700;
-            color: var(--grafite);
-            margin-bottom: 14px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid #F0E9DF;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .config-card h4 .badge {
-            font-size: 9px;
-            background: var(--sap-light-blue);
-            color: var(--sap-blue);
-            padding: 2px 10px;
-            border-radius: 12px;
-            font-weight: 600;
-        }
-
-        .form-group {
-            margin-bottom: 14px;
-        }
-        .form-group label {
-            display: block;
-            font-size: 11px;
-            font-weight: 600;
-            color: var(--cinza);
-            margin-bottom: 4px;
-            text-transform: uppercase;
-            letter-spacing: 0.3px;
-        }
-        .form-group input,
-        .form-group select,
-        .form-group textarea {
-            width: 100%;
-            padding: 10px 12px;
-            border: 1px solid #E5E0D8;
-            border-radius: 8px;
-            font-size: 13px;
-            font-family: 'Inter', sans-serif;
-            transition: border 0.2s;
-        }
-        .form-group input:focus,
-        .form-group select:focus {
-            outline: none;
-            border-color: var(--laranja);
-            box-shadow: 0 0 0 3px rgba(198, 90, 17, 0.08);
-        }
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-        }
-
-        .btn {
-            padding: 10px 24px;
-            border-radius: 8px;
-            border: none;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 13px;
-            font-family: 'Inter', sans-serif;
-            transition: all 0.2s;
-        }
-        .btn-primary {
-            background: var(--laranja);
-            color: white;
-        }
-        .btn-primary:hover {
-            background: var(--laranja-escuro);
-        }
-        .btn-success {
-            background: var(--verde);
-            color: white;
-        }
-        .btn-success:hover {
-            background: #388E3C;
-        }
-        .btn-danger {
-            background: var(--vermelho);
-            color: white;
-        }
-        .btn-danger:hover {
-            background: #C62828;
-        }
-        .btn-outline {
-            background: transparent;
-            color: var(--cinza);
-            border: 1px solid #E5E0D8;
-        }
-        .btn-outline:hover {
-            background: #F8F4ED;
-        }
-        .btn-full {
-            width: 100%;
-            padding: 12px;
-        }
-
-        .toggle-wrapper {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 8px 0;
-        }
-        .toggle-wrapper .toggle-label {
-            font-size: 13px;
-            color: var(--grafite);
-        }
-        .toggle {
-            position: relative;
-            width: 44px;
-            height: 24px;
-            background: #D1D5DB;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: background 0.3s;
-            flex-shrink: 0;
-        }
-        .toggle.ativo {
-            background: var(--verde);
-        }
-        .toggle .toggle-slider {
-            position: absolute;
-            top: 2px;
-            left: 2px;
-            width: 20px;
-            height: 20px;
-            background: white;
-            border-radius: 50%;
-            transition: transform 0.3s;
-            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
-        }
-        .toggle.ativo .toggle-slider {
-            transform: translateX(20px);
-        }
-
-        /* ============================================
-           ACESSOS POR MÓDULO
-           ============================================ */
-        .modulos-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 10px;
-            margin-top: 12px;
-        }
-        .modulo-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 8px 12px;
-            background: #F8F4ED;
-            border-radius: 8px;
-            font-size: 12px;
-            color: var(--grafite);
-        }
-        .modulo-item .modulo-nome {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .modulo-item .modulo-status {
-            font-size: 10px;
-            padding: 2px 10px;
-            border-radius: 12px;
-            font-weight: 600;
-        }
-        .modulo-status.ativo {
-            background: #E8F5E9;
-            color: #2E7D32;
-        }
-        .modulo-status.inativo {
-            background: #FFEBEE;
-            color: #C62828;
-        }
-
-        .perfil-selector {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-            margin-bottom: 12px;
-        }
-        .perfil-pill {
-            padding: 6px 16px;
-            border-radius: 20px;
-            border: 1px solid #E5E0D8;
-            cursor: pointer;
-            font-size: 12px;
-            font-weight: 600;
-            transition: all 0.2s;
-            background: white;
-            color: var(--cinza);
-        }
-        .perfil-pill:hover {
-            border-color: var(--laranja);
-            color: var(--laranja);
-        }
-        .perfil-pill.ativo {
-            background: var(--laranja);
-            color: white;
-            border-color: var(--laranja);
-        }
-
-        .rodape {
-            background: #FFFFFF;
-            border-radius: 14px;
-            padding: 12px 18px;
-            border: 1px solid #F0E9DF;
-            margin-top: 20px;
-        }
-        .rodape-grid {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
-        .rodape-logo {
-            flex-shrink: 0;
-        }
-        .rodape-logo .logo-vigorre {
-            width: 50px;
-        }
-        .rodape-info {
-            flex: 1;
-        }
-        .rodape-info .copyright {
-            font-size: 8px;
-            color: #8A8F98;
-        }
-        .rodape-info .tm {
-            font-size: 6px;
-            vertical-align: super;
-        }
-        .rodape-info .contato {
-            font-size: 9px;
-            color: #8A8F98;
-        }
-        .rodape-info a {
-            color: #C65A11;
-            text-decoration: none;
-        }
-        .rodape-info .email {
-            font-size: 8px;
-            color: #aaa;
-        }
-        .logo-vigorre-fallback {
-            font-size: 12px;
-            font-weight: 700;
-            display: none;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', system-ui, sans-serif; background: #F8F4ED; display: flex; min-height: 100vh; }
+        .main-content { flex: 1; margin-left: 270px; padding: 24px 30px; }
+        .topo-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 10px; }
+        .topo-bar h1 { font-size: 24px; font-weight: 700; color: var(--grafite); }
+        .topo-bar h1 span { color: var(--laranja); font-size: 14px; font-weight: 400; margin-left: 12px; }
+        .btn-sair-topo { background: #F8F4ED; color: #1A1A1A; border: 1px solid #F0E9DF; padding: 8px 16px; border-radius: 10px; font-size: 12px; font-weight: 600; cursor: pointer; }
+        .tabs-container { background: #FFFFFF; border-radius: 14px; border: 1px solid #F0E9DF; overflow: hidden; margin-bottom: 20px; }
+        .tabs-header { display: flex; background: #FAFAFA; border-bottom: 1px solid #F0E9DF; overflow-x: auto; }
+        .tab-btn { padding: 14px 24px; border: none; background: transparent; cursor: pointer; font-weight: 600; font-size: 13px; color: var(--cinza); transition: all 0.2s; font-family: 'Inter', sans-serif; white-space: nowrap; border-bottom: 3px solid transparent; }
+        .tab-btn:hover { background: #FFF8E7; color: var(--laranja); }
+        .tab-btn.ativo { color: var(--laranja); border-bottom-color: var(--laranja); background: #FFF8E7; }
+        .tab-content { padding: 24px; display: none; }
+        .tab-content.ativo { display: block; }
+        .config-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .config-card { background: #FFFFFF; padding: 20px; border-radius: 12px; border: 1px solid #F0E9DF; }
+        .config-card h4 { font-size: 14px; font-weight: 700; color: var(--grafite); margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid #F0E9DF; display: flex; align-items: center; gap: 8px; }
+        .config-card h4 .badge { font-size: 9px; background: var(--aerp-azul-claro); color: var(--aerp-azul); padding: 2px 10px; border-radius: 12px; font-weight: 600; }
+        .form-group { margin-bottom: 14px; }
+        .form-group label { display: block; font-size: 11px; font-weight: 600; color: var(--cinza); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.3px; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px 12px; border: 1px solid #E5E0D8; border-radius: 8px; font-size: 13px; font-family: 'Inter', sans-serif; transition: border 0.2s; background: #FAFAFA; }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: var(--laranja); background: white; box-shadow: 0 0 0 3px rgba(198, 90, 17, 0.08); }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .btn { padding: 10px 24px; border-radius: 8px; border: none; cursor: pointer; font-weight: 600; font-size: 13px; font-family: 'Inter', sans-serif; transition: all 0.2s; display: inline-flex; align-items: center; gap: 8px; }
+        .btn-primary { background: var(--laranja); color: white; } .btn-primary:hover { background: var(--laranja-escuro); }
+        .btn-success { background: var(--verde); color: white; } .btn-success:hover { background: #388E3C; }
+        .btn-danger { background: var(--vermelho); color: white; }
+        .btn-outline { background: transparent; color: var(--cinza); border: 1px solid #E5E0D8; }
+        .btn-outline:hover { background: #F8F4ED; }
+        .btn-sm { padding: 5px 12px; font-size: 11px; }
+        .btn-full { width: 100%; padding: 12px; justify-content: center; }
+        .toggle-wrapper { display: flex; align-items: center; gap: 12px; padding: 8px 0; }
+        .toggle-wrapper .toggle-label { font-size: 13px; color: var(--grafite); }
+        .toggle { position: relative; width: 44px; height: 24px; background: #D1D5DB; border-radius: 12px; cursor: pointer; transition: background 0.3s; flex-shrink: 0; }
+        .toggle.ativo { background: var(--verde); }
+        .toggle .toggle-slider { position: absolute; top: 2px; left: 2px; width: 20px; height: 20px; background: white; border-radius: 50%; transition: transform 0.3s; box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15); }
+        .toggle.ativo .toggle-slider { transform: translateX(20px); }
+        .status-badge { font-size: 10px; padding: 3px 10px; border-radius: 12px; font-weight: 600; display: inline-block; }
+        .status-ativo { background: #E8F5E9; color: #2E7D32; }
+        .status-inativo { background: #FFEBEE; color: #C62828; }
+        .perfis-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; }
+        .perfil-card { background: #FFFFFF; border: 2px solid #F0E9DF; border-radius: 12px; padding: 18px; transition: all 0.3s; }
+        .perfil-card:hover { border-color: var(--laranja); box-shadow: 0 4px 16px rgba(198, 90, 17, 0.1); }
+        .perfil-card.master { border-color: var(--roxo); background: linear-gradient(135deg, #F5F0FF, #FFFFFF); }
+        .perfil-card h5 { font-size: 15px; font-weight: 800; color: var(--grafite); margin-bottom: 8px; }
+        .perfil-card .perfil-status { margin-bottom: 8px; }
+        .perfil-card .perfil-info { font-size: 11px; color: var(--cinza); margin-bottom: 12px; }
+        .tabela-usuarios { width: 100%; border-collapse: separate; border-spacing: 0; margin-top: 12px; border: 1px solid #F0E9DF; border-radius: 10px; overflow: hidden; }
+        .tabela-usuarios thead { background: #C65A11; }
+        .tabela-usuarios thead th { color: white; font-size: 10px; text-transform: uppercase; letter-spacing: 1px; padding: 10px 12px; text-align: left; font-weight: 700; }
+        .tabela-usuarios tbody td { padding: 10px 12px; font-size: 12px; border-bottom: 1px solid #F0E9DF; }
+        .tabela-usuarios tbody tr:last-child td { border-bottom: none; }
+        .tabela-usuarios tbody tr:hover { background: #FFF8E7; }
+        .matriz-tabela { width: 100%; border-collapse: separate; border-spacing: 0; margin-top: 12px; border: 1px solid #F0E9DF; border-radius: 10px; overflow: hidden; font-size: 12px; }
+        .matriz-tabela thead { background: var(--aerp-azul); }
+        .matriz-tabela thead th { color: white; font-size: 10px; text-transform: uppercase; letter-spacing: 1px; padding: 10px 8px; text-align: center; font-weight: 700; }
+        .matriz-tabela thead th:first-child { text-align: left; }
+        .matriz-tabela tbody td { padding: 8px; border-bottom: 1px solid #F0E9DF; text-align: center; }
+        .matriz-tabela tbody td:first-child { text-align: left; font-weight: 600; }
+        .matriz-tabela tbody tr:hover { background: #F0F9FF; }
+        .matriz-tabela .grupo-linha { background: #FAFAFA; font-weight: 700; font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: var(--cinza); padding: 6px 10px; }
+        .check-box { width: 18px; height: 18px; cursor: pointer; accent-color: var(--laranja); }
+        .filtros-auditoria { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; margin-bottom: 16px; padding: 14px; background: #F8F4ED; border-radius: 10px; }
+        .alerta-info { background: linear-gradient(135deg, #E6F0FA, #F0F9FF); border-left: 4px solid var(--aerp-azul); padding: 12px 16px; border-radius: 8px; margin-bottom: 16px; font-size: 12.5px; color: var(--aerp-azul); }
+        .alerta-info strong { display: block; margin-bottom: 2px; }
+        .sem-dados { text-align: center; padding: 40px; color: #9CA3AF; font-size: 13px; }
+        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 9999; justify-content: center; align-items: center; padding: 20px; overflow-y: auto; }
+        .modal-overlay.ativo { display: flex; }
+        .modal { background: white; border-radius: 16px; padding: 30px; max-width: 600px; width: 100%; max-height: 95vh; overflow-y: auto; margin: auto; }
+        .modal h2 { font-size: 20px; color: var(--grafite); margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; }
+        .modal .btn-group { display: flex; gap: 12px; margin-top: 16px; justify-content: flex-end; flex-wrap: wrap; }
+        .modal .fechar { background: none; border: none; font-size: 22px; cursor: pointer; color: var(--cinza); }
+        .senha-wrapper { position: relative; }
+        .senha-wrapper input { padding-right: 44px !important; }
+        .senha-wrapper .btn-olho { position: absolute; right: 8px; top: 50%; transform: translateY(-50%); background: none; border: none; font-size: 18px; cursor: pointer; color: var(--cinza); padding: 6px 10px; border-radius: 6px; }
+        .senha-wrapper .btn-olho:hover { background: #F0E9DF; color: var(--laranja); }
+        .toast { position: fixed; top: 20px; right: 20px; padding: 16px 24px; border-radius: 12px; color: white; font-weight: 600; font-size: 14px; z-index: 10000; box-shadow: 0 8px 32px rgba(0,0,0,0.15); animation: slideInRight 0.4s ease; max-width: 400px; }
+        .toast-success { background: var(--verde); } .toast-error { background: var(--vermelho); } .toast-warning { background: #E65100; }
+        @keyframes slideInRight { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        .rodape { background: #FFFFFF; border-radius: 14px; padding: 12px 18px; border: 1px solid #F0E9DF; margin-top: 20px; }
+        .rodape-grid { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+        .rodape-logo .logo-vigorre { width: 50px; }
+        .rodape-info { flex: 1; }
+        .rodape-info .copyright { font-size: 8px; color: #8A8F98; }
+        .rodape-info .contato { font-size: 9px; color: #8A8F98; }
+        .rodape-info a { color: #C65A11; text-decoration: none; }
         @media (max-width: 900px) {
-            .main-content {
-                margin-left: 0;
-            }
-            .config-grid {
-                grid-template-columns: 1fr;
-            }
-            .form-row {
-                grid-template-columns: 1fr;
-            }
-            .tabs-header {
-                flex-wrap: nowrap;
-                overflow-x: auto;
-            }
-            .tab-btn {
-                padding: 12px 16px;
-                font-size: 12px;
-            }
-            .modulos-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-        }
-        @media (max-width: 480px) {
-            .modulos-grid {
-                grid-template-columns: 1fr;
-            }
+            .main-content { margin-left: 0; }
+            .config-grid { grid-template-columns: 1fr; }
+            .form-row { grid-template-columns: 1fr; }
+            .perfis-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
 
-    <!-- MENU CARREGADO DINAMICAMENTE -->
-    <div id="menu-container"></div>
+<div id="menu-container"></div>
 
-    <main class="main-content">
-        <div class="topo-bar">
-            <div>
-                <h1>⚙️ Configurações <span>SAP</span></h1>
-                <span class="subtitle">AMOVIN ERP Social • Sistema Integrado de Gestão</span>
-            </div>
-            <button class="btn-sair-topo" onclick="window.location.href='index.html'">🚪 Sair</button>
+<main class="main-content">
+    <div class="topo-bar">
+        <div>
+            <h1>⚙️ Configurações <span>AERP</span></h1>
+            <span style="font-size:12px;color:var(--cinza);">AMOVIN ERP Social • Sistema Integrado de Gestão</span>
+        </div>
+        <button class="btn-sair-topo" onclick="window.location.href='dashboard.html'">🏠 Dashboard</button>
+    </div>
+
+    <div class="tabs-container">
+        <div class="tabs-header">
+            <button class="tab-btn ativo" data-tab="organizacao">🏢 Organização</button>
+            <button class="tab-btn" data-tab="usuarios">👥 Usuários</button>
+            <button class="tab-btn" data-tab="perfis">🔐 Perfis & Acessos</button>
+            <button class="tab-btn" data-tab="auditoria">📜 Auditoria</button>
+            <button class="tab-btn" data-tab="integracoes">🔗 Integrações</button>
+            <button class="tab-btn" data-tab="seguranca">🔒 Segurança</button>
+            <button class="tab-btn" data-tab="sobre">ℹ️ Sobre</button>
         </div>
 
-        <!-- TABS -->
-        <div class="tabs-container">
-            <div class="tabs-header">
-                <button class="tab-btn ativo" data-tab="geral">📋 Geral</button>
-                <button class="tab-btn" data-tab="perfis">👤 Perfis & Acessos</button>
-                <button class="tab-btn" data-tab="integracao">🔗 Integrações</button>
-                <button class="tab-btn" data-tab="seguranca">🔒 Segurança</button>
-                <button class="tab-btn" data-tab="sistema">💾 Sistema</button>
-            </div>
-
-            <!-- TAB GERAL -->
-            <div class="tab-content ativo" id="tab-geral">
-                <div class="config-grid">
-                    <div class="config-card">
-                        <h4>🏢 Informações da Organização <span class="badge">SAP</span></h4>
-                        <div class="form-group">
-                            <label>Nome da Organização</label>
-                            <input type="text" id="orgNome" value="AMOVIN - Associação e Movimento pela Inclusão">
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label>CNPJ</label>
-                                <input type="text" id="orgCnpj" value="XX.XXX.XXX/XXXX-XX">
-                            </div>
-                            <div class="form-group">
-                                <label>Cidade</label>
-                                <input type="text" id="orgCidade" value="Rio Paranaíba - MG">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label>Endereço</label>
-                            <input type="text" id="orgEndereco" value="Rua Exemplo, 123 - Centro">
-                        </div>
-                        <button class="btn btn-primary" onclick="salvarConfigGeral()">💾 Salvar</button>
+        <!-- ABA ORGANIZAÇÃO -->
+        <div class="tab-content ativo" id="tab-organizacao">
+            <div class="config-grid">
+                <div class="config-card">
+                    <h4>🏢 Dados da Organização <span class="badge">AERP</span></h4>
+                    <div class="form-group"><label>Nome da Organização</label><input type="text" id="orgNome" value="AMOVIN - Associação e Movimento pela Inclusão"></div>
+                    <div class="form-row">
+                        <div class="form-group"><label>CNPJ</label><input type="text" id="orgCnpj" value="55.880.046/0001-34"></div>
+                        <div class="form-group"><label>Telefone</label><input type="text" id="orgTelefone" value="(34) 99185-0735"></div>
                     </div>
-
-                    <div class="config-card">
-                        <h4>🎨 Aparência <span class="badge">UI</span></h4>
-                        <div class="form-group">
-                            <label>Tema</label>
-                            <select id="tema">
-                                <option value="light">☀️ Claro</option>
-                                <option value="dark">🌙 Escuro</option>
-                                <option value="sap">🔵 SAP Blue</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Cor Primária</label>
-                            <select id="corPrimaria">
-                                <option value="#C65A11">🟧 Laranja (AMOVIN)</option>
-                                <option value="#003366">🔵 SAP Blue</option>
-                                <option value="#1E88E5">🔵 Material Blue</option>
-                                <option value="#57C220">🟢 Verde</option>
-                            </select>
-                        </div>
-                        <div class="toggle-wrapper">
-                            <div class="toggle ativo" id="toggleSidebar" onclick="toggleSwitch(this)">
-                                <div class="toggle-slider"></div>
-                            </div>
-                            <span class="toggle-label">Menu Lateral Fixo</span>
-                        </div>
-                        <div class="toggle-wrapper">
-                            <div class="toggle" id="toggleAnimacoes" onclick="toggleSwitch(this)">
-                                <div class="toggle-slider"></div>
-                            </div>
-                            <span class="toggle-label">Animações e Transições</span>
-                        </div>
-                        <button class="btn btn-primary" onclick="salvarConfigAparencia()">💾 Salvar</button>
+                    <div class="form-group"><label>Endereço Completo</label><input type="text" id="orgEndereco" value="Rua Francisco de Paula Moura Neto, nº 180, Bairro Novo Rio, Rio Paranaíba - MG, CEP 38810-000"></div>
+                    <div class="form-row">
+                        <div class="form-group"><label>E-mail</label><input type="email" id="orgEmail" value="contato@amovin.org.br"></div>
+                        <div class="form-group"><label>Site</label><input type="text" id="orgSite" value="www.amovin.org.br"></div>
                     </div>
+                    <button class="btn btn-primary" onclick="salvarOrganizacao()">💾 Salvar</button>
+                </div>
+
+                <div class="config-card">
+                    <h4>🖼️ Identidade Visual</h4>
+                    <div class="form-group"><label>Logo (URL ou upload)</label><input type="text" id="orgLogo" value="/images/amovin-logo.png" placeholder="/images/amovin-logo.png"></div>
+                    <div style="text-align:center;padding:16px;background:#F8F4ED;border-radius:10px;margin-top:8px;">
+                        <img id="previewLogo" src="/images/amovin-logo.png" alt="Logo" style="max-width:200px;max-height:100px;" onerror="this.style.display='none';">
+                    </div>
+                    <div class="form-group" style="margin-top:14px;"><label>Cor Primária</label>
+                        <select id="orgCor">
+                            <option value="#C65A11" selected>🟧 Laranja AMOVIN</option>
+                            <option value="#003366">🔵 Azul AERP</option>
+                            <option value="#1E88E5">🔵 Material Blue</option>
+                            <option value="#57C220">🟢 Verde</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-primary" onclick="salvarIdentidade()">💾 Salvar</button>
                 </div>
             </div>
+        </div>
 
-            <!-- TAB PERFIS E ACESSOS -->
-            <div class="tab-content" id="tab-perfis">
-                <div class="config-card" style="margin-bottom:20px;">
-                    <h4>👤 Gerenciamento de Perfis</h4>
-                    <div class="perfil-selector">
-                        <button class="perfil-pill ativo" onclick="selecionarPerfil('admin',this)">🛡️ Admin</button>
-                        <button class="perfil-pill" onclick="selecionarPerfil('recepcao',this)">📋 Recepção</button>
-                        <button class="perfil-pill" onclick="selecionarPerfil('consulta',this)">🩺 Consulta</button>
-                        <button class="perfil-pill" onclick="selecionarPerfil('financeiro',this)">💰 Financeiro</button>
-                        <button class="perfil-pill" onclick="selecionarPerfil('voluntario',this)">💪 Voluntário</button>
-                    </div>
-                    <div id="infoPerfil" style="font-size:12px;color:var(--cinza);margin-bottom:12px;">
-                        Perfil: <strong id="perfilNome">Admin</strong> • Acessos totais
-                    </div>
-                    <div class="modulos-grid" id="modulosAcessos">
-                        <!-- Gerado via JavaScript -->
-                    </div>
-                    <button class="btn btn-primary" onclick="salvarAcessos()" style="margin-top:12px;">💾 Salvar Acessos</button>
-                </div>
+        <!-- ABA USUÁRIOS -->
+        <div class="tab-content" id="tab-usuarios">
+            <div class="alerta-info">
+                <strong>🔒 Gestão de Usuários</strong>
+                Cadastro, edição e redefinição de senha. Toda ação gera log de auditoria imutável.
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:10px;">
+                <h3 style="font-size:16px;font-weight:700;">👥 Usuários Cadastrados</h3>
+                <button class="btn btn-primary" onclick="abrirModalUsuario()">➕ Novo Usuário</button>
+            </div>
+            <table class="tabela-usuarios">
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Login</th>
+                        <th>E-mail</th>
+                        <th>Perfil</th>
+                        <th>Último Acesso</th>
+                        <th>Status</th>
+                        <th style="text-align:right;">Ações</th>
+                    </tr>
+                </thead>
+                <tbody id="tabelaUsuarios">
+                    <tr><td colspan="7" class="sem-dados">Carregando usuários do Firebase...</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- ABA PERFIS -->
+        <div class="tab-content" id="tab-perfis">
+            <div class="alerta-info">
+                <strong>🔐 Perfis do Sistema AERP</strong>
+                Somente <strong>master</strong> está ativo. Os outros 6 perfis ficam prontos para você ativar quando definir as permissões de cada módulo.
+            </div>
+            <div class="perfis-grid" id="perfisGrid">
+                <!-- Preenchido via JS -->
             </div>
 
-            <!-- TAB INTEGRAÇÃO -->
-            <div class="tab-content" id="tab-integracao">
-                <div class="config-grid">
-                    <div class="config-card">
-                        <h4>🤖 Gemini IA</h4>
-                        <div class="form-group">
-                            <label>Chave da API</label>
-                            <input type="password" id="geminiKey" placeholder="Digite sua chave da API Gemini">
+            <div id="matrizContainer" style="display:none;margin-top:24px;">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:10px;">
+                    <h3 style="font-size:16px;font-weight:700;">🔧 Matriz de Permissões: <span id="matrizPerfilNome">—</span></h3>
+                    <button class="btn btn-outline btn-sm" onclick="fecharMatriz()">✖ Fechar Matriz</button>
+                </div>
+                <table class="matriz-tabela">
+                    <thead>
+                        <tr>
+                            <th style="width:40%;">Módulo</th>
+                            <th>Ver</th>
+                            <th>Criar</th>
+                            <th>Editar</th>
+                            <th>Excluir</th>
+                            <th>Aprovar</th>
+                        </tr>
+                    </thead>
+                    <tbody id="matrizBody"></tbody>
+                </table>
+                <div style="margin-top:14px;text-align:right;">
+                    <button class="btn btn-success" onclick="salvarMatriz()">💾 Salvar Permissões</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ABA AUDITORIA -->
+        <div class="tab-content" id="tab-auditoria">
+            <div class="alerta-info">
+                <strong>🔒 Logs Imutáveis</strong>
+                Nenhum perfil pode apagar, editar ou ocultar logs. Toda ação no ERP fica registrada com usuário, data/hora, módulo e justificativa.
+            </div>
+            <div class="filtros-auditoria">
+                <div class="form-group" style="margin:0;"><label>Data de</label><input type="date" id="audDataDe"></div>
+                <div class="form-group" style="margin:0;"><label>Data até</label><input type="date" id="audDataAte"></div>
+                <div class="form-group" style="margin:0;"><label>Usuário</label><select id="audUsuario"><option value="">Todos</option></select></div>
+                <div class="form-group" style="margin:0;"><label>Ação</label>
+                    <select id="audAcao">
+                        <option value="">Todas</option>
+                        <option value="CRIAR">Criar</option>
+                        <option value="EDITAR">Editar</option>
+                        <option value="EXCLUIR">Excluir</option>
+                        <option value="MUDAR_STATUS">Mudar Status</option>
+                        <option value="IMPRIMIR_RECIBO">Imprimir Recibo</option>
+                        <option value="EXPORTAR_CSV">Exportar CSV</option>
+                    </select>
+                </div>
+            </div>
+            <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;">
+                <button class="btn btn-primary" onclick="gerarRelatorioAuditoria()">📊 Gerar Relatório</button>
+                <button class="btn btn-success" onclick="exportarAuditoriaCSV()">📥 Exportar CSV</button>
+                <button class="btn btn-outline" onclick="limparFiltrosAuditoria()">🧹 Limpar Filtros</button>
+            </div>
+            <table class="tabela-usuarios">
+                <thead>
+                    <tr>
+                        <th>Data/Hora</th>
+                        <th>Usuário</th>
+                        <th>Perfil</th>
+                        <th>Ação</th>
+                        <th>Registro</th>
+                        <th>Detalhes</th>
+                        <th>Justificativa</th>
+                    </tr>
+                </thead>
+                <tbody id="tabelaAuditoria">
+                    <tr><td colspan="7" class="sem-dados">Clique em "📊 Gerar Relatório" para carregar os logs.</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- ABA INTEGRAÇÕES -->
+        <div class="tab-content" id="tab-integracoes">
+            <div class="config-grid">
+                <div class="config-card">
+                    <h4>🤖 Gemini IA</h4>
+                    <div class="form-group"><label>Chave da API</label>
+                        <div class="senha-wrapper">
+                            <input type="password" id="geminiKey" placeholder="AQ.Ab8RN6...">
+                            <button type="button" class="btn-olho" onclick="toggleOlho('geminiKey')">👁️</button>
                         </div>
+                    </div>
+                    <div style="display:flex;gap:8px;flex-wrap:wrap;">
                         <button class="btn btn-success" onclick="salvarGemini()">🔑 Salvar Chave</button>
-                        <div style="margin-top:10px;font-size:11px;color:var(--cinza);">
-                            Status: <span id="geminiStatus">⏳ Não configurado</span>
-                        </div>
+                        <button class="btn btn-outline" onclick="testarGemini()">🧪 Testar</button>
                     </div>
-                    <div class="config-card">
-                        <h4>📧 Email (SMTP)</h4>
-                        <div class="form-group">
-                            <label>Servidor SMTP</label>
-                            <input type="text" id="smtpServer" placeholder="smtp.gmail.com">
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label>Porta</label>
-                                <input type="text" id="smtpPort" value="587">
-                            </div>
-                            <div class="form-group">
-                                <label>Email</label>
-                                <input type="email" id="smtpEmail" placeholder="contato@amovin.com">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label>Senha</label>
-                            <input type="password" id="smtpPassword" placeholder="••••••••">
-                        </div>
-                        <button class="btn btn-primary" onclick="salvarSMTP()">💾 Salvar</button>
+                    <div style="margin-top:10px;font-size:11px;color:var(--cinza);">
+                        Status: <span id="geminiStatus">⏳ Não configurado</span>
                     </div>
                 </div>
-            </div>
 
-            <!-- TAB SEGURANÇA -->
-            <div class="tab-content" id="tab-seguranca">
-                <div class="config-grid">
-                    <div class="config-card">
-                        <h4>🔒 Política de Senha</h4>
-                        <div class="form-group">
-                            <label>Tamanho mínimo</label>
-                            <select id="minSenha">
-                                <option value="6">6 caracteres</option>
-                                <option value="8" selected>8 caracteres</option>
-                                <option value="10">10 caracteres</option>
-                                <option value="12">12 caracteres</option>
-                            </select>
-                        </div>
-                        <div class="toggle-wrapper">
-                            <div class="toggle ativo" onclick="toggleSwitch(this)">
-                                <div class="toggle-slider"></div>
-                            </div>
-                            <span class="toggle-label">Exigir caracteres especiais</span>
-                        </div>
-                        <div class="toggle-wrapper">
-                            <div class="toggle ativo" onclick="toggleSwitch(this)">
-                                <div class="toggle-slider"></div>
-                            </div>
-                            <span class="toggle-label">Exigir maiúsculas e minúsculas</span>
-                        </div>
-                        <button class="btn btn-primary" onclick="salvarSeguranca()">💾 Salvar</button>
+                <div class="config-card">
+                    <h4>📧 E-mail (Google Workspace)</h4>
+                    <div class="form-group"><label>Servidor SMTP</label><input type="text" id="smtpServer" value="smtp.gmail.com"></div>
+                    <div class="form-row">
+                        <div class="form-group"><label>Porta</label><input type="text" id="smtpPort" value="587"></div>
+                        <div class="form-group"><label>Remetente</label><input type="email" id="smtpEmail" value="contato@amovin.org.br"></div>
                     </div>
-                    <div class="config-card">
-                        <h4>⏰ Sessão</h4>
-                        <div class="form-group">
-                            <label>Tempo de expiração (minutos)</label>
-                            <select id="tempoSessao">
-                                <option value="15">15 minutos</option>
-                                <option value="30" selected>30 minutos</option>
-                                <option value="60">1 hora</option>
-                                <option value="120">2 horas</option>
-                                <option value="480">8 horas</option>
-                            </select>
+                    <div class="form-group"><label>Senha de App</label>
+                        <div class="senha-wrapper">
+                            <input type="password" id="smtpPassword" placeholder="••••••••••••••••">
+                            <button type="button" class="btn-olho" onclick="toggleOlho('smtpPassword')">👁️</button>
                         </div>
-                        <div class="toggle-wrapper">
-                            <div class="toggle" onclick="toggleSwitch(this)">
-                                <div class="toggle-slider"></div>
-                            </div>
-                            <span class="toggle-label">Bloquear após tentativas falhas</span>
-                        </div>
-                        <div class="form-group">
-                            <label>Número de tentativas</label>
-                            <select id="tentativas">
-                                <option value="3">3 tentativas</option>
-                                <option value="5" selected>5 tentativas</option>
-                                <option value="10">10 tentativas</option>
-                            </select>
-                        </div>
-                        <button class="btn btn-primary" onclick="salvarSessao()">💾 Salvar</button>
                     </div>
-                </div>
-            </div>
-
-            <!-- TAB SISTEMA -->
-            <div class="tab-content" id="tab-sistema">
-                <div class="config-grid">
-                    <div class="config-card">
-                        <h4>💾 Backup</h4>
-                        <div style="font-size:13px;color:var(--cinza);margin-bottom:14px;">
-                            Último backup: <strong id="ultimoBackup">Nunca realizado</strong>
-                        </div>
-                        <button class="btn btn-success" onclick="realizarBackup()" style="width:100%;padding:12px;">📥 Realizar Backup</button>
-                        <button class="btn btn-outline" onclick="restaurarBackup()" style="width:100%;margin-top:8px;">📤 Restaurar Backup</button>
+                    <div style="font-size:10px;color:var(--cinza);margin-top:-6px;margin-bottom:10px;">
+                        💡 Gere em <strong>myaccount.google.com → Segurança → Senhas de app</strong> (após ativar 2FA)
                     </div>
-                    <div class="config-card">
-                        <h4>📊 Sobre o Sistema</h4>
-                        <div style="font-size:13px;color:var(--grafite);line-height:2;">
-                            <p><strong>Versão:</strong> 2.0.0</p>
-                            <p><strong>Plataforma:</strong> AMOVIN ERP Social</p>
-                            <p><strong>Base:</strong> SAP/International</p>
-                            <p><strong>Banco de Dados:</strong> LocalStorage + Firebase</p>
-                            <p><strong>Última atualização:</strong> 27/07/2026</p>
-                        </div>
-                        <button class="btn btn-danger" onclick="limparDados()" style="width:100%;margin-top:12px;">🗑️ Limpar Dados Locais</button>
-                    </div>
+                    <button class="btn btn-primary" onclick="salvarSMTP()">💾 Salvar</button>
                 </div>
             </div>
         </div>
 
-        <div class="rodape">
-            <div class="rodape-grid">
-                <div class="rodape-logo">
-                    <img src="images/logo-vigorre.png" alt="Vigorre" class="logo-vigorre" onerror="this.style.display='none';this.nextElementSibling.style.display='block';">
-                    <span class="logo-vigorre-fallback">Vigorre</span>
+        <!-- ABA SEGURANÇA -->
+        <div class="tab-content" id="tab-seguranca">
+            <div class="config-grid">
+                <div class="config-card">
+                    <h4>🔒 Política de Senha</h4>
+                    <div class="form-group"><label>Tamanho mínimo</label>
+                        <select id="minSenha">
+                            <option value="6">6 caracteres</option>
+                            <option value="8" selected>8 caracteres</option>
+                            <option value="10">10 caracteres</option>
+                            <option value="12">12 caracteres</option>
+                        </select>
+                    </div>
+                    <div class="toggle-wrapper">
+                        <div class="toggle ativo" onclick="toggleSwitch(this)"><div class="toggle-slider"></div></div>
+                        <span class="toggle-label">Exigir caracteres especiais</span>
+                    </div>
+                    <div class="toggle-wrapper">
+                        <div class="toggle ativo" onclick="toggleSwitch(this)"><div class="toggle-slider"></div></div>
+                        <span class="toggle-label">Exigir maiúsculas e minúsculas</span>
+                    </div>
+                    <div class="toggle-wrapper">
+                        <div class="toggle ativo" onclick="toggleSwitch(this)"><div class="toggle-slider"></div></div>
+                        <span class="toggle-label">Exigir números</span>
+                    </div>
+                    <button class="btn btn-primary" onclick="salvarSeguranca()">💾 Salvar</button>
                 </div>
-                <div class="rodape-info">
-                    <div class="copyright">© 2026 VIGORRE DESIGNER<span class="tm">™</span></div>
-                    <div class="contato"><a href="https://www.vigorre.com.br">www.vigorre.com.br</a> | <a href="https://wa.me/5534991850735">(34) 99185-0735</a></div>
-                    <div class="email">contato@vigorre.com.br</div>
+                <div class="config-card">
+                    <h4>⏰ Sessão & Bloqueio</h4>
+                    <div class="form-group"><label>Tempo de expiração (minutos)</label>
+                        <select id="tempoSessao">
+                            <option value="15">15 minutos</option>
+                            <option value="30" selected>30 minutos</option>
+                            <option value="60">1 hora</option>
+                            <option value="120">2 horas</option>
+                            <option value="480">8 horas</option>
+                        </select>
+                    </div>
+                    <div class="toggle-wrapper">
+                        <div class="toggle" onclick="toggleSwitch(this)"><div class="toggle-slider"></div></div>
+                        <span class="toggle-label">Bloquear após tentativas falhas</span>
+                    </div>
+                    <div class="form-group"><label>Número de tentativas</label>
+                        <select id="tentativas">
+                            <option value="3">3 tentativas</option>
+                            <option value="5" selected>5 tentativas</option>
+                            <option value="10">10 tentativas</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-primary" onclick="salvarSessao()">💾 Salvar</button>
                 </div>
             </div>
         </div>
-    </main>
 
-    <script src="menu.js?v=20260904"></script>
-    <script>
-        // ============================================================
-        // TABS
-        // ============================================================
-        document.querySelectorAll('.tab-btn').forEach(function(btn) {
-            btn.addEventListener('click', function() {
-                document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('ativo'); });
-                this.classList.add('ativo');
+        <!-- ABA SOBRE -->
+        <div class="tab-content" id="tab-sobre">
+            <div class="config-grid">
+                <div class="config-card">
+                    <h4>ℹ️ Sobre o Sistema</h4>
+                    <div style="font-size:13px;color:var(--grafite);line-height:2;">
+                        <p><strong>Versão:</strong> AERP 1.0.0</p>
+                        <p><strong>Plataforma:</strong> AMOVIN ERP Social</p>
+                        <p><strong>Base:</strong> AERP (Amovin ERP)</p>
+                        <p><strong>Banco de Dados:</strong> Firebase + LocalStorage (cache)</p>
+                        <p><strong>Última atualização:</strong> <span id="dataAtualizacao"></span></p>
+                    </div>
+                </div>
+                <div class="config-card">
+                    <h4>👨‍💻 Desenvolvedor</h4>
+                    <div style="font-size:13px;color:var(--grafite);line-height:2;">
+                        <p><strong>Empresa:</strong> VIGORRE DESIGNER™</p>
+                        <p><strong>Site:</strong> <a href="https://www.vigorre.com.br" target="_blank" style="color:var(--laranja);">www.vigorre.com.br</a></p>
+                        <p><strong>Contato:</strong> <a href="https://wa.me/5534991850735" target="_blank" style="color:var(--laranja);">(34) 99185-0735</a></p>
+                        <p style="margin-top:14px;font-size:11px;color:var(--cinza);">© 2026 VIGORRE DESIGNER™. Todos os direitos reservados.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-                var tabId = this.getAttribute('data-tab');
-                document.querySelectorAll('.tab-content').forEach(function(c) { c.classList.remove('ativo'); });
-                document.getElementById('tab-' + tabId).classList.add('ativo');
-            });
-        });
+    <div class="rodape">
+        <div class="rodape-grid">
+            <div class="rodape-logo"><img src="images/logo-vigorre.png" alt="Vigorre" class="logo-vigorre" onerror="this.style.display='none';"></div>
+            <div class="rodape-info">
+                <div class="copyright">© 2026 VIGORRE DESIGNER™</div>
+                <div class="contato"><a href="https://www.vigorre.com.br">www.vigorre.com.br</a> | <a href="https://wa.me/5534991850735">(34) 99185-0735</a></div>
+            </div>
+        </div>
+    </div>
+</main>
 
-        // ============================================================
-        // TOGGLE SWITCH
-        // ============================================================
-        function toggleSwitch(el) {
-            el.classList.toggle('ativo');
-        }
+<!-- MODAL USUÁRIO -->
+<div class="modal-overlay" id="modalUsuario">
+    <div class="modal">
+        <h2 id="modalUsuarioTitulo">➕ Novo Usuário <button class="fechar" onclick="fecharModalUsuario()">×</button></h2>
+        <input type="hidden" id="usuarioDocId">
+        <div class="form-group"><label>Nome Completo *</label><input type="text" id="uNome" placeholder="Ex: Maria Silva"></div>
+        <div class="form-row">
+            <div class="form-group"><label>Login *</label><input type="text" id="uLogin" placeholder="Ex: maria"></div>
+            <div class="form-group"><label>E-mail *</label><input type="email" id="uEmail" placeholder="maria@amovin.org.br"></div>
+        </div>
+        <div class="form-row">
+            <div class="form-group"><label>Perfil *</label>
+                <select id="uPerfil">
+                    <option value="admin">🛡️ Admin</option>
+                    <option value="financeiro">💰 Financeiro</option>
+                    <option value="contador">📊 Contador</option>
+                    <option value="consulta">👁️ Consulta</option>
+                    <option value="estagiario">🎓 Estagiário</option>
+                    <option value="voluntario">💪 Voluntário</option>
+                </select>
+            </div>
+            <div class="form-group"><label>Status</label>
+                <select id="uAtivo">
+                    <option value="true" selected>✅ Ativo</option>
+                    <option value="false">🔒 Inativo</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group" id="grupoSenhaUsuario">
+            <label>Senha Inicial *</label>
+            <div class="senha-wrapper">
+                <input type="password" id="uSenha" placeholder="Mínimo 8 caracteres">
+                <button type="button" class="btn-olho" onclick="toggleOlho('uSenha')">👁️</button>
+            </div>
+            <div style="font-size:10px;color:var(--cinza);margin-top:4px;">A senha será criptografada com SHA-256. O usuário poderá redefini-la por e-mail.</div>
+        </div>
+        <div class="btn-group">
+            <button class="btn btn-outline" onclick="fecharModalUsuario()">Cancelar</button>
+            <button class="btn btn-success" onclick="salvarUsuario()">💾 Salvar Usuário</button>
+        </div>
+    </div>
+</div>
 
-        // ============================================================
-        // PERFIS E ACESSOS
-        // ============================================================
-        var perfilAtual = 'admin';
-        var modulos = [
-            { id: 'dashboard', nome: '📊 Dashboard', grupo: 'Principal' },
-            { id: 'bi', nome: '📈 BI Executivo', grupo: 'Principal' },
-            { id: 'sala-espera', nome: '📋 Sala de Espera', grupo: 'Captação' },
-            { id: 'pre-cadastro', nome: '📝 Pré-Cadastro', grupo: 'Captação' },
-            { id: 'financeiro', nome: '💰 Financeiro', grupo: 'Financeiro' },
-            { id: 'orcamentos', nome: '📊 Orçamentos', grupo: 'Financeiro' },
-            { id: 'prestacao-contas', nome: '📋 Prest. Contas', grupo: 'Financeiro' },
-            { id: 'notas-fiscais', nome: '📄 Notas Fiscais', grupo: 'Financeiro' },
-            { id: 'pessoas', nome: '👥 Beneficiários', grupo: 'Pessoas' },
-            { id: 'profissionais', nome: '👨‍⚕️ Profissionais', grupo: 'Pessoas' },
-            { id: 'voluntarios', nome: '💪 Voluntários', grupo: 'Pessoas' },
-            { id: 'agenda-telefonica', nome: '☎️ CRM Social', grupo: 'Pessoas' },
-            { id: 'agenda', nome: '📅 Agenda', grupo: 'Atendimento' },
-            { id: 'chat', nome: '💬 Chat', grupo: 'Atendimento' },
-            { id: 'prontuario', nome: '📝 Prontuário', grupo: 'Atendimento' },
-            { id: 'documentos', nome: '📝 Documentos', grupo: 'Documentos' },
-            { id: 'qrcodes', nome: '📱 QR Codes', grupo: 'Documentos' },
-            { id: 'estoque', nome: '📦 Estoque', grupo: 'Documentos' },
-            { id: 'patrimonio', nome: '🏢 Patrimônio', grupo: 'Documentos' },
-            { id: 'biblioteca', nome: '📚 Biblioteca', grupo: 'Educação' },
-            { id: 'certificados', nome: '🎓 Certificados', grupo: 'Educação' },
-            { id: 'assistente', nome: '🤖 Assistente IA', grupo: 'Comunicação' },
-            { id: 'relatorios', nome: '📈 Relatórios', grupo: 'Relatórios' },
-            { id: 'configuracoes', nome: '⚙️ Configurações', grupo: 'Sistema' },
-            { id: 'backup', nome: '💾 Backup', grupo: 'Sistema' },
-            { id: 'idp', nome: '🔑 IDP', grupo: 'Sistema' }
-        ];
+<!-- MODAL CONFIRMAÇÃO -->
+<div class="modal-overlay" id="modalConfirmacao">
+    <div class="modal" style="max-width:450px;">
+        <h2 id="confTitulo">Confirmar <button class="fechar" onclick="fecharConfirmacao()">×</button></h2>
+        <div id="confMensagem" style="font-size:13px;color:var(--grafite);margin-bottom:16px;"></div>
+        <div class="btn-group">
+            <button class="btn btn-outline" onclick="fecharConfirmacao()">Cancelar</button>
+            <button class="btn btn-danger" id="confBtnConfirmar" onclick="executarConfirmacao()">✅ Confirmar</button>
+        </div>
+    </div>
+</div>
+<script src="menu.js?v=20260904"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js"></script>
+<script>
+// ============================================================
+// CONFIGURAÇÕES - AMOVIN ERP (AERP)
+// Gestão de usuários, perfis, auditoria e integrações
+// ============================================================
 
-        var acessosPorPerfil = {
-            admin: modulos.map(function(m) { return m.id; }),
-            recepcao: ['dashboard', 'pessoas', 'agenda-telefonica', 'agenda', 'documentos'],
-            consulta: ['dashboard', 'agenda', 'agenda-telefonica', 'prontuario', 'assistente', 'chat'],
-            financeiro: ['dashboard', 'financeiro', 'orcamentos', 'prestacao-contas', 'notas-fiscais', 'relatorios'],
-            voluntario: ['dashboard', 'agenda', 'voluntarios', 'agenda-telefonica']
-        };
+var usuarios = [];
+var logsAuditoria = [];
+var permissoes = {};
+var firebasePronto = false;
+var db = null;
+var auth = null;
+var usuarioLogado = null;
+var perfilMatrizAtual = null;
+var acaoConfirmar = null;
 
-        function selecionarPerfil(perfil, btn) {
-            perfilAtual = perfil;
-            document.querySelectorAll('.perfil-pill').forEach(function(b) { b.classList.remove('ativo'); });
-            btn.classList.add('ativo');
-            document.getElementById('perfilNome').textContent = perfil.charAt(0).toUpperCase() + perfil.slice(1);
-            renderizarModulos();
-        }
+var PERFIS = [
+    { id: 'master',     nome: '🛡️ Master',     desc: 'Desenvolvedor — acesso total', ativo: true,  cor: 'roxo' },
+    { id: 'admin',      nome: '👑 Admin',      desc: 'Administrador geral',          ativo: false, cor: '' },
+    { id: 'financeiro', nome: '💰 Financeiro', desc: 'Só o módulo financeiro',       ativo: false, cor: '' },
+    { id: 'contador',   nome: '📊 Contador',   desc: 'Consulta e relatórios',        ativo: false, cor: '' },
+    { id: 'consulta',   nome: '👁️ Consulta',   desc: 'Visualização',                 ativo: false, cor: '' },
+    { id: 'estagiario', nome: '🎓 Estagiário', desc: 'Acesso limitado',              ativo: false, cor: '' },
+    { id: 'voluntario', nome: '💪 Voluntário', desc: 'Acesso mínimo',                ativo: false, cor: '' }
+];
 
-        function renderizarModulos() {
-            var container = document.getElementById('modulosAcessos');
-            var acessos = acessosPorPerfil[perfilAtual] || [];
+var MODULOS = [
+    { id: 'dashboard', nome: '📊 Dashboard', grupo: 'Principal' },
+    { id: 'bi', nome: '📈 BI Executivo', grupo: 'Principal' },
+    { id: 'sala-espera', nome: '📋 Sala de Espera', grupo: 'Captação' },
+    { id: 'pre-cadastro', nome: '📝 Pré-Cadastro', grupo: 'Captação' },
+    { id: 'projetos-convenios', nome: '📋 Projetos & Convênios', grupo: 'Financeiro' },
+    { id: 'financeiro', nome: '💰 Financeiro', grupo: 'Financeiro' },
+    { id: 'orcamentos', nome: '📊 Orçamentos', grupo: 'Financeiro' },
+    { id: 'prestacao-contas', nome: '📋 Prestação de Contas', grupo: 'Financeiro' },
+    { id: 'notas-fiscais', nome: '📄 Notas Fiscais', grupo: 'Financeiro' },
+    { id: 'pessoas', nome: '👥 Beneficiários', grupo: 'Pessoas' },
+    { id: 'profissionais', nome: '👨‍⚕️ Profissionais', grupo: 'Pessoas' },
+    { id: 'voluntarios', nome: '💪 Voluntários', grupo: 'Pessoas' },
+    { id: 'agenda-telefonica', nome: '☎️ CRM Social', grupo: 'Pessoas' },
+    { id: 'agenda', nome: '📅 Agenda', grupo: 'Atendimento' },
+    { id: 'chat', nome: '💬 Chat', grupo: 'Atendimento' },
+    { id: 'prontuario', nome: '📝 Prontuário', grupo: 'Atendimento' },
+    { id: 'documentos', nome: '📄 Documentos', grupo: 'Documentos' },
+    { id: 'qrcodes', nome: '📱 QR Codes', grupo: 'Documentos' },
+    { id: 'estoque', nome: '📦 Estoque', grupo: 'Documentos' },
+    { id: 'patrimonio', nome: '🏢 Patrimônio', grupo: 'Documentos' },
+    { id: 'biblioteca', nome: '📚 Biblioteca', grupo: 'Educação' },
+    { id: 'certificados', nome: '🎓 Certificados', grupo: 'Educação' },
+    { id: 'assistente', nome: '🤖 Assistente IA', grupo: 'Comunicação' },
+    { id: 'relatorios', nome: '📈 Relatórios', grupo: 'Relatórios' },
+    { id: 'configuracoes', nome: '⚙️ Configurações', grupo: 'Sistema' },
+    { id: 'backup', nome: '💾 Backup', grupo: 'Sistema' }
+];
 
-            var grupos = {};
-            modulos.forEach(function(m) {
-                if (!grupos[m.grupo]) grupos[m.grupo] = [];
-                grupos[m.grupo].push(m);
-            });
+var ACOES = ['ver', 'criar', 'editar', 'excluir', 'aprovar'];
 
-            var html = '';
-            for (var grupo in grupos) {
-                html += '<div style="grid-column:1/-1;font-size:11px;font-weight:700;color:var(--cinza);margin-top:6px;text-transform:uppercase;letter-spacing:0.5px;">' + grupo + '</div>';
-                grupos[grupo].forEach(function(m) {
-                    var ativo = acessos.indexOf(m.id) >= 0;
-                    html += '<div class="modulo-item">' +
-                        '<span class="modulo-nome">' + m.nome + '</span>' +
-                        '<span class="modulo-status ' + (ativo ? 'ativo' : 'inativo') + '" onclick="toggleAcesso(\'' + m
-                        .id + '\',this)">' + (ativo ? '✅' : '❌') + '</span>' +
-                        '</div>';
-                });
-            }
-            container.innerHTML = html;
-        }
+// ============================================================
+// UTILITÁRIOS
+// ============================================================
+function sha256(texto) {
+    return CryptoJS.SHA256(texto).toString();
+}
+function mostrarToast(msg, tipo) {
+    var t = document.createElement('div');
+    t.className = 'toast toast-' + (tipo || 'success');
+    t.textContent = msg;
+    document.body.appendChild(t);
+    setTimeout(function() { t.remove(); }, 4000);
+}
+function toggleSwitch(el) { el.classList.toggle('ativo'); }
+function toggleOlho(id) {
+    var el = document.getElementById(id);
+    el.type = el.type === 'password' ? 'text' : 'password';
+}
+function formatarData(iso) {
+    if (!iso) return '—';
+    try { return new Date(iso).toLocaleString('pt-BR'); } catch (e) { return iso; }
+}
 
-        function toggleAcesso(moduloId, el) {
-            var acessos = acessosPorPerfil[perfilAtual] || [];
-            var idx = acessos.indexOf(moduloId);
-            if (idx >= 0) {
-                acessos.splice(idx, 1);
-                el.textContent = '❌';
-                el.className = 'modulo-status inativo';
-            } else {
-                acessos.push(moduloId);
-                el.textContent = '✅';
-                el.className = 'modulo-status ativo';
-            }
-            acessosPorPerfil[perfilAtual] = acessos;
-        }
+// ============================================================
+// USUÁRIO LOGADO
+// ============================================================
+function getUsuarioLogado() {
+    return {
+        usuario: sessionStorage.getItem('amovin_usuario') || 'desconhecido',
+        nome: sessionStorage.getItem('amovin_nome') || 'Usuário',
+        perfil: sessionStorage.getItem('amovin_perfil') || 'admin'
+    };
+}
+function isMaster() {
+    var u = getUsuarioLogado();
+    return u.perfil === 'admin' && u.nome === 'Administrador Master';
+}
 
-        function salvarAcessos() {
-            localStorage.setItem('amovin_acessos', JSON.stringify(acessosPorPerfil));
-            alert('✅ Acessos salvos com sucesso!');
-        }
-
-        // ============================================================
-        // FUNÇÕES DAS CONFIGURAÇÕES
-        // ============================================================
-        function salvarConfigGeral() {
-            alert('✅ Configurações gerais salvas!');
-        }
-
-        function salvarConfigAparencia() {
-            alert('✅ Configurações de aparência salvas!');
-        }
-
-        function salvarGemini() {
-            var key = document.getElementById('geminiKey').value;
-            if (key) {
-                localStorage.setItem('amovin_gemini_key', key);
-                document.getElementById('geminiStatus').textContent = '✅ Configurado';
-                document.getElementById('geminiStatus').style.color = '#2E7D32';
-                alert('✅ Chave Gemini salva com sucesso!');
-            } else {
-                alert('⚠️ Digite uma chave válida.');
-            }
-        }
-
-        function salvarSMTP() {
-            alert('✅ Configurações SMTP salvas!');
-        }
-
-        function salvarSeguranca() {
-            alert('✅ Configurações de segurança salvas!');
-        }
-
-        function salvarSessao() {
-            alert('✅ Configurações de sessão salvas!');
-        }
-
-        function realizarBackup() {
-            var dados = {
-                pessoas: localStorage.getItem('amovin_pessoas'),
-                agendamentos: localStorage.getItem('amovin_agendamentos'),
-                notas: localStorage.getItem('amovin_notas_fiscais'),
-                preCadastros: localStorage.getItem('amovin_pre_cadastros'),
-                contatos: localStorage.getItem('amovin_contatos'),
-                estoque: localStorage.getItem('amovin_estoque'),
-                bens: localStorage.getItem('amovin_bens'),
-                certificados: localStorage.getItem('amovin_certificados'),
-                biblioteca: localStorage.getItem('amovin_biblioteca'),
-                qrCodes: localStorage.getItem('amovin_qrcodes'),
-                data: new Date().toISOString()
-            };
-            var blob = new Blob([JSON.stringify(dados, null, 2)], { type: 'application/json' });
-            var link = document.createElement('a');
-            link.href = URL.createObjectURL(blob);
-            link.download = 'backup-amovin-' + new Date().toISOString().split('T')[0] + '.json';
-            link.click();
-            document.getElementById('ultimoBackup').textContent = new Date().toLocaleString('pt-BR');
-            alert('✅ Backup realizado com sucesso!');
-        }
-
-        function restaurarBackup() {
-            var input = document.createElement('input');
-            input.type = 'file';
-            input.accept = '.json';
-            input.onchange = function(e) {
-                var file = e.target.files[0];
-                if (!file) return;
-                var reader = new FileReader();
-                reader.onload = function(ev) {
+// ============================================================
+// FIREBASE
+// ============================================================
+function inicializarFirebase() {
+    if (typeof firebase === 'undefined') {
+        var s = document.createElement('script');
+        s.src = 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js';
+        s.onload = function() {
+            var fs = document.createElement('script');
+            fs.src = 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js';
+            fs.onload = function() {
+                var fa = document.createElement('script');
+                fa.src = 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js';
+                fa.onload = function() {
                     try {
-                        var dados = JSON.parse(ev.target.result);
-                        for (var key in dados) {
-                            if (key !== 'data' && dados[key] !== null) {
-                                localStorage.setItem('amovin_' + key, dados[key]);
-                            }
-                        }
-                        alert('✅ Backup restaurado com sucesso! A página será recarregada.');
-                        location.reload();
-                    } catch (err) {
-                        alert('⚠️ Arquivo inválido.');
-                    }
+                        var cfg = {
+                            apiKey: "AIzaSyDQO-69vVBhmBK8oLt0DzfyigBmjxzu7b4",
+                            authDomain: "gestao-amovin.firebaseapp.com",
+                            projectId: "gestao-amovin",
+                            storageBucket: "gestao-amovin.firebasestorage.app",
+                            messagingSenderId: "316793420445",
+                            appId: "1:316793420445:web:68e9898bbfcd30853f3274"
+                        };
+                        if (!firebase.apps.length) firebase.initializeApp(cfg);
+                        db = firebase.firestore();
+                        auth = firebase.auth();
+                        firebasePronto = true;
+                        escutarTudo();
+                    } catch (e) { console.error(e); mostrarToast('❌ Erro Firebase: ' + e.message, 'error'); }
                 };
-                reader.readAsText(file);
+                document.head.appendChild(fa);
             };
-            input.click();
-        }
-
-        function limparDados() {
-            if (!confirm('⚠️ Tem certeza que deseja limpar TODOS os dados locais? Esta ação não pode ser desfeita!')) return;
-            if (!confirm('🔴 ÚLTIMA CHANCE: Confirmar exclusão de todos os dados?')) return;
-            localStorage.clear();
-            alert('🗑️ Todos os dados foram removidos. A página será recarregada.');
-            location.reload();
-        }
-
-        // ============================================================
-        // CONTROLE DE PERFIL
-        // ============================================================
-        var perfil = sessionStorage.getItem('amovin_perfil') || 'admin';
-        var modulosPermitidos = {
-            admin: ['dashboard', 'bi', 'capta', 'sala-espera', 'pre-cadastro', 'financeiro', 'orcamentos', 'prestacao-contas',
-                'pessoas', 'profissionais', 'voluntarios', 'agenda-telefonica', 'agenda', 'documentos', 'qrcodes',
-                'notas-fiscais', 'estoque', 'patrimonio', 'biblioteca', 'certificados', 'chat', 'assistente', 'relatorios',
-                'configuracoes', 'backup'
-            ],
-            recepcao: ['dashboard', 'pessoas', 'agenda-telefonica', 'agenda', 'documentos'],
-            consulta: ['dashboard', 'agenda', 'agenda-telefonica', 'assistente'],
-            financeiro: ['dashboard', 'financeiro', 'orcamentos', 'prestacao-contas', 'relatorios'],
-            voluntario: ['dashboard', 'agenda', 'voluntarios', 'agenda-telefonica']
+            document.head.appendChild(fs);
         };
+        document.head.appendChild(s);
+    }
+}
+function escutarTudo() {
+    if (!firebasePronto || !db) return;
+    db.collection('usuarios').onSnapshot(function(snap) {
+        usuarios = [];
+        snap.forEach(function(doc) { usuarios.push({ _fbId: doc.id, ...doc.data() }); });
+        renderizarTabelaUsuarios();
+        popularFiltroUsuarios();
+    }, function(err) { console.warn('Erro usuarios:', err); });
+    db.collection('permissoes').onSnapshot(function(snap) {
+        permissoes = {};
+        snap.forEach(function(doc) { permissoes[doc.id] = doc.data(); });
+        renderizarPerfis();
+    }, function(err) { console.warn('Erro permissoes:', err); });
+}
 
-        var permitidos = modulosPermitidos[perfil] || modulosPermitidos.admin;
-        setTimeout(function() {
-            document.querySelectorAll('.nav-item').forEach(function(item) {
-                var href = item.getAttribute('href') || '';
-                var pagina = href.replace('.html', '');
-                pagina = pagina.split('?')[0].split('#')[0];
-                if (pagina && permitidos.indexOf(pagina) === -1 && pagina !== 'dashboard' && pagina !== '') {
-                    item.style.display = 'none';
-                }
+// ============================================================
+// AUDITORIA (log imutável)
+// ============================================================
+async function registrarLogAuditoria(acao, detalhes, extra) {
+    var u = getUsuarioLogado();
+    var log = {
+        timestamp: new Date().toISOString(),
+        usuario: u.usuario,
+        nome: u.nome,
+        perfil: u.perfil,
+        isMaster: isMaster(),
+        acao: acao,
+        detalhes: detalhes || '',
+        extra: extra || null
+    };
+    if (firebasePronto && db) {
+        try { await db.collection('logs_auditoria').add(log); }
+        catch (e) { console.warn('Erro log:', e.message); }
+    }
+    console.log('📋 Auditoria:', log);
+}
+
+// ============================================================
+// TABS
+// ============================================================
+document.querySelectorAll('.tab-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+        document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('ativo'); });
+        this.classList.add('ativo');
+        var tabId = this.getAttribute('data-tab');
+        document.querySelectorAll('.tab-content').forEach(function(c) { c.classList.remove('ativo'); });
+        document.getElementById('tab-' + tabId).classList.add('ativo');
+    });
+});
+
+// ============================================================
+// ABA ORGANIZAÇÃO
+// ============================================================
+function salvarOrganizacao() {
+    var dados = {
+        nome: document.getElementById('orgNome').value,
+        cnpj: document.getElementById('orgCnpj').value,
+        telefone: document.getElementById('orgTelefone').value,
+        endereco: document.getElementById('orgEndereco').value,
+        email: document.getElementById('orgEmail').value,
+        site: document.getElementById('orgSite').value
+    };
+    localStorage.setItem('amovin_organizacao', JSON.stringify(dados));
+    if (firebasePronto && db) {
+        db.collection('configuracoes').doc('organizacao').set(dados, { merge: true })
+            .then(function() { registrarLogAuditoria('CONFIG_ORGANIZACAO', 'Dados da organização atualizados'); });
+    }
+    mostrarToast('✅ Organização salva!', 'success');
+}
+function salvarIdentidade() {
+    var dados = {
+        logo: document.getElementById('orgLogo').value,
+        cor: document.getElementById('orgCor').value
+    };
+    localStorage.setItem('amovin_identidade', JSON.stringify(dados));
+    document.getElementById('previewLogo').src = dados.logo;
+    document.getElementById('previewLogo').style.display = 'block';
+    if (firebasePronto && db) {
+        db.collection('configuracoes').doc('identidade').set(dados, { merge: true })
+            .then(function() { registrarLogAuditoria('CONFIG_IDENTIDADE', 'Identidade visual atualizada'); });
+    }
+    mostrarToast('✅ Identidade salva!', 'success');
+}
+
+// ============================================================
+// ABA USUÁRIOS
+// ============================================================
+function renderizarTabelaUsuarios() {
+    var tbody = document.getElementById('tabelaUsuarios');
+    if (usuarios.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" class="sem-dados">Nenhum usuário cadastrado. Clique em ➕ Novo Usuário.</td></tr>';
+        return;
+    }
+    tbody.innerHTML = usuarios.map(function(u) {
+        var perfilNome = (PERFIS.find(function(p) { return p.id === u.perfil; }) || {}).nome || u.perfil;
+        var statusClass = u.ativo ? 'status-ativo' : 'status-inativo';
+        var statusTxt = u.ativo ? '✅ Ativo' : '🔒 Inativo';
+        return '<tr>' +
+            '<td><strong>' + (u.nome || '—') + '</strong></td>' +
+            '<td>' + (u.login || '—') + '</td>' +
+            '<td>' + (u.email || '—') + '</td>' +
+            '<td>' + perfilNome + '</td>' +
+            '<td>' + formatarData(u.ultimoAcesso) + '</td>' +
+            '<td><span class="status-badge ' + statusClass + '">' + statusTxt + '</span></td>' +
+            '<td style="text-align:right;">' +
+            '<button class="btn btn-outline btn-sm" onclick="editarUsuario(\'' + u._fbId + '\')" title="Editar">✏️</button> ' +
+            '<button class="btn btn-azul btn-sm" onclick="resetarSenha(\'' + u._fbId + '\')" title="Redefinir senha" style="background:var(--azul);color:white;">🔑</button> ' +
+            '<button class="btn btn-danger btn-sm" onclick="desativarUsuario(\'' + u._fbId + '\')" title="Desativar">🚫</button>' +
+            '</td></tr>';
+    }).join('');
+}
+
+function popularFiltroUsuarios() {
+    var sel = document.getElementById('audUsuario');
+    if (!sel) return;
+    var usernames = {};
+    usuarios.forEach(function(u) { if (u.login) usernames[u.login] = true; });
+    sel.innerHTML = '<option value="">Todos</option>';
+    Object.keys(usernames).sort().forEach(function(n) {
+        var opt = document.createElement('option');
+        opt.value = n;
+        opt.textContent = n;
+        sel.appendChild(opt);
+    });
+}
+
+function abrirModalUsuario(docId) {
+    document.getElementById('usuarioDocId').value = docId || '';
+    document.getElementById('modalUsuarioTitulo').innerHTML = (docId ? '✏️ Editar Usuário' : '➕ Novo Usuário') + ' <button class="fechar" onclick="fecharModalUsuario()">×</button>';
+    var grupoSenha = document.getElementById('grupoSenhaUsuario');
+
+    if (docId) {
+        var u = usuarios.find(function(x) { return x._fbId === docId; });
+        if (u) {
+            document.getElementById('uNome').value = u.nome || '';
+            document.getElementById('uLogin').value = u.login || '';
+            document.getElementById('uEmail').value = u.email || '';
+            document.getElementById('uPerfil').value = u.perfil || 'admin';
+            document.getElementById('uAtivo').value = u.ativo ? 'true' : 'false';
+            document.getElementById('uSenha').value = '';
+            grupoSenha.style.display = 'none';
+        }
+    } else {
+        document.getElementById('uNome').value = '';
+        document.getElementById('uLogin').value = '';
+        document.getElementById('uEmail').value = '';
+        document.getElementById('uPerfil').value = 'admin';
+        document.getElementById('uAtivo').value = 'true';
+        document.getElementById('uSenha').value = '';
+        grupoSenha.style.display = 'block';
+    }
+    document.getElementById('modalUsuario').classList.add('ativo');
+}
+function fecharModalUsuario() { document.getElementById('modalUsuario').classList.remove('ativo'); }
+
+async function salvarUsuario() {
+    var docId = document.getElementById('usuarioDocId').value;
+    var nome = document.getElementById('uNome').value.trim();
+    var login = document.getElementById('uLogin').value.trim().toLowerCase();
+    var email = document.getElementById('uEmail').value.trim();
+    var perfil = document.getElementById('uPerfil').value;
+    var ativo = document.getElementById('uAtivo').value === 'true';
+    var senha = document.getElementById('uSenha').value;
+
+    if (!nome || !login || !email) { mostrarToast('⚠️ Nome, login e e-mail são obrigatórios!', 'warning'); return; }
+    if (!docId && (!senha || senha.length < 8)) { mostrarToast('⚠️ Senha deve ter mínimo 8 caracteres!', 'warning'); return; }
+
+    var dados = { nome: nome, login: login, email: email, perfil: perfil, ativo: ativo, atualizadoEm: new Date().toISOString() };
+    if (!docId && senha) dados.senhaHash = sha256(senha);
+
+    if (firebasePronto && db) {
+        try {
+            if (docId) {
+                await db.collection('usuarios').doc(docId).update(dados);
+                registrarLogAuditoria('USUARIO_EDITAR', 'Usuário ' + login + ' (' + perfil + ')', { perfil: perfil, ativo: ativo });
+                mostrarToast('✅ Usuário atualizado!', 'success');
+            } else {
+                dados.criadoEm = new Date().toISOString();
+                await db.collection('usuarios').add(dados);
+                registrarLogAuditoria('USUARIO_CRIAR', 'Usuário ' + login + ' (' + perfil + ')', null);
+                mostrarToast('✅ Usuário criado!', 'success');
+            }
+            fecharModalUsuario();
+        } catch (e) { mostrarToast('❌ ' + e.message, 'error'); }
+    } else {
+        mostrarToast('⚠️ Firebase não disponível', 'warning');
+    }
+}
+
+function editarUsuario(docId) { abrirModalUsuario(docId); }
+
+async function resetarSenha(docId) {
+    var u = usuarios.find(function(x) { return x._fbId === docId; });
+    if (!u) return;
+    if (!confirm('Enviar email de redefinição de senha para:\n\n' + u.nome + ' <' + u.email + '>?')) return;
+    if (!auth) { mostrarToast('❌ Firebase Auth não carregado', 'error'); return; }
+    try {
+        await auth.sendPasswordResetEmail(u.email);
+        registrarLogAuditoria('REDEFINIR_SENHA', 'Email enviado para ' + u.email, null);
+        mostrarToast('✅ Email enviado para ' + u.email, 'success');
+    } catch (e) {
+        mostrarToast('❌ ' + e.message, 'error');
+    }
+}
+
+function desativarUsuario(docId) {
+    var u = usuarios.find(function(x) { return x._fbId === docId; });
+    if (!u) return;
+    var acao = u.ativo ? 'Desativar' : 'Reativar';
+    abrirConfirmacao(acao + ' usuário?', 'Usuário: <strong>' + u.nome + '</strong> (' + u.login + ')<br><br>Deseja continuar?', async function() {
+        if (firebasePronto && db) {
+            await db.collection('usuarios').doc(docId).update({ ativo: !u.ativo, atualizadoEm: new Date().toISOString() });
+            registrarLogAuditoria(u.ativo ? 'USUARIO_DESATIVAR' : 'USUARIO_REATIVAR', 'Usuário ' + u.login, null);
+            mostrarToast('✅ Usuário ' + (u.ativo ? 'desativado' : 'reativado') + '!', 'success');
+        }
+    });
+}
+
+// ============================================================
+// ABA PERFIS & MATRIZ
+// ============================================================
+function renderizarPerfis() {
+    var grid = document.getElementById('perfisGrid');
+    grid.innerHTML = PERFIS.map(function(p) {
+        var qtd = usuarios.filter(function(u) { return u.perfil === p.id; }).length;
+        var classMaster = p.id === 'master' ? ' master' : '';
+        var statusBadge = p.ativo ? '<span class="status-badge status-ativo">✅ Ativo</span>' : '<span class="status-badge status-inativo">🔒 Inativo</span>';
+        return '<div class="perfil-card' + classMaster + '">' +
+            '<h5>' + p.nome + '</h5>' +
+            '<div class="perfil-status">' + statusBadge + '</div>' +
+            '<div class="perfil-info">' + p.desc + '<br><strong>' + qtd + '</strong> usuário(s) cadastrado(s)</div>' +
+            '<button class="btn btn-primary btn-sm" onclick="abrirMatriz(\'' + p.id + '\')">🔧 Ver Matriz</button>' +
+            '</div>';
+    }).join('');
+}
+
+function abrirMatriz(perfilId) {
+    perfilMatrizAtual = perfilId;
+    var perfil = PERFIS.find(function(p) { return p.id === perfilId; });
+    document.getElementById('matrizPerfilNome').textContent = perfil.nome;
+    document.getElementById('matrizContainer').style.display = 'block';
+    document.getElementById('matrizContainer').scrollIntoView({ behavior: 'smooth' });
+
+    var perm = permissoes[perfilId] || {};
+    var html = '';
+    var grupos = {};
+    MODULOS.forEach(function(m) { if (!grupos[m.grupo]) grupos[m.grupo] = []; grupos[m.grupo].push(m); });
+
+    for (var g in grupos) {
+        html += '<tr><td colspan="6" class="grupo-linha">' + g + '</td></tr>';
+        grupos[g].forEach(function(m) {
+            html += '<tr><td>' + m.nome + '</td>';
+            ACOES.forEach(function(a) {
+                var modPerm = (perm[m.id] && perm[m.id][a]) ? 'checked' : '';
+                // Master tem tudo
+                if (perfilId === 'master') modPerm = 'checked disabled';
+                html += '<td><input type="checkbox" class="check-box" data-modulo="' + m.id + '" data-acao="' + a + '" ' + modPerm + '></td>';
             });
-        }, 500);
+            html += '</tr>';
+        });
+    }
+    document.getElementById('matrizBody').innerHTML = html;
+}
 
-        if (!sessionStorage.getItem('amovin_logado')) {
-            window.location.href = 'index.html';
-        }
+function fecharMatriz() {
+    document.getElementById('matrizContainer').style.display = 'none';
+    perfilMatrizAtual = null;
+}
 
-        // ============================================================
-        // INICIALIZAÇÃO
-        // ============================================================
-        renderizarModulos();
+async function salvarMatriz() {
+    if (!perfilMatrizAtual) return;
+    if (perfilMatrizAtual === 'master') { mostrarToast('⚠️ Master tem todas as permissões por padrão', 'warning'); return; }
+    var novaMatriz = {};
+    document.querySelectorAll('#matrizBody .check-box').forEach(function(cb) {
+        var m = cb.getAttribute('data-modulo');
+        var a = cb.getAttribute('data-acao');
+        if (!novaMatriz[m]) novaMatriz[m] = {};
+        novaMatriz[m][a] = cb.checked;
+    });
+    if (firebasePronto && db) {
+        try {
+            await db.collection('permissoes').doc(perfilMatrizAtual).set({ modulos: novaMatriz, atualizadoEm: new Date().toISOString() });
+            registrarLogAuditoria('PERMISSOES_SALVAR', 'Perfil ' + perfilMatrizAtual, null);
+            mostrarToast('✅ Permissões salvas!', 'success');
+        } catch (e) { mostrarToast('❌ ' + e.message, 'error'); }
+    }
+}
 
-        // Carregar chave Gemini
-        var geminiKey = localStorage.getItem('amovin_gemini_key');
-        if (geminiKey) {
-            document.getElementById('geminiStatus').textContent = '✅ Configurado';
+// ============================================================
+// ABA AUDITORIA
+// ============================================================
+async function gerarRelatorioAuditoria() {
+    if (!firebasePronto || !db) { mostrarToast('⚠️ Firebase não disponível', 'warning'); return; }
+    var tbody = document.getElementById('tabelaAuditoria');
+    tbody.innerHTML = '<tr><td colspan="7" class="sem-dados">⏳ Carregando logs...</td></tr>';
+    try {
+        var snap = await db.collection('logs_auditoria').orderBy('timestamp', 'desc').limit(500).get();
+        var de = document.getElementById('audDataDe').value;
+        var ate = document.getElementById('audDataAte').value;
+        var usuarioFiltro = document.getElementById('audUsuario').value;
+        var acaoFiltro = document.getElementById('audAcao').value;
+        logsAuditoria = [];
+        snap.forEach(function(doc) {
+            var l = doc.data();
+            if (de && l.timestamp && l.timestamp.substring(0, 10) < de) return;
+            if (ate && l.timestamp && l.timestamp.substring(0, 10) > ate) return;
+            if (usuarioFiltro && l.usuario !== usuarioFiltro) return;
+            if (acaoFiltro && l.acao !== acaoFiltro) return;
+            logsAuditoria.push(l);
+        });
+        renderizarAuditoria();
+    } catch (e) { mostrarToast('❌ ' + e.message, 'error'); }
+}
+
+function renderizarAuditoria() {
+    var tbody = document.getElementById('tabelaAuditoria');
+    if (logsAuditoria.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" class="sem-dados">Nenhum log encontrado com esses filtros.</td></tr>';
+        return;
+    }
+    tbody.innerHTML = logsAuditoria.map(function(l) {
+        return '<tr>' +
+            '<td>' + formatarData(l.timestamp) + '</td>' +
+            '<td><strong>' + (l.nome || l.usuario) + '</strong><br><span style="font-size:10px;color:var(--cinza);">@' + (l.usuario || '—') + '</span></td>' +
+            '<td>' + (l.perfil || '—') + '</td>' +
+            '<td><span style="background:#FFF3E0;color:#C65A11;padding:2px 8px;border-radius:8px;font-size:10px;font-weight:700;">' + (l.acao || '—') + '</span></td>' +
+            '<td style="font-size:11px;">' + (l.detalhes || '—') + '</td>' +
+            '<td style="font-size:11px;color:var(--cinza);">' + (l.extra ? JSON.stringify(l.extra) : '—') + '</td>' +
+            '<td style="font-size:11px;font-style:italic;">' + (l.justificativa || '—') + '</td>' +
+            '</tr>';
+    }).join('');
+}
+
+function limparFiltrosAuditoria() {
+    document.getElementById('audDataDe').value = '';
+    document.getElementById('audDataAte').value = '';
+    document.getElementById('audUsuario').value = '';
+    document.getElementById('audAcao').value = '';
+}
+
+function exportarAuditoriaCSV() {
+    if (logsAuditoria.length === 0) { mostrarToast('⚠️ Gere o relatório primeiro', 'warning'); return; }
+    var linhas = [['Data/Hora', 'Usuário', 'Nome', 'Perfil', 'Ação', 'Detalhes', 'Justificativa']];
+    logsAuditoria.forEach(function(l) {
+        linhas.push([l.timestamp || '', l.usuario || '', l.nome || '', l.perfil || '', l.acao || '', l.detalhes || '', l.justificativa || '']);
+    });
+    var csv = linhas.map(function(l) { return l.map(function(c) { return '"' + String(c).replace(/"/g, '""') + '"'; }).join(';'); }).join('\n');
+    var blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url; a.download = 'auditoria-amovin-' + new Date().toISOString().split('T')[0] + '.csv';
+    a.click(); URL.revokeObjectURL(url);
+    registrarLogAuditoria('EXPORTAR_AUDITORIA', 'Exportou ' + logsAuditoria.length + ' logs', null);
+    mostrarToast('📥 CSV exportado!', 'success');
+}
+
+// ============================================================
+// ABA INTEGRAÇÕES
+// ============================================================
+function salvarGemini() {
+    var key = document.getElementById('geminiKey').value.trim();
+    if (!key) { mostrarToast('⚠️ Digite a chave!', 'warning'); return; }
+    localStorage.setItem('amovin_gemini_key', key);
+    document.getElementById('geminiStatus').textContent = '✅ Configurado';
+    document.getElementById('geminiStatus').style.color = '#2E7D32';
+    registrarLogAuditoria('CONFIG_GEMINI', 'Chave Gemini atualizada', null);
+    mostrarToast('✅ Chave salva!', 'success');
+}
+async function testarGemini() {
+    var key = localStorage.getItem('amovin_gemini_key');
+    if (!key) { mostrarToast('⚠️ Configure a chave primeiro', 'warning'); return; }
+    try {
+        var res = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'x-goog-api-key': key },
+            body: JSON.stringify({ contents: [{ parts: [{ text: 'Diga apenas: OK' }] }] })
+        });
+        if (res.ok) {
+            document.getElementById('geminiStatus').textContent = '✅ Conexão OK';
             document.getElementById('geminiStatus').style.color = '#2E7D32';
+            mostrarToast('✅ Gemini OK!', 'success');
+        } else {
+            var err = await res.json();
+            throw new Error((err.error && err.error.message) || 'Erro ' + res.status);
         }
-    </script>
+    } catch (e) {
+        document.getElementById('geminiStatus').textContent = '❌ Falha';
+        document.getElementById('geminiStatus').style.color = '#C62828';
+        mostrarToast('❌ ' + e.message, 'error');
+    }
+}
+function salvarSMTP() {
+    var dados = {
+        server: document.getElementById('smtpServer').value,
+        port: document.getElementById('smtpPort').value,
+        email: document.getElementById('smtpEmail').value,
+        password: document.getElementById('smtpPassword').value ? sha256(document.getElementById('smtpPassword').value) : ''
+    };
+    localStorage.setItem('amovin_smtp', JSON.stringify(dados));
+    registrarLogAuditoria('CONFIG_SMTP', 'SMTP atualizado: ' + dados.server, null);
+    mostrarToast('✅ SMTP salvo! (a senha é criptografada)', 'success');
+}
+
+// ============================================================
+// ABA SEGURANÇA
+// ============================================================
+function salvarSeguranca() {
+    var toggles = document.querySelectorAll('#tab-seguranca .toggle');
+    var dados = {
+        minSenha: document.getElementById('minSenha').value,
+        exigirEspeciais: toggles[0].classList.contains('ativo'),
+        exigirMaiusculas: toggles[1].classList.contains('ativo'),
+        exigirNumeros: toggles[2].classList.contains('ativo')
+    };
+    localStorage.setItem('amovin_seguranca', JSON.stringify(dados));
+    registrarLogAuditoria('CONFIG_SEGURANCA', 'Política de senha atualizada', null);
+    mostrarToast('✅ Segurança salva!', 'success');
+}
+function salvarSessao() {
+    var dados = {
+        tempoSessao: document.getElementById('tempoSessao').value,
+        tentativas: document.getElementById('tentativas').value
+    };
+    localStorage.setItem('amovin_sessao', JSON.stringify(dados));
+    registrarLogAuditoria('CONFIG_SESSAO', 'Configurações de sessão atualizadas', null);
+    mostrarToast('✅ Sessão salva!', 'success');
+}
+
+// ============================================================
+// MODAL CONFIRMAÇÃO
+// ============================================================
+function abrirConfirmacao(titulo, mensagem, callback) {
+    document.getElementById('confTitulo').innerHTML = titulo + ' <button class="fechar" onclick="fecharConfirmacao()">×</button>';
+    document.getElementById('confMensagem').innerHTML = mensagem;
+    acaoConfirmar = callback;
+    document.getElementById('modalConfirmacao').classList.add('ativo');
+}
+function fecharConfirmacao() {
+    document.getElementById('modalConfirmacao').classList.remove('ativo');
+    acaoConfirmar = null;
+}
+async function executarConfirmacao() {
+    if (typeof acaoConfirmar === 'function') await acaoConfirmar();
+    fecharConfirmacao();
+}
+
+// ============================================================
+// INICIALIZAÇÃO
+// ============================================================
+document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('dataAtualizacao').textContent = new Date().toLocaleDateString('pt-BR');
+    var key = localStorage.getItem('amovin_gemini_key');
+    if (key) {
+        document.getElementById('geminiStatus').textContent = '✅ Configurado';
+        document.getElementById('geminiStatus').style.color = '#2E7D32';
+    }
+    renderizarPerfis();
+    inicializarFirebase();
+    registrarLogAuditoria('ACESSO', 'Acessou a página de Configurações', null);
+});
+</script>
 </body>
 </html>
