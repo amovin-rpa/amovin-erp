@@ -23,6 +23,7 @@
         .status-firebase.offline { background: #FFF3E0; color: #E65100; border-color: #FFCC80; }
         .status-firebase .dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; animation: pulse 2s infinite; }
         @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+        .badge-master { background: linear-gradient(135deg, #7C3AED, #C65A11); color: white; font-size: 10px; font-weight: 700; padding: 4px 12px; border-radius: 20px; letter-spacing: 0.5px; }
         .kpi-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 15px; margin-bottom: 22px; }
         .kpi-card { background: #FFFFFF; padding: 16px; border-radius: 14px; border: 1px solid #F0E9DF; text-align: center; }
         .kpi-card .kpi-valor { font-size: 20px; font-weight: 800; color: var(--laranja); word-break: break-word; }
@@ -51,17 +52,18 @@
         .filtros-bar { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-bottom: 16px; padding: 12px; background: #F8F4ED; border-radius: 10px; }
         .filtros-bar select, .filtros-bar input { padding: 8px 12px; border: 1px solid #E5E0D8; border-radius: 8px; font-size: 12px; font-family: 'Inter', sans-serif; background: white; }
         .filtros-bar .info { font-size: 12px; color: var(--cinza); margin-left: auto; }
-        .lancamento-item { padding: 12px 16px; border-bottom: 1px solid #F0E9DF; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; transition: background 0.2s; }
+        .lancamento-item { padding: 12px 16px; border-bottom: 1px solid #F0E9DF; display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 8px; transition: background 0.2s; }
         .lancamento-item:hover { background: #FFF8E7; }
         .lancamento-item:last-child { border-bottom: none; }
         .lancamento-item .info { flex: 1; min-width: 200px; }
         .lancamento-item .codigo { font-size: 10px; color: var(--laranja); font-weight: 700; letter-spacing: 0.5px; }
         .lancamento-item .descricao { font-weight: 600; color: var(--grafite); font-size: 13px; }
         .lancamento-item .detalhe { font-size: 11px; color: var(--cinza); margin-top: 2px; }
+        .lancamento-item .rodape-mod { font-size: 9px; color: #B0A99F; margin-top: 6px; font-style: italic; }
         .lancamento-item .valor { font-weight: 700; font-size: 14px; white-space: nowrap; }
         .lancamento-item .valor.receita { color: var(--verde); }
         .lancamento-item .valor.despesa { color: var(--vermelho); }
-        .lancamento-item .status-badge { font-size: 10px; padding: 2px 10px; border-radius: 12px; font-weight: 600; }
+        .lancamento-item .status-badge { font-size: 10px; padding: 2px 10px; border-radius: 12px; font-weight: 600; display: inline-block; margin-top: 4px; }
         .status-pago { background: #E8F5E9; color: #2E7D32; }
         .status-pendente { background: #FFF3E0; color: #E65100; }
         .lancamento-item .vinculo { font-size: 10px; padding: 2px 8px; border-radius: 8px; display: inline-block; margin-top: 4px; margin-right: 4px; }
@@ -88,6 +90,10 @@
         .toast { position: fixed; top: 20px; right: 20px; padding: 16px 24px; border-radius: 12px; color: white; font-weight: 600; font-size: 14px; z-index: 10000; box-shadow: 0 8px 32px rgba(0,0,0,0.15); animation: slideInRight 0.4s ease; max-width: 400px; }
         .toast-success { background: var(--verde); } .toast-error { background: var(--vermelho); } .toast-warning { background: #E65100; }
         @keyframes slideInRight { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        .senha-wrapper { position: relative; }
+        .senha-wrapper input { padding-right: 44px !important; }
+        .senha-wrapper .btn-olho { position: absolute; right: 8px; top: 50%; transform: translateY(-50%); background: none; border: none; font-size: 18px; cursor: pointer; color: var(--cinza); padding: 6px 10px; border-radius: 6px; }
+        .senha-wrapper .btn-olho:hover { background: #F0E9DF; color: var(--laranja); }
         .rodape { background: #FFFFFF; border-radius: 14px; padding: 12px 18px; border: 1px solid #F0E9DF; margin-top: 20px; }
         .rodape-grid { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
         .rodape-logo .logo-vigorre { width: 50px; }
@@ -107,8 +113,9 @@
         <h1>💰 Financeiro <span>Gestão de receitas e despesas</span></h1>
         <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
             <div class="status-firebase" id="statusFirebase"><span class="dot"></span><span>⏳ Conectando...</span></div>
+            <span class="badge-master" id="badgeMaster" style="display:none;">🔓 MODO MASTER</span>
             <button class="btn btn-outline" onclick="exportarCSV()">📥 CSV</button>
-            <button class="btn btn-primary" onclick="pedirAutenticacao('criar')">➕ Novo Lançamento</button>
+            <button class="btn btn-primary" onclick="abrirNovoLancamento()">➕ Novo Lançamento</button>
             <button class="btn-sair-topo" onclick="window.location.href='dashboard.html'">🏠 Dashboard</button>
         </div>
     </div>
@@ -252,7 +259,7 @@
             <div class="form-group"><label>📞 Telefone do Fornecedor</label><input type="text" id="formTelefone" placeholder="(34) 99999-9999" autocomplete="off" name="nf_tel_x1"></div>
         </div>
         <div class="form-row">
-            <div class="form-group"><label>💳 Forma de Pagamento *</label>
+            <div class="form-group"><label>💳 Forma de Pagamento</label>
                 <select id="formFormaPagamento" autocomplete="off">
                     <option value="">Selecione...</option>
                     <option value="Pix">Pix</option>
@@ -264,7 +271,7 @@
                     <option value="Outro">Outro</option>
                 </select>
             </div>
-            <div class="form-group"><label>📋 Natureza do Gasto *</label>
+            <div class="form-group"><label>📋 Natureza do Gasto</label>
                 <select id="formNatureza" autocomplete="off">
                     <option value="Serviço">🛠️ Serviço Prestado</option>
                     <option value="Compra de Material">📦 Compra de Material</option>
@@ -334,13 +341,23 @@
 <!-- MODAL AUTH -->
 <div class="modal-overlay" id="modalAuth">
     <div class="modal modal-pequeno">
-        <h2>🔐 Autenticação Master <button class="fechar" onclick="fecharAuth()">×</button></h2>
+        <h2>🔐 Autenticação <button class="fechar" onclick="fecharAuth()">×</button></h2>
         <div id="authMsg" style="font-size:13px;color:var(--cinza);margin-bottom:16px;"></div>
-        <div class="form-group"><label>Usuário Master</label><input type="text" id="authUsuario" placeholder="Ex: raul" autocomplete="off" name="nf_authu_x1"></div>
-        <div class="form-group"><label>Senha Master</label><input type="password" id="authSenha" placeholder="••••••••" autocomplete="new-password" name="nf_auths_x1"></div>
-        <div class="form-group"><label>Justificativa (mín 50 caracteres)</label>
+        <div class="form-group">
+            <label>Usuário</label>
+            <input type="text" id="authUsuario" placeholder="Seu usuário" autocomplete="off" name="nf_authu_x1">
+        </div>
+        <div class="form-group">
+            <label>Senha</label>
+            <div class="senha-wrapper">
+                <input type="password" id="authSenha" placeholder="••••••••" autocomplete="new-password" name="nf_auths_x1">
+                <button type="button" class="btn-olho" onclick="toggleOlhoSenha()" title="Mostrar/ocultar senha">👁️</button>
+            </div>
+        </div>
+        <div class="form-group" id="grupoJustificativa">
+            <label>Justificativa (mín 20 caracteres)</label>
             <textarea id="authJust" rows="3" placeholder="Explique o motivo da alteração..." autocomplete="off" name="nf_authj_x1"></textarea>
-            <div style="font-size:10px;color:var(--cinza);margin-top:4px;" id="contadorJust">0/50 caracteres</div>
+            <div style="font-size:10px;color:var(--cinza);margin-top:4px;" id="contadorJust">0/20 caracteres</div>
         </div>
         <div class="btn-group">
             <button class="btn btn-outline" onclick="fecharAuth()">Cancelar</button>
@@ -348,14 +365,42 @@
         </div>
     </div>
 </div>
+
+<!-- MODAL STATUS RÁPIDO -->
+<div class="modal-overlay" id="modalStatus">
+    <div class="modal modal-pequeno">
+        <h2>🔄 Mudar Status <button class="fechar" onclick="fecharModalStatus()">×</button></h2>
+        <div id="statusInfo" style="font-size:13px;color:var(--cinza);margin-bottom:16px;"></div>
+        <div class="form-group">
+            <label>Novo Status</label>
+            <select id="statusNovo" autocomplete="off">
+                <option value="Pago">✅ Pago</option>
+                <option value="Pendente">⏳ Pendente</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Usuário</label>
+            <input type="text" id="statusUsuario" placeholder="Seu usuário" autocomplete="off" name="nf_statu_x1">
+        </div>
+        <div class="form-group">
+            <label>Senha</label>
+            <div class="senha-wrapper">
+                <input type="password" id="statusSenha" placeholder="••••••••" autocomplete="new-password" name="nf_stats_x1">
+                <button type="button" class="btn-olho" onclick="toggleOlhoSenhaStatus()" title="Mostrar/ocultar senha">👁️</button>
+            </div>
+        </div>
+        <div class="btn-group">
+            <button class="btn btn-outline" onclick="fecharModalStatus()">Cancelar</button>
+            <button class="btn btn-success" onclick="confirmarMudancaStatus()">✅ Confirmar</button>
+        </div>
+    </div>
+</div>
 <script src="menu.js?v=20260904"></script>
 <script>
 // ============================================================
-// FINANCEIRO - AMOVIN ERP (Firebase + Auth Master + Log)
-// Código: A-FIN-YYYY-NNNN
-// Filtros: Ano, Mês, Tipo, Status, Categoria, PJ/PF, NF, Empresa, Busca
-// KPIs reagem ao filtro aplicado
-// Recibo premium com logo, natureza, forma de pagamento
+// FINANCEIRO - AMOVIN ERP
+// Código: A-FIN-YYYY-NNNN | Log de auditoria imutável
+// Master identificado por perfil+usuario+nome
 // ============================================================
 
 var lancamentos = [];
@@ -368,6 +413,22 @@ var dadosPendentes = null;
 var adminAutenticado = null;
 var lancAtualDetalhes = null;
 var anosPopulados = false;
+var statusAlvo = null;
+
+// ============================================================
+// USUÁRIO LOGADO
+// ============================================================
+function getUsuarioLogado() {
+    return {
+        usuario: sessionStorage.getItem('amovin_usuario') || 'desconhecido',
+        nome: sessionStorage.getItem('amovin_nome') || 'Usuário',
+        perfil: sessionStorage.getItem('amovin_perfil') || 'admin'
+    };
+}
+function isMaster() {
+    var u = getUsuarioLogado();
+    return u.perfil === 'admin' && u.nome === 'Administrador Master';
+}
 
 function formatarMoeda(valor) {
     if (valor === null || valor === undefined || isNaN(valor)) return 'R$ 0,00';
@@ -408,6 +469,14 @@ function extrairMesAno(dataStr) {
     var p = dataStr.split('-');
     if (p.length >= 2) return { month: p[1], year: p[0] };
     return { month: '', year: '' };
+}
+function toggleOlhoSenha() {
+    var el = document.getElementById('authSenha');
+    el.type = el.type === 'password' ? 'text' : 'password';
+}
+function toggleOlhoSenhaStatus() {
+    var el = document.getElementById('statusSenha');
+    el.type = el.type === 'password' ? 'text' : 'password';
 }
 
 // ============================================================
@@ -484,17 +553,41 @@ function carregarLocalStorage() {
     renderizarLancamentos();
 }
 
-// Popula o dropdown de Anos com base nos anos existentes nos lançamentos
+// ============================================================
+// LOG DE AUDITORIA (imutável)
+// ============================================================
+async function registrarLogAuditoria(acao, detalhes, extra) {
+    var u = getUsuarioLogado();
+    var log = {
+        timestamp: new Date().toISOString(),
+        usuario: u.usuario,
+        nome: u.nome,
+        perfil: u.perfil,
+        isMaster: isMaster(),
+        acao: acao,
+        detalhes: detalhes || '',
+        extra: extra || null
+    };
+    // Sempre grava no histórico do próprio lançamento (se houver)
+    // E também grava numa coleção central de auditoria
+    if (firebasePronto && db) {
+        try {
+            await db.collection('logs_auditoria').add(log);
+        } catch (e) { console.warn('Erro log auditoria:', e.message); }
+    }
+    console.log('📋 Log:', log);
+}
+
+// ============================================================
+// ANOS DINÂMICOS
+// ============================================================
 function popularAnos() {
     var sel = document.getElementById('filtroAno');
     if (!sel) return;
     var valorAtual = sel.value;
     var anosSet = {};
-    lancamentos.forEach(function(l) {
-        if (l.year) anosSet[l.year] = true;
-    });
+    lancamentos.forEach(function(l) { if (l.year) anosSet[l.year] = true; });
     var anos = Object.keys(anosSet).sort().reverse();
-    // Se não achou nenhum, usa o ano atual
     if (anos.length === 0) anos = [String(new Date().getFullYear())];
     sel.innerHTML = '<option value="">Todos os anos</option>';
     anos.forEach(function(a) {
@@ -503,7 +596,6 @@ function popularAnos() {
         opt.textContent = a;
         sel.appendChild(opt);
     });
-    // Se é a primeira vez que popula, deixa o ano mais recente selecionado
     if (!anosPopulados) {
         sel.value = anos[0];
         anosPopulados = true;
@@ -551,7 +643,7 @@ document.addEventListener('change', function(e) {
         orc.itens.forEach(function(item, idx) {
             var opt = document.createElement('option');
             opt.value = item.id;
-            opt.textContent = 'Item ' + (idx+1) + ': ' + item.descricao + ' (' + item.quantidade + ' ' + item.unidade + ')';
+            opt.textContent = 'Item ' + (idx+1) + ': ' + item.descricao;
             opt.dataset.valor = item.vencedorValorTotal || 0;
             selItem.appendChild(opt);
         });
@@ -562,13 +654,12 @@ document.addEventListener('change', function(e) {
             var val = parseFloat(opt.dataset.valor);
             document.getElementById('formValor').value = formatarNumero(val);
             atualizarPreviewValor(val);
-            mostrarToast('✅ Valor preenchido pelo orçamento!', 'success');
         }
     }
 });
 
 // ============================================================
-// CÓDIGO A-FIN-YYYY-NNNN (robusto, sem colisão)
+// CÓDIGO A-FIN-YYYY-NNNN
 // ============================================================
 async function gerarProximoCodigo() {
     var ano = new Date().getFullYear();
@@ -580,45 +671,47 @@ async function gerarProximoCodigo() {
             snap.forEach(function(doc) {
                 var c = doc.data().codigo || '';
                 if (c.indexOf(prefixo) === 0) {
-                    var sufixo = c.substring(prefixo.length);
-                    var n = parseInt(sufixo, 10);
+                    var n = parseInt(c.substring(prefixo.length), 10);
                     if (!isNaN(n) && n > max) max = n;
                 }
             });
-        } catch (e) { console.error('Erro ao gerar código:', e); }
+        } catch (e) {}
     } else {
         lancamentos.forEach(function(l) {
             var c = l.codigo || '';
             if (c.indexOf(prefixo) === 0) {
-                var sufixo = c.substring(prefixo.length);
-                var n = parseInt(sufixo, 10);
+                var n = parseInt(c.substring(prefixo.length), 10);
                 if (!isNaN(n) && n > max) max = n;
             }
         });
     }
-    var proximo = max + 1;
-    var codigo = prefixo + String(proximo).padStart(4, '0');
-    var existe = lancamentos.some(function(l) { return l.codigo === codigo; });
-    while (existe && proximo < 9999) {
-        proximo++;
-        codigo = prefixo + String(proximo).padStart(4, '0');
-        existe = lancamentos.some(function(l) { return l.codigo === codigo; });
-    }
-    return codigo;
+    return prefixo + String(max + 1).padStart(4, '0');
 }
 
 // ============================================================
 // AUTH
 // ============================================================
 function pedirAutenticacao(acao, dados) {
+    if (isMaster()) {
+        // Master age direto, sem modal
+        adminAutenticado = { usuario: 'master', nome: 'Administrador Master', justificativa: '[master - ação direta]' };
+        if (acao === 'editar') executarEdicao(dados);
+        else if (acao === 'excluir') executarExclusao(dados);
+        else if (acao === 'salvar') salvarLancamentoFinal();
+        return;
+    }
     acaoPendente = acao;
     dadosPendentes = dados || null;
-    var msgs = { 'criar': 'Criar novo lançamento', 'editar': 'Editar lançamento', 'excluir': 'Excluir lançamento', 'salvar': 'Salvar lançamento' };
+    var msgs = { 'criar': 'Criar lançamento', 'editar': 'Editar lançamento', 'excluir': 'Excluir lançamento', 'salvar': 'Salvar lançamento' };
     document.getElementById('authMsg').textContent = '🔐 ' + (msgs[acao] || acao);
+    // Esconde justificativa em criar/salvar novo
+    var grupoJust = document.getElementById('grupoJustificativa');
+    if (acao === 'criar') grupoJust.style.display = 'none';
+    else grupoJust.style.display = 'block';
     document.getElementById('authUsuario').value = '';
     document.getElementById('authSenha').value = '';
     document.getElementById('authJust').value = '';
-    document.getElementById('contadorJust').textContent = '0/50 caracteres';
+    document.getElementById('contadorJust').textContent = '0/20 caracteres';
     document.getElementById('modalAuth').classList.add('ativo');
     setTimeout(function() { document.getElementById('authUsuario').focus(); }, 200);
 }
@@ -633,7 +726,15 @@ async function validarAdminMaster(usuario, senha) {
     }
     try {
         var snap = await db.collection('admins_master').where('usuario', '==', usuario).where('ativo', '==', true).get();
-        if (snap.empty) return null;
+        if (snap.empty) {
+            // Fallback local
+            var locais2 = [
+                { usuario: 'raul', senha: 'raul8954', nome: 'Raul Ramalho Costa' },
+                { usuario: 'daniele', senha: 'daniele2026', nome: 'Daniele Ramalho' },
+                { usuario: 'master', senha: 'amovin2026', nome: 'Adm Master Principal' }
+            ];
+            return locais2.find(function(a) { return a.usuario === usuario && a.senha === senha; });
+        }
         var admin = null;
         snap.forEach(function(doc) { admin = { _fbId: doc.id, ...doc.data() }; });
         if (admin.senha !== senha) return null;
@@ -645,74 +746,79 @@ async function confirmarAuth() {
     var senha = document.getElementById('authSenha').value;
     var just = document.getElementById('authJust').value.trim();
     if (!usuario || !senha) { mostrarToast('⚠️ Preencha usuário e senha!', 'warning'); return; }
-    if (just.length < 50) { mostrarToast('⚠️ Justificativa mín 50 caracteres!', 'warning'); return; }
+    // Se ação NÃO for criar, exige justificativa de 20
+    if (acaoPendente !== 'criar' && just.length < 20) {
+        mostrarToast('⚠️ Justificativa mín 20 caracteres!', 'warning'); return;
+    }
     var admin = await validarAdminMaster(usuario, senha);
     if (!admin) { mostrarToast('❌ Usuário ou senha incorretos!', 'error'); return; }
-    adminAutenticado = { ...admin, justificativa: just };
+    adminAutenticado = { ...admin, justificativa: just || '[sem justificativa]' };
     fecharAuth();
-    if (acaoPendente === 'criar' || acaoPendente === 'editar') abrirForm(dadosPendentes);
+    if (acaoPendente === 'criar') salvarLancamentoFinal();
+    else if (acaoPendente === 'editar') executarEdicao(dadosPendentes);
     else if (acaoPendente === 'excluir') executarExclusao(dadosPendentes);
     else if (acaoPendente === 'salvar') salvarLancamentoFinal();
     acaoPendente = null;
 }
 function fecharAuth() { document.getElementById('modalAuth').classList.remove('ativo'); }
 document.getElementById('authJust').addEventListener('input', function() {
-    document.getElementById('contadorJust').textContent = this.value.length + '/50 caracteres';
+    document.getElementById('contadorJust').textContent = this.value.length + '/20 caracteres';
 });
 
 // ============================================================
 // FORM
 // ============================================================
-async function abrirForm(lancId) {
-    document.getElementById('lancId').value = lancId || '';
-    if (lancId) {
-        var l = lancamentos.find(function(x) { return x._fbId === lancId; });
-        if (l) {
-            document.getElementById('modalTitulo').innerHTML = '✏️ Editar: ' + (l.codigo || '') + ' <button class="fechar" onclick="fecharForm()">×</button>';
-            document.getElementById('formTipo').value = l.type || 'expense';
-            document.getElementById('formStatus').value = l.status || 'Pago';
-            document.getElementById('formDescricao').value = l.description || '';
-            document.getElementById('formCategoria').value = l.category || 'Outros';
-            document.getElementById('formData').value = l.date || '';
-            document.getElementById('formValor').value = formatarNumero(l.value || 0);
-            document.getElementById('formTipoOrigem').value = l.tipoOrigem || 'PJ';
-            document.getElementById('formEmpresaPessoa').value = l.empresaPessoaFisica || '';
-            document.getElementById('formCnpjCpf').value = l.cnpjCpf || '';
-            document.getElementById('formTelefone').value = l.telefone || '';
-            document.getElementById('formFormaPagamento').value = l.formaPagamento || '';
-            document.getElementById('formNatureza').value = l.natureza || 'Outros';
-            document.getElementById('formLocalEmissao').value = l.localEmissao || 'Rio Paranaíba - MG';
-            document.getElementById('formHasFiscalReceipt').checked = l.hasFiscalReceipt !== false;
-            document.getElementById('formEventName').value = l.eventName || '';
-            document.getElementById('formEventDate').value = l.eventDate || '';
-            document.getElementById('formProjeto').value = l.projeto_id || '';
-            document.getElementById('formOrcamento').value = l.orcamento_id || '';
-            document.getElementById('formObs').value = l.obs || '';
-            atualizarPreviewValor(l.value || 0);
-        }
-    } else {
-        document.getElementById('modalTitulo').innerHTML = '➕ Novo Lançamento <button class="fechar" onclick="fecharForm()">×</button>';
-        document.getElementById('formTipo').value = 'expense';
-        document.getElementById('formStatus').value = 'Pago';
-        document.getElementById('formDescricao').value = '';
-        document.getElementById('formCategoria').value = 'Outros';
-        document.getElementById('formData').value = new Date().toISOString().split('T')[0];
-        document.getElementById('formValor').value = '';
-        document.getElementById('formTipoOrigem').value = 'PJ';
-        document.getElementById('formEmpresaPessoa').value = '';
-        document.getElementById('formCnpjCpf').value = '';
-        document.getElementById('formTelefone').value = '';
-        document.getElementById('formFormaPagamento').value = '';
-        document.getElementById('formNatureza').value = 'Outros';
-        document.getElementById('formLocalEmissao').value = 'Rio Paranaíba - MG';
-        document.getElementById('formHasFiscalReceipt').checked = true;
-        document.getElementById('formEventName').value = '';
-        document.getElementById('formEventDate').value = '';
-        document.getElementById('formProjeto').value = '';
-        document.getElementById('formOrcamento').value = '';
-        document.getElementById('formObs').value = '';
-        document.getElementById('previewValor').textContent = '';
-    }
+function abrirNovoLancamento() {
+    // Cria novo NÃO exige senha nem justificativa
+    document.getElementById('lancId').value = '';
+    document.getElementById('modalTitulo').innerHTML = '➕ Novo Lançamento <button class="fechar" onclick="fecharForm()">×</button>';
+    document.getElementById('formTipo').value = 'expense';
+    document.getElementById('formStatus').value = 'Pago';
+    document.getElementById('formDescricao').value = '';
+    document.getElementById('formCategoria').value = 'Outros';
+    document.getElementById('formData').value = new Date().toISOString().split('T')[0];
+    document.getElementById('formValor').value = '';
+    document.getElementById('formTipoOrigem').value = 'PJ';
+    document.getElementById('formEmpresaPessoa').value = '';
+    document.getElementById('formCnpjCpf').value = '';
+    document.getElementById('formTelefone').value = '';
+    document.getElementById('formFormaPagamento').value = '';
+    document.getElementById('formNatureza').value = 'Outros';
+    document.getElementById('formLocalEmissao').value = 'Rio Paranaíba - MG';
+    document.getElementById('formHasFiscalReceipt').checked = true;
+    document.getElementById('formEventName').value = '';
+    document.getElementById('formEventDate').value = '';
+    document.getElementById('formProjeto').value = '';
+    document.getElementById('formOrcamento').value = '';
+    document.getElementById('formObs').value = '';
+    document.getElementById('previewValor').textContent = '';
+    document.getElementById('modalForm').classList.add('ativo');
+}
+function abrirFormEdicao(lancId) {
+    var l = lancamentos.find(function(x) { return x._fbId === lancId; });
+    if (!l) return;
+    document.getElementById('lancId').value = lancId;
+    document.getElementById('modalTitulo').innerHTML = '✏️ Editar: ' + (l.codigo || '') + ' <button class="fechar" onclick="fecharForm()">×</button>';
+    document.getElementById('formTipo').value = l.type || 'expense';
+    document.getElementById('formStatus').value = l.status || 'Pago';
+    document.getElementById('formDescricao').value = l.description || '';
+    document.getElementById('formCategoria').value = l.category || 'Outros';
+    document.getElementById('formData').value = l.date || '';
+    document.getElementById('formValor').value = formatarNumero(l.value || 0);
+    document.getElementById('formTipoOrigem').value = l.tipoOrigem || 'PJ';
+    document.getElementById('formEmpresaPessoa').value = l.empresaPessoaFisica || '';
+    document.getElementById('formCnpjCpf').value = l.cnpjCpf || '';
+    document.getElementById('formTelefone').value = l.telefone || '';
+    document.getElementById('formFormaPagamento').value = l.formaPagamento || '';
+    document.getElementById('formNatureza').value = l.natureza || 'Outros';
+    document.getElementById('formLocalEmissao').value = l.localEmissao || 'Rio Paranaíba - MG';
+    document.getElementById('formHasFiscalReceipt').checked = l.hasFiscalReceipt !== false;
+    document.getElementById('formEventName').value = l.eventName || '';
+    document.getElementById('formEventDate').value = l.eventDate || '';
+    document.getElementById('formProjeto').value = l.projeto_id || '';
+    document.getElementById('formOrcamento').value = l.orcamento_id || '';
+    document.getElementById('formObs').value = l.obs || '';
+    atualizarPreviewValor(l.value || 0);
     document.getElementById('modalForm').classList.add('ativo');
 }
 function fecharForm() { document.getElementById('modalForm').classList.remove('ativo'); }
@@ -725,9 +831,19 @@ function confirmarSalvar() {
     var valor = parseMoeda(document.getElementById('formValor').value);
     if (!descricao) { mostrarToast('⚠️ Descrição é obrigatória!', 'warning'); return; }
     if (valor <= 0) { mostrarToast('⚠️ Valor deve ser maior que zero!', 'warning'); return; }
-    adminAutenticado = null;
-    pedirAutenticacao('salvar');
-    acaoPendente = 'salvar';
+    var idEdit = document.getElementById('lancId').value;
+    if (idEdit) {
+        // Edição → pede senha + justificativa (admin) ou direto (master)
+        pedirAutenticacao('editar', idEdit);
+    } else {
+        // Novo → salva direto, sem senha
+        salvarLancamentoFinal();
+    }
+}
+
+function executarEdicao(lancId) {
+    // Chamado depois do auth validar
+    salvarLancamentoFinal();
 }
 
 async function salvarLancamentoFinal() {
@@ -753,6 +869,7 @@ async function salvarLancamentoFinal() {
     var obs = document.getElementById('formObs').value.trim();
     var mesAno = extrairMesAno(data);
     var idEdit = document.getElementById('lancId').value;
+    var u = getUsuarioLogado();
 
     var dados = {
         type: tipo, category: categoria, description: descricao,
@@ -763,15 +880,16 @@ async function salvarLancamentoFinal() {
         eventName: eventName, eventDate: eventDate,
         projeto_id: projetoId || null, orcamento_id: orcamentoId || null,
         orcamento_item_id: orcamentoItemId || null,
-        obs: obs, atualizadoEm: new Date().toISOString()
+        obs: obs, atualizadoEm: new Date().toISOString(),
+        atualizadoPor: u.usuario
     };
 
     var logEntry = {
         data: new Date().toISOString(),
-        usuario: adminAutenticado ? adminAutenticado.usuario : 'sistema',
-        nomeUsuario: adminAutenticado ? adminAutenticado.nome : 'Sistema',
+        usuario: (adminAutenticado && adminAutenticado.usuario) || u.usuario,
+        nomeUsuario: (adminAutenticado && adminAutenticado.nome) || u.nome,
         acao: idEdit ? 'editado' : 'criado',
-        justificativa: adminAutenticado ? adminAutenticado.justificativa : '',
+        justificativa: (adminAutenticado && adminAutenticado.justificativa) || '[master]',
         detalhes: 'Valor: ' + formatarMoeda(valor) + ' | Tipo: ' + tipo
     };
 
@@ -784,6 +902,7 @@ async function salvarLancamentoFinal() {
                 dados.historico = hist;
                 await db.collection('finances').doc(idEdit).update(dados);
                 mostrarToast('✅ Lançamento atualizado!', 'success');
+                registrarLogAuditoria('EDITAR', 'Lançamento ' + (l.codigo || idEdit), { valorAntes: l.value, valorDepois: valor });
             } else {
                 dados.codigo = await gerarProximoCodigo();
                 dados.id = dados.codigo;
@@ -791,6 +910,7 @@ async function salvarLancamentoFinal() {
                 dados.historico = [logEntry];
                 await db.collection('finances').add(dados);
                 mostrarToast('✅ Lançamento ' + dados.codigo + ' criado!', 'success');
+                registrarLogAuditoria('CRIAR', 'Lançamento ' + dados.codigo, { valor: valor });
             }
             fecharForm();
             adminAutenticado = null;
@@ -817,20 +937,125 @@ async function salvarLancamentoFinal() {
 }
 
 // ============================================================
-// EDITAR / DETALHES / EXCLUIR / LOG
+// MUDAR STATUS (rápido, só senha)
 // ============================================================
-function editarLancamento(fbId) {
-    adminAutenticado = null;
-    pedirAutenticacao('editar', fbId);
-    acaoPendente = 'editar';
+function abrirModalStatus(fbId) {
+    var l = lancamentos.find(function(x) { return x._fbId === fbId; });
+    if (!l) return;
+    statusAlvo = l;
+    document.getElementById('statusInfo').innerHTML = '<strong>' + (l.codigo || '') + '</strong> — ' + (l.description || '') + '<br>Status atual: <strong>' + (l.status || 'Pago') + '</strong>';
+    document.getElementById('statusNovo').value = l.status === 'Pago' ? 'Pendente' : 'Pago';
+    if (isMaster()) {
+        // Master: sem campos, muda direto
+        document.getElementById('statusUsuario').value = 'master';
+        document.getElementById('statusSenha').value = '******';
+        confirmarMudancaStatus();
+    } else {
+        document.getElementById('statusUsuario').value = '';
+        document.getElementById('statusSenha').value = '';
+        document.getElementById('modalStatus').classList.add('ativo');
+        setTimeout(function() { document.getElementById('statusUsuario').focus(); }, 200);
+    }
+}
+function fecharModalStatus() {
+    document.getElementById('modalStatus').classList.remove('ativo');
+    statusAlvo = null;
+}
+async function confirmarMudancaStatus() {
+    if (!statusAlvo) return;
+    var novoStatus = document.getElementById('statusNovo').value;
+    var u = getUsuarioLogado();
+    var quemFez, senhaValida;
+
+    if (isMaster()) {
+        quemFez = { usuario: 'master', nome: 'Administrador Master', justificativa: '[master - mudança direta de status]' };
+    } else {
+        var usuario = document.getElementById('statusUsuario').value.trim().toLowerCase();
+        var senha = document.getElementById('statusSenha').value;
+        if (!usuario || !senha) { mostrarToast('⚠️ Preencha usuário e senha!', 'warning'); return; }
+        var admin = await validarAdminMaster(usuario, senha);
+        if (!admin) { mostrarToast('❌ Credenciais inválidas!', 'error'); return; }
+        quemFez = { usuario: admin.usuario, nome: admin.nome, justificativa: '[mudança de status - sem justificativa]' };
+    }
+
+    var logEntry = {
+        data: new Date().toISOString(),
+        usuario: quemFez.usuario,
+        nomeUsuario: quemFez.nome,
+        acao: 'status: ' + statusAlvo.status + ' → ' + novoStatus,
+        justificativa: quemFez.justificativa,
+        detalhes: 'Mudança de status'
+    };
+
+    if (firebasePronto && db) {
+        try {
+            var l = lancamentos.find(function(x) { return x._fbId === statusAlvo._fbId; });
+            var hist = (l && l.historico) ? l.historico : [];
+            hist.push(logEntry);
+            await db.collection('finances').doc(statusAlvo._fbId).update({
+                status: novoStatus,
+                historico: hist,
+                atualizadoEm: new Date().toISOString(),
+                atualizadoPor: quemFez.usuario
+            });
+            mostrarToast('✅ Status alterado para ' + novoStatus, 'success');
+            registrarLogAuditoria('MUDAR_STATUS', statusAlvo.codigo + ' → ' + novoStatus, { antes: statusAlvo.status, depois: novoStatus });
+        } catch (e) { mostrarToast('❌ ' + e.message, 'error'); }
+    } else {
+        var l2 = lancamentos.find(function(x) { return x._fbId === statusAlvo._fbId; });
+        l2.status = novoStatus;
+        var h2 = l2.historico || [];
+        h2.push(logEntry);
+        l2.historico = h2;
+        localStorage.setItem('amovin_financeiro', JSON.stringify(lancamentos));
+        renderizarLancamentos();
+    }
+    fecharModalStatus();
 }
 
+// ============================================================
+// EXCLUIR
+// ============================================================
+function excluirLancamento(fbId) {
+    var l = lancamentos.find(function(x) { return x._fbId === fbId; });
+    if (!l) return;
+    if (!confirm('Excluir "' + (l.codigo || '') + ' - ' + (l.description || '') + '"?\n\n⚠️ Esta ação é irreversível.')) return;
+    pedirAutenticacao('excluir', fbId);
+}
+async function executarExclusao(fbId) {
+    var l = lancamentos.find(function(x) { return x._fbId === fbId; });
+    if (!l) { adminAutenticado = null; return; }
+    var logEntry = {
+        data: new Date().toISOString(),
+        usuario: adminAutenticado.usuario,
+        nomeUsuario: adminAutenticado.nome,
+        acao: 'EXCLUÍDO',
+        justificativa: adminAutenticado.justificativa,
+        detalhes: l.codigo + ' - ' + l.description + ' (' + formatarMoeda(l.value || 0) + ')'
+    };
+    if (firebasePronto && db) {
+        try {
+            await db.collection('logs_exclusao').add({ modulo: 'financeiro', itemCodigo: l.codigo, itemNome: l.description, ...logEntry });
+            await db.collection('finances').doc(fbId).delete();
+            mostrarToast('🗑️ Lançamento excluído!', 'info');
+            registrarLogAuditoria('EXCLUIR', 'Lançamento ' + l.codigo, { valor: l.value });
+        } catch (e) { mostrarToast('❌ ' + e.message, 'error'); }
+    } else {
+        lancamentos = lancamentos.filter(function(x) { return x._fbId !== fbId; });
+        localStorage.setItem('amovin_financeiro', JSON.stringify(lancamentos));
+        popularAnos(); renderizarLancamentos();
+    }
+    adminAutenticado = null;
+}
+
+// ============================================================
+// DETALHES / LOG
+// ============================================================
 function verDetalhes(fbId) {
     var l = lancamentos.find(function(x) { return x._fbId === fbId; });
     if (!l) return;
     lancAtualDetalhes = l;
     var dataFmt = l.date ? new Date(l.date + 'T00:00:00').toLocaleDateString('pt-BR') : '-';
-    var eventDateFmt = l.eventDate ? new Date(l.eventDate + 'T00:00:00').toLocaleDateString('pt-BR') : '-';
     var tipoLabel = l.type === 'income' ? '📈 Receita' : '📉 Despesa';
     var html = '<div style="background:#F8F4ED;padding:14px;border-radius:10px;margin-bottom:16px;text-align:center;">' +
         '<div style="font-size:11px;color:var(--cinza);">CÓDIGO</div>' +
@@ -852,8 +1077,6 @@ function verDetalhes(fbId) {
     html += dado('Tem NF?', l.hasFiscalReceipt !== false ? '✅ Sim' : '❌ Não');
     html += dado('Projeto', l.projeto_id);
     html += dado('Orçamento', l.orcamento_id);
-    html += dado('Evento', l.eventName);
-    html += dado('Data Evento', eventDateFmt);
     html += '</div>';
     if (l.obs) html += '<div style="margin-top:12px;padding:12px;background:#F8F4ED;border-radius:8px;font-size:13px;"><strong>📝 Obs:</strong> ' + l.obs + '</div>';
     document.getElementById('conteudoDetalhes').innerHTML = html;
@@ -865,39 +1088,6 @@ function dado(l, v, full, classe) {
         '<div style="font-size:13px;font-weight:600;margin-top:2px;' + (classe === 'destaque' ? 'color:var(--laranja);font-size:16px;' : '') + '">' + (v || '—') + '</div></div>';
 }
 function fecharDetalhes() { document.getElementById('modalDetalhes').classList.remove('ativo'); lancAtualDetalhes = null; }
-
-function excluirLancamento(fbId) {
-    var l = lancamentos.find(function(x) { return x._fbId === fbId; });
-    if (!l) return;
-    if (!confirm('Excluir "' + (l.codigo || '') + ' - ' + (l.description || '') + '"?\n\n⚠️ Esta ação é irreversível.')) return;
-    adminAutenticado = null;
-    pedirAutenticacao('excluir', fbId);
-    acaoPendente = 'excluir';
-}
-async function executarExclusao(fbId) {
-    var l = lancamentos.find(function(x) { return x._fbId === fbId; });
-    if (!l) { adminAutenticado = null; return; }
-    var logEntry = {
-        data: new Date().toISOString(),
-        usuario: adminAutenticado.usuario,
-        nomeUsuario: adminAutenticado.nome,
-        acao: 'EXCLUÍDO',
-        justificativa: adminAutenticado.justificativa,
-        detalhes: l.codigo + ' - ' + l.description + ' (' + formatarMoeda(l.value || 0) + ')'
-    };
-    if (firebasePronto && db) {
-        try {
-            await db.collection('logs_exclusao').add({ modulo: 'financeiro', itemCodigo: l.codigo, itemNome: l.description, ...logEntry });
-            await db.collection('finances').doc(fbId).delete();
-            mostrarToast('🗑️ Lançamento excluído!', 'info');
-        } catch (e) { mostrarToast('❌ ' + e.message, 'error'); }
-    } else {
-        lancamentos = lancamentos.filter(function(x) { return x._fbId !== fbId; });
-        localStorage.setItem('amovin_financeiro', JSON.stringify(lancamentos));
-        popularAnos(); renderizarLancamentos();
-    }
-    adminAutenticado = null;
-}
 
 function verLog(fbId) {
     var l = lancamentos.find(function(x) { return x._fbId === fbId; });
@@ -921,7 +1111,7 @@ function verLog(fbId) {
 function fecharLog() { document.getElementById('modalLog').classList.remove('ativo'); }
 
 // ============================================================
-// FILTRO ÚNICO — usado pela lista E pelos KPIs
+// FILTRO ÚNICO
 // ============================================================
 function obterLancamentosFiltrados() {
     var elAno = document.getElementById('filtroAno');
@@ -933,7 +1123,6 @@ function obterLancamentosFiltrados() {
     var elNF = document.getElementById('filtroNF');
     var elEmpresa = document.getElementById('filtroEmpresa');
     var elBusca = document.getElementById('filtroBusca');
-
     var ano = elAno ? elAno.value : '';
     var mes = elMes ? elMes.value : '';
     var tipo = elTipo ? elTipo.value : 'todos';
@@ -951,66 +1140,47 @@ function obterLancamentosFiltrados() {
         if (status !== 'todos' && l.status !== status) return false;
         if (categoria !== 'todos' && (l.category || 'Outros') !== categoria) return false;
         if (origem !== 'todos' && (l.tipoOrigem || 'PJ') !== origem) return false;
-
         if (nf === 'sim' && l.hasFiscalReceipt === false) return false;
         if (nf === 'nao' && l.hasFiscalReceipt !== false) return false;
-
         if (empresa && (l.empresaPessoaFisica || '').toLowerCase().indexOf(empresa) === -1) return false;
-
         if (busca) {
-            var alvo = [
-                l.description, l.empresaPessoaFisica, l.cnpjCpf, l.telefone,
-                l.codigo, l.category, l.natureza, l.obs, l.eventName
-            ].join(' ').toLowerCase();
+            var alvo = [l.description, l.empresaPessoaFisica, l.cnpjCpf, l.telefone,
+                l.codigo, l.category, l.natureza, l.obs, l.eventName].join(' ').toLowerCase();
             if (alvo.indexOf(busca) === -1) return false;
         }
-
         return true;
     });
 }
 
 function limparFiltros() {
     var elAno = document.getElementById('filtroAno');
-    var elMes = document.getElementById('filtroMes');
-    var elTipo = document.getElementById('filtroTipo');
-    var elStatus = document.getElementById('filtroStatus');
-    var elCategoria = document.getElementById('filtroCategoria');
-    var elOrigem = document.getElementById('filtroOrigem');
-    var elNF = document.getElementById('filtroNF');
-    var elEmpresa = document.getElementById('filtroEmpresa');
-    var elBusca = document.getElementById('filtroBusca');
-
-    // Ano volta para o ano mais recente disponível
     if (elAno) {
         var anos = [];
         lancamentos.forEach(function(l) { if (l.year && anos.indexOf(l.year) === -1) anos.push(l.year); });
         anos.sort().reverse();
         elAno.value = anos.length > 0 ? anos[0] : '';
     }
-    if (elMes) elMes.value = '';
-    if (elTipo) elTipo.value = 'todos';
-    if (elStatus) elStatus.value = 'todos';
-    if (elCategoria) elCategoria.value = 'todos';
-    if (elOrigem) elOrigem.value = 'todos';
-    if (elNF) elNF.value = 'todos';
-    if (elEmpresa) elEmpresa.value = '';
-    if (elBusca) elBusca.value = '';
+    document.getElementById('filtroMes').value = '';
+    document.getElementById('filtroTipo').value = 'todos';
+    document.getElementById('filtroStatus').value = 'todos';
+    document.getElementById('filtroCategoria').value = 'todos';
+    document.getElementById('filtroOrigem').value = 'todos';
+    document.getElementById('filtroNF').value = 'todos';
+    document.getElementById('filtroEmpresa').value = '';
+    document.getElementById('filtroBusca').value = '';
     renderizarLancamentos();
 }
 
 // ============================================================
-// RENDERIZAR (lista)
+// RENDERIZAR
 // ============================================================
 function renderizarLancamentos() {
     var filtrados = obterLancamentosFiltrados();
-    var elContFiltro = document.getElementById('contadorFiltro');
-    var elContLanc = document.getElementById('contadorLanc');
-    if (elContFiltro) elContFiltro.textContent = filtrados.length + ' de ' + lancamentos.length;
-    if (elContLanc) elContLanc.textContent = lancamentos.length + ' lançamento' + (lancamentos.length !== 1 ? 's' : '');
+    document.getElementById('contadorFiltro').textContent = filtrados.length + ' de ' + lancamentos.length;
+    document.getElementById('contadorLanc').textContent = lancamentos.length + ' lançamento' + (lancamentos.length !== 1 ? 's' : '');
     var container = document.getElementById('listaLancamentos');
-    if (!container) return;
     if (filtrados.length === 0) {
-        container.innerHTML = '<div class="sem-dados" style="padding:40px;"><p style="font-size:48px;">💰</p><p style="margin-top:12px;">Nenhum lançamento encontrado com esses filtros.</p></div>';
+        container.innerHTML = '<div class="sem-dados" style="padding:40px;"><p style="font-size:48px;">💰</p><p style="margin-top:12px;">Nenhum lançamento encontrado.</p></div>';
         atualizarKPIs();
         return;
     }
@@ -1026,12 +1196,22 @@ function renderizarLancamentos() {
         if (l.projeto_id) vinculos += '<span class="vinculo projeto">📋 ' + l.projeto_id + '</span>';
         if (l.orcamento_id) vinculos += '<span class="vinculo orcamento">📊 ' + l.orcamento_id + '</span>';
         var numLogs = (l.historico || []).length;
+
+        // Rodapé de modificação
+        var rodapeMod = '';
+        if (numLogs > 0) {
+            var ult = l.historico[numLogs - 1];
+            var dataMod = new Date(ult.data).toLocaleString('pt-BR');
+            rodapeMod = '<div class="rodape-mod">✏️ modificado em ' + dataMod + ' por ' + (ult.nomeUsuario || ult.usuario) + '</div>';
+        }
+
         return '<div class="lancamento-item">' +
             '<div class="info">' +
             '<div class="codigo">' + (l.codigo || '—') + '</div>' +
             '<div class="descricao">' + (l.description || 'Sem descrição') + '</div>' +
             '<div class="detalhe">' + detalhe + '</div>' +
             (vinculos ? '<div style="margin-top:4px;">' + vinculos + '</div>' : '') +
+            rodapeMod +
             '</div>' +
             '<div style="text-align:right;min-width:130px;">' +
             '<div class="valor ' + valorClass + '">' + sinal + ' ' + formatarMoeda(l.value || 0) + '</div>' +
@@ -1039,7 +1219,8 @@ function renderizarLancamentos() {
             '</div>' +
             '<div class="acoes">' +
             '<button class="btn btn-outline btn-sm" onclick="verDetalhes(\'' + l._fbId + '\')">👁️</button>' +
-            '<button class="btn btn-outline btn-sm" onclick="editarLancamento(\'' + l._fbId + '\')">✏️</button>' +
+            '<button class="btn btn-outline btn-sm" onclick="abrirFormEdicao(\'' + l._fbId + '\')">✏️</button>' +
+            '<button class="btn btn-amarelo btn-sm" onclick="abrirModalStatus(\'' + l._fbId + '\')">🔄</button>' +
             '<button class="btn btn-teal btn-sm" onclick="verLog(\'' + l._fbId + '\')">📜 (' + numLogs + ')</button>' +
             '<button class="btn btn-danger btn-sm" onclick="excluirLancamento(\'' + l._fbId + '\')">🗑️</button>' +
             '</div></div>';
@@ -1048,7 +1229,7 @@ function renderizarLancamentos() {
 }
 
 // ============================================================
-// KPIs — refletem EXATAMENTE o filtro aplicado
+// KPIs
 // ============================================================
 function atualizarKPIs() {
     var filtrados = obterLancamentosFiltrados();
@@ -1060,30 +1241,23 @@ function atualizarKPIs() {
         if (l.status === 'Pendente') totalPendentes += v;
     });
     var saldo = totalReceitas - totalDespesas;
-    var elRec = document.getElementById('kpiReceitas');
-    var elDesp = document.getElementById('kpiDespesas');
-    var elSaldo = document.getElementById('kpiSaldo');
-    var elTot = document.getElementById('kpiTotalLanc');
-    var elPend = document.getElementById('kpiPendentes');
-    if (elRec) elRec.textContent = formatarMoeda(totalReceitas);
-    if (elDesp) elDesp.textContent = formatarMoeda(totalDespesas);
-    if (elSaldo) {
-        elSaldo.textContent = formatarMoeda(saldo);
-        elSaldo.style.color = saldo >= 0 ? 'var(--verde)' : 'var(--vermelho)';
-    }
-    if (elTot) elTot.textContent = filtrados.length;
-    if (elPend) elPend.textContent = formatarMoeda(totalPendentes);
+    document.getElementById('kpiReceitas').textContent = formatarMoeda(totalReceitas);
+    document.getElementById('kpiDespesas').textContent = formatarMoeda(totalDespesas);
+    document.getElementById('kpiSaldo').textContent = formatarMoeda(saldo);
+    document.getElementById('kpiSaldo').style.color = saldo >= 0 ? 'var(--verde)' : 'var(--vermelho)';
+    document.getElementById('kpiTotalLanc').textContent = filtrados.length;
+    document.getElementById('kpiPendentes').textContent = formatarMoeda(totalPendentes);
 }
 
 // ============================================================
-// IMPRIMIR RECIBO (Premium)
+// RECIBO PREMIUM
 // ============================================================
 function imprimirReciboAtual() {
     if (!lancAtualDetalhes) return;
     imprimirRecibo(lancAtualDetalhes);
+    registrarLogAuditoria('IMPRIMIR_RECIBO', 'Lançamento ' + lancAtualDetalhes.codigo, null);
 }
 function imprimirRecibo(l) {
-    var tipoLabel = l.type === 'income' ? 'RECEITA' : 'DESPESA';
     var dataFmt = l.date ? new Date(l.date + 'T00:00:00').toLocaleDateString('pt-BR') : '-';
     var valor = formatarMoeda(l.value || 0);
     var valorExtenso = numeroPorExtenso(l.value || 0);
@@ -1100,19 +1274,17 @@ function imprimirRecibo(l) {
         var primeiroLog = l.historico[0];
         if (primeiroLog.nomeUsuario) nomeResponsavel = primeiroLog.nomeUsuario;
     }
-
     var objetoFrase = 'prestação de serviço';
     if (natureza === 'Compra de Material') objetoFrase = 'compra de material';
     else if (natureza === 'Locação') objetoFrase = 'locação';
     else if (natureza === 'Outros') objetoFrase = 'fornecimento';
-
     var artigo = (natureza === 'Serviço' || natureza === 'Locação') ? 'ao' : 'à';
     var quitarFrase = (natureza === 'Compra de Material') ? 'dos itens de consumo' : 'dos serviços prestados';
 
     var html = '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Recibo ' + (l.codigo || '') + '</title>';
     html += '<style>';
     html += '*{box-sizing:border-box;margin:0;padding:0;}';
-    html += 'body{font-family:"Helvetica Neue",Arial,sans-serif;padding:40px 36px;max-width:820px;margin:0 auto;color:#1A1A1A;background:#FFFFFF;line-height:1.65;font-size:13px;}';
+    html += 'body{font-family:"Helvetica Neue",Arial,sans-serif;padding:40px 36px;max-width:820px;margin:0 auto;color:#1A1A1A;background:#FFF;line-height:1.65;font-size:13px;}';
     html += '.header{text-align:center;padding-bottom:18px;margin-bottom:28px;border-bottom:3px double #C65A11;}';
     html += '.header img{max-width:200px;height:auto;margin-bottom:10px;}';
     html += '.header h1{color:#C65A11;font-size:22px;letter-spacing:1px;font-weight:800;margin:6px 0;}';
@@ -1142,56 +1314,40 @@ function imprimirRecibo(l) {
     html += '.rodape a{color:#C65A11;text-decoration:none;}';
     html += '@media print{body{padding:20px 24px;}@page{margin:12mm;}}';
     html += '</style></head><body>';
-
     html += '<div class="header">';
     html += '<img src="/images/amovin-logo.png" alt="AMOVIN" onerror="this.style.display=\'none\';this.insertAdjacentHTML(\'afterend\',\'<h1>AMOVIN</h1>\');">';
     html += '<p>Associação e Movimento pela Inclusão em Rio Paranaíba/MG</p>';
     html += '<p>Rua Francisco de Paula Moura Neto, nº 180, Bairro Novo Rio, Rio Paranaíba - MG, CEP 38810-000</p>';
     html += '<p>CNPJ: 55.880.046/0001-34</p>';
     html += '</div>';
-
     html += '<div class="titulo-doc">Recibo</div>';
     html += '<div class="codigo-box"><div class="label">Documento Nº</div><div class="codigo">' + (l.codigo || '---') + '</div></div>';
-
     html += '<div class="corpo">';
     html += 'Recebi da <strong>AMOVIN - Associação e Movimento pela Inclusão em Rio Paranaíba</strong>, inscrita no CNPJ <strong>55.880.046/0001-34</strong>, com sede na <strong>Rua Francisco de Paula Moura Neto, nº 180, Bairro Novo Rio, Rio Paranaíba - MG, CEP 38810-000</strong>, a importância de ';
     html += '<strong>' + valor + '</strong> <em>(' + valorExtenso + ')</em>, ';
     html += 'sendo paga via <strong>' + formaPagamento + '</strong>.';
     html += '</div>';
-
     html += '<div class="corpo">';
     html += 'O valor acima refere-se ' + artigo + ' <strong>' + objetoFrase + '</strong>: ';
     html += '<strong>' + descricao + '</strong>, conforme lançamento <strong>' + (l.codigo || '') + '</strong> registrado no sistema, na categoria <strong>' + categoria + '</strong>.';
     html += '</div>';
-
     html += '<div class="corpo">';
     html += 'Para que produza os efeitos legais necessários, firmo o presente recibo, dando plena, rasa e geral quitação pela ' + quitarFrase + ' acima descritos.';
     html += '</div>';
-
-    html += '<table class="tabela-dados">';
-    html += '<thead><tr><th colspan="2">Dados do Prestador / Vendedor</th></tr></thead>';
-    html += '<tbody>';
+    html += '<table class="tabela-dados"><thead><tr><th colspan="2">Dados do Prestador / Vendedor</th></tr></thead><tbody>';
     html += '<tr><td class="label">Nome / Razão Social</td><td>' + nomePrestador + '</td></tr>';
     html += '<tr><td class="label">CPF / CNPJ</td><td>' + cpfCnpj + '</td></tr>';
     html += '<tr><td class="label">Telefone de Contato</td><td>' + telefone + '</td></tr>';
     html += '</tbody></table>';
-
     if (l.hasFiscalReceipt === false) {
         html += '<div class="aviso"><strong>⚠️ SEM NOTA FISCAL EMITIDA</strong>Este documento serve como comprovante interno de controle financeiro da AMOVIN para despesas sem documento fiscal.</div>';
     }
-
     html += '<div class="local-data">' + localEmissao + ', ' + (dataFmt || '—') + '.</div>';
-
     html += '<div class="assinaturas">';
     html += '<div class="assinatura"><div class="linha"></div><div class="nome">' + nomeResponsavel + '</div><div class="sub">Responsável AMOVIN</div></div>';
     html += '<div class="assinatura"><div class="linha"></div><div class="nome">' + nomePrestador + '</div><div class="sub">' + (cpfCnpj !== '—' ? 'CPF/CNPJ: ' + cpfCnpj : 'Prestador / Vendedor') + '</div></div>';
     html += '</div>';
-
-    html += '<div class="rodape">';
-    html += 'Documento gerado eletronicamente em ' + new Date().toLocaleString('pt-BR') + '<br>';
-    html += 'AMOVIN ERP • <a href="https://www.vigorre.com.br">www.vigorre.com.br</a> • (34) 99185-0735';
-    html += '</div>';
-
+    html += '<div class="rodape">Documento gerado eletronicamente em ' + new Date().toLocaleString('pt-BR') + '<br>AMOVIN ERP • <a href="https://www.vigorre.com.br">www.vigorre.com.br</a> • (34) 99185-0735</div>';
     html += '</body></html>';
 
     var win = window.open('', '_blank');
@@ -1255,6 +1411,7 @@ function exportarCSV() {
     a.href = url; a.download = 'financeiro-amovin-' + new Date().toISOString().split('T')[0] + '.csv';
     a.click(); URL.revokeObjectURL(url);
     mostrarToast('📥 CSV exportado!', 'success');
+    registrarLogAuditoria('EXPORTAR_CSV', 'Exportou ' + lancamentos.length + ' lançamentos', null);
 }
 
 function mostrarToast(msg, tipo) {
@@ -1265,11 +1422,16 @@ function mostrarToast(msg, tipo) {
     setTimeout(function() { t.remove(); }, 4000);
 }
 
-if (!sessionStorage.getItem('amovin_logado') && !localStorage.getItem('amovin_logado')) {
-    console.log('⚠️ Sessão não encontrada, mas permitindo acesso.');
-}
-
-document.addEventListener('DOMContentLoaded', function() { inicializarFirebase(); });
+// ============================================================
+// INICIALIZAÇÃO
+// ============================================================
+document.addEventListener('DOMContentLoaded', function() {
+    // Mostrar badge master se for o dev
+    if (isMaster()) {
+        document.getElementById('badgeMaster').style.display = 'inline-block';
+    }
+    inicializarFirebase();
+});
 </script>
 </body>
 </html>
