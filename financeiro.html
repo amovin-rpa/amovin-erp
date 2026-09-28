@@ -293,12 +293,12 @@
         </div>
     </div>
 </div>
-
 <script src="menu.js?v=20260904"></script>
 <script>
 // ============================================================
 // FINANCEIRO - AMOVIN ERP (Firebase + Auth Master + Log)
 // Código: A-FIN-YYYY-NNNN
+// KPIs reagem ao filtro aplicado
 // ============================================================
 
 var lancamentos = [];
@@ -402,7 +402,7 @@ function escutarTudo() {
         lancamentos = [];
         snap.forEach(function(doc) { lancamentos.push({ _fbId: doc.id, ...doc.data() }); });
         lancamentos.sort(function(a, b) { return (b.date || '').localeCompare(a.date || ''); });
-        renderizarLancamentos(); atualizarKPIs();
+        renderizarLancamentos();
     });
     db.collection('projetos').onSnapshot(function(snap) {
         projetos = [];
@@ -421,7 +421,7 @@ function carregarLocalStorage() {
     orcamentos = JSON.parse(localStorage.getItem('amovin_orcamentos_v2') || '[]');
     preencherDropdownProjetos();
     preencherDropdownOrcamentos();
-    renderizarLancamentos(); atualizarKPIs();
+    renderizarLancamentos();
 }
 
 function preencherDropdownProjetos() {
@@ -479,7 +479,7 @@ document.addEventListener('change', function(e) {
 });
 
 // ============================================================
-// CÓDIGO A-FIN-YYYY-NNNN
+// CÓDIGO A-FIN-YYYY-NNNN (robusto, sem colisão)
 // ============================================================
 async function gerarProximoCodigo() {
     var ano = new Date().getFullYear();
@@ -487,18 +487,35 @@ async function gerarProximoCodigo() {
     var max = 0;
     if (firebasePronto && db) {
         try {
-            var snap = await db.collection('finances').get();
+            var snap = await db.collection('finances').where('year', '==', String(ano)).get();
             snap.forEach(function(doc) {
                 var c = doc.data().codigo || '';
-                if (c.startsWith(prefixo)) { var n = parseInt(c.replace(prefixo, '')); if (n > max) max = n; }
+                if (c.indexOf(prefixo) === 0) {
+                    var sufixo = c.substring(prefixo.length);
+                    var n = parseInt(sufixo, 10);
+                    if (!isNaN(n) && n > max) max = n;
+                }
             });
-        } catch (e) {}
+        } catch (e) { console.error('Erro ao gerar código:', e); }
     } else {
         lancamentos.forEach(function(l) {
-            if (l.codigo && l.codigo.startsWith(prefixo)) { var n = parseInt(l.codigo.replace(prefixo, '')); if (n > max) max = n; }
+            var c = l.codigo || '';
+            if (c.indexOf(prefixo) === 0) {
+                var sufixo = c.substring(prefixo.length);
+                var n = parseInt(sufixo, 10);
+                if (!isNaN(n) && n > max) max = n;
+            }
         });
     }
-    return prefixo + String(max + 1).padStart(4, '0');
+    var proximo = max + 1;
+    var codigo = prefixo + String(proximo).padStart(4, '0');
+    var existe = lancamentos.some(function(l) { return l.codigo === codigo; });
+    while (existe && proximo < 9999) {
+        proximo++;
+        codigo = prefixo + String(proximo).padStart(4, '0');
+        existe = lancamentos.some(function(l) { return l.codigo === codigo; });
+    }
+    return codigo;
 }
 
 // ============================================================
@@ -612,7 +629,12 @@ function confirmarSalvar() {
     if (!descricao) { mostrarToast('⚠️ Descrição é obrigatória!', 'warning'); return; }
     if (valor <= 0) { mostrarToast('⚠️ Valor deve ser maior que zero!', 'warning'); return; }
     var idEdit = document.getElementById('lancId').value;
-    pedirAutenticacao(idEdit ? 'editar' : 'criar', idEdit || null);
+    if (!adminAutenticado) {
+        pedirAutenticacao(idEdit ? 'editar' : 'criar', idEdit || null);
+        acaoPendente = 'salvar';
+    } else {
+        salvarLancamentoFinal();
+    }
 }
 
 async function salvarLancamentoFinal() {
@@ -648,10 +670,10 @@ async function salvarLancamentoFinal() {
 
     var logEntry = {
         data: new Date().toISOString(),
-        usuario: adminAutenticado.usuario,
-        nomeUsuario: adminAutenticado.nome,
+        usuario: adminAutenticado ? adminAutenticado.usuario : 'sistema',
+        nomeUsuario: adminAutenticado ? adminAutenticado.nome : 'Sistema',
         acao: idEdit ? 'editado' : 'criado',
-        justificativa: adminAutenticado.justificativa,
+        justificativa: adminAutenticado ? adminAutenticado.justificativa : '',
         detalhes: 'Valor: ' + formatarMoeda(valor) + ' | Tipo: ' + tipo
     };
 
@@ -679,9 +701,9 @@ async function salvarLancamentoFinal() {
         if (idEdit) {
             var idx = lancamentos.findIndex(function(l) { return l._fbId === idEdit; });
             if (idx >= 0) {
-                var hist = lancamentos[idx].historico || [];
-                hist.push(logEntry);
-                dados.historico = hist;
+                var hist2 = lancamentos[idx].historico || [];
+                hist2.push(logEntry);
+                dados.historico = hist2;
                 Object.assign(lancamentos[idx], dados);
             }
         } else {
@@ -691,7 +713,7 @@ async function salvarLancamentoFinal() {
             lancamentos.push(dados);
         }
         localStorage.setItem('amovin_financeiro', JSON.stringify(lancamentos));
-        fecharForm(); renderizarLancamentos(); atualizarKPIs();
+        fecharForm(); renderizarLancamentos();
         adminAutenticado = null;
     }
 }
@@ -699,7 +721,11 @@ async function salvarLancamentoFinal() {
 // ============================================================
 // EDITAR / DETALHES / EXCLUIR / LOG
 // ============================================================
-function editarLancamento(fbId) { pedirAutenticacao('editar', fbId); }
+function editarLancamento(fbId) {
+    adminAutenticado = null;
+    pedirAutenticacao('editar', fbId);
+    acaoPendente = 'editar';
+}
 
 function verDetalhes(fbId) {
     var l = lancamentos.find(function(x) { return x._fbId === fbId; });
@@ -742,7 +768,9 @@ function excluirLancamento(fbId) {
     var l = lancamentos.find(function(x) { return x._fbId === fbId; });
     if (!l) return;
     if (!confirm('Excluir "' + (l.codigo || '') + ' - ' + (l.description || '') + '"?\n\n⚠️ Esta ação é irreversível.')) return;
+    adminAutenticado = null;
     pedirAutenticacao('excluir', fbId);
+    acaoPendente = 'excluir';
 }
 async function executarExclusao(fbId) {
     var l = lancamentos.find(function(x) { return x._fbId === fbId; });
@@ -764,7 +792,7 @@ async function executarExclusao(fbId) {
     } else {
         lancamentos = lancamentos.filter(function(x) { return x._fbId !== fbId; });
         localStorage.setItem('amovin_financeiro', JSON.stringify(lancamentos));
-        renderizarLancamentos(); atualizarKPIs();
+        renderizarLancamentos();
     }
     adminAutenticado = null;
 }
@@ -791,26 +819,35 @@ function verLog(fbId) {
 function fecharLog() { document.getElementById('modalLog').classList.remove('ativo'); }
 
 // ============================================================
-// RENDERIZAR
+// FILTRO ÚNICO — usado pela lista E pelos KPIs
 // ============================================================
-function renderizarLancamentos() {
+function obterLancamentosFiltrados() {
     var tipo = document.getElementById('filtroTipo').value;
     var status = document.getElementById('filtroStatus').value;
     var mes = document.getElementById('filtroMes').value;
     var busca = document.getElementById('filtroBusca').value.toLowerCase();
-    var filtrados = lancamentos.filter(function(l) {
+    return lancamentos.filter(function(l) {
         if (tipo !== 'todos' && l.type !== tipo) return false;
         if (status !== 'todos' && l.status !== status) return false;
         if (mes && l.month !== mes) return false;
-        if (busca && (l.description || '').toLowerCase().indexOf(busca) === -1 &&
-                     (l.empresaPessoaFisica || '').toLowerCase().indexOf(busca) === -1) return false;
+        if (busca &&
+            (l.description || '').toLowerCase().indexOf(busca) === -1 &&
+            (l.empresaPessoaFisica || '').toLowerCase().indexOf(busca) === -1) return false;
         return true;
     });
+}
+
+// ============================================================
+// RENDERIZAR (lista)
+// ============================================================
+function renderizarLancamentos() {
+    var filtrados = obterLancamentosFiltrados();
     document.getElementById('contadorFiltro').textContent = filtrados.length + ' de ' + lancamentos.length;
     document.getElementById('contadorLanc').textContent = lancamentos.length + ' lançamento' + (lancamentos.length !== 1 ? 's' : '');
     var container = document.getElementById('listaLancamentos');
     if (filtrados.length === 0) {
-        container.innerHTML = '<div class="sem-dados" style="padding:40px;"><p style="font-size:48px;">💰</p><p style="margin-top:12px;">Nenhum lançamento.</p></div>';
+        container.innerHTML = '<div class="sem-dados" style="padding:40px;"><p style="font-size:48px;">💰</p><p style="margin-top:12px;">Nenhum lançamento encontrado com esses filtros.</p></div>';
+        atualizarKPIs();
         return;
     }
     container.innerHTML = filtrados.map(function(l) {
@@ -825,10 +862,9 @@ function renderizarLancamentos() {
         if (l.projeto_id) vinculos += '<span class="vinculo projeto">📋 ' + l.projeto_id + '</span>';
         if (l.orcamento_id) vinculos += '<span class="vinculo orcamento">📊 ' + l.orcamento_id + '</span>';
         var numLogs = (l.historico || []).length;
-
         return '<div class="lancamento-item">' +
             '<div class="info">' +
-            '<div class="codigo">' + (l.codigo || l.id || '---') + '</div>' +
+            '<div class="codigo">' + (l.codigo || '—') + '</div>' +
             '<div class="descricao">' + (l.description || 'Sem descrição') + '</div>' +
             '<div class="detalhe">' + detalhe + '</div>' +
             (vinculos ? '<div style="margin-top:4px;">' + vinculos + '</div>' : '') +
@@ -844,24 +880,27 @@ function renderizarLancamentos() {
             '<button class="btn btn-danger btn-sm" onclick="excluirLancamento(\'' + l._fbId + '\')">🗑️</button>' +
             '</div></div>';
     }).join('');
+    atualizarKPIs();
 }
 
 // ============================================================
-// KPIs
+// KPIs — refletem EXATAMENTE o filtro aplicado
 // ============================================================
 function atualizarKPIs() {
+    var filtrados = obterLancamentosFiltrados();
     var totalReceitas = 0, totalDespesas = 0, totalPendentes = 0;
-    lancamentos.forEach(function(l) {
-        if (l.type === 'income') totalReceitas += l.value || 0;
-        else totalDespesas += l.value || 0;
-        if (l.status === 'Pendente') totalPendentes += l.value || 0;
+    filtrados.forEach(function(l) {
+        var v = Number(l.value) || 0;
+        if (l.type === 'income') totalReceitas += v;
+        else totalDespesas += v;
+        if (l.status === 'Pendente') totalPendentes += v;
     });
     var saldo = totalReceitas - totalDespesas;
     document.getElementById('kpiReceitas').textContent = formatarMoeda(totalReceitas);
     document.getElementById('kpiDespesas').textContent = formatarMoeda(totalDespesas);
     document.getElementById('kpiSaldo').textContent = formatarMoeda(saldo);
     document.getElementById('kpiSaldo').style.color = saldo >= 0 ? 'var(--verde)' : 'var(--vermelho)';
-    document.getElementById('kpiTotalLanc').textContent = lancamentos.length;
+    document.getElementById('kpiTotalLanc').textContent = filtrados.length;
     document.getElementById('kpiPendentes').textContent = formatarMoeda(totalPendentes);
 }
 
