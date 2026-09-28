@@ -1004,7 +1004,7 @@ function imprimirRecibo(l) {
     html += '.assinaturas{margin-top:60px;display:flex;justify-content:space-between;}.assinatura{border-top:1px solid #1A1A1A;width:45%;padding-top:6px;text-align:center;font-size:12px;}';
     html += '.rodape{margin-top:40px;text-align:center;font-size:10px;color:#8A8F98;border-top:1px solid #E5E0D8;padding-top:16px;}';
     html += '@media print{body{padding:20px;}}</style></head><body>';
-    html += '<div class="header"><h1>🌻 AMOVIN</h1><p>Associação e Movimento pela Inclusão em Rio Paranaíba/MG</p><p>CNPJ: 55.880.046/0001-34</p></div>';
+    html += '<div class="header"><img src="images/amovin-logo.png" alt="AMOVIN" style="max-width:180px;height:auto;display:block;margin:0 auto 8px;" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'block\';"><h1 style="display:none;">AMOVIN</h1><p>Associação e Movimento pela Inclusão em Rio Paranaíba/MG</p><p>CNPJ: 55.880.046/0001-34</p></div>';
     html += '<div class="codigo-box"><div class="label">CÓDIGO DE CONTROLE</div><div class="codigo">' + (l.codigo || '---') + '</div></div>';
     html += '<div style="text-align:center;"><span class="tipo ' + (l.type === 'income' ? 'receita' : 'despesa') + '">' + tipoLabel + '</span></div>';
     html += '<table>';
