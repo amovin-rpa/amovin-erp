@@ -144,6 +144,32 @@
                 <option value="11">Novembro</option><option value="12">Dezembro</option>
             </select>
             <input type="text" id="filtroBusca" placeholder="🔍 Buscar..." oninput="renderizarLancamentos()" style="min-width:180px;">
+            <select id="filtroNF" onchange="renderizarLancamentos()">
+                <option value="todos">📄 Tem NF?</option>
+                <option value="sim">✅ Com NF</option>
+                <option value="nao">❌ Sem NF</option>
+            </select>
+            <select id="filtroOrigem" onchange="renderizarLancamentos()">
+                <option value="todos">🏢 PJ ou PF</option>
+                <option value="PJ">🏢 Pessoa Jurídica</option>
+                <option value="PF">👤 Pessoa Física</option>
+            </select>
+            <select id="filtroCategoria" onchange="renderizarLancamentos()">
+                <option value="todos">📂 Todas as categorias</option>
+                <option value="Doação">🤝 Doação</option>
+                <option value="Convênio">🏛️ Convênio</option>
+                <option value="Emenda">🏛️ Emenda</option>
+                <option value="Patrocínio">💼 Patrocínio</option>
+                <option value="Material">📦 Material</option>
+                <option value="Serviço">🛠️ Serviço</option>
+                <option value="Folha">💼 Folha</option>
+                <option value="Alimentação">🍽️ Alimentação</option>
+                <option value="Transporte">🚗 Transporte</option>
+                <option value="Evento">📅 Evento</option>
+                <option value="Outros">📌 Outros</option>
+            </select>
+            <input type="text" id="filtroEmpresa" placeholder="🏢 Empresa / Pessoa..." oninput="renderizarLancamentos()" style="min-width:180px;">
+            <button class="btn btn-outline btn-sm" onclick="limparFiltros()" style="padding:8px 12px;">🧹 Limpar</button>
             <span class="info" id="contadorFiltro"></span>
         </div>
         <div id="listaLancamentos">
@@ -455,6 +481,7 @@ function preencherDropdownOrcamentos() {
 document.addEventListener('change', function(e) {
     if (e.target && e.target.id === 'formOrcamento') {
         var selItem = document.getElementById('formOrcamentoItem');
+        if (!selItem) return;
         selItem.innerHTML = '<option value="">— Nenhum —</option>';
         var orcCod = e.target.value;
         if (!orcCod) return;
