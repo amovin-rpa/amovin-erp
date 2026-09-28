@@ -525,7 +525,7 @@ async function gerarProximoCodigo() {
 function pedirAutenticacao(acao, dados) {
     acaoPendente = acao;
     dadosPendentes = dados || null;
-    var msgs = { 'criar': 'Criar novo lançamento', 'editar': 'Editar lançamento', 'excluir': 'Excluir lançamento' };
+    var msgs = { 'criar': 'Criar novo lançamento', 'editar': 'Editar lançamento', 'excluir': 'Excluir lançamento', 'salvar': 'Salvar lançamento' };
     document.getElementById('authMsg').textContent = '🔐 ' + (msgs[acao] || acao);
     document.getElementById('authUsuario').value = '';
     document.getElementById('authSenha').value = '';
@@ -629,7 +629,6 @@ function confirmarSalvar() {
     var valor = parseMoeda(document.getElementById('formValor').value);
     if (!descricao) { mostrarToast('⚠️ Descrição é obrigatória!', 'warning'); return; }
     if (valor <= 0) { mostrarToast('⚠️ Valor deve ser maior que zero!', 'warning'); return; }
-    var idEdit = document.getElementById('lancId').value;
     adminAutenticado = null;
     pedirAutenticacao('salvar');
     acaoPendente = 'salvar';
@@ -820,14 +819,23 @@ function fecharLog() { document.getElementById('modalLog').classList.remove('ati
 // FILTRO ÚNICO — usado pela lista E pelos KPIs
 // ============================================================
 function obterLancamentosFiltrados() {
-    var tipo = document.getElementById('filtroTipo').value;
-    var status = document.getElementById('filtroStatus').value;
-    var mes = document.getElementById('filtroMes').value;
-    var busca = document.getElementById('filtroBusca').value.toLowerCase();
-    var nf = document.getElementById('filtroNF').value;
-    var origem = document.getElementById('filtroOrigem').value;
-    var categoria = document.getElementById('filtroCategoria').value;
-    var empresa = document.getElementById('filtroEmpresa').value.toLowerCase();
+    var elTipo = document.getElementById('filtroTipo');
+    var elStatus = document.getElementById('filtroStatus');
+    var elMes = document.getElementById('filtroMes');
+    var elBusca = document.getElementById('filtroBusca');
+    var elNF = document.getElementById('filtroNF');
+    var elOrigem = document.getElementById('filtroOrigem');
+    var elCategoria = document.getElementById('filtroCategoria');
+    var elEmpresa = document.getElementById('filtroEmpresa');
+
+    var tipo = elTipo ? elTipo.value : 'todos';
+    var status = elStatus ? elStatus.value : 'todos';
+    var mes = elMes ? elMes.value : '';
+    var busca = elBusca ? elBusca.value.toLowerCase() : '';
+    var nf = elNF ? elNF.value : 'todos';
+    var origem = elOrigem ? elOrigem.value : 'todos';
+    var categoria = elCategoria ? elCategoria.value : 'todos';
+    var empresa = elEmpresa ? elEmpresa.value.toLowerCase() : '';
 
     return lancamentos.filter(function(l) {
         if (tipo !== 'todos' && l.type !== tipo) return false;
@@ -853,14 +861,13 @@ function obterLancamentosFiltrados() {
 
 // Limpar todos os filtros
 function limparFiltros() {
-    document.getElementById('filtroTipo').value = 'todos';
-    document.getElementById('filtroStatus').value = 'todos';
-    document.getElementById('filtroMes').value = '';
-    document.getElementById('filtroBusca').value = '';
-    document.getElementById('filtroNF').value = 'todos';
-    document.getElementById('filtroOrigem').value = 'todos';
-    document.getElementById('filtroCategoria').value = 'todos';
-    document.getElementById('filtroEmpresa').value = '';
+    var ids = ['filtroTipo', 'filtroStatus', 'filtroMes', 'filtroBusca', 'filtroNF', 'filtroOrigem', 'filtroCategoria', 'filtroEmpresa'];
+    ids.forEach(function(id) {
+        var el = document.getElementById(id);
+        if (!el) return;
+        if (id === 'filtroMes' || id === 'filtroBusca' || id === 'filtroEmpresa') el.value = '';
+        else el.value = 'todos';
+    });
     renderizarLancamentos();
 }
 
@@ -869,9 +876,12 @@ function limparFiltros() {
 // ============================================================
 function renderizarLancamentos() {
     var filtrados = obterLancamentosFiltrados();
-    document.getElementById('contadorFiltro').textContent = filtrados.length + ' de ' + lancamentos.length;
-    document.getElementById('contadorLanc').textContent = lancamentos.length + ' lançamento' + (lancamentos.length !== 1 ? 's' : '');
+    var elContFiltro = document.getElementById('contadorFiltro');
+    var elContLanc = document.getElementById('contadorLanc');
+    if (elContFiltro) elContFiltro.textContent = filtrados.length + ' de ' + lancamentos.length;
+    if (elContLanc) elContLanc.textContent = lancamentos.length + ' lançamento' + (lancamentos.length !== 1 ? 's' : '');
     var container = document.getElementById('listaLancamentos');
+    if (!container) return;
     if (filtrados.length === 0) {
         container.innerHTML = '<div class="sem-dados" style="padding:40px;"><p style="font-size:48px;">💰</p><p style="margin-top:12px;">Nenhum lançamento encontrado com esses filtros.</p></div>';
         atualizarKPIs();
@@ -923,12 +933,19 @@ function atualizarKPIs() {
         if (l.status === 'Pendente') totalPendentes += v;
     });
     var saldo = totalReceitas - totalDespesas;
-    document.getElementById('kpiReceitas').textContent = formatarMoeda(totalReceitas);
-    document.getElementById('kpiDespesas').textContent = formatarMoeda(totalDespesas);
-    document.getElementById('kpiSaldo').textContent = formatarMoeda(saldo);
-    document.getElementById('kpiSaldo').style.color = saldo >= 0 ? 'var(--verde)' : 'var(--vermelho)';
-    document.getElementById('kpiTotalLanc').textContent = filtrados.length;
-    document.getElementById('kpiPendentes').textContent = formatarMoeda(totalPendentes);
+    var elRec = document.getElementById('kpiReceitas');
+    var elDesp = document.getElementById('kpiDespesas');
+    var elSaldo = document.getElementById('kpiSaldo');
+    var elTot = document.getElementById('kpiTotalLanc');
+    var elPend = document.getElementById('kpiPendentes');
+    if (elRec) elRec.textContent = formatarMoeda(totalReceitas);
+    if (elDesp) elDesp.textContent = formatarMoeda(totalDespesas);
+    if (elSaldo) {
+        elSaldo.textContent = formatarMoeda(saldo);
+        elSaldo.style.color = saldo >= 0 ? 'var(--verde)' : 'var(--vermelho)';
+    }
+    if (elTot) elTot.textContent = filtrados.length;
+    if (elPend) elPend.textContent = formatarMoeda(totalPendentes);
 }
 
 // ============================================================
