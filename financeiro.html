@@ -298,6 +298,7 @@
 // ============================================================
 // FINANCEIRO - AMOVIN ERP (Firebase + Auth Master + Log)
 // Código: A-FIN-YYYY-NNNN
+// Filtros: Tipo, Status, Mês, Busca, NF, PJ/PF, Categoria, Empresa
 // KPIs reagem ao filtro aplicado
 // ============================================================
 
@@ -629,12 +630,9 @@ function confirmarSalvar() {
     if (!descricao) { mostrarToast('⚠️ Descrição é obrigatória!', 'warning'); return; }
     if (valor <= 0) { mostrarToast('⚠️ Valor deve ser maior que zero!', 'warning'); return; }
     var idEdit = document.getElementById('lancId').value;
-    if (!adminAutenticado) {
-        pedirAutenticacao(idEdit ? 'editar' : 'criar', idEdit || null);
-        acaoPendente = 'salvar';
-    } else {
-        salvarLancamentoFinal();
-    }
+    adminAutenticado = null;
+    pedirAutenticacao('salvar');
+    acaoPendente = 'salvar';
 }
 
 async function salvarLancamentoFinal() {
@@ -826,15 +824,44 @@ function obterLancamentosFiltrados() {
     var status = document.getElementById('filtroStatus').value;
     var mes = document.getElementById('filtroMes').value;
     var busca = document.getElementById('filtroBusca').value.toLowerCase();
+    var nf = document.getElementById('filtroNF').value;
+    var origem = document.getElementById('filtroOrigem').value;
+    var categoria = document.getElementById('filtroCategoria').value;
+    var empresa = document.getElementById('filtroEmpresa').value.toLowerCase();
+
     return lancamentos.filter(function(l) {
         if (tipo !== 'todos' && l.type !== tipo) return false;
         if (status !== 'todos' && l.status !== status) return false;
         if (mes && l.month !== mes) return false;
+
         if (busca &&
             (l.description || '').toLowerCase().indexOf(busca) === -1 &&
             (l.empresaPessoaFisica || '').toLowerCase().indexOf(busca) === -1) return false;
+
+        if (nf === 'sim' && l.hasFiscalReceipt === false) return false;
+        if (nf === 'nao' && l.hasFiscalReceipt !== false) return false;
+
+        if (origem !== 'todos' && (l.tipoOrigem || 'PJ') !== origem) return false;
+
+        if (categoria !== 'todos' && (l.category || 'Outros') !== categoria) return false;
+
+        if (empresa && (l.empresaPessoaFisica || '').toLowerCase().indexOf(empresa) === -1) return false;
+
         return true;
     });
+}
+
+// Limpar todos os filtros
+function limparFiltros() {
+    document.getElementById('filtroTipo').value = 'todos';
+    document.getElementById('filtroStatus').value = 'todos';
+    document.getElementById('filtroMes').value = '';
+    document.getElementById('filtroBusca').value = '';
+    document.getElementById('filtroNF').value = 'todos';
+    document.getElementById('filtroOrigem').value = 'todos';
+    document.getElementById('filtroCategoria').value = 'todos';
+    document.getElementById('filtroEmpresa').value = '';
+    renderizarLancamentos();
 }
 
 // ============================================================
@@ -905,7 +932,7 @@ function atualizarKPIs() {
 }
 
 // ============================================================
-// IMPRIMIR RECIBO (para lançamentos SEM NF)
+// IMPRIMIR RECIBO
 // ============================================================
 function imprimirReciboAtual() {
     if (!lancAtualDetalhes) return;
