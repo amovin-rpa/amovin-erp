@@ -23,13 +23,11 @@
         .status-firebase.offline { background: #FFF3E0; color: #E65100; border-color: #FFCC80; }
         .status-firebase .dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; animation: pulse 2s infinite; }
         @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
-        .kpi-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 15px; margin-bottom: 22px; }
+        .kpi-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px; margin-bottom: 22px; }
         .kpi-card { background: #FFFFFF; padding: 16px; border-radius: 14px; border: 1px solid #F0E9DF; text-align: center; }
         .kpi-card .kpi-valor { font-size: 22px; font-weight: 800; color: var(--laranja); }
         .kpi-card .kpi-label { font-size: 11px; color: var(--cinza); }
         .card { background: #FFFFFF; padding: 24px; border-radius: 14px; border: 1px solid #F0E9DF; margin-bottom: 20px; }
-        .card h3 { font-size: 16px; font-weight: 700; color: var(--grafite); margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid #F0E9DF; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
-        .card h3 .badge { font-size: 10px; font-weight: 600; padding: 3px 12px; border-radius: 20px; background: #FFF3E0; color: var(--laranja); }
         .btn { padding: 10px 24px; border-radius: 8px; border: none; cursor: pointer; font-weight: 600; font-size: 13px; font-family: 'Inter', sans-serif; transition: all 0.2s; display: inline-flex; align-items: center; gap: 8px; }
         .btn-primary { background: var(--laranja); color: white; } .btn-primary:hover { background: var(--laranja-escuro); }
         .btn-success { background: var(--verde); color: white; } .btn-outline { background: transparent; color: var(--cinza); border: 1px solid #E5E0D8; }
@@ -46,7 +44,7 @@
         .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
         .form-full { grid-column: 1 / -1; }
         .grid-crm { display: grid; grid-template-columns: 240px 1fr; gap: 20px; }
-        .sidebar-categorias { background: #FFFFFF; border-radius: 14px; border: 1px solid #F0E9DF; padding: 20px; max-height: 600px; overflow-y: auto; }
+        .sidebar-categorias { background: #FFFFFF; border-radius: 14px; border: 1px solid #F0E9DF; padding: 20px; max-height: 700px; overflow-y: auto; }
         .sidebar-categorias h3 { font-size: 15px; font-weight: 700; color: var(--grafite); margin-bottom: 14px; }
         .cat-item { display: block; width: 100%; padding: 9px 14px; margin-bottom: 3px; border: none; border-radius: 8px; cursor: pointer; text-align: left; font-size: 12px; background: transparent; transition: all 0.2s; color: var(--cinza); font-family: 'Inter', sans-serif; }
         .cat-item:hover { background: #F8F4ED; }
@@ -57,15 +55,17 @@
         .contato-card { background: #FFFFFF; padding: 14px 18px; border-radius: 12px; border: 1px solid #F0E9DF; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; transition: all 0.2s; }
         .contato-card:hover { transform: translateX(3px); border-left: 4px solid var(--laranja); }
         .contato-card.favorito { border-left: 4px solid var(--amarelo); }
-        .contato-info h4 { font-size: 14px; color: var(--grafite); margin-bottom: 2px; }
+        .contato-info h4 { font-size: 14px; color: var(--grafite); margin-bottom: 2px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
         .contato-info p { font-size: 11px; color: var(--cinza); }
         .contato-info .codigo { font-size: 10px; color: var(--laranja); font-weight: 700; letter-spacing: 0.5px; }
-        .contato-info .tag { font-size: 9px; padding: 2px 10px; border-radius: 12px; margin-left: 6px; }
+        .contato-info .tag { font-size: 9px; padding: 2px 10px; border-radius: 12px; font-weight: 600; }
         .tag-crm { background: #F3E5F5; color: #7B1FA2; }
         .tag-beneficiario { background: #E3F2FD; color: #1565C0; }
         .tag-profissional { background: #E8F5E9; color: #2E7D32; }
         .tag-voluntario { background: #FFF3E0; color: #E65100; }
         .tag-fornecedor { background: #FFF8E7; color: var(--laranja); }
+        .tag-autonomo { background: #E8F5E9; color: #2E7D32; }
+        .tag-universitario { background: #E0F7FA; color: #00838F; }
         .contato-acoes { display: flex; gap: 4px; flex-wrap: wrap; align-items: center; }
         .btn-acao { padding: 6px 10px; border-radius: 6px; border: none; cursor: pointer; font-size: 10px; font-weight: 600; }
         .btn-fav { background: var(--amarelo); color: #1A1A1A; }
@@ -97,6 +97,14 @@
         .rodape-info .copyright { font-size: 8px; color: #8A8F98; }
         .rodape-info .contato { font-size: 9px; color: #8A8F98; }
         .rodape-info a { color: #C65A11; text-decoration: none; }
+        .senha-wrapper { position: relative; }
+        .senha-wrapper input { padding-right: 44px !important; }
+        .senha-wrapper .btn-olho { position: absolute; right: 8px; top: 50%; transform: translateY(-50%); background: none; border: none; font-size: 18px; cursor: pointer; color: var(--cinza); padding: 6px 10px; border-radius: 6px; }
+        .senha-wrapper .btn-olho:hover { background: #F0E9DF; color: var(--laranja); }
+        .wa-check { display: flex; align-items: center; gap: 8px; padding: 10px 12px; background: #FAFAFA; border: 1px solid #E5E0D8; border-radius: 8px; cursor: pointer; height: 42px; }
+        .wa-check input[type="checkbox"] { width: 18px; height: 18px; cursor: pointer; accent-color: #25D366; }
+        .wa-check label { font-size: 12.5px; color: var(--grafite); cursor: pointer; margin: 0; text-transform: none; letter-spacing: 0; }
+        .wa-check.marcado { background: #E8F5E9; border-color: #A5D6A7; }
         @media (max-width: 900px) { .main-content { margin-left: 0; } .grid-crm { grid-template-columns: 1fr; } .form-row { grid-template-columns: 1fr; } }
     </style>
 </head>
@@ -131,7 +139,7 @@
         </div>
         <div>
             <div class="busca-bar">
-                <input type="text" id="buscaContato" placeholder="🔍 Buscar por nome, empresa, código..." oninput="filtrar()">
+                <input type="text" id="buscaContato" placeholder="🔍 Buscar por nome, empresa, código ou documento..." oninput="filtrar()">
             </div>
             <div id="listaContatos"><div class="loading"><div class="spinner"></div><div>Carregando...</div></div></div>
         </div>
@@ -160,7 +168,7 @@
             <div class="form-group"><label>Cargo</label><input type="text" id="cargoContato"></div>
             <div class="form-group"><label>Instituição</label><input type="text" id="instituicaoContato"></div>
         </div>
-        <div class="form-group"><label>Categoria</label>
+        <div class="form-group"><label>Categoria *</label>
             <select id="categoriaContato">
                 <option value="Prefeitura">🏛️ Prefeitura</option>
                 <option value="Empresa">🏢 Empresa</option>
@@ -168,6 +176,8 @@
                 <option value="Doador">🎁 Doador</option>
                 <option value="Fundação">🏛️ Fundação</option>
                 <option value="Fornecedor">📦 Fornecedor</option>
+                <option value="Autônomo">👤 Autônomo</option>
+                <option value="Universitário">🎓 Universitário</option>
                 <option value="Profissional">👨‍⚕️ Profissional</option>
                 <option value="Voluntário">💪 Voluntário</option>
                 <option value="Beneficiário">👤 Beneficiário</option>
@@ -176,11 +186,17 @@
         </div>
         <div class="secao-titulo">📞 Contatos</div>
         <div class="form-row">
-            <div class="form-group"><label>Telefone</label><input type="text" id="tel1Contato" placeholder="(34) 99999-9999"></div>
-            <div class="form-group"><label>WhatsApp</label><input type="text" id="whatsappContato" placeholder="(34) 99999-9999"></div>
+            <div class="form-group"><label>Telefone</label><input type="text" id="tel1Contato" placeholder="(34) 99999-9999" maxlength="15" oninput="mascaraTelefone(this)"></div>
+            <div class="form-group">
+                <label>WhatsApp?</label>
+                <div class="wa-check" id="waCheckWrapper" onclick="toggleWhatsApp()">
+                    <input type="checkbox" id="isWhatsAppContato" onclick="event.stopPropagation();atualizarWaCheck()">
+                    <label for="isWhatsAppContato">📱 Este número é WhatsApp</label>
+                </div>
+            </div>
         </div>
         <div class="form-group"><label>Email</label><input type="email" id="emailContato"></div>
-        <div class="form-group"><label>CNPJ / CPF</label><input type="text" id="cnpjCpfContato"></div>
+        <div class="form-group"><label>CNPJ / CPF</label><input type="text" id="cnpjCpfContato" placeholder="000.000.000-00 ou 00.000.000/0000-00" maxlength="18" oninput="mascaraCpfCnpj(this)"></div>
         <div class="secao-titulo">🔗 Vínculos</div>
         <div class="form-row">
             <div class="form-group"><label>Beneficiário Vinculado</label><select id="beneficiarioVinculo"><option value="">— Nenhum —</option></select></div>
@@ -204,13 +220,19 @@
 
 <div class="modal-overlay" id="modalAuth">
     <div class="modal modal-pequeno">
-        <h2>🔐 Autenticação Master <button class="fechar" onclick="fecharAuth()">×</button></h2>
+        <h2>🔐 Autenticação <button class="fechar" onclick="fecharAuth()">×</button></h2>
         <div id="authMsg" style="font-size:13px;color:var(--cinza);margin-bottom:16px;"></div>
-        <div class="form-group"><label>Usuário Master</label><input type="text" id="authUsuario" placeholder="Ex: raul"></div>
-        <div class="form-group"><label>Senha Master</label><input type="password" id="authSenha" placeholder="••••••••"></div>
-        <div class="form-group"><label>Justificativa (mín 50 caracteres)</label>
+        <div class="form-group"><label>Usuário</label><input type="text" id="authUsuario" placeholder="Seu usuário"></div>
+        <div class="form-group">
+            <label>Senha</label>
+            <div class="senha-wrapper">
+                <input type="password" id="authSenha" placeholder="••••••••">
+                <button type="button" class="btn-olho" onclick="toggleOlhoSenha()">👁️</button>
+            </div>
+        </div>
+        <div class="form-group"><label>Justificativa (mín 20 caracteres)</label>
             <textarea id="authJust" rows="3" placeholder="Explique o motivo da alteração..."></textarea>
-            <div style="font-size:10px;color:var(--cinza);margin-top:4px;" id="contadorJust">0/50 caracteres</div>
+            <div style="font-size:10px;color:var(--cinza);margin-top:4px;" id="contadorJust">0/20 caracteres</div>
         </div>
         <div class="btn-group">
             <button class="btn btn-outline" onclick="fecharAuth()">Cancelar</button>
@@ -218,12 +240,13 @@
         </div>
     </div>
 </div>
-
 <script src="menu.js?v=20260904"></script>
 <script>
 // ============================================================
-// CRM SOCIAL - AMOVIN ERP (Firebase + Auth Master + Log)
+// CRM SOCIAL - AMOVIN ERP
 // Código: A-CRM-YYYY-NNNN
+// Máscaras automáticas CPF/CNPJ e Telefone
+// Checkbox WhatsApp unificado
 // ============================================================
 
 var contatos = [];
@@ -237,8 +260,71 @@ var dadosPendentes = null;
 var adminAutenticado = null;
 var categoriaAtual = 'todos';
 
-function usuarioLogado() {
-    return sessionStorage.getItem('amovin_usuario') || localStorage.getItem('amovin_usuario') || 'sistema';
+// ============================================================
+// USUÁRIO LOGADO
+// ============================================================
+function getUsuarioLogado() {
+    return {
+        usuario: sessionStorage.getItem('amovin_usuario') || 'sistema',
+        nome: sessionStorage.getItem('amovin_nome') || 'Sistema',
+        perfil: sessionStorage.getItem('amovin_perfil') || 'admin'
+    };
+}
+function isMaster() {
+    var u = getUsuarioLogado();
+    return u.perfil === 'admin' && u.nome === 'Administrador Master';
+}
+
+// ============================================================
+// MÁSCARAS
+// ============================================================
+function mascaraCpfCnpj(input) {
+    var v = input.value.replace(/\D/g, '');
+    if (v.length > 14) v = v.substring(0, 14);
+    if (v.length <= 11) {
+        v = v.replace(/(\d{3})(\d)/, '$1.$2');
+        v = v.replace(/(\d{3})(\d)/, '$1.$2');
+        v = v.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+    } else {
+        v = v.replace(/^(\d{2})(\d)/, '$1.$2');
+        v = v.replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3');
+        v = v.replace(/\.(\d{3})(\d)/, '.$1/$2');
+        v = v.replace(/(\d{4})(\d)/, '$1-$2');
+    }
+    input.value = v;
+}
+
+function mascaraTelefone(input) {
+    var v = input.value.replace(/\D/g, '');
+    if (v.length > 11) v = v.substring(0, 11);
+    if (v.length <= 10) {
+        v = v.replace(/^(\d{2})(\d)/, '($1) $2');
+        v = v.replace(/(\d{4})(\d)/, '$1-$2');
+    } else {
+        v = v.replace(/^(\d{2})(\d)/, '($1) $2');
+        v = v.replace(/(\d{5})(\d)/, '$1-$2');
+    }
+    input.value = v;
+}
+
+function apenasNumeros(str) { return (str || '').replace(/\D/g, ''); }
+
+function toggleOlhoSenha() {
+    var el = document.getElementById('authSenha');
+    el.type = el.type === 'password' ? 'text' : 'password';
+}
+
+// WhatsApp
+function toggleWhatsApp() {
+    var cb = document.getElementById('isWhatsAppContato');
+    cb.checked = !cb.checked;
+    atualizarWaCheck();
+}
+function atualizarWaCheck() {
+    var cb = document.getElementById('isWhatsAppContato');
+    var wrap = document.getElementById('waCheckWrapper');
+    if (cb.checked) wrap.classList.add('marcado');
+    else wrap.classList.remove('marcado');
 }
 
 // ============================================================
@@ -337,7 +423,7 @@ function preencherVinculos() {
         profissionais.forEach(function(p) {
             var opt = document.createElement('option');
             opt.value = p._fbId;
-            opt.textContent = (p.name || p.fullName || '') + ' (' + (p.specialty || '') + ')';
+            opt.textContent = (p.fullName || p.nome || '') + ' (' + (p.specialty || p.especialidade || '') + ')';
             selP.appendChild(opt);
         });
         if (atP) selP.value = atP;
@@ -349,7 +435,7 @@ function preencherVinculos() {
         voluntarios.forEach(function(v) {
             var opt = document.createElement('option');
             opt.value = v._fbId;
-            opt.textContent = (v.name || v.fullName || '');
+            opt.textContent = (v.fullName || v.nome || '');
             selV.appendChild(opt);
         });
         if (atV) selV.value = atV;
@@ -368,56 +454,87 @@ async function gerarProximoCodigo() {
             var snap = await db.collection('contatos').get();
             snap.forEach(function(doc) {
                 var c = doc.data().codigo || '';
-                if (c.startsWith(prefixo)) { var n = parseInt(c.replace(prefixo, '')); if (n > max) max = n; }
+                if (c.indexOf(prefixo) === 0) {
+                    var n = parseInt(c.substring(prefixo.length), 10);
+                    if (!isNaN(n) && n > max) max = n;
+                }
             });
         } catch (e) {}
     } else {
         contatos.forEach(function(c) {
-            if (c.codigo && c.codigo.startsWith(prefixo)) { var n = parseInt(c.codigo.replace(prefixo, '')); if (n > max) max = n; }
+            if (c.codigo && c.codigo.indexOf(prefixo) === 0) {
+                var n = parseInt(c.codigo.substring(prefixo.length), 10);
+                if (!isNaN(n) && n > max) max = n;
+            }
         });
     }
     return prefixo + String(max + 1).padStart(4, '0');
 }
 
 // ============================================================
+// LOG DE AUDITORIA
+// ============================================================
+async function registrarLogAuditoria(acao, detalhes) {
+    var u = getUsuarioLogado();
+    var log = {
+        timestamp: new Date().toISOString(),
+        usuario: u.usuario, nome: u.nome, perfil: u.perfil,
+        isMaster: isMaster(), acao: acao, detalhes: detalhes || ''
+    };
+    if (firebasePronto && db) {
+        try { await db.collection('logs_auditoria').add(log); }
+        catch (e) { console.warn('Erro log:', e.message); }
+    }
+}
+
+// ============================================================
 // AUTH
 // ============================================================
 function pedirAutenticacao(acao, dados) {
+    if (isMaster()) {
+        adminAutenticado = { usuario: 'master', nome: 'Administrador Master', justificativa: '[master - ação direta]' };
+        if (acao === 'criar') abrirForm(dados);
+        else if (acao === 'editar') abrirForm(dados);
+        else if (acao === 'excluir') executarExclusao(dados);
+        else if (acao === 'salvar') salvarContatoFinal();
+        else if (acao === 'favorito') executarFavorito(dados);
+        return;
+    }
     acaoPendente = acao;
     dadosPendentes = dados || null;
-    var msgs = { 'criar': 'Criar novo contato', 'editar': 'Editar contato', 'excluir': 'Excluir contato' };
+    var msgs = { 'criar': 'Criar novo contato', 'editar': 'Editar contato', 'excluir': 'Excluir contato', 'salvar': 'Salvar contato', 'favorito': 'Marcar favorito' };
     document.getElementById('authMsg').textContent = '🔐 ' + (msgs[acao] || acao);
     document.getElementById('authUsuario').value = '';
     document.getElementById('authSenha').value = '';
     document.getElementById('authJust').value = '';
-    document.getElementById('contadorJust').textContent = '0/50 caracteres';
+    document.getElementById('contadorJust').textContent = '0/20 caracteres';
     document.getElementById('modalAuth').classList.add('ativo');
     setTimeout(function() { document.getElementById('authUsuario').focus(); }, 200);
 }
 async function validarAdminMaster(usuario, senha) {
-    if (!firebasePronto || !db) {
-        var locais = [
-            { usuario: 'raul', senha: 'raul8954', nome: 'Raul Ramalho Costa' },
-            { usuario: 'daniele', senha: 'daniele2026', nome: 'Daniele Ramalho' },
-            { usuario: 'master', senha: 'amovin2026', nome: 'Adm Master Principal' }
-        ];
-        return locais.find(function(a) { return a.usuario === usuario && a.senha === senha; });
+    var locais = [
+        { usuario: 'raul', senha: 'raul8954', nome: 'Raul Ramalho Costa' },
+        { usuario: 'daniele', senha: 'daniele2026', nome: 'Daniele Ramalho' },
+        { usuario: 'master', senha: 'amovin2026', nome: 'Adm Master Principal' }
+    ];
+    if (firebasePronto && db) {
+        try {
+            var snap = await db.collection('admins_master').where('usuario', '==', usuario).where('ativo', '==', true).get();
+            if (!snap.empty) {
+                var admin = null;
+                snap.forEach(function(doc) { admin = { _fbId: doc.id, ...doc.data() }; });
+                if (admin.senha === senha) return admin;
+            }
+        } catch (e) {}
     }
-    try {
-        var snap = await db.collection('admins_master').where('usuario', '==', usuario).where('ativo', '==', true).get();
-        if (snap.empty) return null;
-        var admin = null;
-        snap.forEach(function(doc) { admin = { _fbId: doc.id, ...doc.data() }; });
-        if (admin.senha !== senha) return null;
-        return admin;
-    } catch (e) { return null; }
+    return locais.find(function(a) { return a.usuario === usuario && a.senha === senha; });
 }
 async function confirmarAuth() {
     var usuario = document.getElementById('authUsuario').value.trim().toLowerCase();
     var senha = document.getElementById('authSenha').value;
     var just = document.getElementById('authJust').value.trim();
     if (!usuario || !senha) { mostrarToast('⚠️ Preencha usuário e senha!', 'warning'); return; }
-    if (just.length < 50) { mostrarToast('⚠️ Justificativa mín 50 caracteres!', 'warning'); return; }
+    if (just.length < 20) { mostrarToast('⚠️ Justificativa mín 20 caracteres!', 'warning'); return; }
     var admin = await validarAdminMaster(usuario, senha);
     if (!admin) { mostrarToast('❌ Usuário ou senha incorretos!', 'error'); return; }
     adminAutenticado = { ...admin, justificativa: just };
@@ -430,7 +547,7 @@ async function confirmarAuth() {
 }
 function fecharAuth() { document.getElementById('modalAuth').classList.remove('ativo'); }
 document.getElementById('authJust').addEventListener('input', function() {
-    document.getElementById('contadorJust').textContent = this.value.length + '/50 caracteres';
+    document.getElementById('contadorJust').textContent = this.value.length + '/20 caracteres';
 });
 
 // ============================================================
@@ -447,8 +564,10 @@ async function abrirForm(contatoId) {
             document.getElementById('cargoContato').value = c.cargo || '';
             document.getElementById('instituicaoContato').value = c.instituicao || '';
             document.getElementById('categoriaContato').value = c.categoria || 'Outros';
-            document.getElementById('tel1Contato').value = c.tel1 || '';
-            document.getElementById('whatsappContato').value = c.whatsapp || '';
+            // Telefone unificado
+            document.getElementById('tel1Contato').value = c.tel1 || c.whatsapp || '';
+            document.getElementById('isWhatsAppContato').checked = c.isWhatsApp === true || (c.whatsapp && c.whatsapp === c.tel1);
+            atualizarWaCheck();
             document.getElementById('emailContato').value = c.email || '';
             document.getElementById('cnpjCpfContato').value = c.cnpjCpf || '';
             document.getElementById('obsContato').value = c.obs || '';
@@ -463,7 +582,8 @@ async function abrirForm(contatoId) {
         document.getElementById('instituicaoContato').value = '';
         document.getElementById('categoriaContato').value = 'Outros';
         document.getElementById('tel1Contato').value = '';
-        document.getElementById('whatsappContato').value = '';
+        document.getElementById('isWhatsAppContato').checked = false;
+        atualizarWaCheck();
         document.getElementById('emailContato').value = '';
         document.getElementById('cnpjCpfContato').value = '';
         document.getElementById('obsContato').value = '';
@@ -484,18 +604,25 @@ function confirmarSalvar() {
     var nome = document.getElementById('nomeContato').value.trim();
     if (!nome) { mostrarToast('⚠️ Nome é obrigatório!', 'warning'); return; }
     var idEdit = document.getElementById('contatoId').value;
-    pedirAutenticacao(idEdit ? 'editar' : 'criar', idEdit || null);
+    adminAutenticado = null;
+    pedirAutenticacao('salvar');
+    acaoPendente = 'salvar';
 }
+
 async function salvarContatoFinal() {
     var idEdit = document.getElementById('contatoId').value;
+    var tel1 = document.getElementById('tel1Contato').value.trim();
+    var isWhatsApp = document.getElementById('isWhatsAppContato').checked;
+
     var dados = {
         codigo: document.getElementById('codigoContato').value,
         nome: document.getElementById('nomeContato').value.trim(),
         cargo: document.getElementById('cargoContato').value.trim(),
         instituicao: document.getElementById('instituicaoContato').value.trim(),
         categoria: document.getElementById('categoriaContato').value,
-        tel1: document.getElementById('tel1Contato').value.trim(),
-        whatsapp: document.getElementById('whatsappContato').value.trim(),
+        tel1: tel1,
+        whatsapp: isWhatsApp ? tel1 : '',
+        isWhatsApp: isWhatsApp,
         email: document.getElementById('emailContato').value.trim(),
         cnpjCpf: document.getElementById('cnpjCpfContato').value.trim(),
         obs: document.getElementById('obsContato').value.trim(),
@@ -504,14 +631,16 @@ async function salvarContatoFinal() {
         voluntarioId: document.getElementById('voluntarioVinculo').value || null,
         atualizadoEm: new Date().toISOString()
     };
+
     var logEntry = {
         data: new Date().toISOString(),
-        usuario: adminAutenticado.usuario,
-        nomeUsuario: adminAutenticado.nome,
+        usuario: (adminAutenticado && adminAutenticado.usuario) || getUsuarioLogado().usuario,
+        nomeUsuario: (adminAutenticado && adminAutenticado.nome) || getUsuarioLogado().nome,
         acao: idEdit ? 'editado' : 'criado',
-        justificativa: adminAutenticado.justificativa,
+        justificativa: (adminAutenticado && adminAutenticado.justificativa) || '[master]',
         detalhes: 'Nome: ' + dados.nome + ' | Categoria: ' + dados.categoria
     };
+
     if (firebasePronto && db) {
         try {
             if (idEdit) {
@@ -521,12 +650,14 @@ async function salvarContatoFinal() {
                 dados.historico = hist;
                 await db.collection('contatos').doc(idEdit).update(dados);
                 mostrarToast('✅ Contato atualizado!', 'success');
+                registrarLogAuditoria('CRM_EDITAR', dados.nome + ' (' + dados.codigo + ')');
             } else {
                 dados.criadoEm = new Date().toISOString();
                 dados.historico = [logEntry];
                 dados.favorito = false;
                 await db.collection('contatos').add(dados);
                 mostrarToast('✅ Contato ' + dados.codigo + ' criado!', 'success');
+                registrarLogAuditoria('CRM_CRIAR', dados.nome + ' (' + dados.codigo + ')');
             }
             fecharForm();
             adminAutenticado = null;
@@ -535,9 +666,9 @@ async function salvarContatoFinal() {
         if (idEdit) {
             var idx = contatos.findIndex(function(x) { return x._fbId === idEdit; });
             if (idx >= 0) {
-                var hist = contatos[idx].historico || [];
-                hist.push(logEntry);
-                dados.historico = hist;
+                var hist2 = contatos[idx].historico || [];
+                hist2.push(logEntry);
+                dados.historico = hist2;
                 Object.assign(contatos[idx], dados);
             }
         } else {
@@ -555,17 +686,20 @@ async function salvarContatoFinal() {
 // ============================================================
 // FAVORITO
 // ============================================================
-function toggleFav(fbId) { pedirAutenticacao('favorito', fbId); }
+function toggleFav(fbId) {
+    adminAutenticado = null;
+    pedirAutenticacao('favorito', fbId);
+}
 async function executarFavorito(fbId) {
     var c = contatos.find(function(x) { return x._fbId === fbId; });
     if (!c) { adminAutenticado = null; return; }
     var novo = !c.favorito;
     var logEntry = {
         data: new Date().toISOString(),
-        usuario: adminAutenticado.usuario,
-        nomeUsuario: adminAutenticado.nome,
+        usuario: (adminAutenticado && adminAutenticado.usuario) || getUsuarioLogado().usuario,
+        nomeUsuario: (adminAutenticado && adminAutenticado.nome) || getUsuarioLogado().nome,
         acao: novo ? 'adicionado aos favoritos' : 'removido dos favoritos',
-        justificativa: adminAutenticado.justificativa
+        justificativa: (adminAutenticado && adminAutenticado.justificativa) || '[master]'
     };
     if (firebasePronto && db) {
         try {
@@ -591,6 +725,7 @@ function excluirContato(fbId) {
     var c = contatos.find(function(x) { return x._fbId === fbId; });
     if (!c) return;
     if (!confirm('Excluir "' + c.nome + '" (' + c.codigo + ')?\n\n⚠️ Esta ação é irreversível.')) return;
+    adminAutenticado = null;
     pedirAutenticacao('excluir', fbId);
 }
 async function executarExclusao(fbId) {
@@ -598,10 +733,10 @@ async function executarExclusao(fbId) {
     if (!c) { adminAutenticado = null; return; }
     var logEntry = {
         data: new Date().toISOString(),
-        usuario: adminAutenticado.usuario,
-        nomeUsuario: adminAutenticado.nome,
+        usuario: (adminAutenticado && adminAutenticado.usuario) || getUsuarioLogado().usuario,
+        nomeUsuario: (adminAutenticado && adminAutenticado.nome) || getUsuarioLogado().nome,
         acao: 'EXCLUÍDO',
-        justificativa: adminAutenticado.justificativa,
+        justificativa: (adminAutenticado && adminAutenticado.justificativa) || '[master]',
         detalhes: c.nome + ' (' + c.codigo + ')'
     };
     if (firebasePronto && db) {
@@ -609,6 +744,7 @@ async function executarExclusao(fbId) {
             await db.collection('logs_exclusao').add({ modulo: 'crm', itemCodigo: c.codigo, itemNome: c.nome, ...logEntry });
             await db.collection('contatos').doc(fbId).delete();
             mostrarToast('🗑️ Contato excluído!', 'info');
+            registrarLogAuditoria('CRM_EXCLUIR', c.nome + ' (' + c.codigo + ')');
         } catch (e) { mostrarToast('❌ ' + e.message, 'error'); }
     } else {
         contatos = contatos.filter(function(x) { return x._fbId !== fbId; });
@@ -660,6 +796,8 @@ function getTagClass(cat) {
     if (cat === 'Profissional') return 'tag-profissional';
     if (cat === 'Voluntário') return 'tag-voluntario';
     if (cat === 'Fornecedor') return 'tag-fornecedor';
+    if (cat === 'Autônomo') return 'tag-autonomo';
+    if (cat === 'Universitário') return 'tag-universitario';
     return 'tag-crm';
 }
 
@@ -671,7 +809,9 @@ function filtrar() {
     if (b) l = l.filter(function(c) {
         return (c.nome || '').toLowerCase().indexOf(b) >= 0 ||
                (c.instituicao || '').toLowerCase().indexOf(b) >= 0 ||
-               (c.codigo || '').toLowerCase().indexOf(b) >= 0;
+               (c.codigo || '').toLowerCase().indexOf(b) >= 0 ||
+               (c.cnpjCpf || '').toLowerCase().indexOf(b) >= 0 ||
+               (c.email || '').toLowerCase().indexOf(b) >= 0;
     });
     l.sort(function(a, b) { return (a.nome || '').localeCompare(b.nome || ''); });
     var c = document.getElementById('listaContatos');
@@ -684,17 +824,19 @@ function filtrar() {
             if (x.beneficiarioId) vinculos += ' 🔗👤';
             if (x.profissionalId) vinculos += ' 🔗👨‍⚕️';
             if (x.voluntarioId) vinculos += ' 🔗💪';
+            var telExibir = x.tel1 || x.whatsapp || '';
+            var isWA = x.isWhatsApp === true || (x.whatsapp && x.whatsapp === x.tel1);
             return '<div class="contato-card' + (x.favorito ? ' favorito' : '') + '">' +
                 '<div class="contato-info">' +
                 '<div class="codigo">' + (x.codigo || '---') + '</div>' +
-                '<h4>' + (x.favorito ? '⭐ ' : '') + (x.nome || '') + ' <span class="tag ' + tagClass + '">' + (x.categoria || '') + '</span>' + vinculos + '</h4>' +
-                '<p>' + (x.cargo || '') + ' ' + (x.instituicao ? '| ' + x.instituicao : '') + '</p>' +
-                '<p>📞 ' + (x.tel1 || x.whatsapp || '-') + ' | 📧 ' + (x.email || '-') + '</p>' +
+                '<h4>' + (x.favorito ? '⭐ ' : '') + (x.nome || '') + ' <span class="tag ' + tagClass + '">' + (x.categoria || '') + '</span>' + vinculos + (isWA ? ' <span class="tag tag-autonomo" style="font-size:8px;">📱 WhatsApp</span>' : '') + '</h4>' +
+                '<p>' + (x.cargo || '') + (x.instituicao ? ' | ' + x.instituicao : '') + '</p>' +
+                '<p>📄 ' + (x.cnpjCpf || 'Sem documento') + ' | 📞 ' + (telExibir || '-') + ' | 📧 ' + (x.email || '-') + '</p>' +
                 '</div>' +
                 '<div class="contato-acoes">' +
-                (x.whatsapp ? '<button class="btn-acao btn-wpp" onclick="event.stopPropagation();window.open(\'https://wa.me/55\'+x.whatsapp.replace(/\\D/g,\'\'))">💬</button>' : '') +
-                (x.tel1 ? '<button class="btn-acao btn-teal" onclick="event.stopPropagation();window.open(\'tel:\'+x.tel1)">📞</button>' : '') +
-                (x.email ? '<button class="btn-acao btn-azul" onclick="event.stopPropagation();window.open(\'mailto:\'+x.email)">📧</button>' : '') +
+                (isWA && telExibir ? '<button class="btn-acao btn-wpp" onclick="event.stopPropagation();window.open(\'https://wa.me/55\'+\'' + apenasNumeros(telExibir) + '\')">💬</button>' : '') +
+                (telExibir ? '<button class="btn-acao btn-teal" onclick="event.stopPropagation();window.open(\'tel:' + telExibir + '\')">📞</button>' : '') +
+                (x.email ? '<button class="btn-acao btn-azul" onclick="event.stopPropagation();window.open(\'mailto:' + x.email + '\')">📧</button>' : '') +
                 '<button class="btn-acao btn-fav" onclick="event.stopPropagation();toggleFav(\'' + x._fbId + '\')">' + (x.favorito ? '★' : '☆') + '</button>' +
                 '<button class="btn-acao btn-editar" onclick="event.stopPropagation();editarContato(\'' + x._fbId + '\')">✏️</button>' +
                 '<button class="btn-acao btn-teal" onclick="event.stopPropagation();verLog(\'' + x._fbId + '\')">📜' + (numLogs ? ' (' + numLogs + ')' : '') + '</button>' +
@@ -705,36 +847,43 @@ function filtrar() {
     atualizarKPIs();
 }
 
-function editarContato(fbId) { pedirAutenticacao('editar', fbId); }
+function editarContato(fbId) {
+    adminAutenticado = null;
+    pedirAutenticacao('editar', fbId);
+}
 
 // ============================================================
 // KPIs
 // ============================================================
 function atualizarKPIs() {
     document.getElementById('kpiTotal').textContent = contatos.length;
-    document.getElementById('kpiCRM').textContent = contatos.filter(function(c) { return !c.categoria || c.categoria === 'Outros' || c.categoria === 'Prefeitura' || c.categoria === 'Empresa' || c.categoria === 'Patrocinador' || c.categoria === 'Doador' || c.categoria === 'Fundação'; }).length;
+    document.getElementById('kpiCRM').textContent = contatos.filter(function(c) {
+        return ['Prefeitura', 'Empresa', 'Patrocinador', 'Doador', 'Fundação', 'Outros'].indexOf(c.categoria) >= 0 || !c.categoria;
+    }).length;
     document.getElementById('kpiBeneficiarios').textContent = contatos.filter(function(c) { return c.categoria === 'Beneficiário'; }).length;
     document.getElementById('kpiProfissionais').textContent = contatos.filter(function(c) { return c.categoria === 'Profissional'; }).length;
     document.getElementById('kpiVoluntarios').textContent = contatos.filter(function(c) { return c.categoria === 'Voluntário'; }).length;
-    document.getElementById('kpiFornecedores').textContent = contatos.filter(function(c) { return c.categoria === 'Fornecedor'; }).length;
+    document.getElementById('kpiFornecedores').textContent = contatos.filter(function(c) { return c.categoria === 'Fornecedor' || c.categoria === 'Autônomo'; }).length;
 }
 
 // ============================================================
 // CSV
 // ============================================================
 function exportarCSV() {
-    var linhas = [['Código', 'Nome', 'Categoria', 'Cargo', 'Instituição', 'Telefone', 'WhatsApp', 'Email', 'CNPJ/CPF', 'Favorito']];
+    var linhas = [['Código', 'Nome', 'Categoria', 'Cargo', 'Instituição', 'Telefone', 'WhatsApp', 'É WhatsApp', 'Email', 'CNPJ/CPF', 'Favorito']];
     contatos.forEach(function(c) {
         linhas.push([c.codigo || '', c.nome || '', c.categoria || '', c.cargo || '', c.instituicao || '',
-            c.tel1 || '', c.whatsapp || '', c.email || '', c.cnpjCpf || '', c.favorito ? 'Sim' : 'Não']);
+            c.tel1 || '', c.whatsapp || '', c.isWhatsApp ? 'Sim' : 'Não',
+            c.email || '', c.cnpjCpf || '', c.favorito ? 'Sim' : 'Não']);
     });
-    var csv = linhas.map(function(l) { return l.map(function(c) { return '"' + c + '"'; }).join(';'); }).join('\n');
+    var csv = linhas.map(function(l) { return l.map(function(c) { return '"' + String(c).replace(/"/g, '""') + '"'; }).join(';'); }).join('\n');
     var blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
     var url = URL.createObjectURL(blob);
     var a = document.createElement('a');
     a.href = url; a.download = 'crm-amovin-' + new Date().toISOString().split('T')[0] + '.csv';
     a.click(); URL.revokeObjectURL(url);
     mostrarToast('📥 CSV exportado!', 'success');
+    registrarLogAuditoria('CRM_EXPORTAR_CSV', contatos.length + ' contatos');
 }
 
 function mostrarToast(msg, tipo) {
