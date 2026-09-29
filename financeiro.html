@@ -102,106 +102,33 @@
         .rodape-info .contato { font-size: 9px; color: #8A8F98; }
         .rodape-info a { color: #C65A11; text-decoration: none; }
 
-        /* ========== AUTOCOMPLETE FORNECEDOR (AERP) ========== */
+        /* AUTOCOMPLETE FORNECEDOR */
         .autocomplete-wrapper { position: relative; }
-        .autocomplete-dropdown {
-            display: none;
-            position: absolute;
-            top: 100%;
-            left: 0;
-            right: 0;
-            background: white;
-            border: 1px solid #E5E0D8;
-            border-radius: 8px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.12);
-            max-height: 320px;
-            overflow-y: auto;
-            z-index: 500;
-            margin-top: 4px;
-        }
+        .autocomplete-dropdown { display: none; position: absolute; top: 100%; left: 0; right: 0; background: white; border: 1px solid #E5E0D8; border-radius: 8px; box-shadow: 0 8px 24px rgba(0,0,0,0.12); max-height: 320px; overflow-y: auto; z-index: 500; margin-top: 4px; }
         .autocomplete-dropdown.ativo { display: block; }
-        .autocomplete-item {
-            padding: 8px 14px;
-            cursor: pointer;
-            border-bottom: 1px solid #F0E9DF;
-            transition: background 0.15s;
-        }
+        .autocomplete-item { padding: 8px 14px; cursor: pointer; border-bottom: 1px solid #F0E9DF; transition: background 0.15s; }
         .autocomplete-item:last-child { border-bottom: none; }
         .autocomplete-item:hover, .autocomplete-item.selecionado { background: #FFF8E7; }
-        .autocomplete-item .ac-nome {
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--grafite);
-            line-height: 1.2;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .autocomplete-item .ac-doc {
-            font-size: 10.5px;
-            color: var(--cinza);
-            font-family: 'Courier New', monospace;
-            margin-top: 2px;
-        }
-        .autocomplete-item .ac-tipo {
-            font-size: 9.5px;
-            font-weight: 700;
-            padding: 1px 8px;
-            border-radius: 10px;
-            text-transform: uppercase;
-            letter-spacing: 0.3px;
-        }
+        .autocomplete-item .ac-nome { font-size: 13px; font-weight: 600; color: var(--grafite); line-height: 1.2; display: flex; justify-content: space-between; align-items: center; }
+        .autocomplete-item .ac-doc { font-size: 10.5px; color: var(--cinza); font-family: 'Courier New', monospace; margin-top: 2px; }
+        .autocomplete-item .ac-tipo { font-size: 9.5px; font-weight: 700; padding: 1px 8px; border-radius: 10px; text-transform: uppercase; letter-spacing: 0.3px; }
         .ac-tipo.fornecedor { background: #FFF3E0; color: #C65A11; }
         .ac-tipo.autonomo { background: #E8F5E9; color: #2E7D32; }
         .ac-tipo.beneficiario { background: #E3F2FD; color: #1565C0; }
         .ac-tipo.profissional { background: #F3E5F5; color: #7B1FA2; }
         .ac-tipo.voluntario { background: #FFF8E1; color: #E65100; }
         .ac-tipo.universitario { background: #E0F7FA; color: #00838F; }
-        .ac-vazio {
-            padding: 14px;
-            text-align: center;
-            font-size: 12px;
-            color: var(--cinza);
-            font-style: italic;
-        }
-        .ac-hint {
-            padding: 8px 14px;
-            font-size: 10px;
-            color: var(--cinza);
-            background: #FAFAFA;
-            border-bottom: 1px solid #F0E9DF;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            font-weight: 700;
-        }
+        .ac-vazio { padding: 14px; text-align: center; font-size: 12px; color: var(--cinza); font-style: italic; }
+        .ac-hint { padding: 8px 14px; font-size: 10px; color: var(--cinza); background: #FAFAFA; border-bottom: 1px solid #F0E9DF; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 700; }
 
-        /* Card WhatsApp */
-        .wa-check {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 10px 12px;
-            background: #FAFAFA;
-            border: 1px solid #E5E0D8;
-            border-radius: 8px;
-            cursor: pointer;
-            height: 42px;
-        }
+        /* WhatsApp checkbox */
+        .wa-check { display: flex; align-items: center; gap: 8px; padding: 10px 12px; background: #FAFAFA; border: 1px solid #E5E0D8; border-radius: 8px; cursor: pointer; height: 42px; }
         .wa-check input[type="checkbox"] { width: 18px; height: 18px; cursor: pointer; accent-color: #25D366; }
         .wa-check label { font-size: 12.5px; color: var(--grafite); cursor: pointer; margin: 0; text-transform: none; letter-spacing: 0; }
         .wa-check.marcado { background: #E8F5E9; border-color: #A5D6A7; }
 
-        /* Card vínculo IDP */
-        .vinculo-idp-info {
-            display: none;
-            padding: 10px 12px;
-            background: #E3F2FD;
-            border-left: 3px solid var(--azul);
-            border-radius: 6px;
-            font-size: 11.5px;
-            color: #1565C0;
-            margin-bottom: 10px;
-        }
+        /* Vínculo IDP */
+        .vinculo-idp-info { display: none; padding: 10px 12px; background: #E3F2FD; border-left: 3px solid var(--azul); border-radius: 6px; font-size: 11.5px; color: #1565C0; margin-bottom: 10px; }
         .vinculo-idp-info.ativo { display: block; }
         .vinculo-idp-info strong { color: #0D47A1; }
 
@@ -261,13 +188,20 @@
                 <option value="Convênio">🏛️ Convênio</option>
                 <option value="Emenda">🏛️ Emenda</option>
                 <option value="Patrocínio">💼 Patrocínio</option>
+                <option value="Bazar / Evento">🎁 Bazar / Evento</option>
+                <option value="Venda de Produtos">📦 Venda de Produtos</option>
+                <option value="Receita Financeira">💰 Receita Financeira</option>
+                <option value="Reembolso">🔄 Reembolso</option>
                 <option value="Material">📦 Material</option>
                 <option value="Serviço">🛠️ Serviço</option>
                 <option value="Folha">💼 Folha</option>
                 <option value="Alimentação">🍽️ Alimentação</option>
                 <option value="Transporte">🚗 Transporte</option>
                 <option value="Evento">📅 Evento</option>
-                <option value="Outros">📌 Outros</option>
+                <option value="Locação">🏠 Locação</option>
+                <option value="Administrativo">📋 Administrativo</option>
+                <option value="Outras Receitas">📌 Outras Receitas</option>
+                <option value="Outras Despesas">📌 Outras Despesas</option>
             </select>
             <select id="filtroOrigem" onchange="renderizarLancamentos()" autocomplete="off">
                 <option value="todos">🏢 PJ ou PF</option>
@@ -308,7 +242,7 @@
         <div class="secao-titulo">📋 Dados Principais</div>
         <div class="form-row">
             <div class="form-group"><label>Tipo *</label>
-                <select id="formTipo" autocomplete="off">
+                <select id="formTipo" autocomplete="off" onchange="atualizarCategoriasPorTipo()">
                     <option value="income">📈 Receita</option>
                     <option value="expense" selected>📉 Despesa</option>
                 </select>
@@ -323,19 +257,7 @@
         <div class="form-group"><label>Descrição *</label><input type="text" id="formDescricao" placeholder="Ex: Café da manhã - Reunião Diretoria" autocomplete="off" name="nf_desc_x1"></div>
         <div class="form-row">
             <div class="form-group"><label>Categoria *</label>
-                <select id="formCategoria" autocomplete="off">
-                    <option value="Doação">🤝 Doação</option>
-                    <option value="Convênio">🏛️ Convênio</option>
-                    <option value="Emenda">🏛️ Emenda</option>
-                    <option value="Patrocínio">💼 Patrocínio</option>
-                    <option value="Material">📦 Material</option>
-                    <option value="Serviço">🛠️ Serviço</option>
-                    <option value="Folha">💼 Folha</option>
-                    <option value="Alimentação">🍽️ Alimentação</option>
-                    <option value="Transporte">🚗 Transporte</option>
-                    <option value="Evento">📅 Evento</option>
-                    <option value="Outros" selected>📌 Outros</option>
-                </select>
+                <select id="formCategoria" autocomplete="off"></select>
             </div>
             <div class="form-group"><label>Data *</label><input type="date" id="formData" autocomplete="off"></div>
         </div>
@@ -358,7 +280,7 @@
             <div class="form-group" style="grid-column: span 2;">
                 <label>Nome da Empresa / Pessoa *</label>
                 <div class="autocomplete-wrapper">
-                    <input type="text" id="formEmpresaPessoa" placeholder="Digite 3 letras para buscar..." autocomplete="off" name="nf_emp_x1" oninput="buscarFornecedor(this.value)" onfocus="buscarFornecedor(this.value)">
+                    <input type="text" id="formEmpresaPessoa" placeholder="Digite 2 letras para buscar..." autocomplete="off" name="nf_emp_x1" oninput="buscarFornecedor(this.value)" onfocus="buscarFornecedor(this.value)">
                     <div class="autocomplete-dropdown" id="dropdownFornecedor"></div>
                 </div>
             </div>
@@ -442,7 +364,7 @@
     <div class="modal"><h2>📋 Detalhes do Lançamento <button class="fechar" onclick="fecharDetalhes()">×</button></h2>
         <div id="conteudoDetalhes"></div>
         <div class="btn-group">
-            <button class="btn btn-roxo" onclick="imprimirReciboAtual()">🖨️ Imprimir Recibo</button>
+            <button class="btn btn-roxo" id="btnImprimirDoc" onclick="imprimirDocumentoAtual()">🖨️ Imprimir</button>
             <button class="btn btn-outline" onclick="fecharDetalhes()">Fechar</button>
         </div>
     </div>
@@ -512,7 +434,7 @@
     <div class="modal modal-pequeno">
         <h2>🏢 Cadastrar no CRM? <button class="fechar" onclick="fecharModalCrm()">×</button></h2>
         <div id="crmMsg" style="font-size:13.5px;color:var(--grafite);margin-bottom:16px;line-height:1.6;"></div>
-        <div class="form-group">
+        <div class="form-group" id="grupoCrmTipo">
             <label>Tipo de Cadastro</label>
             <select id="crmTipoCadastro" autocomplete="off">
                 <option value="Fornecedor">🏢 Fornecedor (Pessoa Jurídica)</option>
@@ -529,8 +451,8 @@
 <script>
 // ============================================================
 // FINANCEIRO - AMOVIN ERP (AERP)
-// Autocomplete de fornecedor nas 4 bases (CRM + IDP)
-// Código: A-FIN-YYYY-NNNN | Log de auditoria imutável
+// Categorias dinâmicas | Recibo (despesa) + Comprovante (receita)
+// Autocomplete ordenado alfabeticamente
 // ============================================================
 
 var lancamentos = [];
@@ -549,8 +471,49 @@ var lancAtualDetalhes = null;
 var anosPopulados = false;
 var statusAlvo = null;
 var fornecedorSelecionado = null;
-var novoFornecedorPendente = null;
 var dadosPendentesCrm = null;
+var modoEdicao = false;
+
+// CATEGORIAS POR TIPO
+var CATEGORIAS_RECEITA = [
+    { v: 'Doação', l: '🤝 Doação' },
+    { v: 'Convênio', l: '🏛️ Convênio' },
+    { v: 'Emenda', l: '🏛️ Emenda' },
+    { v: 'Patrocínio', l: '💼 Patrocínio' },
+    { v: 'Bazar / Evento', l: '🎁 Bazar / Evento' },
+    { v: 'Venda de Produtos', l: '📦 Venda de Produtos' },
+    { v: 'Receita Financeira', l: '💰 Receita Financeira' },
+    { v: 'Reembolso', l: '🔄 Reembolso' },
+    { v: 'Outras Receitas', l: '📌 Outras Receitas' }
+];
+var CATEGORIAS_DESPESA = [
+    { v: 'Material', l: '📦 Material' },
+    { v: 'Serviço', l: '🛠️ Serviço' },
+    { v: 'Folha', l: '💼 Folha' },
+    { v: 'Alimentação', l: '🍽️ Alimentação' },
+    { v: 'Transporte', l: '🚗 Transporte' },
+    { v: 'Evento', l: '📅 Evento' },
+    { v: 'Locação', l: '🏠 Locação' },
+    { v: 'Administrativo', l: '📋 Administrativo' },
+    { v: 'Outras Despesas', l: '📌 Outras Despesas' }
+];
+
+function atualizarCategoriasPorTipo(categoriaAtual) {
+    var tipo = document.getElementById('formTipo').value;
+    var sel = document.getElementById('formCategoria');
+    var lista = tipo === 'income' ? CATEGORIAS_RECEITA : CATEGORIAS_DESPESA;
+    sel.innerHTML = '';
+    lista.forEach(function(c) {
+        var opt = document.createElement('option');
+        opt.value = c.v;
+        opt.textContent = c.l;
+        sel.appendChild(opt);
+    });
+    if (categoriaAtual) {
+        sel.value = categoriaAtual;
+        if (!sel.value) sel.value = lista[0].v;
+    }
+}
 
 // ============================================================
 // USUÁRIO LOGADO
@@ -612,7 +575,6 @@ function extrairMesAno(dataStr) {
 }
 function apenasNumeros(str) { return (str || '').replace(/\D/g, ''); }
 
-// Máscara CPF/CNPJ
 function mascaraCpfCnpj(input) {
     var v = input.value.replace(/\D/g, '');
     if (v.length > 14) v = v.substring(0, 14);
@@ -628,14 +590,9 @@ function mascaraCpfCnpj(input) {
     }
     input.value = v;
     var numeros = apenasNumeros(v);
-    if (numeros.length <= 11) {
-        document.getElementById('formTipoOrigem').value = 'PF';
-    } else {
-        document.getElementById('formTipoOrigem').value = 'PJ';
-    }
+    document.getElementById('formTipoOrigem').value = numeros.length <= 11 ? 'PF' : 'PJ';
 }
 
-// Máscara telefone
 function mascaraTelefone(input) {
     var v = input.value.replace(/\D/g, '');
     if (v.length > 11) v = v.substring(0, 11);
@@ -657,8 +614,6 @@ function toggleOlhoSenhaStatus() {
     var el = document.getElementById('statusSenha');
     el.type = el.type === 'password' ? 'text' : 'password';
 }
-
-// WhatsApp checkbox visual
 function toggleWhatsApp() {
     var cb = document.getElementById('formIsWhatsApp');
     cb.checked = !cb.checked;
@@ -669,6 +624,11 @@ function atualizarWaCheck() {
     var wrap = document.getElementById('waCheckWrapper');
     if (cb.checked) wrap.classList.add('marcado');
     else wrap.classList.remove('marcado');
+}
+function escapeHtml(s) {
+    return String(s || '').replace(/[&<>"']/g, function(c) {
+        return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c];
+    });
 }
 
 // ============================================================
@@ -754,8 +714,7 @@ function escutarTudo() {
             profissionais.push({ _fbId: doc.id, _tipo: 'profissional',
                 nome: d.fullName || d.nome || 'Sem nome',
                 cpf: d.cpf || '', telefone: d.phone || d.telefone || '',
-                whatsapp: d.whatsapp || '', especialidade: d.specialty || '',
-                origem: 'idp' });
+                whatsapp: d.whatsapp || '', origem: 'idp' });
         });
     });
     db.collection('volunteers').onSnapshot(function(snap) {
@@ -777,7 +736,7 @@ function carregarLocalStorage() {
 }
 
 // ============================================================
-// LOG DE AUDITORIA (imutável)
+// LOG DE AUDITORIA
 // ============================================================
 async function registrarLogAuditoria(acao, detalhes, extra) {
     var u = getUsuarioLogado();
@@ -794,15 +753,13 @@ async function registrarLogAuditoria(acao, detalhes, extra) {
 }
 
 // ============================================================
-// AUTOCOMPLETE DE FORNECEDOR (CRM + IDP)
+// AUTOCOMPLETE EM ORDEM ALFABÉTICA
 // ============================================================
 var nomesCache = [];
 
 function construirCacheBusca() {
     nomesCache = [];
-    // CRM
     contatos.forEach(function(c) {
-        var cat = (c.categoria || 'Fornecedor').toLowerCase();
         nomesCache.push({
             origem: 'crm', _fbId: c._fbId,
             nome: c.nome || '',
@@ -815,7 +772,6 @@ function construirCacheBusca() {
             vinculoId: null, vinculoCampo: null
         });
     });
-    // IDP - Beneficiários
     beneficiarios.forEach(function(b) {
         nomesCache.push({
             origem: 'idp', _fbId: b._fbId,
@@ -825,7 +781,6 @@ function construirCacheBusca() {
             tipoOrigem: 'PF', vinculoId: b._fbId, vinculoCampo: 'beneficiarioId'
         });
     });
-    // IDP - Profissionais
     profissionais.forEach(function(p) {
         nomesCache.push({
             origem: 'idp', _fbId: p._fbId,
@@ -835,7 +790,6 @@ function construirCacheBusca() {
             tipoOrigem: 'PF', vinculoId: p._fbId, vinculoCampo: 'profissionalId'
         });
     });
-    // IDP - Voluntários
     voluntarios.forEach(function(v) {
         nomesCache.push({
             origem: 'idp', _fbId: v._fbId,
@@ -845,35 +799,36 @@ function construirCacheBusca() {
             tipoOrigem: 'PF', vinculoId: v._fbId, vinculoCampo: 'voluntarioId'
         });
     });
+    // Ordena alfabeticamente
+    nomesCache.sort(function(a, b) {
+        return (a.nome || '').localeCompare(b.nome || '', 'pt-BR');
+    });
 }
 
 function buscarFornecedor(texto) {
     construirCacheBusca();
     var dropdown = document.getElementById('dropdownFornecedor');
     var t = (texto || '').trim().toLowerCase();
-    if (t.length < 2) { dropdown.classList.remove('ativo'); dropdown.innerHTML = ''; fornecedorSelecionado = null; return; }
+    if (t.length < 2) { dropdown.classList.remove('ativo'); dropdown.innerHTML = ''; return; }
 
-    // Busca por nome OU documento
     var achados = nomesCache.filter(function(f) {
         return f.nome.toLowerCase().indexOf(t) >= 0 ||
                apenasNumeros(f.doc).indexOf(apenasNumeros(t)) >= 0;
     });
-    achados = achados.slice(0, 12);
+    achados = achados.slice(0, 15);
 
     if (achados.length === 0) {
         dropdown.innerHTML = '<div class="ac-hint">Nenhum cadastro encontrado</div>' +
-            '<div class="ac-item" style="padding:10px 14px;font-size:12px;color:var(--laranja);font-weight:600;">➕ Cadastrar novo: "' + texto + '"</div>';
+            '<div class="autocomplete-item" id="acNovo"><div class="ac-nome">➕ Cadastrar novo: "' + escapeHtml(texto) + '"</div></div>';
         dropdown.classList.add('ativo');
-        // Clicar em "cadastrar novo" deixa como novo fornecedor
-        dropdown.querySelector('.ac-item').onclick = function() {
+        document.getElementById('acNovo').onclick = function() {
             dropdown.classList.remove('ativo');
             fornecedorSelecionado = { nome: texto, novo: true };
-            document.getElementById('formEmpresaPessoa').value = texto;
         };
         return;
     }
 
-    var html = '<div class="ac-hint">' + achados.length + ' cadastro(s) encontrado(s)</div>';
+    var html = '<div class="ac-hint">' + achados.length + ' cadastro(s) — ordem alfabética</div>';
     achados.forEach(function(f, i) {
         html += '<div class="autocomplete-item" data-idx="' + i + '">' +
             '<div class="ac-nome">' + escapeHtml(f.nome) + ' <span class="ac-tipo ' + f.tipoClasse + '">' + f.tipoLabel + '</span></div>' +
@@ -883,18 +838,11 @@ function buscarFornecedor(texto) {
     dropdown.innerHTML = html;
     dropdown.classList.add('ativo');
 
-    var items = dropdown.querySelectorAll('.autocomplete-item');
-    items.forEach(function(el) {
+    dropdown.querySelectorAll('.autocomplete-item').forEach(function(el) {
         el.onclick = function() {
             var idx = parseInt(el.getAttribute('data-idx'), 10);
             selecionarFornecedor(achados[idx]);
         };
-    });
-}
-
-function escapeHtml(s) {
-    return String(s || '').replace(/[&<>"']/g, function(c) {
-        return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c];
     });
 }
 
@@ -907,7 +855,6 @@ function selecionarFornecedor(f) {
     document.getElementById('formIsWhatsApp').checked = f.isWhatsApp === true;
     atualizarWaCheck();
 
-    // Vínculo IDP
     var infoBox = document.getElementById('vinculoIdpInfo');
     if (f.origem === 'idp' && f.vinculoCampo) {
         infoBox.innerHTML = '🔗 <strong>Vinculado ao IDP</strong> como ' + f.tipoLabel + ': ' + escapeHtml(f.nome);
@@ -916,14 +863,11 @@ function selecionarFornecedor(f) {
         infoBox.classList.remove('ativo');
         infoBox.innerHTML = '';
     }
-
     document.getElementById('dropdownFornecedor').classList.remove('ativo');
 }
 
-// Fechar dropdown ao clicar fora
 document.addEventListener('click', function(e) {
-    var wrapper = e.target.closest('.autocomplete-wrapper');
-    if (!wrapper) {
+    if (!e.target.closest('.autocomplete-wrapper')) {
         var dd = document.getElementById('dropdownFornecedor');
         if (dd) dd.classList.remove('ativo');
     }
@@ -1003,7 +947,7 @@ document.addEventListener('change', function(e) {
 });
 
 // ============================================================
-// CÓDIGO A-FIN-YYYY-NNNN
+// CÓDIGO
 // ============================================================
 async function gerarProximoCodigo() {
     var ano = new Date().getFullYear();
@@ -1115,12 +1059,13 @@ document.getElementById('authJust').addEventListener('input', function() {
 // ============================================================
 function abrirNovoLancamento() {
     fornecedorSelecionado = null;
+    modoEdicao = false;
     document.getElementById('lancId').value = '';
     document.getElementById('modalTitulo').innerHTML = '➕ Novo Lançamento <button class="fechar" onclick="fecharForm()">×</button>';
     document.getElementById('formTipo').value = 'expense';
     document.getElementById('formStatus').value = 'Pago';
     document.getElementById('formDescricao').value = '';
-    document.getElementById('formCategoria').value = 'Outros';
+    atualizarCategoriasPorTipo('Outras Despesas');
     document.getElementById('formData').value = new Date().toISOString().split('T')[0];
     document.getElementById('formValor').value = '';
     document.getElementById('formTipoOrigem').value = 'PJ';
@@ -1146,12 +1091,13 @@ function abrirFormEdicao(lancId) {
     var l = lancamentos.find(function(x) { return x._fbId === lancId; });
     if (!l) return;
     fornecedorSelecionado = null;
+    modoEdicao = true;
     document.getElementById('lancId').value = lancId;
     document.getElementById('modalTitulo').innerHTML = '✏️ Editar: ' + (l.codigo || '') + ' <button class="fechar" onclick="fecharForm()">×</button>';
     document.getElementById('formTipo').value = l.type || 'expense';
     document.getElementById('formStatus').value = l.status || 'Pago';
     document.getElementById('formDescricao').value = l.description || '';
-    document.getElementById('formCategoria').value = l.category || 'Outros';
+    atualizarCategoriasPorTipo(l.category || '');
     document.getElementById('formData').value = l.date || '';
     document.getElementById('formValor').value = formatarNumero(l.value || 0);
     document.getElementById('formTipoOrigem').value = l.tipoOrigem || 'PJ';
@@ -1227,7 +1173,6 @@ async function salvarLancamentoFinal() {
         obs: obs, atualizadoEm: new Date().toISOString(), atualizadoPor: u.usuario
     };
 
-    // Vínculo IDP
     if (fornecedorSelecionado && fornecedorSelecionado.origem === 'idp' && fornecedorSelecionado.vinculoCampo) {
         dados[fornecedorSelecionado.vinculoCampo] = fornecedorSelecionado.vinculoId;
         dados.fornecedorOrigem = 'idp';
@@ -1256,6 +1201,8 @@ async function salvarLancamentoFinal() {
                 mostrarToast('✅ Lançamento atualizado!', 'success');
                 registrarLogAuditoria('EDITAR', 'Lançamento ' + (l.codigo || idEdit), { valorAntes: l.value, valorDepois: valor });
                 fecharForm(); adminAutenticado = null;
+                // Verificar CRM também ao editar
+                verificarCadastroCrm(dados);
             } else {
                 dados.codigo = await gerarProximoCodigo();
                 dados.id = dados.codigo;
@@ -1265,12 +1212,10 @@ async function salvarLancamentoFinal() {
                 mostrarToast('✅ Lançamento ' + dados.codigo + ' criado!', 'success');
                 registrarLogAuditoria('CRIAR', 'Lançamento ' + dados.codigo, { valor: valor });
                 fecharForm();
-                // Verifica se fornecedor é novo → pergunta cadastro no CRM
                 verificarCadastroCrm(dados);
             }
         } catch (e) { mostrarToast('❌ Erro: ' + e.message, 'error'); }
     } else {
-        // Modo local
         if (idEdit) {
             var idx = lancamentos.findIndex(function(l) { return l._fbId === idEdit; });
             if (idx >= 0) Object.assign(lancamentos[idx], dados);
@@ -1287,31 +1232,21 @@ async function salvarLancamentoFinal() {
 }
 
 // ============================================================
-// VERIFICAR CADASTRO NO CRM (fornecedor novo)
+// VERIFICAR CADASTRO NO CRM
 // ============================================================
 async function verificarCadastroCrm(dadosLancamento) {
     var nome = dadosLancamento.empresaPessoaFisica;
     var doc = dadosLancamento.cnpjCpf;
     var tel = dadosLancamento.telefone;
     if (!nome) return;
+    if (fornecedorSelecionado && (fornecedorSelecionado.origem === 'idp' || fornecedorSelecionado.origem === 'crm')) return;
 
-    // Se já veio do IDP ou do CRM, não pergunta
-    if (fornecedorSelecionado && (fornecedorSelecionado.origem === 'idp' || fornecedorSelecionado.origem === 'crm')) {
-        return;
-    }
-
-    // Verifica se já existe no CRM pelo nome ou documento
     var numDoc = apenasNumeros(doc);
     var existente = null;
-    if (numDoc) {
-        existente = contatos.find(function(c) { return apenasNumeros(c.cnpjCpf) === numDoc; });
-    }
-    if (!existente) {
-        existente = contatos.find(function(c) { return (c.nome || '').toLowerCase() === nome.toLowerCase(); });
-    }
+    if (numDoc) existente = contatos.find(function(c) { return apenasNumeros(c.cnpjCpf) === numDoc; });
+    if (!existente) existente = contatos.find(function(c) { return (c.nome || '').toLowerCase() === nome.toLowerCase(); });
 
     if (existente) {
-        // Já existe — pergunta se quer atualizar o nome (se for diferente)
         if (numDoc && existente.nome && existente.nome.toLowerCase() !== nome.toLowerCase()) {
             abrirModalCrm({
                 tipo: 'atualizar',
@@ -1326,7 +1261,6 @@ async function verificarCadastroCrm(dadosLancamento) {
         return;
     }
 
-    // Não existe — pergunta se quer cadastrar
     var tipoSugerido = numDoc.length > 11 ? 'Fornecedor' : 'Autônomo';
     abrirModalCrm({
         tipo: 'novo',
@@ -1342,11 +1276,12 @@ async function verificarCadastroCrm(dadosLancamento) {
 function abrirModalCrm(opts) {
     dadosPendentesCrm = opts;
     document.getElementById('crmMsg').innerHTML = opts.msg;
+    var grupo = document.getElementById('grupoCrmTipo');
     var selTipo = document.getElementById('crmTipoCadastro');
     if (opts.tipo === 'atualizar') {
-        selTipo.style.display = 'none';
+        grupo.style.display = 'none';
     } else {
-        selTipo.style.display = 'block';
+        grupo.style.display = 'block';
         selTipo.value = opts.dados.tipoSugerido || 'Fornecedor';
     }
     document.getElementById('modalConfirmaCrm').classList.add('ativo');
@@ -1363,7 +1298,6 @@ async function confirmarCadastroCrm() {
     if (firebasePronto && db) {
         try {
             if (opts.tipo === 'atualizar') {
-                // Atualiza nome do contato existente
                 await db.collection('contatos').doc(opts.dados.existenteId).update({
                     nome: opts.dados.novoNome,
                     cnpjCpf: opts.dados.novoDoc || '',
@@ -1372,10 +1306,9 @@ async function confirmarCadastroCrm() {
                     whatsapp: opts.dados.isWhatsApp === true ? (opts.dados.novoTel || '') : '',
                     atualizadoEm: new Date().toISOString()
                 });
-                registrarLogAuditoria('CRM_ATUALIZAR_NOME', 'Contato ' + opts.dados.existenteId + ' renomeado para ' + opts.dados.novoNome, null);
+                registrarLogAuditoria('CRM_ATUALIZAR_NOME', 'Contato renomeado para ' + opts.dados.novoNome, null);
                 mostrarToast('✅ Nome atualizado no CRM!', 'success');
             } else {
-                // Cria novo contato
                 var categoria = document.getElementById('crmTipoCadastro').value;
                 var codigo = await gerarProximoCodigoCrm();
                 await db.collection('contatos').add({
@@ -1395,7 +1328,7 @@ async function confirmarCadastroCrm() {
                     }],
                     criadoEm: new Date().toISOString()
                 });
-                registrarLogAuditoria('CRM_CRIAR', 'Novo contato no CRM: ' + opts.dados.novoNome, { categoria: categoria });
+                registrarLogAuditoria('CRM_CRIAR', 'Novo contato: ' + opts.dados.novoNome, { categoria: categoria });
                 mostrarToast('✅ Cadastrado no CRM como ' + categoria + '!', 'success');
             }
         } catch (e) { mostrarToast('❌ Erro: ' + e.message, 'error'); }
@@ -1441,15 +1374,12 @@ async function confirmarMudancaStatus() {
         if (!admin) { mostrarToast('❌ Credenciais inválidas!', 'error'); return; }
         quemFez = { usuario: admin.usuario, nome: admin.nome, justificativa: '[mudança de status]' };
     }
-
     var logEntry = {
         data: new Date().toISOString(),
         usuario: quemFez.usuario, nomeUsuario: quemFez.nome,
         acao: 'status: ' + statusAlvo.status + ' → ' + novoStatus,
-        justificativa: quemFez.justificativa,
-        detalhes: 'Mudança de status'
+        justificativa: quemFez.justificativa, detalhes: 'Mudança de status'
     };
-
     if (firebasePronto && db) {
         try {
             var l = lancamentos.find(function(x) { return x._fbId === statusAlvo._fbId; });
@@ -1500,7 +1430,7 @@ async function executarExclusao(fbId) {
 }
 
 // ============================================================
-// DETALHES / LOG
+// DETALHES
 // ============================================================
 function verDetalhes(fbId) {
     var l = lancamentos.find(function(x) { return x._fbId === fbId; });
@@ -1531,6 +1461,10 @@ function verDetalhes(fbId) {
     html += '</div>';
     if (l.obs) html += '<div style="margin-top:12px;padding:12px;background:#F8F4ED;border-radius:8px;font-size:13px;"><strong>📝 Obs:</strong> ' + l.obs + '</div>';
     document.getElementById('conteudoDetalhes').innerHTML = html;
+    var btn = document.getElementById('btnImprimirDoc');
+    if (btn) {
+        btn.textContent = l.type === 'income' ? '📄 Comprovante de Arrecadação' : '🖨️ Recibo de Pagamento';
+    }
     document.getElementById('modalDetalhes').classList.add('ativo');
 }
 function dado(l, v, full, classe) {
@@ -1540,6 +1474,9 @@ function dado(l, v, full, classe) {
 }
 function fecharDetalhes() { document.getElementById('modalDetalhes').classList.remove('ativo'); lancAtualDetalhes = null; }
 
+// ============================================================
+// LOG DO LANÇAMENTO
+// ============================================================
 function verLog(fbId) {
     var l = lancamentos.find(function(x) { return x._fbId === fbId; });
     if (!l) return;
@@ -1692,13 +1629,77 @@ function atualizarKPIs() {
 }
 
 // ============================================================
-// RECIBO PREMIUM
+// IMPRESSÃO - ESCOLHE LAYOUT POR TIPO
 // ============================================================
-function imprimirReciboAtual() {
+function imprimirDocumentoAtual() {
     if (!lancAtualDetalhes) return;
-    imprimirRecibo(lancAtualDetalhes);
-    registrarLogAuditoria('IMPRIMIR_RECIBO', 'Lançamento ' + lancAtualDetalhes.codigo, null);
+    if (lancAtualDetalhes.type === 'income') {
+        imprimirComprovanteArrecadacao(lancAtualDetalhes);
+        registrarLogAuditoria('IMPRIMIR_COMPROVANTE', 'Lançamento ' + lancAtualDetalhes.codigo, null);
+    } else {
+        imprimirRecibo(lancAtualDetalhes);
+        registrarLogAuditoria('IMPRIMIR_RECIBO', 'Lançamento ' + lancAtualDetalhes.codigo, null);
+    }
 }
+
+// CSS compartilhado dos documentos
+function cssDocumento() {
+    var css = '<style>';
+    css += '*{box-sizing:border-box;margin:0;padding:0;}';
+    css += 'body{font-family:"Helvetica Neue",Arial,sans-serif;padding:10mm 12mm;max-width:210mm;margin:0 auto;color:#1A1A1A;background:#FFF;line-height:1.3;font-size:11px;}';
+    css += '.header{text-align:center;padding-bottom:6px;margin-bottom:8px;border-bottom:2px double #C65A11;}';
+    css += '.header img{max-width:140px;height:auto;margin-bottom:2px;}';
+    css += '.header h1{color:#C65A11;font-size:16px;letter-spacing:1px;font-weight:800;margin:2px 0;}';
+    css += '.header p{color:#6B7280;font-size:8.5px;margin:1px 0;line-height:1.25;}';
+    css += '.titulo-doc{text-align:center;font-size:14px;font-weight:800;color:#C65A11;letter-spacing:4px;margin:6px 0 3px;text-transform:uppercase;}';
+    css += '.codigo-box{background:linear-gradient(135deg,#FFF8E7,#FFF3E0);border:2px dashed #C65A11;padding:6px 12px;text-align:center;margin:0 auto 8px;border-radius:6px;max-width:280px;}';
+    css += '.codigo-box .label{font-size:7px;color:#6B7280;letter-spacing:2px;text-transform:uppercase;font-weight:700;}';
+    css += '.codigo-box .codigo{font-size:15px;font-weight:800;color:#C65A11;letter-spacing:2px;margin-top:1px;font-family:"Courier New",monospace;}';
+    css += '.corpo{font-size:10.5px;text-align:justify;line-height:1.5;margin-bottom:6px;padding:0 2px;}';
+    css += '.corpo strong{color:#A04A0E;}';
+    css += '.tabela-dados{width:100%;border-collapse:separate;border-spacing:0;margin:8px 0;border-radius:6px;overflow:hidden;border:1px solid #E5E0D8;font-size:10px;}';
+    css += '.tabela-dados thead{background:#C65A11;}';
+    css += '.tabela-dados thead th{color:white;font-size:8px;text-transform:uppercase;letter-spacing:1px;padding:5px 8px;text-align:left;font-weight:700;}';
+    css += '.tabela-dados tbody td{padding:5px 8px;font-size:10px;border-bottom:1px solid #F0E9DF;color:#1A1A1A;}';
+    css += '.tabela-dados tbody tr:last-child td{border-bottom:none;}';
+    css += '.tabela-dados tbody tr:nth-child(even){background:#FBF8F2;}';
+    css += '.tabela-dados td.label{color:#6B7280;width:32%;font-weight:600;font-size:9px;text-transform:uppercase;letter-spacing:0.3px;}';
+    css += '.valor-destaque{background:#FFF8E7;border-left:4px solid #C65A11;padding:8px 12px;margin:10px 0;border-radius:6px;}';
+    css += '.valor-destaque .vl{font-size:15px;font-weight:800;color:#C65A11;}';
+    css += '.valor-destaque .ext{font-size:9.5px;color:#6B7280;font-style:italic;margin-top:2px;}';
+    css += '.aviso{background:#FEF3C7;border-left:3px solid #E65100;padding:6px 10px;font-size:9px;margin:6px 0;border-radius:4px;color:#7C2D12;line-height:1.4;}';
+    css += '.aviso strong{display:block;margin-bottom:1px;color:#7C2D12;}';
+    css += '.local-data{text-align:right;font-size:10px;margin:10px 0 4px;color:#1A1A1A;font-style:italic;}';
+    css += '.assinaturas{margin-top:22px;display:flex;justify-content:space-between;gap:30px;}';
+    css += '.assinaturas.centralizada{justify-content:center;}';
+    css += '.assinatura{flex:1;text-align:center;max-width:280px;}';
+    css += '.assinatura .linha{border-top:1px solid #1A1A1A;margin-bottom:3px;}';
+    css += '.assinatura .nome{font-size:10px;font-weight:700;color:#1A1A1A;}';
+    css += '.assinatura .sub{font-size:8.5px;color:#6B7280;margin-top:1px;}';
+    css += '.rodape{margin-top:14px;text-align:center;font-size:7.5px;color:#8A8F98;border-top:1px solid #E5E0D8;padding-top:6px;line-height:1.4;}';
+    css += '.rodape a{color:#C65A11;text-decoration:none;}';
+    css += '@media print{body{padding:6mm 8mm;}@page{size:A4;margin:6mm;}*{-webkit-print-color-adjust:exact;print-color-adjust:exact;}}';
+    css += '</style>';
+    return css;
+}
+
+function cabecalhoAmovin() {
+    var h = '<div class="header">';
+    h += '<img src="/images/amovin-logo.png" alt="AMOVIN" onerror="this.style.display=\'none\';this.insertAdjacentHTML(\'afterend\',\'<h1>AMOVIN</h1>\');">';
+    h += '<p>Associação e Movimento pela Inclusão em Rio Paranaíba/MG</p>';
+    h += '<p>Rua Francisco de Paula Moura Neto, nº 180, Bairro Novo Rio, Rio Paranaíba - MG, CEP 38810-000</p>';
+    h += '<p>CNPJ: 55.880.046/0001-34</p>';
+    h += '</div>';
+    return h;
+}
+
+function rodapeAmovin() {
+    return '<div class="rodape">Documento gerado eletronicamente em ' + new Date().toLocaleString('pt-BR') + '<br>AMOVIN ERP • <a href="https://www.vigorre.com.br">www.vigorre.com.br</a> • (34) 99185-0735</div>';
+}
+
+// ============================================================
+// RECIBO DE PAGAMENTO (despesa)
+// ============================================================
 function imprimirRecibo(l) {
     var dataFmt = l.date ? new Date(l.date + 'T00:00:00').toLocaleDateString('pt-BR') : '-';
     var valor = formatarMoeda(l.value || 0);
@@ -1724,45 +1725,10 @@ function imprimirRecibo(l) {
     var quitarFrase = (natureza === 'Compra de Material') ? 'dos itens de consumo' : 'dos serviços prestados';
 
     var html = '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Recibo ' + (l.codigo || '') + '</title>';
-    html += '<style>';
-    html += '*{box-sizing:border-box;margin:0;padding:0;}';
-    html += 'body{font-family:"Helvetica Neue",Arial,sans-serif;padding:10mm 12mm;max-width:210mm;margin:0 auto;color:#1A1A1A;background:#FFF;line-height:1.3;font-size:11px;}';
-    html += '.header{text-align:center;padding-bottom:6px;margin-bottom:8px;border-bottom:2px double #C65A11;}';
-    html += '.header img{max-width:140px;height:auto;margin-bottom:2px;}';
-    html += '.header h1{color:#C65A11;font-size:16px;letter-spacing:1px;font-weight:800;margin:2px 0;}';
-    html += '.header p{color:#6B7280;font-size:8.5px;margin:1px 0;line-height:1.25;}';
-    html += '.titulo-doc{text-align:center;font-size:14px;font-weight:800;color:#C65A11;letter-spacing:4px;margin:6px 0 3px;text-transform:uppercase;}';
-    html += '.codigo-box{background:linear-gradient(135deg,#FFF8E7,#FFF3E0);border:2px dashed #C65A11;padding:6px 12px;text-align:center;margin:0 auto 8px;border-radius:6px;max-width:280px;}';
-    html += '.codigo-box .label{font-size:7px;color:#6B7280;letter-spacing:2px;text-transform:uppercase;font-weight:700;}';
-    html += '.codigo-box .codigo{font-size:15px;font-weight:800;color:#C65A11;letter-spacing:2px;margin-top:1px;font-family:"Courier New",monospace;}';
-    html += '.corpo{font-size:10.5px;text-align:justify;line-height:1.5;margin-bottom:6px;padding:0 2px;}';
-    html += '.corpo strong{color:#A04A0E;}';
-    html += '.tabela-dados{width:100%;border-collapse:separate;border-spacing:0;margin:8px 0;border-radius:6px;overflow:hidden;border:1px solid #E5E0D8;font-size:10px;}';
-    html += '.tabela-dados thead{background:#C65A11;}';
-    html += '.tabela-dados thead th{color:white;font-size:8px;text-transform:uppercase;letter-spacing:1px;padding:5px 8px;text-align:left;font-weight:700;}';
-    html += '.tabela-dados tbody td{padding:5px 8px;font-size:10px;border-bottom:1px solid #F0E9DF;color:#1A1A1A;}';
-    html += '.tabela-dados tbody tr:last-child td{border-bottom:none;}';
-    html += '.tabela-dados tbody tr:nth-child(even){background:#FBF8F2;}';
-    html += '.tabela-dados td.label{color:#6B7280;width:32%;font-weight:600;font-size:9px;text-transform:uppercase;letter-spacing:0.3px;}';
-    html += '.aviso{background:#FEF3C7;border-left:3px solid #E65100;padding:6px 10px;font-size:9px;margin:6px 0;border-radius:4px;color:#7C2D12;line-height:1.4;}';
-    html += '.aviso strong{display:block;margin-bottom:1px;color:#7C2D12;}';
-    html += '.local-data{text-align:right;font-size:10px;margin:10px 0 4px;color:#1A1A1A;font-style:italic;}';
-    html += '.assinaturas{margin-top:22px;display:flex;justify-content:space-between;gap:30px;}';
-    html += '.assinatura{flex:1;text-align:center;}';
-    html += '.assinatura .linha{border-top:1px solid #1A1A1A;margin-bottom:3px;}';
-    html += '.assinatura .nome{font-size:10px;font-weight:700;color:#1A1A1A;}';
-    html += '.assinatura .sub{font-size:8.5px;color:#6B7280;margin-top:1px;}';
-    html += '.rodape{margin-top:14px;text-align:center;font-size:7.5px;color:#8A8F98;border-top:1px solid #E5E0D8;padding-top:6px;line-height:1.4;}';
-    html += '.rodape a{color:#C65A11;text-decoration:none;}';
-    html += '@media print{body{padding:6mm 8mm;}@page{size:A4;margin:6mm;}*{-webkit-print-color-adjust:exact;print-color-adjust:exact;}}';
-    html += '</style></head><body>';
-    html += '<div class="header">';
-    html += '<img src="/images/amovin-logo.png" alt="AMOVIN" onerror="this.style.display=\'none\';this.insertAdjacentHTML(\'afterend\',\'<h1>AMOVIN</h1>\');">';
-    html += '<p>Associação e Movimento pela Inclusão em Rio Paranaíba/MG</p>';
-    html += '<p>Rua Francisco de Paula Moura Neto, nº 180, Bairro Novo Rio, Rio Paranaíba - MG, CEP 38810-000</p>';
-    html += '<p>CNPJ: 55.880.046/0001-34</p>';
-    html += '</div>';
-    html += '<div class="titulo-doc">Recibo</div>';
+    html += cssDocumento();
+    html += '</head><body>';
+    html += cabecalhoAmovin();
+    html += '<div class="titulo-doc">Recibo de Pagamento</div>';
     html += '<div class="codigo-box"><div class="label">Documento Nº</div><div class="codigo">' + (l.codigo || '---') + '</div></div>';
     html += '<div class="corpo">';
     html += 'Recebi da <strong>AMOVIN - Associação e Movimento pela Inclusão em Rio Paranaíba</strong>, inscrita no CNPJ <strong>55.880.046/0001-34</strong>, com sede na <strong>Rua Francisco de Paula Moura Neto, nº 180, Bairro Novo Rio, Rio Paranaíba - MG, CEP 38810-000</strong>, a importância de ';
@@ -1782,22 +1748,88 @@ function imprimirRecibo(l) {
     html += '<tr><td class="label">Telefone de Contato</td><td>' + telefone + '</td></tr>';
     html += '</tbody></table>';
     if (l.hasFiscalReceipt === false) {
-        html += '<div class="aviso"><strong>⚠️ SEM NOTA FISCAL EMITIDA</strong>Este documento serve como comprovante interno de controle financeiro da AMOVIN para despesas sem documento fiscal.</div>';
+        html += '<div class="aviso"><strong>⚠️ SEM NOTA FISCAL EMITIDA</strong>Este documento serve como comprovante interno de controle financeiro da AMOVIN.</div>';
     }
     html += '<div class="local-data">' + localEmissao + ', ' + (dataFmt || '—') + '.</div>';
     html += '<div class="assinaturas">';
     html += '<div class="assinatura"><div class="linha"></div><div class="nome">' + nomeResponsavel + '</div><div class="sub">Responsável AMOVIN</div></div>';
     html += '<div class="assinatura"><div class="linha"></div><div class="nome">' + nomePrestador + '</div><div class="sub">' + (cpfCnpj !== '—' ? 'CPF/CNPJ: ' + cpfCnpj : 'Prestador / Vendedor') + '</div></div>';
     html += '</div>';
-    html += '<div class="rodape">Documento gerado eletronicamente em ' + new Date().toLocaleString('pt-BR') + '<br>AMOVIN ERP • <a href="https://www.vigorre.com.br">www.vigorre.com.br</a> • (34) 99185-0735</div>';
+    html += rodapeAmovin();
     html += '</body></html>';
+    abrirJanelaImpressao(html);
+}
 
+// ============================================================
+// COMPROVANTE DE ARRECADAÇÃO (receita)
+// ============================================================
+function imprimirComprovanteArrecadacao(l) {
+    var dataFmt = l.date ? new Date(l.date + 'T00:00:00').toLocaleDateString('pt-BR') : '-';
+    var valor = formatarMoeda(l.value || 0);
+    var valorExtenso = numeroPorExtenso(l.value || 0);
+    var formaRecebimento = l.formaPagamento || '—';
+    var nomeDoador = l.empresaPessoaFisica || 'Doador Anônimo';
+    var docDoador = l.cnpjCpf || '—';
+    var telDoador = l.telefone || '—';
+    var localEmissao = l.localEmissao || 'Rio Paranaíba - MG';
+    var descricao = l.description || '—';
+    var categoria = l.category || 'Outras Receitas';
+    var nomeResponsavel = 'Responsável Financeiro';
+    if (l.historico && l.historico.length > 0) {
+        var primeiroLog = l.historico[0];
+        if (primeiroLog.nomeUsuario) nomeResponsavel = primeiroLog.nomeUsuario;
+    }
+    var eventoInfo = l.eventName ? ('<tr><td class="label">Evento</td><td>' + l.eventName + (l.eventDate ? ' — ' + new Date(l.eventDate + 'T00:00:00').toLocaleDateString('pt-BR') : '') + '</td></tr>') : '';
+
+    var html = '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Comprovante ' + (l.codigo || '') + '</title>';
+    html += cssDocumento();
+    html += '</head><body>';
+    html += cabecalhoAmovin();
+    html += '<div class="titulo-doc">Comprovante de Arrecadação</div>';
+    html += '<div class="codigo-box"><div class="label">Documento Nº</div><div class="codigo">' + (l.codigo || '---') + '</div></div>';
+    html += '<div class="corpo">';
+    html += 'A <strong>AMOVIN - Associação e Movimento pela Inclusão em Rio Paranaíba</strong>, inscrita no CNPJ <strong>55.880.046/0001-34</strong>, com sede na <strong>Rua Francisco de Paula Moura Neto, nº 180, Bairro Novo Rio, Rio Paranaíba - MG, CEP 38810-000</strong>, declara ter recebido de <strong>' + nomeDoador + '</strong> a importância de ';
+    html += '<strong>' + valor + '</strong> <em>(' + valorExtenso + ')</em>, ';
+    html += 'sendo recebida via <strong>' + formaRecebimento + '</strong>.';
+    html += '</div>';
+    html += '<table class="tabela-dados"><thead><tr><th colspan="2">Dados do Contribuinte / Doador</th></tr></thead><tbody>';
+    html += '<tr><td class="label">Nome / Razão Social</td><td>' + nomeDoador + '</td></tr>';
+    html += '<tr><td class="label">CPF / CNPJ</td><td>' + docDoador + '</td></tr>';
+    html += '<tr><td class="label">Telefone de Contato</td><td>' + telDoador + '</td></tr>';
+    html += '</tbody></table>';
+    html += '<table class="tabela-dados"><thead><tr><th colspan="2">Detalhes do Recurso Recebido</th></tr></thead><tbody>';
+    html += '<tr><td class="label">Natureza / Categoria</td><td>' + categoria + '</td></tr>';
+    html += '<tr><td class="label">Descrição</td><td>' + descricao + '</td></tr>';
+    html += '<tr><td class="label">Data do Recebimento</td><td>' + dataFmt + '</td></tr>';
+    html += '<tr><td class="label">Forma de Recebimento</td><td>' + formaRecebimento + '</td></tr>';
+    html += eventoInfo;
+    html += '</tbody></table>';
+    html += '<div class="valor-destaque">';
+    html += '<div class="vl">' + valor + '</div>';
+    html += '<div class="ext">(' + valorExtenso + ')</div>';
+    html += '</div>';
+    html += '<div class="corpo">';
+    html += 'Para fins de comprovação interna e prestação de contas, a AMOVIN emite o presente comprovante de arrecadação, o qual serve como registro oficial do recebimento descrito acima.';
+    html += '</div>';
+    html += '<div class="local-data">' + localEmissao + ', ' + (dataFmt || '—') + '.</div>';
+    html += '<div class="assinaturas centralizada">';
+    html += '<div class="assinatura"><div class="linha"></div><div class="nome">' + nomeResponsavel + '</div><div class="sub">Responsável AMOVIN</div></div>';
+    html += '</div>';
+    html += rodapeAmovin();
+    html += '</body></html>';
+    abrirJanelaImpressao(html);
+}
+
+function abrirJanelaImpressao(html) {
     var win = window.open('', '_blank');
     win.document.write(html);
     win.document.close();
     setTimeout(function() { win.print(); }, 600);
 }
 
+// ============================================================
+// NÚMERO POR EXTENSO
+// ============================================================
 function numeroPorExtenso(valor) {
     if (valor === 0) return 'zero reais';
     var reais = Math.floor(valor);
@@ -1871,6 +1903,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (isMaster()) {
         document.getElementById('badgeMaster').style.display = 'inline-block';
     }
+    atualizarCategoriasPorTipo();
     inicializarFirebase();
 });
 </script>
