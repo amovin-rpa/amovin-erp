@@ -102,35 +102,34 @@
         .rodape-info .contato { font-size: 9px; color: #8A8F98; }
         .rodape-info a { color: #C65A11; text-decoration: none; }
 
-        /* AUTOCOMPLETE FORNECEDOR */
+        /* AUTOCOMPLETE FORNECEDOR — só CRM */
         .autocomplete-wrapper { position: relative; }
         .autocomplete-dropdown { display: none; position: absolute; top: 100%; left: 0; right: 0; background: white; border: 1px solid #E5E0D8; border-radius: 8px; box-shadow: 0 8px 24px rgba(0,0,0,0.12); max-height: 320px; overflow-y: auto; z-index: 500; margin-top: 4px; }
         .autocomplete-dropdown.ativo { display: block; }
         .autocomplete-item { padding: 8px 14px; cursor: pointer; border-bottom: 1px solid #F0E9DF; transition: background 0.15s; }
         .autocomplete-item:last-child { border-bottom: none; }
         .autocomplete-item:hover, .autocomplete-item.selecionado { background: #FFF8E7; }
-        .autocomplete-item .ac-nome { font-size: 13px; font-weight: 600; color: var(--grafite); line-height: 1.2; display: flex; justify-content: space-between; align-items: center; }
+        .autocomplete-item .ac-nome { font-size: 13px; font-weight: 600; color: var(--grafite); line-height: 1.2; display: flex; justify-content: space-between; align-items: center; gap: 8px; }
         .autocomplete-item .ac-doc { font-size: 10.5px; color: var(--cinza); font-family: 'Courier New', monospace; margin-top: 2px; }
-        .autocomplete-item .ac-tipo { font-size: 9.5px; font-weight: 700; padding: 1px 8px; border-radius: 10px; text-transform: uppercase; letter-spacing: 0.3px; }
+        .autocomplete-item .ac-tipo { font-size: 9.5px; font-weight: 700; padding: 1px 8px; border-radius: 10px; text-transform: uppercase; letter-spacing: 0.3px; flex-shrink: 0; }
         .ac-tipo.fornecedor { background: #FFF3E0; color: #C65A11; }
         .ac-tipo.autonomo { background: #E8F5E9; color: #2E7D32; }
-        .ac-tipo.beneficiario { background: #E3F2FD; color: #1565C0; }
-        .ac-tipo.profissional { background: #F3E5F5; color: #7B1FA2; }
-        .ac-tipo.voluntario { background: #FFF8E1; color: #E65100; }
-        .ac-tipo.universitario { background: #E0F7FA; color: #00838F; }
+        .ac-tipo.empresa { background: #E3F2FD; color: #1565C0; }
+        .ac-tipo.prefeitura { background: #F3E5F5; color: #7B1FA2; }
+        .ac-tipo.patrocinador { background: #FFF8E1; color: #E65100; }
+        .ac-tipo.doador { background: #E0F7FA; color: #00838F; }
+        .ac-tipo.fundacao { background: #FCE4EC; color: #AD1457; }
+        .ac-tipo.outros { background: #ECEFF1; color: #455A64; }
         .ac-vazio { padding: 14px; text-align: center; font-size: 12px; color: var(--cinza); font-style: italic; }
         .ac-hint { padding: 8px 14px; font-size: 10px; color: var(--cinza); background: #FAFAFA; border-bottom: 1px solid #F0E9DF; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 700; }
+        .ac-item-novo { padding: 10px 14px; font-size: 12px; color: var(--laranja); font-weight: 600; cursor: pointer; }
+        .ac-item-novo:hover { background: #FFF8E7; }
 
         /* WhatsApp checkbox */
         .wa-check { display: flex; align-items: center; gap: 8px; padding: 10px 12px; background: #FAFAFA; border: 1px solid #E5E0D8; border-radius: 8px; cursor: pointer; height: 42px; }
         .wa-check input[type="checkbox"] { width: 18px; height: 18px; cursor: pointer; accent-color: #25D366; }
         .wa-check label { font-size: 12.5px; color: var(--grafite); cursor: pointer; margin: 0; text-transform: none; letter-spacing: 0; }
         .wa-check.marcado { background: #E8F5E9; border-color: #A5D6A7; }
-
-        /* Vínculo IDP */
-        .vinculo-idp-info { display: none; padding: 10px 12px; background: #E3F2FD; border-left: 3px solid var(--azul); border-radius: 6px; font-size: 11.5px; color: #1565C0; margin-bottom: 10px; }
-        .vinculo-idp-info.ativo { display: block; }
-        .vinculo-idp-info strong { color: #0D47A1; }
 
         @media (max-width: 900px) { .main-content { margin-left: 0; } .form-row, .form-row-3 { grid-template-columns: 1fr; } }
     </style>
@@ -269,7 +268,6 @@
         </div>
 
         <div class="secao-titulo">🏢 Origem / Fornecedor</div>
-        <div id="vinculoIdpInfo" class="vinculo-idp-info"></div>
         <div class="form-row-3">
             <div class="form-group"><label>Tipo</label>
                 <select id="formTipoOrigem" autocomplete="off">
@@ -451,17 +449,14 @@
 <script>
 // ============================================================
 // FINANCEIRO - AMOVIN ERP (AERP)
+// Autocomplete busca SOMENTE na coleção CONTATOS (CRM)
 // Categorias dinâmicas | Recibo (despesa) + Comprovante (receita)
-// Autocomplete ordenado alfabeticamente
 // ============================================================
 
 var lancamentos = [];
 var projetos = [];
 var orcamentos = [];
 var contatos = [];
-var beneficiarios = [];
-var profissionais = [];
-var voluntarios = [];
 var firebasePronto = false;
 var db = null;
 var acaoPendente = null;
@@ -575,6 +570,14 @@ function extrairMesAno(dataStr) {
 }
 function apenasNumeros(str) { return (str || '').replace(/\D/g, ''); }
 
+// Normaliza string: remove acentos, minúsculas
+function normalizar(str) {
+    return String(str || '')
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '');
+}
+
 function mascaraCpfCnpj(input) {
     var v = input.value.replace(/\D/g, '');
     if (v.length > 14) v = v.substring(0, 14);
@@ -592,7 +595,6 @@ function mascaraCpfCnpj(input) {
     var numeros = apenasNumeros(v);
     document.getElementById('formTipoOrigem').value = numeros.length <= 11 ? 'PF' : 'PJ';
 }
-
 function mascaraTelefone(input) {
     var v = input.value.replace(/\D/g, '');
     if (v.length > 11) v = v.substring(0, 11);
@@ -605,7 +607,6 @@ function mascaraTelefone(input) {
     }
     input.value = v;
 }
-
 function toggleOlhoSenha() {
     var el = document.getElementById('authSenha');
     el.type = el.type === 'password' ? 'text' : 'password';
@@ -693,45 +694,25 @@ function escutarTudo() {
         snap.forEach(function(doc) { orcamentos.push({ _fbId: doc.id, ...doc.data() }); });
         preencherDropdownOrcamentos();
     });
+    // ÚNICA coleção consultada: contatos (CRM)
     db.collection('contatos').onSnapshot(function(snap) {
         contatos = [];
-        snap.forEach(function(doc) { contatos.push({ _fbId: doc.id, ...doc.data() }); });
-    });
-    db.collection('beneficiaries').onSnapshot(function(snap) {
-        beneficiarios = [];
         snap.forEach(function(doc) {
             var d = doc.data();
-            beneficiarios.push({ _fbId: doc.id, _tipo: 'beneficiario',
-                nome: d.fullName || d.nome || 'Sem nome',
-                cpf: d.cpf || '', telefone: d.phone || d.telefone || '',
-                whatsapp: d.whatsapp || '', origem: 'idp' });
+            contatos.push({ _fbId: doc.id, ...d });
         });
-    });
-    db.collection('professionals').onSnapshot(function(snap) {
-        profissionais = [];
-        snap.forEach(function(doc) {
-            var d = doc.data();
-            profissionais.push({ _fbId: doc.id, _tipo: 'profissional',
-                nome: d.fullName || d.nome || 'Sem nome',
-                cpf: d.cpf || '', telefone: d.phone || d.telefone || '',
-                whatsapp: d.whatsapp || '', origem: 'idp' });
+        // Reordena alfabeticamente
+        contatos.sort(function(a, b) {
+            return normalizar(a.nome || '').localeCompare(normalizar(b.nome || ''), 'pt-BR');
         });
-    });
-    db.collection('volunteers').onSnapshot(function(snap) {
-        voluntarios = [];
-        snap.forEach(function(doc) {
-            var d = doc.data();
-            voluntarios.push({ _fbId: doc.id, _tipo: 'voluntario',
-                nome: d.fullName || d.nome || 'Sem nome',
-                cpf: d.cpf || '', telefone: d.phone || d.telefone || '',
-                whatsapp: d.whatsapp || '', origem: 'idp' });
-        });
+        console.log('📇 CRM carregado:', contatos.length, 'contatos');
     });
 }
 function carregarLocalStorage() {
     lancamentos = JSON.parse(localStorage.getItem('amovin_financeiro') || '[]');
     projetos = JSON.parse(localStorage.getItem('amovin_projetos') || '[]');
     orcamentos = JSON.parse(localStorage.getItem('amovin_orcamentos_v2') || '[]');
+    contatos = JSON.parse(localStorage.getItem('amovin_contatos') || '[]');
     popularAnos(); preencherDropdownProjetos(); preencherDropdownOrcamentos(); renderizarLancamentos();
 }
 
@@ -753,86 +734,60 @@ async function registrarLogAuditoria(acao, detalhes, extra) {
 }
 
 // ============================================================
-// AUTOCOMPLETE EM ORDEM ALFABÉTICA
+// AUTOCOMPLETE — SÓ CRM (contatos)
 // ============================================================
-var nomesCache = [];
-
-function construirCacheBusca() {
-    nomesCache = [];
-    contatos.forEach(function(c) {
-        nomesCache.push({
-            origem: 'crm', _fbId: c._fbId,
-            nome: c.nome || '',
-            doc: c.cnpjCpf || '',
-            telefone: c.tel1 || c.whatsapp || '',
-            isWhatsApp: c.isWhatsApp === true || c.whatsapp === c.tel1,
-            tipoLabel: c.categoria === 'Autônomo' ? 'Autônomo' : 'Fornecedor',
-            tipoClasse: c.categoria === 'Autônomo' ? 'autonomo' : 'fornecedor',
-            tipoOrigem: apenasNumeros(c.cnpjCpf).length <= 11 ? 'PF' : 'PJ',
-            vinculoId: null, vinculoCampo: null
-        });
-    });
-    beneficiarios.forEach(function(b) {
-        nomesCache.push({
-            origem: 'idp', _fbId: b._fbId,
-            nome: b.nome, doc: b.cpf || '', telefone: b.telefone || b.whatsapp || '',
-            isWhatsApp: b.whatsapp === b.telefone || (!b.telefone && b.whatsapp),
-            tipoLabel: 'Beneficiário', tipoClasse: 'beneficiario',
-            tipoOrigem: 'PF', vinculoId: b._fbId, vinculoCampo: 'beneficiarioId'
-        });
-    });
-    profissionais.forEach(function(p) {
-        nomesCache.push({
-            origem: 'idp', _fbId: p._fbId,
-            nome: p.nome, doc: p.cpf || '', telefone: p.telefone || p.whatsapp || '',
-            isWhatsApp: p.whatsapp === p.telefone || (!p.telefone && p.whatsapp),
-            tipoLabel: 'Profissional', tipoClasse: 'profissional',
-            tipoOrigem: 'PF', vinculoId: p._fbId, vinculoCampo: 'profissionalId'
-        });
-    });
-    voluntarios.forEach(function(v) {
-        nomesCache.push({
-            origem: 'idp', _fbId: v._fbId,
-            nome: v.nome, doc: v.cpf || '', telefone: v.telefone || v.whatsapp || '',
-            isWhatsApp: v.whatsapp === v.telefone || (!v.telefone && v.whatsapp),
-            tipoLabel: 'Voluntário', tipoClasse: 'voluntario',
-            tipoOrigem: 'PF', vinculoId: v._fbId, vinculoCampo: 'voluntarioId'
-        });
-    });
-    // Ordena alfabeticamente
-    nomesCache.sort(function(a, b) {
-        return (a.nome || '').localeCompare(b.nome || '', 'pt-BR');
-    });
-}
-
 function buscarFornecedor(texto) {
-    construirCacheBusca();
     var dropdown = document.getElementById('dropdownFornecedor');
-    var t = (texto || '').trim().toLowerCase();
-    if (t.length < 2) { dropdown.classList.remove('ativo'); dropdown.innerHTML = ''; return; }
+    var t = (texto || '').trim();
 
-    var achados = nomesCache.filter(function(f) {
-        return f.nome.toLowerCase().indexOf(t) >= 0 ||
-               apenasNumeros(f.doc).indexOf(apenasNumeros(t)) >= 0;
-    });
-    achados = achados.slice(0, 15);
-
-    if (achados.length === 0) {
-        dropdown.innerHTML = '<div class="ac-hint">Nenhum cadastro encontrado</div>' +
-            '<div class="autocomplete-item" id="acNovo"><div class="ac-nome">➕ Cadastrar novo: "' + escapeHtml(texto) + '"</div></div>';
-        dropdown.classList.add('ativo');
-        document.getElementById('acNovo').onclick = function() {
-            dropdown.classList.remove('ativo');
-            fornecedorSelecionado = { nome: texto, novo: true };
-        };
+    // Só busca com 2+ caracteres
+    if (t.length < 2) {
+        dropdown.classList.remove('ativo');
+        dropdown.innerHTML = '';
         return;
     }
 
-    var html = '<div class="ac-hint">' + achados.length + ' cadastro(s) — ordem alfabética</div>';
+    var tNorm = normalizar(t);
+    var tNum = apenasNumeros(t);
+
+    // Filtra contatos que casam (nome normalizado ou documento)
+    var achados = contatos.filter(function(f) {
+        var nomeNorm = normalizar(f.nome || '');
+        if (nomeNorm.indexOf(tNorm) >= 0) return true;
+        if (tNum && apenasNumeros(f.cnpjCpf || '').indexOf(tNum) >= 0) return true;
+        return false;
+    });
+
+    // Limita a 15
+    achados = achados.slice(0, 15);
+
+    // Nada encontrado → mostra opção de cadastrar
+    if (achados.length === 0) {
+        dropdown.innerHTML =
+            '<div class="ac-hint">Nenhum contato no CRM</div>' +
+            '<div class="ac-item-novo" id="acNovo">➕ Cadastrar novo: "' + escapeHtml(t) + '"</div>';
+        dropdown.classList.add('ativo');
+        var elNovo = document.getElementById('acNovo');
+        if (elNovo) {
+            elNovo.onclick = function() {
+                dropdown.classList.remove('ativo');
+                fornecedorSelecionado = { nome: t, novo: true, origem: 'novo' };
+            };
+        }
+        return;
+    }
+
+    // Monta lista
+    var html = '<div class="ac-hint">' + achados.length + ' contato(s) no CRM — ordem alfabética</div>';
     achados.forEach(function(f, i) {
+        var catLabel = f.categoria || 'Fornecedor';
+        var catClass = normalizar(catLabel).replace(/[^a-z]/g, '') || 'fornecedor';
+        var docExibir = f.cnpjCpf || 'Sem documento';
         html += '<div class="autocomplete-item" data-idx="' + i + '">' +
-            '<div class="ac-nome">' + escapeHtml(f.nome) + ' <span class="ac-tipo ' + f.tipoClasse + '">' + f.tipoLabel + '</span></div>' +
-            '<div class="ac-doc">' + (f.doc || 'Sem documento') + '</div>' +
+            '<div class="ac-nome">' + escapeHtml(f.nome || '') +
+                ' <span class="ac-tipo ' + catClass + '">' + escapeHtml(catLabel) + '</span>' +
+            '</div>' +
+            '<div class="ac-doc">' + escapeHtml(docExibir) + '</div>' +
             '</div>';
     });
     dropdown.innerHTML = html;
@@ -847,25 +802,17 @@ function buscarFornecedor(texto) {
 }
 
 function selecionarFornecedor(f) {
-    fornecedorSelecionado = f;
-    document.getElementById('formEmpresaPessoa').value = f.nome;
-    document.getElementById('formCnpjCpf').value = f.doc || '';
-    document.getElementById('formTelefone').value = f.telefone || '';
-    document.getElementById('formTipoOrigem').value = f.tipoOrigem || 'PJ';
-    document.getElementById('formIsWhatsApp').checked = f.isWhatsApp === true;
+    fornecedorSelecionado = { ...f, origem: 'crm' };
+    document.getElementById('formEmpresaPessoa').value = f.nome || '';
+    document.getElementById('formCnpjCpf').value = f.cnpjCpf || '';
+    document.getElementById('formTelefone').value = f.tel1 || f.whatsapp || '';
+    document.getElementById('formTipoOrigem').value = apenasNumeros(f.cnpjCpf || '').length > 11 ? 'PJ' : 'PF';
+    document.getElementById('formIsWhatsApp').checked = f.isWhatsApp === true || (f.whatsapp && f.whatsapp === f.tel1);
     atualizarWaCheck();
-
-    var infoBox = document.getElementById('vinculoIdpInfo');
-    if (f.origem === 'idp' && f.vinculoCampo) {
-        infoBox.innerHTML = '🔗 <strong>Vinculado ao IDP</strong> como ' + f.tipoLabel + ': ' + escapeHtml(f.nome);
-        infoBox.classList.add('ativo');
-    } else {
-        infoBox.classList.remove('ativo');
-        infoBox.innerHTML = '';
-    }
     document.getElementById('dropdownFornecedor').classList.remove('ativo');
 }
 
+// Fecha dropdown ao clicar fora
 document.addEventListener('click', function(e) {
     if (!e.target.closest('.autocomplete-wrapper')) {
         var dd = document.getElementById('dropdownFornecedor');
@@ -1084,7 +1031,6 @@ function abrirNovoLancamento() {
     document.getElementById('formOrcamento').value = '';
     document.getElementById('formObs').value = '';
     document.getElementById('previewValor').textContent = '';
-    document.getElementById('vinculoIdpInfo').classList.remove('ativo');
     document.getElementById('modalForm').classList.add('ativo');
 }
 function abrirFormEdicao(lancId) {
@@ -1173,10 +1119,7 @@ async function salvarLancamentoFinal() {
         obs: obs, atualizadoEm: new Date().toISOString(), atualizadoPor: u.usuario
     };
 
-    if (fornecedorSelecionado && fornecedorSelecionado.origem === 'idp' && fornecedorSelecionado.vinculoCampo) {
-        dados[fornecedorSelecionado.vinculoCampo] = fornecedorSelecionado.vinculoId;
-        dados.fornecedorOrigem = 'idp';
-    } else if (fornecedorSelecionado && fornecedorSelecionado.origem === 'crm') {
+    if (fornecedorSelecionado && fornecedorSelecionado.origem === 'crm' && fornecedorSelecionado._fbId) {
         dados.fornecedorId = fornecedorSelecionado._fbId;
         dados.fornecedorOrigem = 'crm';
     }
@@ -1201,7 +1144,6 @@ async function salvarLancamentoFinal() {
                 mostrarToast('✅ Lançamento atualizado!', 'success');
                 registrarLogAuditoria('EDITAR', 'Lançamento ' + (l.codigo || idEdit), { valorAntes: l.value, valorDepois: valor });
                 fecharForm(); adminAutenticado = null;
-                // Verificar CRM também ao editar
                 verificarCadastroCrm(dados);
             } else {
                 dados.codigo = await gerarProximoCodigo();
@@ -1239,15 +1181,15 @@ async function verificarCadastroCrm(dadosLancamento) {
     var doc = dadosLancamento.cnpjCpf;
     var tel = dadosLancamento.telefone;
     if (!nome) return;
-    if (fornecedorSelecionado && (fornecedorSelecionado.origem === 'idp' || fornecedorSelecionado.origem === 'crm')) return;
+    if (fornecedorSelecionado && fornecedorSelecionado.origem === 'crm') return;
 
     var numDoc = apenasNumeros(doc);
     var existente = null;
     if (numDoc) existente = contatos.find(function(c) { return apenasNumeros(c.cnpjCpf) === numDoc; });
-    if (!existente) existente = contatos.find(function(c) { return (c.nome || '').toLowerCase() === nome.toLowerCase(); });
+    if (!existente) existente = contatos.find(function(c) { return normalizar(c.nome) === normalizar(nome); });
 
     if (existente) {
-        if (numDoc && existente.nome && existente.nome.toLowerCase() !== nome.toLowerCase()) {
+        if (numDoc && existente.nome && normalizar(existente.nome) !== normalizar(nome)) {
             abrirModalCrm({
                 tipo: 'atualizar',
                 msg: 'Este CNPJ/CPF já está cadastrado no CRM com o nome:<br><br>' +
@@ -1462,9 +1404,7 @@ function verDetalhes(fbId) {
     if (l.obs) html += '<div style="margin-top:12px;padding:12px;background:#F8F4ED;border-radius:8px;font-size:13px;"><strong>📝 Obs:</strong> ' + l.obs + '</div>';
     document.getElementById('conteudoDetalhes').innerHTML = html;
     var btn = document.getElementById('btnImprimirDoc');
-    if (btn) {
-        btn.textContent = l.type === 'income' ? '📄 Comprovante de Arrecadação' : '🖨️ Recibo de Pagamento';
-    }
+    if (btn) btn.textContent = l.type === 'income' ? '📄 Comprovante de Arrecadação' : '🖨️ Recibo de Pagamento';
     document.getElementById('modalDetalhes').classList.add('ativo');
 }
 function dado(l, v, full, classe) {
@@ -1518,8 +1458,8 @@ function obterLancamentosFiltrados() {
     var categoria = elCategoria ? elCategoria.value : 'todos';
     var origem = elOrigem ? elOrigem.value : 'todos';
     var nf = elNF ? elNF.value : 'todos';
-    var empresa = elEmpresa ? elEmpresa.value.toLowerCase() : '';
-    var busca = elBusca ? elBusca.value.toLowerCase() : '';
+    var empresa = elEmpresa ? normalizar(elEmpresa.value) : '';
+    var busca = elBusca ? normalizar(elBusca.value) : '';
 
     return lancamentos.filter(function(l) {
         if (ano && l.year !== ano) return false;
@@ -1530,10 +1470,10 @@ function obterLancamentosFiltrados() {
         if (origem !== 'todos' && (l.tipoOrigem || 'PJ') !== origem) return false;
         if (nf === 'sim' && l.hasFiscalReceipt === false) return false;
         if (nf === 'nao' && l.hasFiscalReceipt !== false) return false;
-        if (empresa && (l.empresaPessoaFisica || '').toLowerCase().indexOf(empresa) === -1) return false;
+        if (empresa && normalizar(l.empresaPessoaFisica || '').indexOf(empresa) === -1) return false;
         if (busca) {
-            var alvo = [l.description, l.empresaPessoaFisica, l.cnpjCpf, l.telefone,
-                l.codigo, l.category, l.natureza, l.obs, l.eventName].join(' ').toLowerCase();
+            var alvo = normalizar([l.description, l.empresaPessoaFisica, l.cnpjCpf, l.telefone,
+                l.codigo, l.category, l.natureza, l.obs, l.eventName].join(' '));
             if (alvo.indexOf(busca) === -1) return false;
         }
         return true;
@@ -1642,7 +1582,6 @@ function imprimirDocumentoAtual() {
     }
 }
 
-// CSS compartilhado dos documentos
 function cssDocumento() {
     var css = '<style>';
     css += '*{box-sizing:border-box;margin:0;padding:0;}';
@@ -1692,7 +1631,6 @@ function cabecalhoAmovin() {
     h += '</div>';
     return h;
 }
-
 function rodapeAmovin() {
     return '<div class="rodape">Documento gerado eletronicamente em ' + new Date().toLocaleString('pt-BR') + '<br>AMOVIN ERP • <a href="https://www.vigorre.com.br">www.vigorre.com.br</a> • (34) 99185-0735</div>';
 }
@@ -1730,18 +1668,9 @@ function imprimirRecibo(l) {
     html += cabecalhoAmovin();
     html += '<div class="titulo-doc">Recibo de Pagamento</div>';
     html += '<div class="codigo-box"><div class="label">Documento Nº</div><div class="codigo">' + (l.codigo || '---') + '</div></div>';
-    html += '<div class="corpo">';
-    html += 'Recebi da <strong>AMOVIN - Associação e Movimento pela Inclusão em Rio Paranaíba</strong>, inscrita no CNPJ <strong>55.880.046/0001-34</strong>, com sede na <strong>Rua Francisco de Paula Moura Neto, nº 180, Bairro Novo Rio, Rio Paranaíba - MG, CEP 38810-000</strong>, a importância de ';
-    html += '<strong>' + valor + '</strong> <em>(' + valorExtenso + ')</em>, ';
-    html += 'sendo paga via <strong>' + formaPagamento + '</strong>.';
-    html += '</div>';
-    html += '<div class="corpo">';
-    html += 'O valor acima refere-se ' + artigo + ' <strong>' + objetoFrase + '</strong>: ';
-    html += '<strong>' + descricao + '</strong>, conforme lançamento <strong>' + (l.codigo || '') + '</strong> registrado no sistema, na categoria <strong>' + categoria + '</strong>.';
-    html += '</div>';
-    html += '<div class="corpo">';
-    html += 'Para que produza os efeitos legais necessários, firmo o presente recibo, dando plena, rasa e geral quitação pela ' + quitarFrase + ' acima descritos.';
-    html += '</div>';
+    html += '<div class="corpo">Recebi da <strong>AMOVIN - Associação e Movimento pela Inclusão em Rio Paranaíba</strong>, inscrita no CNPJ <strong>55.880.046/0001-34</strong>, com sede na <strong>Rua Francisco de Paula Moura Neto, nº 180, Bairro Novo Rio, Rio Paranaíba - MG, CEP 38810-000</strong>, a importância de <strong>' + valor + '</strong> <em>(' + valorExtenso + ')</em>, sendo paga via <strong>' + formaPagamento + '</strong>.</div>';
+    html += '<div class="corpo">O valor acima refere-se ' + artigo + ' <strong>' + objetoFrase + '</strong>: <strong>' + descricao + '</strong>, conforme lançamento <strong>' + (l.codigo || '') + '</strong> registrado no sistema, na categoria <strong>' + categoria + '</strong>.</div>';
+    html += '<div class="corpo">Para que produza os efeitos legais necessários, firmo o presente recibo, dando plena, rasa e geral quitação pela ' + quitarFrase + ' acima descritos.</div>';
     html += '<table class="tabela-dados"><thead><tr><th colspan="2">Dados do Prestador / Vendedor</th></tr></thead><tbody>';
     html += '<tr><td class="label">Nome / Razão Social</td><td>' + nomePrestador + '</td></tr>';
     html += '<tr><td class="label">CPF / CNPJ</td><td>' + cpfCnpj + '</td></tr>';
@@ -1787,11 +1716,7 @@ function imprimirComprovanteArrecadacao(l) {
     html += cabecalhoAmovin();
     html += '<div class="titulo-doc">Comprovante de Arrecadação</div>';
     html += '<div class="codigo-box"><div class="label">Documento Nº</div><div class="codigo">' + (l.codigo || '---') + '</div></div>';
-    html += '<div class="corpo">';
-    html += 'A <strong>AMOVIN - Associação e Movimento pela Inclusão em Rio Paranaíba</strong>, inscrita no CNPJ <strong>55.880.046/0001-34</strong>, com sede na <strong>Rua Francisco de Paula Moura Neto, nº 180, Bairro Novo Rio, Rio Paranaíba - MG, CEP 38810-000</strong>, declara ter recebido de <strong>' + nomeDoador + '</strong> a importância de ';
-    html += '<strong>' + valor + '</strong> <em>(' + valorExtenso + ')</em>, ';
-    html += 'sendo recebida via <strong>' + formaRecebimento + '</strong>.';
-    html += '</div>';
+    html += '<div class="corpo">A <strong>AMOVIN - Associação e Movimento pela Inclusão em Rio Paranaíba</strong>, inscrita no CNPJ <strong>55.880.046/0001-34</strong>, com sede na <strong>Rua Francisco de Paula Moura Neto, nº 180, Bairro Novo Rio, Rio Paranaíba - MG, CEP 38810-000</strong>, declara ter recebido de <strong>' + nomeDoador + '</strong> a importância de <strong>' + valor + '</strong> <em>(' + valorExtenso + ')</em>, sendo recebida via <strong>' + formaRecebimento + '</strong>.</div>';
     html += '<table class="tabela-dados"><thead><tr><th colspan="2">Dados do Contribuinte / Doador</th></tr></thead><tbody>';
     html += '<tr><td class="label">Nome / Razão Social</td><td>' + nomeDoador + '</td></tr>';
     html += '<tr><td class="label">CPF / CNPJ</td><td>' + docDoador + '</td></tr>';
@@ -1808,13 +1733,9 @@ function imprimirComprovanteArrecadacao(l) {
     html += '<div class="vl">' + valor + '</div>';
     html += '<div class="ext">(' + valorExtenso + ')</div>';
     html += '</div>';
-    html += '<div class="corpo">';
-    html += 'Para fins de comprovação interna e prestação de contas, a AMOVIN emite o presente comprovante de arrecadação, o qual serve como registro oficial do recebimento descrito acima.';
-    html += '</div>';
+    html += '<div class="corpo">Para fins de comprovação interna e prestação de contas, a AMOVIN emite o presente comprovante de arrecadação, o qual serve como registro oficial do recebimento descrito acima.</div>';
     html += '<div class="local-data">' + localEmissao + ', ' + (dataFmt || '—') + '.</div>';
-    html += '<div class="assinaturas centralizada">';
-    html += '<div class="assinatura"><div class="linha"></div><div class="nome">' + nomeResponsavel + '</div><div class="sub">Responsável AMOVIN</div></div>';
-    html += '</div>';
+    html += '<div class="assinaturas centralizada"><div class="assinatura"><div class="linha"></div><div class="nome">' + nomeResponsavel + '</div><div class="sub">Responsável AMOVIN</div></div></div>';
     html += rodapeAmovin();
     html += '</body></html>';
     abrirJanelaImpressao(html);
