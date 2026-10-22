@@ -23,6 +23,7 @@
         .status-firebase.offline { background: #FFF3E0; color: #E65100; border-color: #FFCC80; }
         .status-firebase .dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; animation: pulse 2s infinite; }
         @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+        .badge-master { background: linear-gradient(135deg, #7C3AED, #C65A11); color: white; font-size: 10px; font-weight: 700; padding: 4px 12px; border-radius: 20px; letter-spacing: 0.5px; }
         .kpi-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px; margin-bottom: 22px; }
         .kpi-card { background: #FFFFFF; padding: 16px; border-radius: 14px; border: 1px solid #F0E9DF; text-align: center; }
         .kpi-card .kpi-valor { font-size: 22px; font-weight: 800; color: var(--laranja); }
@@ -41,6 +42,7 @@
         .form-group label { display: block; font-size: 11px; font-weight: 600; color: var(--cinza); margin-bottom: 4px; text-transform: uppercase; }
         .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px 12px; border: 1px solid #E5E0D8; border-radius: 8px; font-size: 13px; font-family: 'Inter', sans-serif; background: #FAFAFA; }
         .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: var(--laranja); background: white; box-shadow: 0 0 0 3px rgba(198, 90, 17, 0.08); }
+        .form-group input[readonly] { background: #E5E0D8; color: #6B7280; cursor: not-allowed; border-style: dashed; }
         .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
         .form-full { grid-column: 1 / -1; }
         .grid-crm { display: grid; grid-template-columns: 240px 1fr; gap: 20px; }
@@ -66,6 +68,7 @@
         .tag-fornecedor { background: #FFF8E7; color: var(--laranja); }
         .tag-autonomo { background: #E8F5E9; color: #2E7D32; }
         .tag-universitario { background: #E0F7FA; color: #00838F; }
+        .tag-idp { background: #E3F2FD; color: #1565C0; border: 1px dashed #1565C0; font-size: 8px; }
         .contato-acoes { display: flex; gap: 4px; flex-wrap: wrap; align-items: center; }
         .btn-acao { padding: 6px 10px; border-radius: 6px; border: none; cursor: pointer; font-size: 10px; font-weight: 600; }
         .btn-fav { background: var(--amarelo); color: #1A1A1A; }
@@ -117,6 +120,7 @@
         <h1>☎️ CRM Social <span>AMOVIN</span></h1>
         <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
             <div class="status-firebase" id="statusFirebase"><span class="dot"></span><span>⏳ Conectando...</span></div>
+            <span class="badge-master" id="badgeMaster" style="display:none;">🔓 MODO MASTER</span>
             <button class="btn btn-outline" onclick="exportarCSV()">📥 CSV</button>
             <button class="btn btn-primary" onclick="pedirAutenticacao('criar')">➕ Novo Contato</button>
             <button class="btn-sair-topo" onclick="window.location.href='dashboard.html'">🏠 Dashboard</button>
@@ -139,7 +143,7 @@
         </div>
         <div>
             <div class="busca-bar">
-                <input type="text" id="buscaContato" placeholder="🔍 Buscar por nome, empresa, código ou documento..." oninput="filtrar()">
+                <input type="text" id="buscaContato" placeholder="🔍 Buscar por nome, empresa, código, CPF/CNPJ..." oninput="filtrar()" autocomplete="off" name="busca_crm_x1">
             </div>
             <div id="listaContatos"><div class="loading"><div class="spinner"></div><div>Carregando...</div></div></div>
         </div>
@@ -156,10 +160,14 @@
     </div>
 </main>
 
+<!-- MODAL FORM -->
 <div class="modal-overlay" id="modalForm">
     <div class="modal">
         <h2 id="tituloModal">Novo Contato <button class="fechar" onclick="fecharForm()">×</button></h2>
         <input type="hidden" id="contatoId">
+        <div id="avisoOrigemIdp" style="display:none;background:#E3F2FD;border-left:4px solid #1565C0;padding:10px 14px;border-radius:6px;margin-bottom:14px;font-size:12px;color:#0D47A1;">
+            📥 <strong>Contato espelhado do IDP.</strong> Os campos com 🔒 são controlados pelo módulo IDP e não podem ser editados aqui.
+        </div>
         <div class="form-row">
             <div class="form-group"><label>Código CRM</label><input type="text" id="codigoContato" readonly style="background:#F0E9DF;font-weight:700;color:var(--laranja);"></div>
             <div class="form-group"><label>Nome *</label><input type="text" id="nomeContato"></div>
@@ -177,12 +185,15 @@
                 <option value="Fundação">🏛️ Fundação</option>
                 <option value="Fornecedor">📦 Fornecedor</option>
                 <option value="Autônomo">👤 Autônomo</option>
-                <option value="Universitário">🎓 Universitário</option>
                 <option value="Profissional">👨‍⚕️ Profissional</option>
+                <option value="Universitário">🎓 Universitário</option>
                 <option value="Voluntário">💪 Voluntário</option>
                 <option value="Beneficiário">👤 Beneficiário</option>
                 <option value="Outros">📌 Outros</option>
             </select>
+        </div>
+        <div id="grupoEspecialidade" style="display:none;">
+             <div class="form-group"><label>Especialidade</label><input type="text" id="especialidadeContato" placeholder="Ex: Fisioterapeuta, Psicólogo..."></div>
         </div>
         <div class="secao-titulo">📞 Contatos</div>
         <div class="form-row">
@@ -197,12 +208,23 @@
         </div>
         <div class="form-group"><label>Email</label><input type="email" id="emailContato"></div>
         <div class="form-group"><label>CNPJ / CPF</label><input type="text" id="cnpjCpfContato" placeholder="000.000.000-00 ou 00.000.000/0000-00" maxlength="18" oninput="mascaraCpfCnpj(this)"></div>
-        <div class="secao-titulo">🔗 Vínculos</div>
-        <div class="form-row">
-            <div class="form-group"><label>Beneficiário Vinculado</label><select id="beneficiarioVinculo"><option value="">— Nenhum —</option></select></div>
-            <div class="form-group"><label>Profissional Vinculado</label><select id="profissionalVinculo"><option value="">— Nenhum —</option></select></div>
+        
+        <!-- CAMPOS TRAVADOS (IDP) -->
+        <div id="grupoVinculado" style="display:none;">
+            <div class="secao-titulo">🔒 Vínculo IDP (bloqueado)</div>
+            <div class="form-group">
+                <label>Vinculado a</label>
+                <input type="text" id="vinculadoA" readonly>
+            </div>
         </div>
-        <div class="form-group"><label>Voluntário Vinculado</label><select id="voluntarioVinculo"><option value="">— Nenhum —</option></select></div>
+        <div id="grupoEmergencia" style="display:none;">
+            <div class="secao-titulo">🔒 Contato de Emergência (bloqueado)</div>
+            <div class="form-group">
+                <label>Contato de Emergência</label>
+                <input type="text" id="contatoEmergencia" readonly>
+            </div>
+        </div>
+
         <div class="secao-titulo">📝 Observações</div>
         <div class="form-full form-group"><textarea id="obsContato" rows="2"></textarea></div>
         <div class="btn-group">
@@ -212,26 +234,28 @@
     </div>
 </div>
 
+<!-- MODAL LOG -->
 <div class="modal-overlay" id="modalLog">
     <div class="modal modal-pequeno"><h2>📜 Histórico <button class="fechar" onclick="fecharLog()">×</button></h2>
     <div id="conteudoLog" style="max-height:400px;overflow-y:auto;"></div>
     <div class="btn-group"><button class="btn btn-outline" onclick="fecharLog()">Fechar</button></div></div>
 </div>
 
+<!-- MODAL AUTH -->
 <div class="modal-overlay" id="modalAuth">
     <div class="modal modal-pequeno">
         <h2>🔐 Autenticação <button class="fechar" onclick="fecharAuth()">×</button></h2>
         <div id="authMsg" style="font-size:13px;color:var(--cinza);margin-bottom:16px;"></div>
-        <div class="form-group"><label>Usuário</label><input type="text" id="authUsuario" placeholder="Seu usuário"></div>
+        <div class="form-group"><label>Usuário</label><input type="text" id="authUsuario" placeholder="Seu usuário" autocomplete="off"></div>
         <div class="form-group">
             <label>Senha</label>
             <div class="senha-wrapper">
-                <input type="password" id="authSenha" placeholder="••••••••">
+                <input type="password" id="authSenha" placeholder="••••••••" autocomplete="new-password">
                 <button type="button" class="btn-olho" onclick="toggleOlhoSenha()">👁️</button>
             </div>
         </div>
         <div class="form-group"><label>Justificativa (mín 20 caracteres)</label>
-            <textarea id="authJust" rows="3" placeholder="Explique o motivo da alteração..."></textarea>
+            <textarea id="authJust" rows="3" placeholder="Explique o motivo da alteração..." autocomplete="off"></textarea>
             <div style="font-size:10px;color:var(--cinza);margin-top:4px;" id="contadorJust">0/20 caracteres</div>
         </div>
         <div class="btn-group">
@@ -243,22 +267,16 @@
 <script src="menu.js?v=20260904"></script>
 <script>
 // ============================================================
-// CRM SOCIAL - AMOVIN ERP
-// Código: A-CRM-YYYY-NNNN
-// Máscaras automáticas CPF/CNPJ e Telefone
-// Checkbox WhatsApp unificado
+// CRM SOCIAL - AMOVIN ERP (AERP) - CORRIGIDO
 // ============================================================
 
 var contatos = [];
-var beneficiarios = [];
-var profissionais = [];
-var voluntarios = [];
 var firebasePronto = false;
 var db = null;
+var categoriaAtual = 'todos';
 var acaoPendente = null;
 var dadosPendentes = null;
 var adminAutenticado = null;
-var categoriaAtual = 'todos';
 
 // ============================================================
 // USUÁRIO LOGADO
@@ -293,7 +311,6 @@ function mascaraCpfCnpj(input) {
     }
     input.value = v;
 }
-
 function mascaraTelefone(input) {
     var v = input.value.replace(/\D/g, '');
     if (v.length > 11) v = v.substring(0, 11);
@@ -306,15 +323,19 @@ function mascaraTelefone(input) {
     }
     input.value = v;
 }
-
-function apenasNumeros(str) { return (str || '').replace(/\D/g, ''); }
-
+function apenasNumeros(s) { return (s || '').replace(/\D/g, ''); }
+function escapeHtml(s) {
+    return String(s || '').replace(/[&<>"']/g, function(c) {
+        return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c];
+    });
+}
+function normalizar(s) {
+    return String(s || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+}
 function toggleOlhoSenha() {
     var el = document.getElementById('authSenha');
     el.type = el.type === 'password' ? 'text' : 'password';
 }
-
-// WhatsApp
 function toggleWhatsApp() {
     var cb = document.getElementById('isWhatsAppContato');
     cb.checked = !cb.checked;
@@ -351,8 +372,8 @@ function inicializarFirebase() {
                     db = firebase.firestore();
                     firebasePronto = true;
                     atualizarStatusFirebase('conectado');
-                    escutarTudo();
-                } catch (e) { atualizarStatusFirebase('offline'); carregarLocalStorage(); }
+                    escutarContatos();
+                } catch (e) { atualizarStatusFirebase('offline'); }
             };
             document.head.appendChild(fs);
         };
@@ -362,129 +383,216 @@ function inicializarFirebase() {
             db = firebase.firestore();
             firebasePronto = true;
             atualizarStatusFirebase('conectado');
-            escutarTudo();
-        } catch (e) { atualizarStatusFirebase('offline'); carregarLocalStorage(); }
+            escutarContatos();
+        } catch (e) { atualizarStatusFirebase('offline'); }
     }
 }
 function atualizarStatusFirebase(s) {
     var el = document.getElementById('statusFirebase');
     if (s === 'conectado') { el.className = 'status-firebase conectado'; el.innerHTML = '<span class="dot"></span><span>🟢 Firebase (Tempo Real)</span>'; }
-    else { el.className = 'status-firebase offline'; el.innerHTML = '<span class="dot"></span><span>🟡 Modo Local</span>'; }
+    else { el.className = 'status-firebase offline'; el.innerHTML = '<span class="dot"></span><span>🟡 Offline</span>'; }
 }
-function escutarTudo() {
-    if (!firebasePronto || !db) { carregarLocalStorage(); return; }
+function escutarContatos() {
+    if (!firebasePronto || !db) return;
     db.collection('contatos').onSnapshot(function(snap) {
         contatos = [];
         snap.forEach(function(doc) { contatos.push({ _fbId: doc.id, ...doc.data() }); });
-        renderizarMenu(); filtrar();
+        renderizarMenu();
+        filtrar();
+        atualizarKPIs();
     });
-    db.collection('beneficiaries').onSnapshot(function(snap) {
-        beneficiarios = [];
-        snap.forEach(function(doc) { beneficiarios.push({ _fbId: doc.id, ...doc.data() }); });
-        preencherVinculos();
-    });
-    db.collection('professionals').onSnapshot(function(snap) {
-        profissionais = [];
-        snap.forEach(function(doc) { profissionais.push({ _fbId: doc.id, ...doc.data() }); });
-        preencherVinculos();
-    });
-    db.collection('volunteers').onSnapshot(function(snap) {
-        voluntarios = [];
-        snap.forEach(function(doc) { voluntarios.push({ _fbId: doc.id, ...doc.data() }); });
-        preencherVinculos();
-    });
-}
-function carregarLocalStorage() {
-    contatos = JSON.parse(localStorage.getItem('amovin_contatos') || '[]');
-    beneficiarios = JSON.parse(localStorage.getItem('amovin_beneficiarios') || '[]');
-    profissionais = JSON.parse(localStorage.getItem('amovin_profissionais') || '[]');
-    voluntarios = JSON.parse(localStorage.getItem('amovin_voluntarios') || '[]');
-    preencherVinculos();
-    renderizarMenu(); filtrar();
-}
-
-function preencherVinculos() {
-    var selB = document.getElementById('beneficiarioVinculo');
-    if (selB) {
-        var at = selB.value;
-        selB.innerHTML = '<option value="">— Nenhum —</option>';
-        beneficiarios.forEach(function(b) {
-            var opt = document.createElement('option');
-            opt.value = b._fbId;
-            opt.textContent = (b.fullName || b.nome || '') + ' (' + (b.cpf || '') + ')';
-            selB.appendChild(opt);
-        });
-        if (at) selB.value = at;
-    }
-    var selP = document.getElementById('profissionalVinculo');
-    if (selP) {
-        var atP = selP.value;
-        selP.innerHTML = '<option value="">— Nenhum —</option>';
-        profissionais.forEach(function(p) {
-            var opt = document.createElement('option');
-            opt.value = p._fbId;
-            opt.textContent = (p.fullName || p.nome || '') + ' (' + (p.specialty || p.especialidade || '') + ')';
-            selP.appendChild(opt);
-        });
-        if (atP) selP.value = atP;
-    }
-    var selV = document.getElementById('voluntarioVinculo');
-    if (selV) {
-        var atV = selV.value;
-        selV.innerHTML = '<option value="">— Nenhum —</option>';
-        voluntarios.forEach(function(v) {
-            var opt = document.createElement('option');
-            opt.value = v._fbId;
-            opt.textContent = (v.fullName || v.nome || '');
-            selV.appendChild(opt);
-        });
-        if (atV) selV.value = atV;
-    }
 }
 
 // ============================================================
-// CÓDIGO A-CRM-YYYY-NNNN
+// LOG AUDITORIA
+// ============================================================
+async function registrarLogAuditoria(acao, detalhes) {
+    if (!firebasePronto || !db) return;
+    var u = getUsuarioLogado();
+    try {
+        await db.collection('logs_auditoria').add({
+            timestamp: new Date().toISOString(),
+            usuario: u.usuario, nome: u.nome, perfil: u.perfil,
+            isMaster: isMaster(), acao: acao, detalhes: detalhes || ''
+        });
+    } catch (e) {}
+}
+
+// ============================================================
+// GERAR CÓDIGO CRM
 // ============================================================
 async function gerarProximoCodigo() {
     var ano = new Date().getFullYear();
     var prefixo = 'A-CRM-' + ano + '-';
     var max = 0;
-    if (firebasePronto && db) {
-        try {
-            var snap = await db.collection('contatos').get();
-            snap.forEach(function(doc) {
-                var c = doc.data().codigo || '';
-                if (c.indexOf(prefixo) === 0) {
-                    var n = parseInt(c.substring(prefixo.length), 10);
-                    if (!isNaN(n) && n > max) max = n;
-                }
-            });
-        } catch (e) {}
-    } else {
-        contatos.forEach(function(c) {
-            if (c.codigo && c.codigo.indexOf(prefixo) === 0) {
-                var n = parseInt(c.codigo.substring(prefixo.length), 10);
+    try {
+        var snap = await db.collection('contatos').get();
+        snap.forEach(function(doc) {
+            var c = doc.data().codigo || '';
+            if (c.indexOf(prefixo) === 0) {
+                var n = parseInt(c.substring(prefixo.length), 10);
                 if (!isNaN(n) && n > max) max = n;
             }
         });
-    }
+    } catch (e) {}
     return prefixo + String(max + 1).padStart(4, '0');
 }
 
 // ============================================================
-// LOG DE AUDITORIA
+// RENDERIZAR MENU LATERAL (AGRUPADO)
 // ============================================================
-async function registrarLogAuditoria(acao, detalhes) {
-    var u = getUsuarioLogado();
-    var log = {
-        timestamp: new Date().toISOString(),
-        usuario: u.usuario, nome: u.nome, perfil: u.perfil,
-        isMaster: isMaster(), acao: acao, detalhes: detalhes || ''
-    };
-    if (firebasePronto && db) {
-        try { await db.collection('logs_auditoria').add(log); }
-        catch (e) { console.warn('Erro log:', e.message); }
+function renderizarMenu() {
+    // Categorias base
+    var catsBase = ['Todos', 'Favoritos', 'Empresa', 'Autônomo', 'Fornecedor', 'Beneficiário', 'Profissional', 'Voluntário', 'Universitário'];
+    var counts = {};
+    contatos.forEach(function(c) {
+        var cat = c.categoria || 'Outros';
+        // Agrupa profissionais (Fisio, Psico, etc) na categoria "Profissional" para o menu não ficar gigante
+        if (cat !== 'Beneficiário' && cat !== 'Voluntário' && cat !== 'Universitário' && cat !== 'Fornecedor' && cat !== 'Autônomo' && cat !== 'Empresa' && cat !== 'Doador' && cat !== 'Patrocinador' && cat !== 'Outros' && cat !== 'Prefeitura' && cat !== 'Fundação') {
+            cat = 'Profissional'; 
+        }
+        counts[cat] = (counts[cat] || 0) + 1;
+    });
+
+    var h = '';
+    h += '<button class="cat-item ' + (categoriaAtual === 'todos' ? 'ativo' : '') + '" onclick="filtrarPorCat(\'todos\')">📋 Todos <span class="count">' + contatos.length + '</span></button>';
+    h += '<button class="cat-item ' + (categoriaAtual === 'favoritos' ? 'ativo' : '') + '" onclick="filtrarPorCat(\'favoritos\')">⭐ Favoritos <span class="count">' + contatos.filter(function(c) { return c.favorito; }).length + '</span></button>';
+    
+    catsBase.forEach(function(cat) {
+        if (cat === 'Todos' || cat === 'Favoritos') return;
+        if (counts[cat]) {
+            h += '<button class="cat-item ' + (categoriaAtual === cat ? 'ativo' : '') + '" onclick="filtrarPorCat(\'' + cat + '\')">' + cat + ' <span class="count">' + counts[cat] + '</span></button>';
+        }
+    });
+    
+    // Adiciona as outras categorias que não estão na base (Doador, Prefeitura, etc)
+    Object.keys(counts).sort().forEach(function(cat) {
+        if (catsBase.indexOf(cat) === -1) {
+            h += '<button class="cat-item ' + (categoriaAtual === cat ? 'ativo' : '') + '" onclick="filtrarPorCat(\'' + cat + '\')">' + cat + ' <span class="count">' + counts[cat] + '</span></button>';
+        }
+    });
+
+    document.getElementById('menuCategorias').innerHTML = h;
+}
+window.filtrarPorCat = function(c) { categoriaAtual = c; renderizarMenu(); filtrar(); };
+
+// ============================================================
+// GET TAG COR
+// ============================================================
+function getTagClass(cat) {
+    var c = normalizar(cat || '');
+    if (c.indexOf('benefici') >= 0) return 'tag-beneficiario';
+    if (c.indexOf('profissi') >= 0 || c.indexOf('fisio') >= 0 || c.indexOf('psico') >= 0 || c.indexOf('nutri') >= 0) return 'tag-profissional';
+    if (c.indexOf('volunt') >= 0) return 'tag-voluntario';
+    if (c.indexOf('fornecedor') >= 0) return 'tag-fornecedor';
+    if (c.indexOf('autonom') >= 0) return 'tag-autonomo';
+    if (c.indexOf('universit') >= 0) return 'tag-universitario';
+    return 'tag-crm';
+}
+
+// ============================================================
+// FILTRAR / RENDERIZAR (CORRIGIDO)
+// ============================================================
+function filtrar() {
+    var l = contatos.slice();
+    
+    // Filtro por categoria do menu
+    if (categoriaAtual === 'favoritos') {
+        l = l.filter(function(c) { return c.favorito; });
+    } else if (categoriaAtual !== 'todos') {
+        l = l.filter(function(c) { 
+            var cat = c.categoria || 'Outros';
+            if (categoriaAtual === 'Profissional') {
+                 return cat !== 'Beneficiário' && cat !== 'Voluntário' && cat !== 'Universitário' && cat !== 'Fornecedor' && cat !== 'Autônomo' && cat !== 'Empresa' && cat !== 'Doador' && cat !== 'Patrocinador' && cat !== 'Outros' && cat !== 'Prefeitura' && cat !== 'Fundação';
+            }
+            return cat === categoriaAtual; 
+        });
     }
+
+    // Filtro de Busca (evita autocomplete do navegador com "admin")
+    var inputBusca = document.getElementById('buscaContato');
+    var b = inputBusca ? inputBusca.value.trim().toLowerCase() : '';
+    
+    // Se o navegador preencheu "admin" sozinho e você não digitou, limpa
+    if (b === 'admin' && !inputBusca.dataset.digitado) {
+        inputBusca.value = '';
+        b = '';
+    }
+    if (b) inputBusca.dataset.digitado = 'true';
+
+    if (b) {
+        l = l.filter(function(c) {
+            return (c.nome || '').toLowerCase().indexOf(b) >= 0 ||
+                   (c.instituicao || '').toLowerCase().indexOf(b) >= 0 ||
+                   (c.codigo || '').toLowerCase().indexOf(b) >= 0 ||
+                   (c.cnpjCpf || '').toLowerCase().indexOf(b) >= 0;
+        });
+    }
+    l.sort(function(a, b) { return (a.nome || '').localeCompare(b.nome || '', 'pt-BR'); });
+
+    var container = document.getElementById('listaContatos');
+    if (l.length === 0) {
+        container.innerHTML = '<div class="sem-dados">Nenhum contato encontrado.</div>';
+        return;
+    }
+    
+    container.innerHTML = l.map(function(x) {
+        var tagClass = getTagClass(x.categoria);
+        var numLogs = (x.historico || []).length;
+        var telExibir = x.tel1 || x.whatsapp || '';
+        var isWA = x.isWhatsApp === true || (x.whatsapp && x.whatsapp === x.tel1);
+        var origemIdp = x.idpOrigem ? '<span class="tag tag-idp">📥 IDP</span>' : '';
+        
+        // Mostra o nome do responsável de forma destacada na lista (para beneficiários)
+        var nomeExibir = x.nome;
+        var subTexto = '';
+        if (x.vinculadoA) {
+            subTexto = '<div style="font-size:10px;color:#1565C0;margin-top:4px;">🔒 Vinculado a: ' + escapeHtml(x.vinculadoA) + '</div>';
+        }
+        if (x.contatoEmergencia) {
+            subTexto += '<div style="font-size:10px;color:#1565C0;margin-top:2px;">🔒 Contato emergência: ' + escapeHtml(x.contatoEmergencia) + '</div>';
+        }
+
+        return '<div class="contato-card' + (x.favorito ? ' favorito' : '') + '">' +
+            '<div class="contato-info">' +
+            '<div class="codigo">' + (x.codigo || '—') + '</div>' +
+            '<h4>' + (x.favorito ? '⭐ ' : '') + escapeHtml(nomeExibir || '') +
+                ' <span class="tag ' + tagClass + '">' + escapeHtml(x.categoria || 'Outros') + '</span>' + origemIdp + '</h4>' +
+            '<p>' + escapeHtml(x.cargo || '') + (x.instituicao ? ' | ' + escapeHtml(x.instituicao) : '') + '</p>' +
+            '<p>📄 ' + escapeHtml(x.cnpjCpf || 'Sem doc') + ' | 📞 ' + escapeHtml(telExibir || '—') + ' | 📧 ' + escapeHtml(x.email || '—') + (isWA ? ' 📱' : '') + '</p>' +
+            subTexto +
+            '</div>' +
+            '<div class="contato-acoes">' +
+            (isWA && telExibir ? '<button class="btn-acao btn-wpp" onclick="event.stopPropagation();window.open(\'https://wa.me/55' + apenasNumeros(telExibir) + '\')">💬</button>' : '') +
+            (telExibir ? '<button class="btn-acao btn-teal" onclick="event.stopPropagation();window.open(\'tel:' + telExibir + '\')">📞</button>' : '') +
+            (x.email ? '<button class="btn-acao btn-azul" onclick="event.stopPropagation();window.open(\'mailto:' + x.email + '\')">📧</button>' : '') +
+            '<button class="btn-acao btn-fav" onclick="event.stopPropagation();toggleFav(\'' + x._fbId + '\')">' + (x.favorito ? '★' : '☆') + '</button>' +
+            '<button class="btn-acao btn-editar" onclick="event.stopPropagation();editarContato(\'' + x._fbId + '\')">✏️</button>' +
+            '<button class="btn-acao btn-teal" onclick="event.stopPropagation();verLog(\'' + x._fbId + '\')">📜' + (numLogs ? ' (' + numLogs + ')' : '') + '</button>' +
+            '</div></div>';
+    }).join('');
+}
+
+// ============================================================
+// KPIs
+// ============================================================
+function atualizarKPIs() {
+    document.getElementById('kpiTotal').textContent = contatos.length;
+    var crm = contatos.filter(function(c) {
+        var cat = normalizar(c.categoria || '');
+        return cat === 'empresa' || cat === 'prefeitura' || cat === 'doador' || cat === 'patrocinador' || cat === 'fundacao' || cat === 'outros' || cat === '';
+    }).length;
+    document.getElementById('kpiCRM').textContent = crm;
+    document.getElementById('kpiBeneficiarios').textContent = contatos.filter(function(c) { return normalizar(c.categoria) === 'beneficiario'; }).length;
+    document.getElementById('kpiProfissionais').textContent = contatos.filter(function(c) {
+        var cat = normalizar(c.categoria);
+        return cat === 'profissional' || cat === 'fisioterapeuta' || cat === 'psicologo' || cat === 'nutricionista' || cat === 'assistente social';
+    }).length;
+    document.getElementById('kpiVoluntarios').textContent = contatos.filter(function(c) { return normalizar(c.categoria) === 'voluntario'; }).length;
+    document.getElementById('kpiFornecedores').textContent = contatos.filter(function(c) {
+        var cat = normalizar(c.categoria);
+        return cat === 'fornecedor' || cat === 'autonomo';
+    }).length;
 }
 
 // ============================================================
@@ -493,23 +601,20 @@ async function registrarLogAuditoria(acao, detalhes) {
 function pedirAutenticacao(acao, dados) {
     if (isMaster()) {
         adminAutenticado = { usuario: 'master', nome: 'Administrador Master', justificativa: '[master - ação direta]' };
-        if (acao === 'criar') abrirForm(dados);
+        if (acao === 'criar') abrirForm();
         else if (acao === 'editar') abrirForm(dados);
-        else if (acao === 'excluir') executarExclusao(dados);
         else if (acao === 'salvar') salvarContatoFinal();
-        else if (acao === 'favorito') executarFavorito(dados);
         return;
     }
     acaoPendente = acao;
     dadosPendentes = dados || null;
-    var msgs = { 'criar': 'Criar novo contato', 'editar': 'Editar contato', 'excluir': 'Excluir contato', 'salvar': 'Salvar contato', 'favorito': 'Marcar favorito' };
+    var msgs = { 'criar': 'Criar novo contato', 'editar': 'Editar contato', 'salvar': 'Salvar contato' };
     document.getElementById('authMsg').textContent = '🔐 ' + (msgs[acao] || acao);
     document.getElementById('authUsuario').value = '';
     document.getElementById('authSenha').value = '';
     document.getElementById('authJust').value = '';
     document.getElementById('contadorJust').textContent = '0/20 caracteres';
     document.getElementById('modalAuth').classList.add('ativo');
-    setTimeout(function() { document.getElementById('authUsuario').focus(); }, 200);
 }
 async function validarAdminMaster(usuario, senha) {
     var locais = [
@@ -534,15 +639,13 @@ async function confirmarAuth() {
     var senha = document.getElementById('authSenha').value;
     var just = document.getElementById('authJust').value.trim();
     if (!usuario || !senha) { mostrarToast('⚠️ Preencha usuário e senha!', 'warning'); return; }
-    if (just.length < 20) { mostrarToast('⚠️ Justificativa mín 20 caracteres!', 'warning'); return; }
+    if (acaoPendente !== 'criar' && just.length < 20) { mostrarToast('⚠️ Justificativa mín 20 caracteres!', 'warning'); return; }
     var admin = await validarAdminMaster(usuario, senha);
     if (!admin) { mostrarToast('❌ Usuário ou senha incorretos!', 'error'); return; }
-    adminAutenticado = { ...admin, justificativa: just };
+    adminAutenticado = { ...admin, justificativa: just || '[sem justificativa]' };
     fecharAuth();
     if (acaoPendente === 'criar' || acaoPendente === 'editar') abrirForm(dadosPendentes);
-    else if (acaoPendente === 'excluir') executarExclusao(dadosPendentes);
     else if (acaoPendente === 'salvar') salvarContatoFinal();
-    else if (acaoPendente === 'favorito') executarFavorito(dadosPendentes);
     acaoPendente = null;
 }
 function fecharAuth() { document.getElementById('modalAuth').classList.remove('ativo'); }
@@ -553,53 +656,72 @@ document.getElementById('authJust').addEventListener('input', function() {
 // ============================================================
 // FORM
 // ============================================================
-async function abrirForm(contatoId) {
-    document.getElementById('contatoId').value = contatoId || '';
-    if (contatoId) {
-        var c = contatos.find(function(x) { return x._fbId === contatoId; });
+async function abrirForm(fbId) {
+    document.getElementById('contatoId').value = fbId || '';
+    document.getElementById('avisoOrigemIdp').style.display = 'none';
+    document.getElementById('grupoVinculado').style.display = 'none';
+    document.getElementById('grupoEmergencia').style.display = 'none';
+    document.getElementById('grupoEspecialidade').style.display = 'none';
+
+    if (fbId) {
+        var c = contatos.find(function(x) { return x._fbId === fbId; });
         if (c) {
-            document.getElementById('tituloModal').innerHTML = '✏️ Editar: ' + c.nome + ' <button class="fechar" onclick="fecharForm()">×</button>';
+            document.getElementById('tituloModal').innerHTML = '✏️ Editar: ' + escapeHtml(c.nome || '') + ' <button class="fechar" onclick="fecharForm()">×</button>';
             document.getElementById('codigoContato').value = c.codigo || '';
             document.getElementById('nomeContato').value = c.nome || '';
             document.getElementById('cargoContato').value = c.cargo || '';
             document.getElementById('instituicaoContato').value = c.instituicao || '';
             document.getElementById('categoriaContato').value = c.categoria || 'Outros';
-            // Telefone unificado
             document.getElementById('tel1Contato').value = c.tel1 || c.whatsapp || '';
             document.getElementById('isWhatsAppContato').checked = c.isWhatsApp === true || (c.whatsapp && c.whatsapp === c.tel1);
             atualizarWaCheck();
             document.getElementById('emailContato').value = c.email || '';
             document.getElementById('cnpjCpfContato').value = c.cnpjCpf || '';
             document.getElementById('obsContato').value = c.obs || '';
-            document.getElementById('beneficiarioVinculo').value = c.beneficiarioId || '';
-            document.getElementById('profissionalVinculo').value = c.profissionalId || '';
-            document.getElementById('voluntarioVinculo').value = c.voluntarioId || '';
+            
+            // Especialidade
+            if (c.categoria && c.categoria !== 'Profissional' && getTagClass(c.categoria) === 'tag-profissional') {
+                document.getElementById('grupoEspecialidade').style.display = 'block';
+                document.getElementById('especialidadeContato').value = c.categoria;
+                document.getElementById('categoriaContato').value = 'Profissional';
+            }
+
+            // Campos travados (IDP)
+            if (c.idpOrigem) {
+                document.getElementById('avisoOrigemIdp').style.display = 'block';
+            }
+            if (c.vinculadoA) {
+                document.getElementById('grupoVinculado').style.display = 'block';
+                document.getElementById('vinculadoA').value = c.vinculadoA;
+            }
+            if (c.contatoEmergencia) {
+                document.getElementById('grupoEmergencia').style.display = 'block';
+                document.getElementById('contatoEmergencia').value = c.contatoEmergencia;
+            }
         }
     } else {
-        document.getElementById('tituloModal').innerHTML = 'Novo Contato <button class="fechar" onclick="fecharForm()">×</button>';
+        document.getElementById('tituloModal').innerHTML = '➕ Novo Contato <button class="fechar" onclick="fecharForm()">×</button>';
+        document.getElementById('codigoContato').value = await gerarProximoCodigo();
         document.getElementById('nomeContato').value = '';
         document.getElementById('cargoContato').value = '';
         document.getElementById('instituicaoContato').value = '';
-        document.getElementById('categoriaContato').value = 'Outros';
+        document.getElementById('categoriaContato').value = 'Empresa';
         document.getElementById('tel1Contato').value = '';
         document.getElementById('isWhatsAppContato').checked = false;
         atualizarWaCheck();
         document.getElementById('emailContato').value = '';
         document.getElementById('cnpjCpfContato').value = '';
         document.getElementById('obsContato').value = '';
-        document.getElementById('beneficiarioVinculo').value = '';
-        document.getElementById('profissionalVinculo').value = '';
-        document.getElementById('voluntarioVinculo').value = '';
-        var cod = await gerarProximoCodigo();
-        document.getElementById('codigoContato').value = cod;
     }
     document.getElementById('modalForm').classList.add('ativo');
 }
 function fecharForm() { document.getElementById('modalForm').classList.remove('ativo'); }
 
-// ============================================================
-// SALVAR
-// ============================================================
+function editarContato(fbId) {
+    adminAutenticado = null;
+    pedirAutenticacao('editar', fbId);
+}
+
 function confirmarSalvar() {
     var nome = document.getElementById('nomeContato').value.trim();
     if (!nome) { mostrarToast('⚠️ Nome é obrigatório!', 'warning'); return; }
@@ -613,22 +735,27 @@ async function salvarContatoFinal() {
     var idEdit = document.getElementById('contatoId').value;
     var tel1 = document.getElementById('tel1Contato').value.trim();
     var isWhatsApp = document.getElementById('isWhatsAppContato').checked;
+    var catSelecionada = document.getElementById('categoriaContato').value;
+    var especialidade = document.getElementById('especialidadeContato').value.trim();
+
+    // Lógica da categoria
+    var catFinal = catSelecionada;
+    if (catSelecionada === 'Profissional' && especialidade) {
+        catFinal = especialidade; // Fisioterapeuta, Psicólogo, etc.
+    }
 
     var dados = {
         codigo: document.getElementById('codigoContato').value,
         nome: document.getElementById('nomeContato').value.trim(),
         cargo: document.getElementById('cargoContato').value.trim(),
         instituicao: document.getElementById('instituicaoContato').value.trim(),
-        categoria: document.getElementById('categoriaContato').value,
+        categoria: catFinal,
         tel1: tel1,
         whatsapp: isWhatsApp ? tel1 : '',
         isWhatsApp: isWhatsApp,
         email: document.getElementById('emailContato').value.trim(),
         cnpjCpf: document.getElementById('cnpjCpfContato').value.trim(),
         obs: document.getElementById('obsContato').value.trim(),
-        beneficiarioId: document.getElementById('beneficiarioVinculo').value || null,
-        profissionalId: document.getElementById('profissionalVinculo').value || null,
-        voluntarioId: document.getElementById('voluntarioVinculo').value || null,
         atualizadoEm: new Date().toISOString()
     };
 
@@ -637,8 +764,7 @@ async function salvarContatoFinal() {
         usuario: (adminAutenticado && adminAutenticado.usuario) || getUsuarioLogado().usuario,
         nomeUsuario: (adminAutenticado && adminAutenticado.nome) || getUsuarioLogado().nome,
         acao: idEdit ? 'editado' : 'criado',
-        justificativa: (adminAutenticado && adminAutenticado.justificativa) || '[master]',
-        detalhes: 'Nome: ' + dados.nome + ' | Categoria: ' + dados.categoria
+        justificativa: (adminAutenticado && adminAutenticado.justificativa) || '[master]'
     };
 
     if (firebasePronto && db) {
@@ -663,23 +789,7 @@ async function salvarContatoFinal() {
             adminAutenticado = null;
         } catch (e) { mostrarToast('❌ Erro: ' + e.message, 'error'); }
     } else {
-        if (idEdit) {
-            var idx = contatos.findIndex(function(x) { return x._fbId === idEdit; });
-            if (idx >= 0) {
-                var hist2 = contatos[idx].historico || [];
-                hist2.push(logEntry);
-                dados.historico = hist2;
-                Object.assign(contatos[idx], dados);
-            }
-        } else {
-            dados._fbId = Date.now().toString();
-            dados.historico = [logEntry];
-            dados.favorito = false;
-            contatos.push(dados);
-        }
-        localStorage.setItem('amovin_contatos', JSON.stringify(contatos));
-        fecharForm(); renderizarMenu(); filtrar();
-        adminAutenticado = null;
+        mostrarToast('⚠️ Firebase offline', 'warning');
     }
 }
 
@@ -687,71 +797,13 @@ async function salvarContatoFinal() {
 // FAVORITO
 // ============================================================
 function toggleFav(fbId) {
-    adminAutenticado = null;
-    pedirAutenticacao('favorito', fbId);
-}
-async function executarFavorito(fbId) {
-    var c = contatos.find(function(x) { return x._fbId === fbId; });
-    if (!c) { adminAutenticado = null; return; }
-    var novo = !c.favorito;
-    var logEntry = {
-        data: new Date().toISOString(),
-        usuario: (adminAutenticado && adminAutenticado.usuario) || getUsuarioLogado().usuario,
-        nomeUsuario: (adminAutenticado && adminAutenticado.nome) || getUsuarioLogado().nome,
-        acao: novo ? 'adicionado aos favoritos' : 'removido dos favoritos',
-        justificativa: (adminAutenticado && adminAutenticado.justificativa) || '[master]'
-    };
-    if (firebasePronto && db) {
-        try {
-            var hist = c.historico || [];
-            hist.push(logEntry);
-            await db.collection('contatos').doc(fbId).update({ favorito: novo, historico: hist });
-            mostrarToast(novo ? '⭐ Adicionado aos favoritos' : 'Removido dos favoritos', 'success');
-        } catch (e) { mostrarToast('❌ ' + e.message, 'error'); }
-    } else {
-        c.favorito = novo;
-        if (!c.historico) c.historico = [];
-        c.historico.push(logEntry);
-        localStorage.setItem('amovin_contatos', JSON.stringify(contatos));
-        filtrar(); renderizarMenu();
-    }
-    adminAutenticado = null;
-}
-
-// ============================================================
-// EXCLUIR
-// ============================================================
-function excluirContato(fbId) {
+    if (!firebasePronto || !db) return;
     var c = contatos.find(function(x) { return x._fbId === fbId; });
     if (!c) return;
-    if (!confirm('Excluir "' + c.nome + '" (' + c.codigo + ')?\n\n⚠️ Esta ação é irreversível.')) return;
-    adminAutenticado = null;
-    pedirAutenticacao('excluir', fbId);
-}
-async function executarExclusao(fbId) {
-    var c = contatos.find(function(x) { return x._fbId === fbId; });
-    if (!c) { adminAutenticado = null; return; }
-    var logEntry = {
-        data: new Date().toISOString(),
-        usuario: (adminAutenticado && adminAutenticado.usuario) || getUsuarioLogado().usuario,
-        nomeUsuario: (adminAutenticado && adminAutenticado.nome) || getUsuarioLogado().nome,
-        acao: 'EXCLUÍDO',
-        justificativa: (adminAutenticado && adminAutenticado.justificativa) || '[master]',
-        detalhes: c.nome + ' (' + c.codigo + ')'
-    };
-    if (firebasePronto && db) {
-        try {
-            await db.collection('logs_exclusao').add({ modulo: 'crm', itemCodigo: c.codigo, itemNome: c.nome, ...logEntry });
-            await db.collection('contatos').doc(fbId).delete();
-            mostrarToast('🗑️ Contato excluído!', 'info');
-            registrarLogAuditoria('CRM_EXCLUIR', c.nome + ' (' + c.codigo + ')');
-        } catch (e) { mostrarToast('❌ ' + e.message, 'error'); }
-    } else {
-        contatos = contatos.filter(function(x) { return x._fbId !== fbId; });
-        localStorage.setItem('amovin_contatos', JSON.stringify(contatos));
-        renderizarMenu(); filtrar();
-    }
-    adminAutenticado = null;
+    var novo = !c.favorito;
+    db.collection('contatos').doc(fbId).update({ favorito: novo })
+        .then(function() { mostrarToast(novo ? '⭐ Favorito' : 'Removido', 'success'); })
+        .catch(function(e) { mostrarToast('❌ ' + e.message, 'error'); });
 }
 
 // ============================================================
@@ -767,9 +819,8 @@ function verLog(fbId) {
         container.innerHTML = hist.slice().reverse().map(function(h) {
             var dt = new Date(h.data).toLocaleString('pt-BR');
             return '<div class="log-item"><div class="quando">' + dt + '</div>' +
-                '<div class="quem">👤 ' + (h.nomeUsuario || h.usuario) + ' (@' + h.usuario + ')</div>' +
+                '<div class="quem">👤 ' + (h.nomeUsuario || h.usuario) + '</div>' +
                 '<div class="acao">📌 ' + h.acao + '</div>' +
-                (h.detalhes ? '<div style="font-size:11px;color:var(--cinza);">' + h.detalhes + '</div>' : '') +
                 (h.justificativa ? '<div class="just"><strong>Justificativa:</strong> ' + h.justificativa + '</div>' : '') +
                 '</div>';
         }).join('');
@@ -779,102 +830,14 @@ function verLog(fbId) {
 function fecharLog() { document.getElementById('modalLog').classList.remove('ativo'); }
 
 // ============================================================
-// RENDERIZAR
-// ============================================================
-function renderizarMenu() {
-    var cats = {};
-    contatos.forEach(function(c) { cats[c.categoria] = (cats[c.categoria]||0)+1; });
-    var h = '<button class="cat-item '+(categoriaAtual==='todos'?'ativo':'')+'" onclick="filtrarPorCat(\'todos\')">📋 Todos <span class="count">'+contatos.length+'</span></button>';
-    h += '<button class="cat-item '+(categoriaAtual==='favoritos'?'ativo':'')+'" onclick="filtrarPorCat(\'favoritos\')">⭐ Favoritos <span class="count">'+contatos.filter(function(c){return c.favorito;}).length+'</span></button>';
-    Object.keys(cats).sort().forEach(function(c){ h += '<button class="cat-item '+(categoriaAtual===c?'ativo':'')+'" onclick="filtrarPorCat(\''+c+'\')">'+c+' <span class="count">'+cats[c]+'</span></button>'; });
-    document.getElementById('menuCategorias').innerHTML = h;
-}
-window.filtrarPorCat = function(c) { categoriaAtual = c; renderizarMenu(); filtrar(); };
-
-function getTagClass(cat) {
-    if (cat === 'Beneficiário') return 'tag-beneficiario';
-    if (cat === 'Profissional') return 'tag-profissional';
-    if (cat === 'Voluntário') return 'tag-voluntario';
-    if (cat === 'Fornecedor') return 'tag-fornecedor';
-    if (cat === 'Autônomo') return 'tag-autonomo';
-    if (cat === 'Universitário') return 'tag-universitario';
-    return 'tag-crm';
-}
-
-function filtrar() {
-    var l = contatos.slice();
-    if (categoriaAtual === 'favoritos') l = l.filter(function(c) { return c.favorito; });
-    else if (categoriaAtual !== 'todos') l = l.filter(function(c) { return c.categoria === categoriaAtual; });
-    var b = document.getElementById('buscaContato').value.toLowerCase();
-    if (b) l = l.filter(function(c) {
-        return (c.nome || '').toLowerCase().indexOf(b) >= 0 ||
-               (c.instituicao || '').toLowerCase().indexOf(b) >= 0 ||
-               (c.codigo || '').toLowerCase().indexOf(b) >= 0 ||
-               (c.cnpjCpf || '').toLowerCase().indexOf(b) >= 0 ||
-               (c.email || '').toLowerCase().indexOf(b) >= 0;
-    });
-    l.sort(function(a, b) { return (a.nome || '').localeCompare(b.nome || ''); });
-    var c = document.getElementById('listaContatos');
-    if (l.length === 0) { c.innerHTML = '<div class="sem-dados">Nenhum contato.</div>'; }
-    else {
-        c.innerHTML = l.map(function(x) {
-            var tagClass = getTagClass(x.categoria);
-            var numLogs = (x.historico || []).length;
-            var vinculos = '';
-            if (x.beneficiarioId) vinculos += ' 🔗👤';
-            if (x.profissionalId) vinculos += ' 🔗👨‍⚕️';
-            if (x.voluntarioId) vinculos += ' 🔗💪';
-            var telExibir = x.tel1 || x.whatsapp || '';
-            var isWA = x.isWhatsApp === true || (x.whatsapp && x.whatsapp === x.tel1);
-            return '<div class="contato-card' + (x.favorito ? ' favorito' : '') + '">' +
-                '<div class="contato-info">' +
-                '<div class="codigo">' + (x.codigo || '---') + '</div>' +
-                '<h4>' + (x.favorito ? '⭐ ' : '') + (x.nome || '') + ' <span class="tag ' + tagClass + '">' + (x.categoria || '') + '</span>' + vinculos + (isWA ? ' <span class="tag tag-autonomo" style="font-size:8px;">📱 WhatsApp</span>' : '') + '</h4>' +
-                '<p>' + (x.cargo || '') + (x.instituicao ? ' | ' + x.instituicao : '') + '</p>' +
-                '<p>📄 ' + (x.cnpjCpf || 'Sem documento') + ' | 📞 ' + (telExibir || '-') + ' | 📧 ' + (x.email || '-') + '</p>' +
-                '</div>' +
-                '<div class="contato-acoes">' +
-                (isWA && telExibir ? '<button class="btn-acao btn-wpp" onclick="event.stopPropagation();window.open(\'https://wa.me/55\'+\'' + apenasNumeros(telExibir) + '\')">💬</button>' : '') +
-                (telExibir ? '<button class="btn-acao btn-teal" onclick="event.stopPropagation();window.open(\'tel:' + telExibir + '\')">📞</button>' : '') +
-                (x.email ? '<button class="btn-acao btn-azul" onclick="event.stopPropagation();window.open(\'mailto:' + x.email + '\')">📧</button>' : '') +
-                '<button class="btn-acao btn-fav" onclick="event.stopPropagation();toggleFav(\'' + x._fbId + '\')">' + (x.favorito ? '★' : '☆') + '</button>' +
-                '<button class="btn-acao btn-editar" onclick="event.stopPropagation();editarContato(\'' + x._fbId + '\')">✏️</button>' +
-                '<button class="btn-acao btn-teal" onclick="event.stopPropagation();verLog(\'' + x._fbId + '\')">📜' + (numLogs ? ' (' + numLogs + ')' : '') + '</button>' +
-                '<button class="btn-acao btn-danger" onclick="event.stopPropagation();excluirContato(\'' + x._fbId + '\')">🗑️</button>' +
-                '</div></div>';
-        }).join('');
-    }
-    atualizarKPIs();
-}
-
-function editarContato(fbId) {
-    adminAutenticado = null;
-    pedirAutenticacao('editar', fbId);
-}
-
-// ============================================================
-// KPIs
-// ============================================================
-function atualizarKPIs() {
-    document.getElementById('kpiTotal').textContent = contatos.length;
-    document.getElementById('kpiCRM').textContent = contatos.filter(function(c) {
-        return ['Prefeitura', 'Empresa', 'Patrocinador', 'Doador', 'Fundação', 'Outros'].indexOf(c.categoria) >= 0 || !c.categoria;
-    }).length;
-    document.getElementById('kpiBeneficiarios').textContent = contatos.filter(function(c) { return c.categoria === 'Beneficiário'; }).length;
-    document.getElementById('kpiProfissionais').textContent = contatos.filter(function(c) { return c.categoria === 'Profissional'; }).length;
-    document.getElementById('kpiVoluntarios').textContent = contatos.filter(function(c) { return c.categoria === 'Voluntário'; }).length;
-    document.getElementById('kpiFornecedores').textContent = contatos.filter(function(c) { return c.categoria === 'Fornecedor' || c.categoria === 'Autônomo'; }).length;
-}
-
-// ============================================================
 // CSV
 // ============================================================
 function exportarCSV() {
-    var linhas = [['Código', 'Nome', 'Categoria', 'Cargo', 'Instituição', 'Telefone', 'WhatsApp', 'É WhatsApp', 'Email', 'CNPJ/CPF', 'Favorito']];
+    var linhas = [['Código', 'Nome', 'Categoria', 'Cargo', 'Instituição', 'Telefone', 'É WhatsApp', 'Email', 'CNPJ/CPF', 'Origem']];
     contatos.forEach(function(c) {
         linhas.push([c.codigo || '', c.nome || '', c.categoria || '', c.cargo || '', c.instituicao || '',
-            c.tel1 || '', c.whatsapp || '', c.isWhatsApp ? 'Sim' : 'Não',
-            c.email || '', c.cnpjCpf || '', c.favorito ? 'Sim' : 'Não']);
+            c.tel1 || c.whatsapp || '', c.isWhatsApp ? 'Sim' : 'Não',
+            c.email || '', c.cnpjCpf || '', c.idpOrigem ? 'IDP' : 'CRM']);
     });
     var csv = linhas.map(function(l) { return l.map(function(c) { return '"' + String(c).replace(/"/g, '""') + '"'; }).join(';'); }).join('\n');
     var blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
@@ -886,6 +849,9 @@ function exportarCSV() {
     registrarLogAuditoria('CRM_EXPORTAR_CSV', contatos.length + ' contatos');
 }
 
+// ============================================================
+// TOAST
+// ============================================================
 function mostrarToast(msg, tipo) {
     var t = document.createElement('div');
     t.className = 'toast toast-' + (tipo || 'success');
@@ -894,11 +860,17 @@ function mostrarToast(msg, tipo) {
     setTimeout(function() { t.remove(); }, 4000);
 }
 
-if (!sessionStorage.getItem('amovin_logado') && !localStorage.getItem('amovin_logado')) {
-    console.log('⚠️ Sessão não encontrada, mas permitindo acesso.');
-}
-
-document.addEventListener('DOMContentLoaded', function() { inicializarFirebase(); });
+// ============================================================
+// INICIALIZAÇÃO
+// ============================================================
+document.addEventListener('DOMContentLoaded', function() {
+    if (isMaster()) document.getElementById('badgeMaster').style.display = 'inline-block';
+    if (!sessionStorage.getItem('amovin_logado')) {
+        window.location.href = 'index.html';
+        return;
+    }
+    inicializarFirebase();
+});
 </script>
 </body>
 </html>
