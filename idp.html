@@ -129,10 +129,21 @@
         </div>
     </div>
 </main>
+
+<!-- MODAL DETALHES (VISUALIZAR) -->
+<div class="modal-overlay" id="modalDetalhes" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:9999; justify-content:center; align-items:center; padding:20px;">
+    <div class="modal" style="background:white; border-radius:16px; padding:30px; max-width:500px; width:100%;">
+        <h2 style="font-size:20px; margin-bottom:16px; display:flex; justify-content:space-between; align-items:center;">👁️ Detalhes do Cadastro <button class="fechar" style="background:none; border:none; font-size:22px; cursor:pointer; color:var(--cinza);" onclick="fecharDetalhes()">×</button></h2>
+        <div id="conteudoDetalhes" style="font-size:13px; line-height:1.8; color:var(--grafite);"></div>
+        <div style="display:flex; gap:12px; margin-top:16px; justify-content:flex-end;">
+            <button class="btn btn-outline" style="background:transparent; color:var(--cinza); border:1px solid #E5E0D8; padding:10px 24px; border-radius:8px; font-weight:600; cursor:pointer;" onclick="fecharDetalhes()">Fechar</button>
+        </div>
+    </div>
+</div>
 <script src="menu.js?v=20260904"></script>
 <script>
 // ============================================================
-// IDP - AMOVIN ERP (AERP) - VERSÃO FINAL COM BOTÕES CORRIGIDOS
+// IDP - AMOVIN ERP (AERP) - VERSÃO FINAL COM TODOS OS BOTÕES
 // ============================================================
 
 var dados = { beneficiario: [], profissional: [], voluntario: [], universitario: [] };
@@ -283,7 +294,7 @@ async function registrarLogAuditoria(acao, detalhes) {
 }
 
 // ============================================================
-// GERAR CÓDIGO A-IDP-2026-XXXX
+// GERAR CÓDIGO E ID INTERNO
 // ============================================================
 async function gerarProximoCodigo(colecao) {
     var ano = new Date().getFullYear();
@@ -304,9 +315,6 @@ async function gerarProximoCodigo(colecao) {
     return prefixo + String(max + 1).padStart(4, '0');
 }
 
-// ============================================================
-// GERAR ID INTERNO (6 primeiros dígitos do CPF + sufixo)
-// ============================================================
 async function gerarIdInterno(cpf, tipoAtual, fbIdAtual) {
     var numeros = apenasNumeros(cpf);
     if (numeros.length < 6) return '';
@@ -623,7 +631,39 @@ function limparForm(tipo) {
 }
 
 // ============================================================
-// EDITAR E VER DETALHES
+// VISUALIZAR (NOVO)
+// ============================================================
+function verDetalhes(tipo, fbId) {
+    var p = dados[tipo].find(function(x) { return x._fbId === fbId; });
+    if (!p) return;
+    
+    var html = '<div style="background:#F8F4ED;padding:14px;border-radius:10px;margin-bottom:16px;text-align:center;">';
+    html += '<div style="font-size:11px;color:var(--cinza);">CÓDIGO</div>';
+    html += '<div style="font-size:20px;font-weight:800;color:var(--laranja);letter-spacing:1px;">' + (p.codigo || '---') + '</div>';
+    html += '</div>';
+    
+    html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">';
+    html += '<div style="grid-column:1/-1;padding:8px;background:#FAFAFA;border-radius:6px;"><div style="font-size:10px;color:var(--cinza);text-transform:uppercase;font-weight:600;">Nome Completo</div><div style="font-size:14px;font-weight:600;margin-top:2px;">' + escapeHtml(p.fullName || '—') + '</div></div>';
+    html += '<div style="padding:8px;background:#FAFAFA;border-radius:6px;"><div style="font-size:10px;color:var(--cinza);text-transform:uppercase;font-weight:600;">ID Interno</div><div style="font-size:13px;font-weight:600;margin-top:2px;">' + (p.idInterno || '—') + '</div></div>';
+    html += '<div style="padding:8px;background:#FAFAFA;border-radius:6px;"><div style="font-size:10px;color:var(--cinza);text-transform:uppercase;font-weight:600;">CPF</div><div style="font-size:13px;font-weight:600;margin-top:2px;">' + (p.cpf || '—') + '</div></div>';
+    html += '<div style="padding:8px;background:#FAFAFA;border-radius:6px;"><div style="font-size:10px;color:var(--cinza);text-transform:uppercase;font-weight:600;">Telefone</div><div style="font-size:13px;font-weight:600;margin-top:2px;">' + (p.phone || '—') + '</div></div>';
+    html += '<div style="padding:8px;background:#FAFAFA;border-radius:6px;"><div style="font-size:10px;color:var(--cinza);text-transform:uppercase;font-weight:600;">Status</div><div style="font-size:13px;font-weight:600;margin-top:2px;">' + (p.status || '—') + '</div></div>';
+    html += '</div>';
+    
+    if (p.responsavelNome) {
+        html += '<div style="margin-top:10px;padding:10px;background:#E3F2FD;border-radius:6px;color:#1565C0;font-size:12px;"><strong>Responsável/Contato:</strong> ' + escapeHtml(p.responsavelNome) + ' (' + (p.responsavelTelefone || '') + ')</div>';
+    }
+    
+    document.getElementById('conteudoDetalhes').innerHTML = html;
+    document.getElementById('modalDetalhes').style.display = 'flex';
+}
+
+function fecharDetalhes() {
+    document.getElementById('modalDetalhes').style.display = 'none';
+}
+
+// ============================================================
+// EDITAR
 // ============================================================
 function editarPessoa(tipo, fbId) {
     var p = dados[tipo].find(function(x) { return x._fbId === fbId; });
@@ -676,11 +716,11 @@ async function excluirPessoa(tipo, fbId) {
         await db.collection(cfg.colecao).doc(fbId).delete();
         mostrarToast('🗑️ Excluído! (mantido no CRM como histórico)', 'info');
         registrarLogAuditoria('IDP_EXCLUIR_' + tipo.toUpperCase(), 'Excluído: ' + (p.fullName || ''));
-    } catch (e) { mostrarToast('❌ ' + e.message, 'error'); }
+    } catch (e) { mostrarToast('❌ Erro: ' + e.message, 'error'); }
 }
 
 // ============================================================
-// RENDERIZAR LISTA (BOTÕES CORRIGIDOS)
+// RENDERIZAR LISTA (TODOS OS BOTÕES VISÍVEIS)
 // ============================================================
 function renderizarLista(tipo) {
     var container = document.getElementById('lista-' + tipo);
@@ -715,7 +755,8 @@ function renderizarLista(tipo) {
             '<div class="detalhe">' + detalhe + '</div>' +
             '<div><span class="status-badge ' + (statusMap[p.status] || 'status-pendente') + '">' + (statusLbl[p.status] || p.status || '—') + '</span></div>' +
             '</div>' +
-            '<div class="acoes" style="display:flex;gap:6px;">' +
+            '<div class="acoes" style="display:flex;gap:6px; flex-wrap:wrap;">' +
+            '<button class="btn-acao ver" title="Visualizar detalhes" onclick="verDetalhes(\'' + tipo + '\',\'' + p._fbId + '\')">👁️ Ver</button>' +
             '<button class="btn-acao editar" title="Editar cadastro" onclick="editarPessoa(\'' + tipo + '\',\'' + p._fbId + '\')">✏️ Editar</button>' +
             '<button class="btn-acao excluir" title="Excluir cadastro" onclick="excluirPessoa(\'' + tipo + '\',\'' + p._fbId + '\')">🗑️ Excluir</button>' +
             '</div></div>';
