@@ -7,942 +7,738 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --laranja: #C65A11;
-            --laranja-escuro: #A04A0E;
-            --amarelo: #F5C518;
-            --verde: #57C220;
-            --azul: #1E88E5;
-            --grafite: #1A1A1A;
-            --cinza: #6B7280;
-            --cinza-claro: #F8F4ED;
-            --branco: #FFFFFF;
-            --vermelho: #E53935;
+            --laranja: #C65A11; --laranja-escuro: #A04A0E; --amarelo: #F5C518; --verde: #57C220;
+            --azul: #1E88E5; --grafite: #1A1A1A; --cinza: #6B7280; --branco: #FFFFFF;
+            --vermelho: #E53935; --roxo: #7C3AED; --teal: #00897B;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'Inter', system-ui, sans-serif;
-            background: #F8F4ED;
-            display: flex;
-            min-height: 100vh;
-        }
-
+        body { font-family: 'Inter', system-ui, sans-serif; background: #F8F4ED; display: flex; min-height: 100vh; }
         .main-content { flex: 1; margin-left: 270px; padding: 24px 30px; }
-        .topo-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 24px;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
+        .topo-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 10px; }
         .topo-bar h1 { font-size: 24px; font-weight: 700; color: var(--grafite); }
         .topo-bar h1 span { color: var(--laranja); }
-        .btn-sair-topo {
-            background: #F8F4ED;
-            color: #1A1A1A;
-            border: 1px solid #F0E9DF;
-            padding: 8px 16px;
-            border-radius: 10px;
-            font-size: 12px;
-            font-weight: 600;
-            cursor: pointer;
-        }
-
-        .card {
-            background: #FFFFFF;
-            padding: 24px;
-            border-radius: 14px;
-            border: 1px solid #F0E9DF;
-            margin-bottom: 20px;
-        }
-        .card h3 {
-            font-size: 16px;
-            font-weight: 700;
-            color: var(--grafite);
-            margin-bottom: 16px;
-            padding-bottom: 12px;
-            border-bottom: 1px solid #F0E9DF;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-
-        .tabs {
-            display: flex;
-            gap: 4px;
-            margin-bottom: 20px;
-            border-bottom: 2px solid #F0E9DF;
-            flex-wrap: wrap;
-        }
-        .tab {
-            padding: 10px 22px;
-            border: none;
-            background: transparent;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 13px;
-            color: var(--cinza);
-            font-family: 'Inter', sans-serif;
-            transition: all 0.2s;
-            border-bottom: 3px solid transparent;
-        }
+        .btn-sair-topo { background: #F8F4ED; color: #1A1A1A; border: 1px solid #F0E9DF; padding: 8px 16px; border-radius: 10px; font-size: 12px; font-weight: 600; cursor: pointer; }
+        .status-firebase { display: flex; align-items: center; gap: 8px; padding: 6px 14px; border-radius: 20px; background: #F8F4ED; font-size: 12px; font-weight: 600; border: 1px solid #F0E9DF; }
+        .status-firebase.conectado { background: #E8F5E9; color: #2E7D32; border-color: #A5D6A7; }
+        .status-firebase.offline { background: #FFF3E0; color: #E65100; border-color: #FFCC80; }
+        .status-firebase .dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; animation: pulse 2s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+        .badge-master { background: linear-gradient(135deg, #7C3AED, #C65A11); color: white; font-size: 10px; font-weight: 700; padding: 4px 12px; border-radius: 20px; letter-spacing: 0.5px; }
+        .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 15px; margin-bottom: 20px; }
+        .kpi-card { background: #FFFFFF; padding: 18px; border-radius: 14px; border: 1px solid #F0E9DF; text-align: center; }
+        .kpi-card .kpi-valor { font-size: 28px; font-weight: 800; color: var(--laranja); }
+        .kpi-card .kpi-label { font-size: 11px; color: var(--cinza); }
+        .card { background: #FFFFFF; padding: 24px; border-radius: 14px; border: 1px solid #F0E9DF; margin-bottom: 20px; }
+        .tabs { display: flex; gap: 4px; margin-bottom: 20px; border-bottom: 2px solid #F0E9DF; flex-wrap: wrap; }
+        .tab { padding: 10px 22px; border: none; background: transparent; cursor: pointer; font-weight: 600; font-size: 13px; color: var(--cinza); font-family: 'Inter', sans-serif; transition: all 0.2s; border-bottom: 3px solid transparent; }
         .tab:hover { color: var(--laranja); }
         .tab.ativo { color: var(--laranja); border-bottom-color: var(--laranja); }
-
         .tab-content { display: none; }
         .tab-content.ativo { display: block; }
-
         .form-group { margin-bottom: 14px; }
-        .form-group label {
-            display: block;
-            font-size: 11px;
-            font-weight: 600;
-            color: var(--cinza);
-            margin-bottom: 4px;
-            text-transform: uppercase;
-            letter-spacing: 0.3px;
-        }
-        .form-group input,
-        .form-group select,
-        .form-group textarea {
-            width: 100%;
-            padding: 10px 12px;
-            border: 1px solid #E5E0D8;
-            border-radius: 8px;
-            font-size: 13px;
-            font-family: 'Inter', sans-serif;
-            transition: border 0.2s;
-            background: #FAFAFA;
-        }
-        .form-group input:focus,
-        .form-group select:focus,
-        .form-group textarea:focus {
-            outline: none;
-            border-color: var(--laranja);
-            background: var(--branco);
-            box-shadow: 0 0 0 3px rgba(198, 90, 17, 0.08);
-        }
+        .form-group label { display: block; font-size: 11px; font-weight: 600; color: var(--cinza); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.3px; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px 12px; border: 1px solid #E5E0D8; border-radius: 8px; font-size: 13px; font-family: 'Inter', sans-serif; background: #FAFAFA; }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: var(--laranja); background: #FFF; box-shadow: 0 0 0 3px rgba(198,90,17,0.08); }
+        .form-group input[readonly] { background: #F0E9DF; color: var(--laranja); font-weight: 700; cursor: not-allowed; border-style: dashed; }
         .form-group textarea { resize: vertical; min-height: 60px; }
         .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-
-        .btn {
-            padding: 10px 24px;
-            border-radius: 8px;
-            border: none;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 13px;
-            font-family: 'Inter', sans-serif;
-            transition: all 0.2s;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .btn-primary { background: var(--laranja); color: white; }
-        .btn-primary:hover { background: var(--laranja-escuro); }
-        .btn-success { background: var(--verde); color: white; }
-        .btn-success:hover { background: #388E3C; }
+        .btn { padding: 10px 24px; border-radius: 8px; border: none; cursor: pointer; font-weight: 600; font-size: 13px; font-family: 'Inter', sans-serif; transition: all 0.2s; display: inline-flex; align-items: center; gap: 8px; }
+        .btn-primary { background: var(--laranja); color: white; } .btn-primary:hover { background: var(--laranja-escuro); }
         .btn-danger { background: var(--vermelho); color: white; }
-        .btn-danger:hover { background: #C62828; }
-        .btn-outline { background: transparent; color: var(--cinza); border: 1px solid #E5E0D8; }
-        .btn-outline:hover { background: #F8F4ED; }
         .btn-full { width: 100%; padding: 14px; font-size: 15px; justify-content: center; }
-        .btn-azul { background: var(--azul); color: white; }
-        .btn-azul:hover { background: #1565C0; }
-
-        .pessoa-item {
-            padding: 12px 16px;
-            border-bottom: 1px solid #F0E9DF;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 8px;
-            transition: background 0.2s;
-        }
+        .btn-sm { padding: 4px 10px; font-size: 10px; }
+        .pessoa-item { padding: 12px 16px; border-bottom: 1px solid #F0E9DF; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
         .pessoa-item:hover { background: #FFF8E7; }
         .pessoa-item .info { flex: 1; min-width: 150px; }
+        .pessoa-item .info .codigo { font-size: 10px; color: var(--laranja); font-weight: 700; letter-spacing: 0.5px; }
         .pessoa-item .info .nome { font-weight: 600; font-size: 14px; color: var(--grafite); }
-        .pessoa-item .info .detalhe { font-size: 12px; color: var(--cinza); }
-        .pessoa-item .info .projetos { font-size: 11px; color: var(--azul); margin-top: 2px; }
-        .pessoa-item .acoes { display: flex; gap: 4px; flex-wrap: wrap; }
-        .pessoa-item .btn { padding: 4px 10px; font-size: 10px; }
-
-        .status-badge {
-            display: inline-block;
-            padding: 2px 12px;
-            border-radius: 20px;
-            font-size: 10px;
-            font-weight: 600;
-        }
+        .pessoa-item .info .detalhe { font-size: 12px; color: var(--cinza); margin-top: 2px; }
+        .status-badge { display: inline-block; padding: 2px 12px; border-radius: 20px; font-size: 10px; font-weight: 600; margin-top: 4px; }
         .status-ativo { background: #E8F5E9; color: #2E7D32; }
         .status-inativo { background: #FFEBEE; color: #C62828; }
         .status-pendente { background: #FFF3E0; color: #E65100; }
-
         .sem-dados { text-align: center; padding: 30px; color: #9CA3AF; }
-
-        .kpi-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-        .kpi-card {
-            background: #FFFFFF;
-            padding: 18px;
-            border-radius: 14px;
-            border: 1px solid #F0E9DF;
-            text-align: center;
-        }
-        .kpi-card .kpi-valor { font-size: 28px; font-weight: 800; color: var(--laranja); }
-        .kpi-card .kpi-label { font-size: 11px; color: var(--cinza); }
-
-        .loading {
-            text-align: center;
-            padding: 40px;
-            color: var(--cinza);
-        }
-        .loading .spinner {
-            display: inline-block;
-            width: 30px;
-            height: 30px;
-            border: 3px solid #E5E0D8;
-            border-top: 3px solid var(--laranja);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-bottom: 10px;
-        }
+        .loading { text-align: center; padding: 40px; color: var(--cinza); }
+        .loading .spinner { display: inline-block; width: 30px; height: 30px; border: 3px solid #E5E0D8; border-top: 3px solid var(--laranja); border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 10px; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-        .rodape {
-            background: #FFFFFF;
-            border-radius: 14px;
-            padding: 12px 18px;
-            border: 1px solid #F0E9DF;
-            margin-top: 20px;
-        }
-        .rodape-grid { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
-        .rodape-logo .logo-vigorre { width: 50px; }
-        .rodape-info { flex: 1; }
-        .rodape-info .copyright { font-size: 8px; color: #8A8F98; }
-        .rodape-info .tm { font-size: 6px; vertical-align: super; }
-        .rodape-info .contato { font-size: 9px; color: #8A8F98; }
-        .rodape-info a { color: #C65A11; text-decoration: none; }
-        .rodape-info .email { font-size: 8px; color: #aaa; }
-        .logo-vigorre-fallback { font-size: 12px; font-weight: 700; display: none; }
-
-        @media (max-width: 900px) {
-            .main-content { margin-left: 0; }
-            .form-row { grid-template-columns: 1fr; }
-            .tabs { flex-wrap: nowrap; overflow-x: auto; }
-            .tab { padding: 8px 14px; font-size: 12px; white-space: nowrap; }
-        }
-        @media (max-width: 480px) {
-            .kpi-grid { grid-template-columns: 1fr 1fr; }
-        }
+        .wa-check { display: flex; align-items: center; gap: 8px; padding: 10px 12px; background: #FAFAFA; border: 1px solid #E5E0D8; border-radius: 8px; cursor: pointer; height: 42px; }
+        .wa-check input[type="checkbox"] { width: 18px; height: 18px; cursor: pointer; accent-color: #25D366; }
+        .wa-check label { font-size: 12.5px; color: var(--grafite); cursor: pointer; margin: 0; text-transform: none; letter-spacing: 0; }
+        .wa-check.marcado { background: #E8F5E9; border-color: #A5D6A7; }
+        .secao-titulo { font-size: 12px; font-weight: 700; color: var(--laranja); text-transform: uppercase; margin: 20px 0 10px; padding-bottom: 6px; border-bottom: 2px solid var(--laranja); }
+        .rodape { background: #FFFFFF; border-radius: 14px; padding: 12px 18px; border: 1px solid #F0E9DF; margin-top: 20px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+        .rodape img { width: 50px; }
+        .rodape .copyright { font-size: 8px; color: #8A8F98; }
+        .rodape .contato { font-size: 9px; color: #8A8F98; }
+        .rodape a { color: #C65A11; text-decoration: none; }
+        @media (max-width: 900px) { .main-content { margin-left: 0; } .form-row { grid-template-columns: 1fr; } .tabs { flex-wrap: nowrap; overflow-x: auto; } .tab { padding: 8px 14px; font-size: 12px; white-space: nowrap; } }
     </style>
 </head>
 <body>
-
-    <div id="menu-container"></div>
-
-    <main class="main-content">
-        <div class="topo-bar">
-            <h1>🔑 IDP <span>AMOVIN</span></h1>
-            <button class="btn-sair-topo" onclick="window.location.href='index.html'">🚪 Sair</button>
+<div id="menu-container"></div>
+<main class="main-content">
+    <div class="topo-bar">
+        <h1>🔑 IDP <span>AMOVIN</span></h1>
+        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+            <div class="status-firebase" id="statusFirebase"><span class="dot"></span><span>⏳ Conectando...</span></div>
+            <span class="badge-master" id="badgeMaster" style="display:none;">🔓 MODO MASTER</span>
+            <button class="btn-sair-topo" onclick="window.location.href='dashboard.html'">🏠 Dashboard</button>
         </div>
+    </div>
 
-        <!-- KPIs -->
-        <div class="kpi-grid" id="kpiContainer">
-            <div class="kpi-card">
-                <div class="kpi-valor" id="kpiTotal">0</div>
-                <div class="kpi-label">👥 Total de Pessoas</div>
-            </div>
-            <div class="kpi-card">
-                <div class="kpi-valor" style="color:var(--verde);" id="kpiBeneficiarios">0</div>
-                <div class="kpi-label">👤 Beneficiários</div>
-            </div>
-            <div class="kpi-card">
-                <div class="kpi-valor" style="color:var(--azul);" id="kpiProfissionais">0</div>
-                <div class="kpi-label">👨‍⚕️ Profissionais</div>
-            </div>
-            <div class="kpi-card">
-                <div class="kpi-valor" style="color:#E65100;" id="kpiVoluntarios">0</div>
-                <div class="kpi-label">💪 Voluntários</div>
-            </div>
+    <div class="kpi-grid">
+        <div class="kpi-card"><div class="kpi-valor" id="kpiTotal">0</div><div class="kpi-label">👥 Total</div></div>
+        <div class="kpi-card"><div class="kpi-valor" style="color:var(--verde);" id="kpiBeneficiarios">0</div><div class="kpi-label">👤 Beneficiários</div></div>
+        <div class="kpi-card"><div class="kpi-valor" style="color:var(--azul);" id="kpiProfissionais">0</div><div class="kpi-label">👨‍⚕️ Profissionais</div></div>
+        <div class="kpi-card"><div class="kpi-valor" style="color:#E65100;" id="kpiVoluntarios">0</div><div class="kpi-label">💪 Voluntários</div></div>
+        <div class="kpi-card"><div class="kpi-valor" style="color:#00838F;" id="kpiUniversitarios">0</div><div class="kpi-label">🎓 Universitários</div></div>
+    </div>
+
+    <div class="card">
+        <div class="tabs">
+            <button class="tab ativo" data-tab="beneficiario" onclick="mudarTab('beneficiario',this)">👤 Beneficiários</button>
+            <button class="tab" data-tab="profissional" onclick="mudarTab('profissional',this)">👨‍⚕️ Profissionais</button>
+            <button class="tab" data-tab="voluntario" onclick="mudarTab('voluntario',this)">💪 Voluntários</button>
+            <button class="tab" data-tab="universitario" onclick="mudarTab('universitario',this)">🎓 Universitários</button>
         </div>
+        <div id="conteudoAbas"></div>
+    </div>
 
-        <!-- TABS -->
-        <div class="card">
-            <div class="tabs">
-                <button class="tab ativo" data-tab="beneficiario" onclick="mudarTab('beneficiario',this)">👤 Beneficiários</button>
-                <button class="tab" data-tab="profissional" onclick="mudarTab('profissional',this)">👨‍⚕️ Profissionais</button>
-                <button class="tab" data-tab="voluntario" onclick="mudarTab('voluntario',this)">💪 Voluntários</button>
-            </div>
-
-            <!-- TAB BENEFICIÁRIO -->
-            <div class="tab-content ativo" id="tab-beneficiario">
-                <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
-                    <div>
-                        <h4 style="font-size:14px;color:var(--cinza);margin-bottom:12px;">📝 Cadastrar Beneficiário</h4>
-                        <input type="hidden" id="beneficiarioId">
-                        <div class="form-group">
-                            <label>Nome Completo *</label>
-                            <input type="text" id="benefNome" placeholder="Nome do beneficiário">
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label>CPF</label>
-                                <input type="text" id="benefCpf" placeholder="000.000.000-00">
-                            </div>
-                            <div class="form-group">
-                                <label>Data Nascimento</label>
-                                <input type="date" id="benefNascimento">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label>Email</label>
-                            <input type="email" id="benefEmail" placeholder="email@exemplo.com">
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label>Telefone</label>
-                                <input type="text" id="benefTelefone" placeholder="(34) 99999-9999">
-                            </div>
-                            <div class="form-group">
-                                <label>WhatsApp</label>
-                                <input type="text" id="benefWhatsapp" placeholder="(34) 99999-9999">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label>Endereço</label>
-                            <input type="text" id="benefEndereco" placeholder="Rua, número, bairro">
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label>Status</label>
-                                <select id="benefStatus">
-                                    <option value="ativo">✅ Ativo</option>
-                                    <option value="pendente">⏳ Pendente</option>
-                                    <option value="inativo">❌ Inativo</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label>📋 Projeto</label>
-                                <select id="benefProjeto">
-                                    <option value="">Nenhum</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label>Observações</label>
-                            <textarea id="benefObs" rows="2" placeholder="Informações adicionais..."></textarea>
-                        </div>
-                        <button class="btn btn-primary btn-full" onclick="salvarPessoa('beneficiario')">💾 Salvar Beneficiário</button>
-                    </div>
-                    <div>
-                        <h4 style="font-size:14px;color:var(--cinza);margin-bottom:12px;">📋 Lista de Beneficiários</h4>
-                        <div id="listaBeneficiarios">
-                            <div class="loading"><div class="spinner"></div><div>Carregando do Firebase...</div></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- TAB PROFISSIONAL -->
-            <div class="tab-content" id="tab-profissional">
-                <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
-                    <div>
-                        <h4 style="font-size:14px;color:var(--cinza);margin-bottom:12px;">📝 Cadastrar Profissional</h4>
-                        <input type="hidden" id="profissionalId">
-                        <div class="form-group">
-                            <label>Nome Completo *</label>
-                            <input type="text" id="profNome" placeholder="Nome do profissional">
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label>CPF</label>
-                                <input type="text" id="profCpf" placeholder="000.000.000-00">
-                            </div>
-                            <div class="form-group">
-                                <label>Data Nascimento</label>
-                                <input type="date" id="profNascimento">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label>Email</label>
-                            <input type="email" id="profEmail" placeholder="email@exemplo.com">
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label>Telefone</label>
-                                <input type="text" id="profTelefone" placeholder="(34) 99999-9999">
-                            </div>
-                            <div class="form-group">
-                                <label>WhatsApp</label>
-                                <input type="text" id="profWhatsapp" placeholder="(34) 99999-9999">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label>Especialidade</label>
-                            <input type="text" id="profEspecialidade" placeholder="Ex: Psicólogo, Assistente Social">
-                        </div>
-                        <div class="form-group">
-                            <label>Registro Profissional</label>
-                            <input type="text" id="profRegistro" placeholder="CRP, CRAS, etc">
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label>Status</label>
-                                <select id="profStatus">
-                                    <option value="ativo">✅ Ativo</option>
-                                    <option value="pendente">⏳ Pendente</option>
-                                    <option value="inativo">❌ Inativo</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label>📋 Projeto</label>
-                                <select id="profProjeto">
-                                    <option value="">Nenhum</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label>Observações</label>
-                            <textarea id="profObs" rows="2" placeholder="Informações adicionais..."></textarea>
-                        </div>
-                        <button class="btn btn-primary btn-full" onclick="salvarPessoa('profissional')">💾 Salvar Profissional</button>
-                    </div>
-                    <div>
-                        <h4 style="font-size:14px;color:var(--cinza);margin-bottom:12px;">📋 Lista de Profissionais</h4>
-                        <div id="listaProfissionais">
-                            <div class="loading"><div class="spinner"></div><div>Carregando do Firebase...</div></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- TAB VOLUNTÁRIO -->
-            <div class="tab-content" id="tab-voluntario">
-                <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
-                    <div>
-                        <h4 style="font-size:14px;color:var(--cinza);margin-bottom:12px;">📝 Cadastrar Voluntário</h4>
-                        <input type="hidden" id="voluntarioId">
-                        <div class="form-group">
-                            <label>Nome Completo *</label>
-                            <input type="text" id="volNome" placeholder="Nome do voluntário">
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label>CPF</label>
-                                <input type="text" id="volCpf" placeholder="000.000.000-00">
-                            </div>
-                            <div class="form-group">
-                                <label>Data Nascimento</label>
-                                <input type="date" id="volNascimento">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label>Email</label>
-                            <input type="email" id="volEmail" placeholder="email@exemplo.com">
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label>Telefone</label>
-                                <input type="text" id="volTelefone" placeholder="(34) 99999-9999">
-                            </div>
-                            <div class="form-group">
-                                <label>WhatsApp</label>
-                                <input type="text" id="volWhatsapp" placeholder="(34) 99999-9999">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label>Área de Interesse</label>
-                            <select id="volArea">
-                                <option value="Educação">📚 Educação</option>
-                                <option value="Esporte">⚽ Esporte</option>
-                                <option value="Saúde">🩺 Saúde</option>
-                                <option value="Social">🤝 Social</option>
-                                <option value="Administrativo">📋 Administrativo</option>
-                                <option value="Outro">📌 Outro</option>
-                            </select>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label>Status</label>
-                                <select id="volStatus">
-                                    <option value="ativo">✅ Ativo</option>
-                                    <option value="pendente">⏳ Pendente</option>
-                                    <option value="inativo">❌ Inativo</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label>📋 Projeto</label>
-                                <select id="volProjeto">
-                                    <option value="">Nenhum</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label>Observações</label>
-                            <textarea id="volObs" rows="2" placeholder="Informações adicionais..."></textarea>
-                        </div>
-                        <button class="btn btn-primary btn-full" onclick="salvarPessoa('voluntario')">💾 Salvar Voluntário</button>
-                    </div>
-                    <div>
-                        <h4 style="font-size:14px;color:var(--cinza);margin-bottom:12px;">📋 Lista de Voluntários</h4>
-                        <div id="listaVoluntarios">
-                            <div class="loading"><div class="spinner"></div><div>Carregando do Firebase...</div></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    <div class="rodape">
+        <img src="images/logo-vigorre.png" alt="Vigorre" onerror="this.style.display='none';">
+        <div>
+            <div class="copyright">© 2026 VIGORRE DESIGNER™</div>
+            <div class="contato"><a href="https://www.vigorre.com.br">www.vigorre.com.br</a> | <a href="https://wa.me/5534991850735">(34) 99185-0735</a></div>
         </div>
+    </div>
+</main>
+<script src="menu.js?v=20260904"></script>
+<script>
+// ============================================================
+// IDP - AMOVIN ERP (AERP) - VERSÃO FINAL COMPLETA
+// 4 coleções: beneficiaries, professionals, volunteers, university_students
+// Espelhamento automático para CRM (contatos) quando tem telefone
+// ID interno (6 primeiros dígitos CPF) + Código A-IDP-2026-XXXX
+// ============================================================
 
-        <div class="rodape">
-            <div class="rodape-grid">
-                <div class="rodape-logo">
-                    <img src="images/logo-vigorre.png" alt="Vigorre" class="logo-vigorre" onerror="this.style.display='none';this.nextElementSibling.style.display='block';">
-                    <span class="logo-vigorre-fallback">Vigorre</span>
-                </div>
-                <div class="rodape-info">
-                    <div class="copyright">© 2026 VIGORRE DESIGNER<span class="tm">™</span></div>
-                    <div class="contato"><a href="https://www.vigorre.com.br">www.vigorre.com.br</a> | <a href="https://wa.me/5534991850735">(34) 99185-0735</a></div>
-                    <div class="email">contato@vigorre.com.br</div>
-                </div>
-            </div>
-        </div>
-    </main>
+var dados = { beneficiario: [], profissional: [], voluntario: [], universitario: [] };
+var projetos = [];
+var firebasePronto = false;
+var db = null;
+var unsubs = [];
 
-    <script src="menu.js?v=20260904"></script>
-    <script>
-        // ============================================================
-        // DADOS
-        // ============================================================
-        var pessoas = [];
-        var projetos = JSON.parse(localStorage.getItem('amovin_projetos') || '[]');
-        var beneficiarios = [];
-        var profissionais = [];
-        var voluntarios = [];
-        var firebasePronto = false;
+// ============================================================
+// USUÁRIO LOGADO
+// ============================================================
+function getUsuarioLogado() {
+    return {
+        usuario: sessionStorage.getItem('amovin_usuario') || 'sistema',
+        nome: sessionStorage.getItem('amovin_nome') || 'Sistema',
+        perfil: sessionStorage.getItem('amovin_perfil') || 'admin'
+    };
+}
+function isMaster() {
+    var u = getUsuarioLogado();
+    return u.perfil === 'admin' && u.nome === 'Administrador Master';
+}
 
-        // ============================================================
-        // INICIALIZAR FIREBASE (COMPAT)
-        // ============================================================
-        function inicializarFirebase() {
-            if (typeof firebase === 'undefined') {
-                var script = document.createElement('script');
-                script.src = 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js';
-                script.onload = function() {
-                    var firestoreScript = document.createElement('script');
-                    firestoreScript.src = 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js';
-                    firestoreScript.onload = function() {
-                        try {
-                            var firebaseConfig = {
-                                apiKey: "AIzaSyDQO-69vVBhmBK8oLt0DzfyigBmjxzu7b4",
-                                authDomain: "gestao-amovin.firebaseapp.com",
-                                projectId: "gestao-amovin",
-                                storageBucket: "gestao-amovin.firebasestorage.app",
-                                messagingSenderId: "316793420445",
-                                appId: "1:316793420445:web:68e9898bbfcd30853f3274"
-                            };
-                            if (!firebase.apps.length) {
-                                firebase.initializeApp(firebaseConfig);
-                            }
-                            firebasePronto = true;
-                            console.log('🔥 Firebase IDP conectado');
-                            carregarDoFirebase();
-                        } catch (e) {
-                            console.error('❌ Erro Firebase:', e);
-                            carregarLocalStorage();
-                        }
-                    };
-                    firestoreScript.onerror = function() {
-                        console.warn('⚠️ Firestore não carregou, usando localStorage');
-                        carregarLocalStorage();
-                    };
-                    document.head.appendChild(firestoreScript);
-                };
-                script.onerror = function() {
-                    console.warn('⚠️ Firebase não carregou, usando localStorage');
-                    carregarLocalStorage();
-                };
-                document.head.appendChild(script);
-            } else {
-                firebasePronto = true;
-                carregarDoFirebase();
-            }
-        }
+// ============================================================
+// MÁSCARAS E UTILITÁRIOS
+// ============================================================
+function mascaraCpf(i) {
+    var v = i.value.replace(/\D/g, '');
+    if (v.length > 11) v = v.slice(0, 11);
+    v = v.replace(/(\d{3})(\d)/, '$1.$2').replace(/(\d{3})(\d)/, '$1.$2').replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+    i.value = v;
+}
+function mascaraTelefone(i) {
+    var v = i.value.replace(/\D/g, '');
+    if (v.length > 11) v = v.slice(0, 11);
+    v = v.length <= 10
+        ? v.replace(/^(\d{2})(\d)/, '($1) $2').replace(/(\d{4})(\d)/, '$1-$2')
+        : v.replace(/^(\d{2})(\d)/, '($1) $2').replace(/(\d{5})(\d)/, '$1-$2');
+    i.value = v;
+}
+function apenasNumeros(s) { return (s || '').replace(/\D/g, ''); }
+function escapeHtml(s) {
+    return String(s || '').replace(/[&<>"']/g, function(c) {
+        return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c];
+    });
+}
 
-        // ============================================================
-        // CARREGAR DO FIREBASE
-        // ============================================================
-        async function carregarDoFirebase() {
-            if (!firebasePronto) return;
+// WhatsApp
+function toggleWa(id) {
+    var cb = document.getElementById(id);
+    cb.checked = !cb.checked;
+    updateWa(id + 'Wrapper', id);
+}
+function updateWa(wrapperId, cbId) {
+    var cb = document.getElementById(cbId);
+    var w = document.getElementById(wrapperId);
+    if (cb.checked) w.classList.add('marcado');
+    else w.classList.remove('marcado');
+}
+function mostrarToast(msg, tipo) {
+    var t = document.createElement('div');
+    t.style.cssText = 'position:fixed;top:20px;right:20px;padding:16px 24px;border-radius:12px;color:white;font-weight:600;font-size:14px;z-index:10000;box-shadow:0 8px 32px rgba(0,0,0,0.15);max-width:400px;';
+    var cores = { success: '#57C220', error: '#E53935', warning: '#E65100', info: '#1E88E5' };
+    t.style.background = cores[tipo] || cores.success;
+    t.textContent = msg;
+    document.body.appendChild(t);
+    setTimeout(function() { t.remove(); }, 4000);
+}
 
-            try {
-                var db = firebase.firestore();
-
-                // Beneficiários
-                var benSnap = await db.collection('beneficiaries').get();
-                beneficiarios = [];
-                benSnap.forEach(function(doc) {
-                    var d = doc.data();
-                    beneficiarios.push({
-                        id: doc.id,
-                        firebaseId: doc.id,
-                        nome: d.fullName || d.nome || 'Sem nome',
-                        tipo: 'beneficiario',
-                        cpf: d.cpf || '',
-                        nascimento: d.birthDate || d.dataNascimento || '',
-                        email: d.email || '',
-                        telefone: d.phone || d.telefone || '',
-                        whatsapp: d.whatsapp || '',
-                        endereco: d.address || d.endereco || '',
-                        status: d.status || 'ativo',
-                        projeto_id: d.projeto_id || null,
-                        obs: d.notes || d.obs || '',
-                        // Campos específicos
-                        diagnosis: d.diagnosis || '',
-                        cid: d.cid || '',
-                        continuousMedication: d.continuousMedication || '',
-                        familyIncome: d.familyIncome || '',
-                        activities: d.activities || [],
-                        gender: d.gender || '',
-                        origem: 'firebase'
-                    });
-                });
-                console.log('👥 Beneficiários do Firebase:', beneficiarios.length);
-
-                // Profissionais
-                var profSnap = await db.collection('professionals').get();
-                profissionais = [];
-                profSnap.forEach(function(doc) {
-                    var d = doc.data();
-                    profissionais.push({
-                        id: doc.id,
-                        firebaseId: doc.id,
-                        nome: d.fullName || d.nome || 'Sem nome',
-                        tipo: 'profissional',
-                        cpf: d.cpf || '',
-                        nascimento: d.birthDate || '',
-                        email: d.email || '',
-                        telefone: d.phone || d.telefone || '',
-                        whatsapp: d.whatsapp || '',
-                        endereco: d.address || '',
-                        status: d.status || 'ativo',
-                        especialidade: d.specialty || d.especialidade || '',
-                        registro: d.registration || d.registro || '',
-                        projeto_id: d.projeto_id || null,
-                        obs: d.notes || d.obs || '',
-                        origem: 'firebase'
-                    });
-                });
-                console.log('👨‍⚕️ Profissionais do Firebase:', profissionais.length);
-
-                // Voluntários
-                var volSnap = await db.collection('volunteers').get();
-                voluntarios = [];
-                volSnap.forEach(function(doc) {
-                    var d = doc.data();
-                    voluntarios.push({
-                        id: doc.id,
-                        firebaseId: doc.id,
-                        nome: d.fullName || d.nome || 'Sem nome',
-                        tipo: 'voluntario',
-                        cpf: d.cpf || '',
-                        nascimento: d.birthDate || '',
-                        email: d.email || '',
-                        telefone: d.phone || d.telefone || '',
-                        whatsapp: d.whatsapp || '',
-                        endereco: d.address || '',
-                        status: d.status || 'ativo',
-                        area: d.area || d.areaInteresse || 'Outro',
-                        projeto_id: d.projeto_id || null,
-                        obs: d.notes || d.obs || '',
-                        origem: 'firebase'
-                    });
-                });
-                console.log('💪 Voluntários do Firebase:', voluntarios.length);
-
-                // Junta tudo
-                pessoas = beneficiarios.concat(profissionais).concat(voluntarios);
-
-                renderizarListas();
-                atualizarKPIs();
-
-            } catch (e) {
-                console.error('❌ Erro ao ler do Firebase:', e);
-                carregarLocalStorage();
-            }
-        }
-
-        // ============================================================
-        // CARREGAR DO LOCALSTORAGE (FALLBACK)
-        // ============================================================
-        function carregarLocalStorage() {
-            pessoas = JSON.parse(localStorage.getItem('amovin_pessoas') || '[]');
-            if (pessoas.length === 0) {
-                pessoas = [
-                    { id: 1, nome: 'Maria Silva', tipo: 'beneficiario', cpf: '123.456.789-00',
-                      nascimento: '1985-06-15', email: 'maria@email.com', telefone: '(34) 99999-0001',
-                      status: 'ativo', projeto_id: 1, obs: '' }
-                ];
-            }
-            renderizarListas();
-            atualizarKPIs();
-        }
-
-        // ============================================================
-        // SALVAR PESSOA (LOCAL — PODE SER ADAPTADO PARA FIREBASE)
-        // ============================================================
-        async function salvarPessoa(tipo) {
-            var prefix = { 'beneficiario': 'benef', 'profissional': 'prof', 'voluntario': 'vol' }[tipo];
-
-            var nome = document.getElementById(prefix + 'Nome').value.trim();
-            if (!nome) { alert('⚠️ Nome é obrigatório!'); return; }
-
-            var dados = {
-                nome: nome,
-                tipo: tipo,
-                cpf: document.getElementById(prefix + 'Cpf').value.trim(),
-                nascimento: document.getElementById(prefix + 'Nascimento').value,
-                email: document.getElementById(prefix + 'Email').value.trim(),
-                telefone: document.getElementById(prefix + 'Telefone').value.trim(),
-                whatsapp: document.getElementById(prefix + 'Whatsapp').value.trim(),
-                status: document.getElementById(prefix + 'Status').value,
-                projeto_id: parseInt(document.getElementById(prefix + 'Projeto').value) || null,
-                obs: document.getElementById(prefix + 'Obs').value.trim()
-            };
-
-            if (tipo === 'profissional') {
-                dados.especialidade = document.getElementById('profEspecialidade').value.trim();
-                dados.registro = document.getElementById('profRegistro').value.trim();
-            }
-            if (tipo === 'voluntario') {
-                dados.area = document.getElementById('volArea').value;
-            }
-            if (tipo === 'beneficiario') {
-                dados.endereco = document.getElementById('benefEndereco').value.trim();
-            }
-
-            // Salva no Firebase se disponível
-            if (firebasePronto) {
+// ============================================================
+// FIREBASE
+// ============================================================
+function inicializarFirebase() {
+    if (typeof firebase === 'undefined') {
+        var s = document.createElement('script');
+        s.src = 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js';
+        s.onload = function() {
+            var fs = document.createElement('script');
+            fs.src = 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js';
+            fs.onload = function() {
                 try {
-                    var db = firebase.firestore();
-                    var colecao = tipo === 'beneficiario' ? 'beneficiaries' : (tipo === 'profissional' ? 'professionals' : 'volunteers');
+                    var cfg = {
+                        apiKey: "AIzaSyDQO-69vVBhmBK8oLt0DzfyigBmjxzu7b4",
+                        authDomain: "gestao-amovin.firebaseapp.com",
+                        projectId: "gestao-amovin",
+                        storageBucket: "gestao-amovin.firebasestorage.app",
+                        messagingSenderId: "316793420445",
+                        appId: "1:316793420445:web:68e9898bbfcd30853f3274"
+                    };
+                    if (!firebase.apps.length) firebase.initializeApp(cfg);
+                    db = firebase.firestore();
+                    firebasePronto = true;
+                    atualizarStatusFirebase('conectado');
+                    escutarTudo();
+                } catch (e) { atualizarStatusFirebase('offline'); }
+            };
+            document.head.appendChild(fs);
+        };
+        document.head.appendChild(s);
+    } else {
+        try {
+            db = firebase.firestore();
+            firebasePronto = true;
+            atualizarStatusFirebase('conectado');
+            escutarTudo();
+        } catch (e) { atualizarStatusFirebase('offline'); }
+    }
+}
+function atualizarStatusFirebase(s) {
+    var el = document.getElementById('statusFirebase');
+    if (s === 'conectado') { el.className = 'status-firebase conectado'; el.innerHTML = '<span class="dot"></span><span>🟢 Firebase</span>'; }
+    else { el.className = 'status-firebase offline'; el.innerHTML = '<span class="dot"></span><span>🟡 Offline</span>'; }
+}
+function escutarTudo() {
+    if (!firebasePronto || !db) return;
+    
+    // Projetos
+    unsubs.push(db.collection('projetos').onSnapshot(function(snap) {
+        projetos = [];
+        snap.forEach(function(doc) { projetos.push({ _fbId: doc.id, ...doc.data() }); });
+        preencherProjetos();
+    }));
 
-                    var dadosFirebase = {};
-                    if (tipo === 'beneficiario') {
-                        dadosFirebase.fullName = dados.nome;
-                        dadosFirebase.cpf = dados.cpf;
-                        dadosFirebase.birthDate = dados.nascimento;
-                        dadosFirebase.email = dados.email;
-                        dadosFirebase.phone = dados.telefone;
-                        dadosFirebase.whatsapp = dados.whatsapp;
-                        dadosFirebase.address = dados.endereco;
-                        dadosFirebase.status = dados.status;
-                        dadosFirebase.notes = dados.obs;
-                    } else if (tipo === 'profissional') {
-                        dadosFirebase.fullName = dados.nome;
-                        dadosFirebase.cpf = dados.cpf;
-                        dadosFirebase.birthDate = dados.nascimento;
-                        dadosFirebase.email = dados.email;
-                        dadosFirebase.phone = dados.telefone;
-                        dadosFirebase.whatsapp = dados.whatsapp;
-                        dadosFirebase.specialty = dados.especialidade;
-                        dadosFirebase.registration = dados.registro;
-                        dadosFirebase.status = dados.status;
-                        dadosFirebase.notes = dados.obs;
-                    } else {
-                        dadosFirebase.fullName = dados.nome;
-                        dadosFirebase.cpf = dados.cpf;
-                        dadosFirebase.birthDate = dados.nascimento;
-                        dadosFirebase.email = dados.email;
-                        dadosFirebase.phone = dados.telefone;
-                        dadosFirebase.whatsapp = dados.whatsapp;
-                        dadosFirebase.area = dados.area;
-                        dadosFirebase.status = dados.status;
-                        dadosFirebase.notes = dados.obs;
-                    }
-
-                    dadosFirebase.createdAt = new Date().toISOString();
-                    dadosFirebase.updatedAt = new Date().toISOString();
-
-                    await db.collection(colecao).add(dadosFirebase);
-                    console.log('✅ Salvo no Firebase:', colecao);
-                } catch (e) {
-                    console.error('❌ Erro ao salvar no Firebase:', e);
-                    alert('⚠️ Erro ao salvar no Firebase. Salvo localmente.');
-                }
-            }
-
-            // Salva no localStorage também (cache)
-            dados.id = Date.now();
-            dados.dataCriacao = new Date().toISOString();
-            pessoas.push(dados);
-            localStorage.setItem('amovin_pessoas', JSON.stringify(pessoas));
-
-            limparForm(tipo);
-            renderizarListas();
+    // 4 coleções do IDP
+    var mapa = [
+        { tipo: 'beneficiario', colecao: 'beneficiaries' },
+        { tipo: 'profissional', colecao: 'professionals' },
+        { tipo: 'voluntario', colecao: 'volunteers' },
+        { tipo: 'universitario', colecao: 'university_students' }
+    ];
+    mapa.forEach(function(m) {
+        unsubs.push(db.collection(m.colecao).onSnapshot(function(snap) {
+            dados[m.tipo] = [];
+            snap.forEach(function(doc) { dados[m.tipo].push({ _fbId: doc.id, ...doc.data() }); });
+            renderizarLista(m.tipo);
             atualizarKPIs();
-            alert('✅ ' + (tipo === 'beneficiario' ? 'Beneficiário' : tipo === 'profissional' ? 'Profissional' : 'Voluntário') + ' salvo com sucesso!');
+        }));
+    });
+}
 
-            // Recarrega do Firebase para pegar o ID correto
-            setTimeout(carregarDoFirebase, 1000);
-        }
-
-        // ============================================================
-        // PREENCHER PROJETOS
-        // ============================================================
-        function preencherProjetos() {
-            ['benefProjeto', 'profProjeto', 'volProjeto'].forEach(function(id) {
-                var select = document.getElementById(id);
-                if (!select) return;
-                select.innerHTML = '<option value="">Nenhum</option>';
-                projetos.filter(function(p) { return p.status === 'ativo'; }).forEach(function(p) {
-                    var option = document.createElement('option');
-                    option.value = p.id;
-                    option.textContent = p.nome;
-                    select.appendChild(option);
-                });
-            });
-        }
-
-        // ============================================================
-        // TAB
-        // ============================================================
-        function mudarTab(tab, btn) {
-            document.querySelectorAll('.tab').forEach(function(t) { t.classList.remove('ativo'); });
-            btn.classList.add('ativo');
-            document.querySelectorAll('.tab-content').forEach(function(c) { c.classList.remove('ativo'); });
-            document.getElementById('tab-' + tab).classList.add('ativo');
-            renderizarListas();
-        }
-
-        // ============================================================
-        // EDITAR / EXCLUIR
-        // ============================================================
-        function editarPessoa(id) {
-            var p = pessoas.find(function(x) { return x.id === id; });
-            if (!p) return;
-            alert('✏️ Edição de ' + p.nome + ' — implementar update no Firebase');
-        }
-
-        function excluirPessoa(id) {
-            if (!confirm('Excluir este registro?')) return;
-            pessoas = pessoas.filter(function(p) { return p.id !== id; });
-            localStorage.setItem('amovin_pessoas', JSON.stringify(pessoas));
-            renderizarListas();
-            atualizarKPIs();
-        }
-
-        // ============================================================
-        // LIMPAR FORM
-        // ============================================================
-        function limparForm(tipo) {
-            var prefix = { 'beneficiario': 'benef', 'profissional': 'prof', 'voluntario': 'vol' }[tipo];
-            document.getElementById(prefix + 'Id').value = '';
-            document.getElementById(prefix + 'Nome').value = '';
-            document.getElementById(prefix + 'Cpf').value = '';
-            document.getElementById(prefix + 'Nascimento').value = '';
-            document.getElementById(prefix + 'Email').value = '';
-            document.getElementById(prefix + 'Telefone').value = '';
-            document.getElementById(prefix + 'Whatsapp').value = '';
-            document.getElementById(prefix + 'Status').value = 'ativo';
-            document.getElementById(prefix + 'Projeto').value = '';
-            document.getElementById(prefix + 'Obs').value = '';
-            if (tipo === 'beneficiario') document.getElementById('benefEndereco').value = '';
-            if (tipo === 'profissional') {
-                document.getElementById('profEspecialidade').value = '';
-                document.getElementById('profRegistro').value = '';
-            }
-            if (tipo === 'voluntario') document.getElementById('volArea').value = 'Educação';
-        }
-
-        // ============================================================
-        // RENDERIZAR
-        // ============================================================
-        function renderizarListas() {
-            renderizarLista('beneficiario', beneficiarios.length ? beneficiarios : pessoas.filter(function(p) { return p.tipo === 'beneficiario'; }));
-            renderizarLista('profissional', profissionais.length ? profissionais : pessoas.filter(function(p) { return p.tipo === 'profissional'; }));
-            renderizarLista('voluntario', voluntarios.length ? voluntarios : pessoas.filter(function(p) { return p.tipo === 'voluntario'; }));
-            atualizarKPIs();
-        }
-
-        function renderizarLista(tipo, lista) {
-            var containerId = {
-                'beneficiario': 'listaBeneficiarios',
-                'profissional': 'listaProfissionais',
-                'voluntario': 'listaVoluntarios'
-            }[tipo];
-
-            var container = document.getElementById(containerId);
-            if (!container) return;
-
-            if (!lista || lista.length === 0) {
-                container.innerHTML = '<div class="sem-dados">Nenhum ' + (tipo === 'beneficiario' ? 'beneficiário' : tipo === 'profissional' ? 'profissional' : 'voluntário') + ' cadastrado.</div>';
-                return;
-            }
-
-            container.innerHTML = lista.map(function(p) {
-                var statusMap = { 'ativo': 'status-ativo', 'pendente': 'status-pendente', 'inativo': 'status-inativo' };
-                var statusLabel = { 'ativo': '✅ Ativo', 'pendente': '⏳ Pendente', 'inativo': '❌ Inativo' };
-
-                var detalhe = '';
-                if (tipo === 'beneficiario') {
-                    var diag = p.diagnosis || '';
-                    detalhe = 'CPF: ' + (p.cpf || '-') + (diag ? ' | 🩺 ' + diag.substring(0, 40) : '');
-                } else if (tipo === 'profissional') {
-                    detalhe = '🔬 ' + (p.especialidade || '-') + ' | ' + (p.registro || '-');
-                } else {
-                    detalhe = '📌 ' + (p.area || '-');
-                }
-
-                var atividades = (p.activities && p.activities.length) ? '🎯 ' + p.activities.join(', ') : '';
-
-                return '<div class="pessoa-item">' +
-                    '<div class="info">' +
-                    '<div class="nome">' + (p.nome || 'Sem nome') + '</div>' +
-                    '<div class="detalhe">' + detalhe + '</div>' +
-                    (atividades ? '<div class="projetos">' + atividades + '</div>' : '') +
-                    '<div style="margin-top:4px;"><span class="status-badge ' + (statusMap[p.status] || 'status-pendente') + '">' + (statusLabel[p.status] || p.status || 'ativo') + '</span></div>' +
-                    '</div>' +
-                    '<div class="acoes">' +
-                    '<button class="btn btn-primary" onclick="editarPessoa(\'' + p.id + '\')">✏️</button>' +
-                    '<button class="btn btn-danger" onclick="excluirPessoa(\'' + p.id + '\')">🗑️</button>' +
-                    '</div>' +
-                    '</div>';
-            }).join('');
-        }
-
-        // ============================================================
-        // KPIs
-        // ============================================================
-        function atualizarKPIs() {
-            var benCount = beneficiarios.length || pessoas.filter(function(p) { return p.tipo === 'beneficiario'; }).length;
-            var profCount = profissionais.length || pessoas.filter(function(p) { return p.tipo === 'profissional'; }).length;
-            var volCount = voluntarios.length || pessoas.filter(function(p) { return p.tipo === 'voluntario'; }).length;
-
-            document.getElementById('kpiTotal').textContent = benCount + profCount + volCount;
-            document.getElementById('kpiBeneficiarios').textContent = benCount;
-            document.getElementById('kpiProfissionais').textContent = profCount;
-            document.getElementById('kpiVoluntarios').textContent = volCount;
-        }
-
-        // ============================================================
-        // INICIALIZAÇÃO
-        // ============================================================
-        if (!sessionStorage.getItem('amovin_logado')) {
-            window.location.href = 'index.html';
-        }
-
-        document.addEventListener('DOMContentLoaded', function() {
-            preencherProjetos();
-            inicializarFirebase();
+// ============================================================
+// LOG DE AUDITORIA
+// ============================================================
+async function registrarLogAuditoria(acao, detalhes) {
+    if (!firebasePronto || !db) return;
+    var u = getUsuarioLogado();
+    try {
+        await db.collection('logs_auditoria').add({
+            timestamp: new Date().toISOString(),
+            usuario: u.usuario, nome: u.nome, perfil: u.perfil,
+            isMaster: isMaster(), acao: acao, detalhes: detalhes || ''
         });
-    </script>
+    } catch (e) {}
+}
+
+// ============================================================
+// GERAR CÓDIGO A-IDP-2026-XXXX
+// ============================================================
+async function gerarProximoCodigo(colecao) {
+    var ano = new Date().getFullYear();
+    var prefixo = 'A-IDP-' + ano + '-';
+    var max = 0;
+    if (firebasePronto && db) {
+        try {
+            var snap = await db.collection(colecao).get();
+            snap.forEach(function(doc) {
+                var c = doc.data().codigo || '';
+                if (c.indexOf(prefixo) === 0) {
+                    var n = parseInt(c.substring(prefixo.length), 10);
+                    if (!isNaN(n) && n > max) max = n;
+                }
+            });
+        } catch (e) {}
+    }
+    return prefixo + String(max + 1).padStart(4, '0');
+}
+
+// ============================================================
+// GERAR ID INTERNO (6 primeiros dígitos do CPF + sufixo)
+// ============================================================
+async function gerarIdInterno(cpf, tipoAtual, fbIdAtual) {
+    var numeros = apenasNumeros(cpf);
+    if (numeros.length < 6) return '';
+    var idBase = numeros.substring(0, 6);
+    var existe = false;
+    var colecoes = ['beneficiaries', 'professionals', 'volunteers', 'university_students'];
+    
+    for (var i = 0; i < colecoes.length; i++) {
+        try {
+            var snap = await db.collection(colecoes[i]).where('idInterno', '==', idBase).get();
+            if (!snap.empty) {
+                snap.forEach(function(doc) { if (doc.id !== fbIdAtual) existe = true; });
+            }
+        } catch (e) {}
+    }
+    if (!existe) return idBase;
+    
+    var contador = 1;
+    while (contador < 100) {
+        var tentativa = idBase + '-' + contador;
+        var colide = false;
+        for (var j = 0; j < colecoes.length; j++) {
+            try {
+                var s = await db.collection(colecoes[j]).where('idInterno', '==', tentativa).get();
+                if (!s.empty) { s.forEach(function(doc) { if (doc.id !== fbIdAtual) colide = true; }); }
+            } catch (e) {}
+        }
+        if (!colide) return tentativa;
+        contador++;
+    }
+    return idBase + '-' + Date.now();
+}
+
+// ============================================================
+// CONFIGURAÇÃO DAS ABAS
+// ============================================================
+var CONFIG = {
+    beneficiario: { nome: 'Beneficiário', colecao: 'beneficiaries', temResponsavel: true },
+    profissional: { nome: 'Profissional', colecao: 'professionals', temResponsavel: false },
+    voluntario: { nome: 'Voluntário', colecao: 'volunteers', temResponsavel: false },
+    universitario: { nome: 'Universitário', colecao: 'university_students', temResponsavel: true }
+};
+
+// ============================================================
+// ABRIR ABA
+// ============================================================
+function abrirAba(tipo) {
+    var cfg = CONFIG[tipo];
+    var html = '<div class="tab-content ativo" id="tab-' + tipo + '">';
+    html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">';
+    html += '<div>';
+    html += '<h4 style="font-size:14px;color:var(--cinza);margin-bottom:12px;">📝 Cadastrar ' + cfg.nome + '</h4>';
+    html += '<input type="hidden" id="' + tipo + 'Id">';
+    html += '<div class="form-row">';
+    html += '<div class="form-group"><label>ID Interno</label><input type="text" id="' + tipo + 'IdInterno" readonly placeholder="Gerado pelo CPF"></div>';
+    html += '<div class="form-group"><label>Código</label><input type="text" id="' + tipo + 'Codigo" readonly placeholder="A-IDP-..."></div>';
+    html += '</div>';
+    html += '<div class="form-group"><label>Nome Completo *</label><input type="text" id="' + tipo + 'Nome" placeholder="Nome completo"></div>';
+    html += '<div class="form-row">';
+    html += '<div class="form-group"><label>CPF</label><input type="text" id="' + tipo + 'Cpf" placeholder="000.000.000-00" maxlength="14" oninput="mascaraCpf(this)" onblur="gerarIdNoForm(\'' + tipo + '\')"></div>';
+    html += '<div class="form-group"><label>Data Nascimento</label><input type="date" id="' + tipo + 'Nascimento"></div>';
+    html += '</div>';
+    html += '<div class="form-group"><label>Email</label><input type="email" id="' + tipo + 'Email" placeholder="email@exemplo.com"></div>';
+    html += '<div class="form-row">';
+    html += '<div class="form-group"><label>Telefone</label><input type="text" id="' + tipo + 'Telefone" placeholder="(34) 99999-9999" maxlength="15" oninput="mascaraTelefone(this)"></div>';
+    html += '<div class="form-group"><label>WhatsApp?</label><div class="wa-check" id="' + tipo + 'WaWrapper" onclick="toggleWa(\'' + tipo + 'Wa\')"><input type="checkbox" id="' + tipo + 'Wa" onclick="event.stopPropagation();updateWa(\'' + tipo + 'WaWrapper\',\'' + tipo + 'Wa\')"><label for="' + tipo + 'Wa">📱 Este número é WhatsApp</label></div></div>';
+    html += '</div>';
+    html += '<div class="form-group"><label>Endereço</label><input type="text" id="' + tipo + 'Endereco" placeholder="Rua, número, bairro"></div>';
+
+    if (tipo === 'profissional') {
+        html += '<div class="form-row"><div class="form-group"><label>Especialidade *</label><input type="text" id="profissionalEspecialidade" placeholder="Psicólogo, Fisioterapeuta..."></div>';
+        html += '<div class="form-group"><label>Registro</label><input type="text" id="profissionalRegistro" placeholder="CRP, CRAS..."></div></div>';
+    }
+    if (tipo === 'voluntario') {
+        html += '<div class="form-group"><label>Área de Interesse</label><select id="voluntarioArea"><option value="Educação">📚 Educação</option><option value="Esporte">⚽ Esporte</option><option value="Saúde">🩺 Saúde</option><option value="Social">🤝 Social</option><option value="Administrativo">📋 Administrativo</option><option value="Outro">📌 Outro</option></select></div>';
+    }
+    if (cfg.temResponsavel) {
+        html += '<div class="secao-titulo">👤 ' + (tipo === 'universitario' ? 'Contato de Emergência' : 'Responsável (se menor)') + '</div>';
+        html += '<div class="form-row">';
+        html += '<div class="form-group"><label>Nome do ' + (tipo === 'universitario' ? 'Contato' : 'Responsável') + '</label><input type="text" id="' + tipo + 'RespNome" placeholder="Nome"></div>';
+        html += '<div class="form-group"><label>Telefone do ' + (tipo === 'universitario' ? 'Contato' : 'Responsável') + '</label><input type="text" id="' + tipo + 'RespTelefone" placeholder="(34) 99999-9999" maxlength="15" oninput="mascaraTelefone(this)"></div>';
+        html += '</div>';
+    }
+
+    html += '<div class="form-row">';
+    html += '<div class="form-group"><label>Status</label><select id="' + tipo + 'Status"><option value="ativo">✅ Ativo</option><option value="pendente">⏳ Pendente</option><option value="inativo">❌ Inativo</option></select></div>';
+    html += '<div class="form-group"><label>📋 Projeto</label><select id="' + tipo + 'Projeto"><option value="">Nenhum</option></select></div>';
+    html += '</div>';
+    html += '<div class="form-group"><label>Observações</label><textarea id="' + tipo + 'Obs" rows="2"></textarea></div>';
+    html += '<button class="btn btn-primary btn-full" onclick="salvarPessoa(\'' + tipo + '\')">💾 Salvar ' + cfg.nome + '</button>';
+    html += '</div>';
+    html += '<div>';
+    html += '<h4 style="font-size:14px;color:var(--cinza);margin-bottom:12px;">📋 Lista de ' + cfg.nome + 's</h4>';
+    html += '<div id="lista-' + tipo + '"><div class="loading"><div class="spinner"></div><div>Carregando...</div></div></div>';
+    html += '</div>';
+    html += '</div></div>';
+    return html;
+}
+
+function mudarTab(tipo, btn) {
+    document.querySelectorAll('.tab').forEach(function(t) { t.classList.remove('ativo'); });
+    btn.classList.add('ativo');
+    document.getElementById('conteudoAbas').innerHTML = abrirAba(tipo);
+    preencherProjetos();
+    renderizarLista(tipo);
+}
+
+function preencherProjetos() {
+    var selects = document.querySelectorAll('select[id$="Projeto"]');
+    selects.forEach(function(sel) {
+        var at = sel.value;
+        sel.innerHTML = '<option value="">Nenhum</option>';
+        projetos.forEach(function(p) {
+            var opt = document.createElement('option');
+            opt.value = p.codigo || p._fbId;
+            opt.textContent = p.nome || p.codigo || '';
+            sel.appendChild(opt);
+        });
+        if (at) sel.value = at;
+    });
+}
+
+async function gerarIdNoForm(tipo) {
+    var cpf = document.getElementById(tipo + 'Cpf').value;
+    if (apenasNumeros(cpf).length < 6) return;
+    var idAtual = document.getElementById(tipo + 'Id').value;
+    if (idAtual) return; 
+    var idInterno = await gerarIdInterno(cpf, tipo, null);
+    document.getElementById(tipo + 'IdInterno').value = idInterno;
+}
+
+// ============================================================
+// SALVAR PESSOA + ESPELHAR NO CRM
+// ============================================================
+async function salvarPessoa(tipo) {
+    if (!firebasePronto || !db) { mostrarToast('⚠️ Firebase offline', 'warning'); return; }
+    var cfg = CONFIG[tipo];
+    var nome = document.getElementById(tipo + 'Nome').value.trim();
+    if (!nome) { mostrarToast('⚠️ Nome é obrigatório!', 'warning'); return; }
+    if (tipo === 'profissional') {
+        var esp = document.getElementById('profissionalEspecialidade').value.trim();
+        if (!esp) { mostrarToast('⚠️ Especialidade é obrigatória para profissional!', 'warning'); return; }
+    }
+
+    var telefone = document.getElementById(tipo + 'Telefone').value.trim();
+    var isWhatsApp = document.getElementById(tipo + 'Wa').checked;
+    var cpf = document.getElementById(tipo + 'Cpf').value.trim();
+    var idEdit = document.getElementById(tipo + 'Id').value;
+
+    var idInterno = document.getElementById(tipo + 'IdInterno').value;
+    if (!idInterno && cpf) {
+        idInterno = await gerarIdInterno(cpf, tipo, idEdit || null);
+        document.getElementById(tipo + 'IdInterno').value = idInterno;
+    }
+
+    var dadosSalvar = {
+        tipo: tipo,
+        idInterno: idInterno,
+        fullName: nome,
+        cpf: cpf,
+        birthDate: document.getElementById(tipo + 'Nascimento').value,
+        email: document.getElementById(tipo + 'Email').value.trim(),
+        phone: telefone,
+        whatsapp: isWhatsApp ? telefone : '',
+        isWhatsApp: isWhatsApp,
+        address: document.getElementById(tipo + 'Endereco').value.trim(),
+        status: document.getElementById(tipo + 'Status').value,
+        projeto_id: document.getElementById(tipo + 'Projeto').value || null,
+        notes: document.getElementById(tipo + 'Obs').value.trim(),
+        atualizadoEm: new Date().toISOString(),
+        atualizadoPor: getUsuarioLogado().usuario,
+        year: String(new Date().getFullYear())
+    };
+
+    if (tipo === 'profissional') {
+        dadosSalvar.specialty = document.getElementById('profissionalEspecialidade').value.trim();
+        dadosSalvar.registration = document.getElementById('profissionalRegistro').value.trim();
+    }
+    if (tipo === 'voluntario') {
+        dadosSalvar.area = document.getElementById('voluntarioArea').value;
+    }
+    if (cfg.temResponsavel) {
+        dadosSalvar.responsavelNome = document.getElementById(tipo + 'RespNome').value.trim();
+        dadosSalvar.responsavelTelefone = document.getElementById(tipo + 'RespTelefone').value.trim();
+    }
+
+    try {
+        if (idEdit) {
+            await db.collection(cfg.colecao).doc(idEdit).update(dadosSalvar);
+            mostrarToast('✅ ' + cfg.nome + ' atualizado!', 'success');
+            registrarLogAuditoria('IDP_EDITAR_' + tipo.toUpperCase(), 'Editado: ' + nome);
+            await espelharNoCrm(tipo, idEdit, dadosSalvar);
+            limparForm(tipo);
+        } else {
+            dadosSalvar.codigo = await gerarProximoCodigo(cfg.colecao);
+            dadosSalvar.criadoEm = new Date().toISOString();
+            var ref = await db.collection(cfg.colecao).add(dadosSalvar);
+            var novoId = ref.id;
+            mostrarToast('✅ ' + cfg.nome + ' ' + dadosSalvar.codigo + ' criado!', 'success');
+            registrarLogAuditoria('IDP_CRIAR_' + tipo.toUpperCase(), 'Criado: ' + nome + ' (' + dadosSalvar.codigo + ')');
+            await espelharNoCrm(tipo, novoId, dadosSalvar);
+            limparForm(tipo);
+        }
+    } catch (e) { mostrarToast('❌ Erro: ' + e.message, 'error'); }
+}
+
+// ============================================================
+// ESPELHAR NO CRM (contatos)
+// ============================================================
+async function espelharNoCrm(tipo, idpFbId, dadosIdp) {
+    if (!firebasePronto || !db) return;
+    
+    var telefoneEspelho = dadosIdp.phone;
+    var nomeEspelho = dadosIdp.fullName;
+    var isWhatsApp = dadosIdp.isWhatsApp;
+    var categoriaCrm = '';
+    var campoExtra = {};
+
+    if (tipo === 'beneficiario') {
+        if (dadosIdp.responsavelNome && dadosIdp.responsavelTelefone) {
+            nomeEspelho = dadosIdp.responsavelNome;
+            telefoneEspelho = dadosIdp.responsavelTelefone;
+            isWhatsApp = false;
+            campoExtra.vinculadoA = dadosIdp.fullName + ' (Beneficiário)';
+        }
+        categoriaCrm = 'Beneficiário';
+    } else if (tipo === 'universitario') {
+        categoriaCrm = 'Universitário';
+        if (dadosIdp.responsavelNome) {
+            campoExtra.contatoEmergencia = dadosIdp.responsavelNome + ' · ' + (dadosIdp.responsavelTelefone || 'sem telefone');
+        }
+    } else if (tipo === 'profissional') {
+        categoriaCrm = dadosIdp.specialty || 'Profissional';
+    } else if (tipo === 'voluntario') {
+        categoriaCrm = 'Voluntário';
+    }
+
+    if (!telefoneEspelho) return;
+
+    var existente = null;
+    try {
+        var snap = await db.collection('contatos').where('idpOrigem', '==', CONFIG[tipo].colecao).where('idpFbId', '==', idpFbId).get();
+        snap.forEach(function(doc) { existente = { _fbId: doc.id, ...doc.data() }; });
+    } catch (e) {}
+
+    var dadosCrm = {
+        nome: nomeEspelho,
+        categoria: categoriaCrm,
+        cnpjCpf: dadosIdp.cpf || '',
+        tel1: telefoneEspelho,
+        whatsapp: isWhatsApp ? telefoneEspelho : '',
+        isWhatsApp: isWhatsApp,
+        email: dadosIdp.email || '',
+        obs: dadosIdp.notes || '',
+        idpOrigem: CONFIG[tipo].colecao,
+        idpFbId: idpFbId,
+        espelhadoEm: new Date().toISOString(),
+        camposTravados: campoExtra
+    };
+    Object.assign(dadosCrm, campoExtra);
+
+    try {
+        if (existente) {
+            await db.collection('contatos').doc(existente._fbId).update(dadosCrm);
+        } else {
+            dadosCrm.codigo = await gerarCodigoCrm();
+            dadosCrm.favorito = false;
+            dadosCrm.criadoEm = new Date().toISOString();
+            dadosCrm.historico = [{
+                data: new Date().toISOString(),
+                usuario: getUsuarioLogado().usuario,
+                nomeUsuario: getUsuarioLogado().nome,
+                acao: 'espelhado do IDP (' + tipo + ')'
+            }];
+            await db.collection('contatos').add(dadosCrm);
+        }
+    } catch (e) { console.warn('Erro espelhar CRM:', e); }
+}
+
+async function gerarCodigoCrm() {
+    var ano = new Date().getFullYear();
+    var prefixo = 'A-CRM-' + ano + '-';
+    var max = 0;
+    try {
+        var snap = await db.collection('contatos').get();
+        snap.forEach(function(doc) {
+            var c = doc.data().codigo || '';
+            if (c.indexOf(prefixo) === 0) {
+                var n = parseInt(c.substring(prefixo.length), 10);
+                if (!isNaN(n) && n > max) max = n;
+            }
+        });
+    } catch (e) {}
+    return prefixo + String(max + 1).padStart(4, '0');
+}
+
+// ============================================================
+// LIMPAR FORM
+// ============================================================
+function limparForm(tipo) {
+    ['Id', 'IdInterno', 'Codigo', 'Nome', 'Cpf', 'Nascimento', 'Email', 'Telefone', 'Endereco', 'Obs', 'RespNome', 'RespTelefone'].forEach(function(c) {
+        var el = document.getElementById(tipo + c);
+        if (el) el.value = '';
+    });
+    if (tipo === 'profissional') {
+        document.getElementById('profissionalEspecialidade').value = '';
+        document.getElementById('profissionalRegistro').value = '';
+    }
+    if (tipo === 'voluntario') {
+        document.getElementById('voluntarioArea').value = 'Educação';
+    }
+    var wa = document.getElementById(tipo + 'Wa');
+    if (wa) { wa.checked = false; updateWa(tipo + 'WaWrapper', tipo + 'Wa'); }
+    var status = document.getElementById(tipo + 'Status');
+    if (status) status.value = 'ativo';
+}
+
+// ============================================================
+// EDITAR
+// ============================================================
+function editarPessoa(tipo, fbId) {
+    var p = dados[tipo].find(function(x) { return x._fbId === fbId; });
+    if (!p) return;
+    var set = function(campo, valor) { var el = document.getElementById(tipo + campo); if (el) el.value = valor || ''; };
+    set('Id', p._fbId);
+    set('IdInterno', p.idInterno);
+    set('Codigo', p.codigo);
+    set('Nome', p.fullName);
+    set('Cpf', p.cpf);
+    set('Nascimento', p.birthDate);
+    set('Email', p.email);
+    set('Telefone', p.phone);
+    set('Endereco', p.address);
+    set('Obs', p.notes);
+    set('RespNome', p.responsavelNome);
+    set('RespTelefone', p.responsavelTelefone);
+    var wa = document.getElementById(tipo + 'Wa');
+    if (wa) { wa.checked = p.isWhatsApp === true; updateWa(tipo + 'WaWrapper', tipo + 'Wa'); }
+    set('Status', p.status);
+    set('Projeto', p.projeto_id);
+    if (tipo === 'profissional') {
+        document.getElementById('profissionalEspecialidade').value = p.specialty || '';
+        document.getElementById('profissionalRegistro').value = p.registration || '';
+    }
+    if (tipo === 'voluntario') {
+        document.getElementById('voluntarioArea').value = p.area || 'Educação';
+    }
+    document.querySelector('.tab[data-tab="' + tipo + '"]').click();
+}
+
+// ============================================================
+// EXCLUIR
+// ============================================================
+async function excluirPessoa(tipo, fbId) {
+    var p = dados[tipo].find(function(x) { return x._fbId === fbId; });
+    if (!p) return;
+    if (!confirm('Excluir "' + (p.fullName || '') + '"?\n\n⚠️ ATENÇÃO: O contato espelhado no CRM será MANTIDO como histórico.')) return;
+    var cfg = CONFIG[tipo];
+    try {
+        await db.collection('logs_exclusao').add({
+            modulo: 'idp',
+            colecao: cfg.colecao,
+            itemCodigo: p.codigo || '',
+            itemNome: p.fullName || '',
+            usuario: getUsuarioLogado().usuario,
+            nomeUsuario: getUsuarioLogado().nome,
+            data: new Date().toISOString()
+        });
+        await db.collection(cfg.colecao).doc(fbId).delete();
+        mostrarToast('🗑️ Excluído! (mantido no CRM como histórico)', 'info');
+        registrarLogAuditoria('IDP_EXCLUIR_' + tipo.toUpperCase(), 'Excluído: ' + (p.fullName || ''));
+    } catch (e) { mostrarToast('❌ ' + e.message, 'error'); }
+}
+
+// ============================================================
+// RENDERIZAR LISTA
+// ============================================================
+function renderizarLista(tipo) {
+    var container = document.getElementById('lista-' + tipo);
+    if (!container) return;
+    var lista = (dados[tipo] || []).slice().sort(function(a, b) {
+        return (a.fullName || '').localeCompare(b.fullName || '', 'pt-BR');
+    });
+    if (lista.length === 0) {
+        container.innerHTML = '<div class="sem-dados">Nenhum ' + CONFIG[tipo].nome.toLowerCase() + ' cadastrado.</div>';
+        return;
+    }
+    container.innerHTML = lista.map(function(p) {
+        var statusMap = { 'ativo': 'status-ativo', 'pendente': 'status-pendente', 'inativo': 'status-inativo' };
+        var statusLbl = { 'ativo': '✅ Ativo', 'pendente': '⏳ Pendente', 'inativo': '❌ Inativo' };
+        var detalhe = '';
+        if (tipo === 'beneficiario') {
+            detalhe = 'CPF: ' + (p.cpf || '—') + ' | 📞 ' + (p.phone || '—');
+            if (p.responsavelNome) detalhe += '<br>👤 Resp: ' + p.responsavelNome;
+        } else if (tipo === 'profissional') {
+            detalhe = '🔬 ' + (p.specialty || '—') + ' | ' + (p.registration || '—');
+        } else if (tipo === 'voluntario') {
+            detalhe = '📌 ' + (p.area || '—');
+        } else if (tipo === 'universitario') {
+            detalhe = 'CPF: ' + (p.cpf || '—');
+            if (p.responsavelNome) detalhe += '<br>📞 Contato: ' + p.responsavelNome;
+        }
+        return '<div class="pessoa-item">' +
+            '<div class="info">' +
+            '<div class="codigo">' + (p.idInterno || '—') + ' · ' + (p.codigo || '—') + '</div>' +
+            '<div class="nome">' + escapeHtml(p.fullName || '—') + '</div>' +
+            '<div class="detalhe">' + detalhe + '</div>' +
+            '<div><span class="status-badge ' + (statusMap[p.status] || 'status-pendente') + '">' + (statusLbl[p.status] || p.status || '—') + '</span></div>' +
+            '</div>' +
+            '<div class="acoes" style="display:flex;gap:4px;">' +
+            '<button class="btn btn-primary btn-sm" onclick="editarPessoa(\'' + tipo + '\',\'' + p._fbId + '\')">✏️</button>' +
+            '<button class="btn btn-danger btn-sm" onclick="excluirPessoa(\'' + tipo + '\',\'' + p._fbId + '\')">🗑️</button>' +
+            '</div></div>';
+    }).join('');
+}
+
+// ============================================================
+// KPIs
+// ============================================================
+function atualizarKPIs() {
+    var total = (dados.beneficiario || []).length + (dados.profissional || []).length + (dados.voluntario || []).length + (dados.universitario || []).length;
+    document.getElementById('kpiTotal').textContent = total;
+    document.getElementById('kpiBeneficiarios').textContent = (dados.beneficiario || []).length;
+    document.getElementById('kpiProfissionais').textContent = (dados.profissional || []).length;
+    document.getElementById('kpiVoluntarios').textContent = (dados.voluntario || []).length;
+    document.getElementById('kpiUniversitarios').textContent = (dados.universitario || []).length;
+}
+
+// ============================================================
+// INICIALIZAÇÃO
+// ============================================================
+document.addEventListener('DOMContentLoaded', function() {
+    if (isMaster()) document.getElementById('badgeMaster').style.display = 'inline-block';
+    if (!sessionStorage.getItem('amovin_logado')) {
+        window.location.href = 'index.html';
+        return;
+    }
+    document.getElementById('conteudoAbas').innerHTML = abrirAba('beneficiario');
+    inicializarFirebase();
+});
+</script>
 </body>
 </html>
