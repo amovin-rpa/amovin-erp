@@ -33,18 +33,12 @@
         .btn-primary { background: var(--laranja); color: white; } .btn-primary:hover { background: var(--laranja-escuro); }
         .btn-success { background: var(--verde); color: white; } .btn-outline { background: transparent; color: var(--cinza); border: 1px solid #E5E0D8; }
         .btn-outline:hover { background: #F8F4ED; }
-        .btn-danger { background: var(--vermelho); color: white; }
-        .btn-sm { padding: 5px 12px; font-size: 11px; }
-        .btn-azul { background: var(--azul); color: white; } .btn-roxo { background: var(--roxo); color: white; }
-        .btn-teal { background: var(--teal); color: white; } .btn-amarelo { background: var(--amarelo); color: #1A1A1A; }
-        .btn-wpp { background: #25D366; color: white; }
         .form-group { margin-bottom: 14px; }
         .form-group label { display: block; font-size: 11px; font-weight: 600; color: var(--cinza); margin-bottom: 4px; text-transform: uppercase; }
         .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px 12px; border: 1px solid #E5E0D8; border-radius: 8px; font-size: 13px; font-family: 'Inter', sans-serif; background: #FAFAFA; }
         .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: var(--laranja); background: white; box-shadow: 0 0 0 3px rgba(198, 90, 17, 0.08); }
         .form-group input[readonly] { background: #E5E0D8; color: #6B7280; cursor: not-allowed; border-style: dashed; }
         .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-        .form-full { grid-column: 1 / -1; }
         .grid-crm { display: grid; grid-template-columns: 240px 1fr; gap: 20px; }
         .sidebar-categorias { background: #FFFFFF; border-radius: 14px; border: 1px solid #F0E9DF; padding: 20px; max-height: 700px; overflow-y: auto; }
         .sidebar-categorias h3 { font-size: 15px; font-weight: 700; color: var(--grafite); margin-bottom: 14px; }
@@ -70,26 +64,19 @@
         .tag-universitario { background: #E0F7FA; color: #00838F; }
         .tag-idp { background: #E3F2FD; color: #1565C0; border: 1px dashed #1565C0; font-size: 8px; }
         
-        /* BOTÕES PADRONIZADOS AERP */
+        /* BOTÕES PADRONIZADOS */
         .btn-acao {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 8px 12px;
-            border-radius: 6px;
-            border: none;
-            cursor: pointer;
-            font-size: 11px;
-            font-weight: 600;
-            font-family: 'Inter', sans-serif;
-            transition: all 0.2s;
-            gap: 4px;
+            display: inline-flex; align-items: center; justify-content: center;
+            padding: 8px 12px; border-radius: 6px; border: none; cursor: pointer;
+            font-size: 11px; font-weight: 600; font-family: 'Inter', sans-serif;
+            transition: all 0.2s; gap: 4px;
         }
         .btn-acao:hover { transform: translateY(-1px); box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
         .btn-acao.ver { background: #E3F2FD; color: #1565C0; }
         .btn-acao.editar { background: #FFF3E0; color: #C65A11; }
         .btn-acao.excluir { background: #FFEBEE; color: #C62828; }
         .btn-acao.fav { background: #FFF8E1; color: #F57F17; }
+        .btn-acao.wpp { background: #E8F5E9; color: #2E7D32; }
         
         .contato-acoes { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
         .sem-dados { text-align: center; padding: 40px; color: #9CA3AF; }
@@ -246,6 +233,15 @@
     </div>
 </div>
 
+<!-- MODAL DETALHES / VISUALIZAR -->
+<div class="modal-overlay" id="modalDetalhes">
+    <div class="modal modal-pequeno">
+        <h2>👁️ Detalhes do Contato <button class="fechar" onclick="fecharDetalhes()">×</button></h2>
+        <div id="conteudoDetalhes" style="font-size:13px; line-height:1.8; color:var(--grafite);"></div>
+        <div class="btn-group"><button class="btn btn-outline" onclick="fecharDetalhes()">Fechar</button></div>
+    </div>
+</div>
+
 <!-- MODAL LOG -->
 <div class="modal-overlay" id="modalLog">
     <div class="modal modal-pequeno"><h2>📜 Histórico <button class="fechar" onclick="fecharLog()">×</button></h2>
@@ -279,7 +275,7 @@
 <script src="menu.js?v=20260904"></script>
 <script>
 // ============================================================
-// CRM SOCIAL - AMOVIN ERP (AERP) - VERSÃO FINAL COM BOTÕES CORRIGIDOS
+// CRM SOCIAL - AMOVIN ERP (AERP) - VERSÃO FINAL COM TODOS OS BOTÕES
 // ============================================================
 
 var contatos = [];
@@ -306,7 +302,7 @@ function isMaster() {
 }
 
 // ============================================================
-// MÁSCARAS
+// MÁSCARAS E UTILITÁRIOS
 // ============================================================
 function mascaraCpfCnpj(input) {
     var v = input.value.replace(/\D/g, '');
@@ -451,7 +447,7 @@ async function gerarProximoCodigo() {
 }
 
 // ============================================================
-// RENDERIZAR MENU LATERAL (AGRUPADO)
+// RENDERIZAR MENU LATERAL
 // ============================================================
 function renderizarMenu() {
     var catsBase = ['Todos', 'Favoritos', 'Empresa', 'Autônomo', 'Fornecedor', 'Beneficiário', 'Profissional', 'Voluntário', 'Universitário'];
@@ -500,7 +496,7 @@ function getTagClass(cat) {
 }
 
 // ============================================================
-// FILTRAR / RENDERIZAR (BOTÕES CORRIGIDOS)
+// FILTRAR / RENDERIZAR (TODOS OS BOTÕES VISÍVEIS)
 // ============================================================
 function filtrar() {
     var l = contatos.slice();
@@ -546,7 +542,6 @@ function filtrar() {
         var telExibir = x.tel1 || x.whatsapp || '';
         var isWA = x.isWhatsApp === true || (x.whatsapp && x.whatsapp === x.tel1);
         var origemIdp = x.idpOrigem ? '<span class="tag tag-idp">📥 IDP</span>' : '';
-        var nomeExibir = x.nome;
         var subTexto = '';
         if (x.vinculadoA) subTexto = '<div style="font-size:10px;color:#1565C0;margin-top:4px;">🔒 Vinculado a: ' + escapeHtml(x.vinculadoA) + '</div>';
         if (x.contatoEmergencia) subTexto += '<div style="font-size:10px;color:#1565C0;margin-top:2px;">🔒 Contato emergência: ' + escapeHtml(x.contatoEmergencia) + '</div>';
@@ -554,17 +549,18 @@ function filtrar() {
         return '<div class="contato-card' + (x.favorito ? ' favorito' : '') + '">' +
             '<div class="contato-info">' +
             '<div class="codigo">' + (x.codigo || '—') + '</div>' +
-            '<h4>' + (x.favorito ? '⭐ ' : '') + escapeHtml(nomeExibir || '') +
+            '<h4>' + (x.favorito ? '⭐ ' : '') + escapeHtml(x.nome || '') +
                 ' <span class="tag ' + tagClass + '">' + escapeHtml(x.categoria || 'Outros') + '</span>' + origemIdp + '</h4>' +
             '<p>' + escapeHtml(x.cargo || '') + (x.instituicao ? ' | ' + escapeHtml(x.instituicao) : '') + '</p>' +
             '<p>📄 ' + escapeHtml(x.cnpjCpf || 'Sem doc') + ' | 📞 ' + escapeHtml(telExibir || '—') + ' | 📧 ' + escapeHtml(x.email || '—') + (isWA ? ' 📱' : '') + '</p>' +
             subTexto +
             '</div>' +
             '<div class="contato-acoes">' +
-            (isWA && telExibir ? '<button class="btn-acao ver" title="Abrir WhatsApp" onclick="event.stopPropagation();window.open(\'https://wa.me/55' + apenasNumeros(telExibir) + '\')">💬 WhatsApp</button>' : '') +
-            '<button class="btn-acao fav" title="Favoritar" onclick="event.stopPropagation();toggleFav(\'' + x._fbId + '\')">' + (x.favorito ? '★ Favorito' : '☆ Favoritar') + '</button>' +
+            '<button class="btn-acao ver" title="Visualizar detalhes" onclick="event.stopPropagation();verDetalhes(\'' + x._fbId + '\')">👁️ Ver</button>' +
+            (isWA && telExibir ? '<button class="btn-acao wpp" title="Abrir WhatsApp" onclick="event.stopPropagation();window.open(\'https://wa.me/55' + apenasNumeros(telExibir) + '\')">💬 WhatsApp</button>' : '') +
             '<button class="btn-acao editar" title="Editar contato" onclick="event.stopPropagation();editarContato(\'' + x._fbId + '\')">✏️ Editar</button>' +
-            '<button class="btn-acao ver" title="Ver histórico" onclick="event.stopPropagation();verLog(\'' + x._fbId + '\')">📜 (' + numLogs + ')</button>' +
+            '<button class="btn-acao excluir" title="Excluir contato" onclick="event.stopPropagation();excluirContato(\'' + x._fbId + '\')">🗑️ Excluir</button>' +
+            '<button class="btn-acao ver" title="Ver histórico" onclick="event.stopPropagation();verLog(\'' + x._fbId + '\')">📜 Histórico (' + numLogs + ')</button>' +
             '</div></div>';
     }).join('');
 }
@@ -599,12 +595,13 @@ function pedirAutenticacao(acao, dados) {
         adminAutenticado = { usuario: 'master', nome: 'Administrador Master', justificativa: '[master - ação direta]' };
         if (acao === 'criar') abrirForm();
         else if (acao === 'editar') abrirForm(dados);
+        else if (acao === 'excluir') executarExclusao(dados);
         else if (acao === 'salvar') salvarContatoFinal();
         return;
     }
     acaoPendente = acao;
     dadosPendentes = dados || null;
-    var msgs = { 'criar': 'Criar novo contato', 'editar': 'Editar contato', 'salvar': 'Salvar contato' };
+    var msgs = { 'criar': 'Criar novo contato', 'editar': 'Editar contato', 'salvar': 'Salvar contato', 'excluir': 'Excluir contato' };
     document.getElementById('authMsg').textContent = '🔐 ' + (msgs[acao] || acao);
     document.getElementById('authUsuario').value = '';
     document.getElementById('authSenha').value = '';
@@ -641,6 +638,7 @@ async function confirmarAuth() {
     adminAutenticado = { ...admin, justificativa: just || '[sem justificativa]' };
     fecharAuth();
     if (acaoPendente === 'criar' || acaoPendente === 'editar') abrirForm(dadosPendentes);
+    else if (acaoPendente === 'excluir') executarExclusao(dadosPendentes);
     else if (acaoPendente === 'salvar') salvarContatoFinal();
     acaoPendente = null;
 }
@@ -650,7 +648,7 @@ document.getElementById('authJust').addEventListener('input', function() {
 });
 
 // ============================================================
-// FORM
+// FORM E DETALHES
 // ============================================================
 async function abrirForm(fbId) {
     document.getElementById('contatoId').value = fbId || '';
@@ -713,6 +711,37 @@ function editarContato(fbId) {
     adminAutenticado = null;
     pedirAutenticacao('editar', fbId);
 }
+
+function verDetalhes(fbId) {
+    var c = contatos.find(function(x) { return x._fbId === fbId; });
+    if (!c) return;
+    
+    var html = '<div style="background:#F8F4ED;padding:14px;border-radius:10px;margin-bottom:16px;text-align:center;">';
+    html += '<div style="font-size:11px;color:var(--cinza);">CÓDIGO CRM</div>';
+    html += '<div style="font-size:20px;font-weight:800;color:var(--laranja);letter-spacing:1px;">' + (c.codigo || '---') + '</div>';
+    html += '</div>';
+    
+    var telExibir = c.tel1 || c.whatsapp || '—';
+    var isWA = c.isWhatsApp === true || (c.whatsapp && c.whatsapp === c.tel1);
+    
+    html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">';
+    html += '<div style="grid-column:1/-1;padding:8px;background:#FAFAFA;border-radius:6px;"><div style="font-size:10px;color:var(--cinza);text-transform:uppercase;font-weight:600;">Nome</div><div style="font-size:14px;font-weight:600;margin-top:2px;">' + escapeHtml(c.nome) + '</div></div>';
+    html += '<div style="padding:8px;background:#FAFAFA;border-radius:6px;"><div style="font-size:10px;color:var(--cinza);text-transform:uppercase;font-weight:600;">Categoria</div><div style="font-size:13px;font-weight:600;margin-top:2px;">' + escapeHtml(c.categoria) + '</div></div>';
+    html += '<div style="padding:8px;background:#FAFAFA;border-radius:6px;"><div style="font-size:10px;color:var(--cinza);text-transform:uppercase;font-weight:600;">CPF/CNPJ</div><div style="font-size:13px;font-weight:600;margin-top:2px;">' + (c.cnpjCpf || '—') + '</div></div>';
+    html += '<div style="padding:8px;background:#FAFAFA;border-radius:6px;"><div style="font-size:10px;color:var(--cinza);text-transform:uppercase;font-weight:600;">Telefone</div><div style="font-size:13px;font-weight:600;margin-top:2px;">' + telExibir + (isWA ? ' 📱' : '') + '</div></div>';
+    html += '<div style="padding:8px;background:#FAFAFA;border-radius:6px;"><div style="font-size:10px;color:var(--cinza);text-transform:uppercase;font-weight:600;">Email</div><div style="font-size:13px;font-weight:600;margin-top:2px;">' + (c.email || '—') + '</div></div>';
+    
+    if (c.vinculadoA) html += '<div style="grid-column:1/-1;padding:8px;background:#E3F2FD;border-radius:6px;color:#1565C0;"><div style="font-size:10px;text-transform:uppercase;font-weight:600;">🔒 Vinculado a</div><div style="font-size:13px;font-weight:600;margin-top:2px;">' + escapeHtml(c.vinculadoA) + '</div></div>';
+    if (c.contatoEmergencia) html += '<div style="grid-column:1/-1;padding:8px;background:#E3F2FD;border-radius:6px;color:#1565C0;"><div style="font-size:10px;text-transform:uppercase;font-weight:600;">🔒 Contato de Emergência</div><div style="font-size:13px;font-weight:600;margin-top:2px;">' + escapeHtml(c.contatoEmergencia) + '</div></div>';
+    
+    if (c.obs) html += '<div style="grid-column:1/-1;padding:8px;background:#FFF8E7;border-radius:6px;"><div style="font-size:10px;color:var(--cinza);text-transform:uppercase;font-weight:600;">Observações</div><div style="font-size:13px;font-weight:600;margin-top:2px;">' + escapeHtml(c.obs) + '</div></div>';
+    
+    html += '</div>';
+    
+    document.getElementById('conteudoDetalhes').innerHTML = html;
+    document.getElementById('modalDetalhes').classList.add('ativo');
+}
+function fecharDetalhes() { document.getElementById('modalDetalhes').classList.remove('ativo'); }
 
 function confirmarSalvar() {
     var nome = document.getElementById('nomeContato').value.trim();
@@ -785,7 +814,41 @@ async function salvarContatoFinal() {
 }
 
 // ============================================================
-// FAVORITO
+// EXCLUIR
+// ============================================================
+function excluirContato(fbId) {
+    var c = contatos.find(function(x) { return x._fbId === fbId; });
+    if (!c) return;
+    if (!confirm('Excluir "' + c.nome + '" (' + c.codigo + ')?\n\n⚠️ Esta ação é irreversível.')) return;
+    adminAutenticado = null;
+    pedirAutenticacao('excluir', fbId);
+}
+
+async function executarExclusao(fbId) {
+    var c = contatos.find(function(x) { return x._fbId === fbId; });
+    if (!c) { adminAutenticado = null; return; }
+    
+    var logEntry = {
+        data: new Date().toISOString(),
+        usuario: (adminAutenticado && adminAutenticado.usuario) || getUsuarioLogado().usuario,
+        nomeUsuario: (adminAutenticado && adminAutenticado.nome) || getUsuarioLogado().nome,
+        acao: 'EXCLUÍDO',
+        justificativa: (adminAutenticado && adminAutenticado.justificativa) || '[master]'
+    };
+
+    if (firebasePronto && db) {
+        try {
+            await db.collection('logs_exclusao').add({ modulo: 'crm', itemCodigo: c.codigo, itemNome: c.nome, ...logEntry });
+            await db.collection('contatos').doc(fbId).delete();
+            mostrarToast('🗑️ Contato excluído!', 'success');
+            registrarLogAuditoria('CRM_EXCLUIR', c.nome + ' (' + c.codigo + ')');
+        } catch (e) { mostrarToast('❌ Erro: ' + e.message, 'error'); }
+    }
+    adminAutenticado = null;
+}
+
+// ============================================================
+// FAVORITO E LOG
 // ============================================================
 function toggleFav(fbId) {
     if (!firebasePronto || !db) return;
@@ -797,9 +860,6 @@ function toggleFav(fbId) {
         .catch(function(e) { mostrarToast('❌ ' + e.message, 'error'); });
 }
 
-// ============================================================
-// LOG
-// ============================================================
 function verLog(fbId) {
     var c = contatos.find(function(x) { return x._fbId === fbId; });
     if (!c) return;
@@ -821,7 +881,7 @@ function verLog(fbId) {
 function fecharLog() { document.getElementById('modalLog').classList.remove('ativo'); }
 
 // ============================================================
-// CSV
+// CSV E TOAST
 // ============================================================
 function exportarCSV() {
     var linhas = [['Código', 'Nome', 'Categoria', 'Cargo', 'Instituição', 'Telefone', 'É WhatsApp', 'Email', 'CNPJ/CPF', 'Origem']];
@@ -837,12 +897,8 @@ function exportarCSV() {
     a.href = url; a.download = 'crm-amovin-' + new Date().toISOString().split('T')[0] + '.csv';
     a.click(); URL.revokeObjectURL(url);
     mostrarToast('📥 CSV exportado!', 'success');
-    registrarLogAuditoria('CRM_EXPORTAR_CSV', contatos.length + ' contatos');
 }
 
-// ============================================================
-// TOAST
-// ============================================================
 function mostrarToast(msg, tipo) {
     var t = document.createElement('div');
     t.className = 'toast toast-' + (tipo || 'success');
