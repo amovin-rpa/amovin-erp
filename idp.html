@@ -42,11 +42,31 @@
         .form-group input[readonly] { background: #F0E9DF; color: var(--laranja); font-weight: 700; cursor: not-allowed; border-style: dashed; }
         .form-group textarea { resize: vertical; min-height: 60px; }
         .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-        .btn { padding: 10px 24px; border-radius: 8px; border: none; cursor: pointer; font-weight: 600; font-size: 13px; font-family: 'Inter', sans-serif; transition: all 0.2s; display: inline-flex; align-items: center; gap: 8px; }
+        .btn { padding: 10px 24px; border-radius: 8px; border: none; cursor: pointer; font-weight: 600; font-size: 13px; font-family: 'Inter', sans-serif; transition: all 0.2s; display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
         .btn-primary { background: var(--laranja); color: white; } .btn-primary:hover { background: var(--laranja-escuro); }
         .btn-danger { background: var(--vermelho); color: white; }
-        .btn-full { width: 100%; padding: 14px; font-size: 15px; justify-content: center; }
-        .btn-sm { padding: 4px 10px; font-size: 10px; }
+        .btn-full { width: 100%; padding: 14px; font-size: 15px; }
+        
+        /* BOTÕES PADRONIZADOS AERP */
+        .btn-acao {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 600;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.2s;
+            gap: 4px;
+        }
+        .btn-acao:hover { transform: translateY(-1px); box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .btn-acao.ver { background: #E3F2FD; color: #1565C0; }
+        .btn-acao.editar { background: #FFF3E0; color: #C65A11; }
+        .btn-acao.excluir { background: #FFEBEE; color: #C62828; }
+        
         .pessoa-item { padding: 12px 16px; border-bottom: 1px solid #F0E9DF; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
         .pessoa-item:hover { background: #FFF8E7; }
         .pessoa-item .info { flex: 1; min-width: 150px; }
@@ -85,7 +105,6 @@
             <button class="btn-sair-topo" onclick="window.location.href='dashboard.html'">🏠 Dashboard</button>
         </div>
     </div>
-
     <div class="kpi-grid">
         <div class="kpi-card"><div class="kpi-valor" id="kpiTotal">0</div><div class="kpi-label">👥 Total</div></div>
         <div class="kpi-card"><div class="kpi-valor" style="color:var(--verde);" id="kpiBeneficiarios">0</div><div class="kpi-label">👤 Beneficiários</div></div>
@@ -93,7 +112,6 @@
         <div class="kpi-card"><div class="kpi-valor" style="color:#E65100;" id="kpiVoluntarios">0</div><div class="kpi-label">💪 Voluntários</div></div>
         <div class="kpi-card"><div class="kpi-valor" style="color:#00838F;" id="kpiUniversitarios">0</div><div class="kpi-label">🎓 Universitários</div></div>
     </div>
-
     <div class="card">
         <div class="tabs">
             <button class="tab ativo" data-tab="beneficiario" onclick="mudarTab('beneficiario',this)">👤 Beneficiários</button>
@@ -103,7 +121,6 @@
         </div>
         <div id="conteudoAbas"></div>
     </div>
-
     <div class="rodape">
         <img src="images/logo-vigorre.png" alt="Vigorre" onerror="this.style.display='none';">
         <div>
@@ -115,10 +132,7 @@
 <script src="menu.js?v=20260904"></script>
 <script>
 // ============================================================
-// IDP - AMOVIN ERP (AERP) - VERSÃO FINAL COMPLETA
-// 4 coleções: beneficiaries, professionals, volunteers, university_students
-// Espelhamento automático para CRM (contatos) quando tem telefone
-// ID interno (6 primeiros dígitos CPF) + Código A-IDP-2026-XXXX
+// IDP - AMOVIN ERP (AERP) - VERSÃO FINAL COM BOTÕES CORRIGIDOS
 // ============================================================
 
 var dados = { beneficiario: [], profissional: [], voluntario: [], universitario: [] };
@@ -165,8 +179,6 @@ function escapeHtml(s) {
         return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c];
     });
 }
-
-// WhatsApp
 function toggleWa(id) {
     var cb = document.getElementById(id);
     cb.checked = !cb.checked;
@@ -234,15 +246,11 @@ function atualizarStatusFirebase(s) {
 }
 function escutarTudo() {
     if (!firebasePronto || !db) return;
-    
-    // Projetos
     unsubs.push(db.collection('projetos').onSnapshot(function(snap) {
         projetos = [];
         snap.forEach(function(doc) { projetos.push({ _fbId: doc.id, ...doc.data() }); });
         preencherProjetos();
     }));
-
-    // 4 coleções do IDP
     var mapa = [
         { tipo: 'beneficiario', colecao: 'beneficiaries' },
         { tipo: 'profissional', colecao: 'professionals' },
@@ -305,7 +313,6 @@ async function gerarIdInterno(cpf, tipoAtual, fbIdAtual) {
     var idBase = numeros.substring(0, 6);
     var existe = false;
     var colecoes = ['beneficiaries', 'professionals', 'volunteers', 'university_students'];
-    
     for (var i = 0; i < colecoes.length; i++) {
         try {
             var snap = await db.collection(colecoes[i]).where('idInterno', '==', idBase).get();
@@ -315,7 +322,6 @@ async function gerarIdInterno(cpf, tipoAtual, fbIdAtual) {
         } catch (e) {}
     }
     if (!existe) return idBase;
-    
     var contador = 1;
     while (contador < 100) {
         var tentativa = idBase + '-' + contador;
@@ -617,7 +623,7 @@ function limparForm(tipo) {
 }
 
 // ============================================================
-// EDITAR
+// EDITAR E VER DETALHES
 // ============================================================
 function editarPessoa(tipo, fbId) {
     var p = dados[tipo].find(function(x) { return x._fbId === fbId; });
@@ -674,7 +680,7 @@ async function excluirPessoa(tipo, fbId) {
 }
 
 // ============================================================
-// RENDERIZAR LISTA
+// RENDERIZAR LISTA (BOTÕES CORRIGIDOS)
 // ============================================================
 function renderizarLista(tipo) {
     var container = document.getElementById('lista-' + tipo);
@@ -701,6 +707,7 @@ function renderizarLista(tipo) {
             detalhe = 'CPF: ' + (p.cpf || '—');
             if (p.responsavelNome) detalhe += '<br>📞 Contato: ' + p.responsavelNome;
         }
+        
         return '<div class="pessoa-item">' +
             '<div class="info">' +
             '<div class="codigo">' + (p.idInterno || '—') + ' · ' + (p.codigo || '—') + '</div>' +
@@ -708,9 +715,9 @@ function renderizarLista(tipo) {
             '<div class="detalhe">' + detalhe + '</div>' +
             '<div><span class="status-badge ' + (statusMap[p.status] || 'status-pendente') + '">' + (statusLbl[p.status] || p.status || '—') + '</span></div>' +
             '</div>' +
-            '<div class="acoes" style="display:flex;gap:4px;">' +
-            '<button class="btn btn-primary btn-sm" onclick="editarPessoa(\'' + tipo + '\',\'' + p._fbId + '\')">✏️</button>' +
-            '<button class="btn btn-danger btn-sm" onclick="excluirPessoa(\'' + tipo + '\',\'' + p._fbId + '\')">🗑️</button>' +
+            '<div class="acoes" style="display:flex;gap:6px;">' +
+            '<button class="btn-acao editar" title="Editar cadastro" onclick="editarPessoa(\'' + tipo + '\',\'' + p._fbId + '\')">✏️ Editar</button>' +
+            '<button class="btn-acao excluir" title="Excluir cadastro" onclick="excluirPessoa(\'' + tipo + '\',\'' + p._fbId + '\')">🗑️ Excluir</button>' +
             '</div></div>';
     }).join('');
 }
